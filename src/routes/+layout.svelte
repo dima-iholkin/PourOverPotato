@@ -5,11 +5,11 @@
 </script>
 
 <MyLayout>
-  <MyHeader />
+  <!-- <MyHeader /> -->
 
-  <MyNavbar />
+  <!-- <MyNavbar /> -->
 
-  <div style="padding-left: 120px;">
+  <!-- <div style="padding-left: 120px;"> -->
     <slot />
-  </div>
+  <!-- </div> -->
 </MyLayout>
