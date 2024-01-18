@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { SvelteUIProvider } from "@svelteuidev/core";
-  import { Navbar, Button } from "@svelteuidev/core";
+  // import { SvelteUIProvider } from "@svelteuidev/core";
+  // import { Navbar, Button } from "@svelteuidev/core";
 
   let opened = false;
 
@@ -11,7 +11,7 @@
 
 <!-- Toggle the "display: hidden;" style. -->
 
-<Navbar
+<!-- <Navbar
   slot="navbar"
   hidden={!opened}
   style="display: flex; flex-direction: column; justify-content: space-between; width: auto;"
@@ -23,4 +23,4 @@
   <div>
     <Button>Settings</Button>
   </div>
-</Navbar>
+</Navbar> -->

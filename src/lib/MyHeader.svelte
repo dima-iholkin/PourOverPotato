@@ -1,13 +1,37 @@
 <script lang="ts">
-  import { Burger, Header } from "@svelteuidev/core";
-  import MyHeader from "$lib/MyHeader.svelte";
+  import { Navbar, NavbarBackLink } from "konsta/svelte";
+  import { page } from "$app/stores";
+  import { goto } from "$app/navigation";
+  import "../app.css";
+
+  export let onMenuClick: () => void;
+
+  function handleBackButtonClick() {
+    if (history.length === 0 || document.referrer.indexOf(window.location.host) === -1) {
+      goto("/", { replaceState: true });
+    } else {
+      history.back();
+    }
+  }
 </script>
 
-<Header slot="header" height={65} style="display: flex; justify-content: space-between;" fixed>
-  <!-- Navbar burger icon goes here. Toggle hidden state based on the variable "opened". -->
-
-  <!-- <MenuBurgerIcon show={true} menuOpen={false} /> -->
-
-  <h3>PourOverPotato</h3>
-  <div><p>Login</p></div>
-</Header>
+{#if $page.url.pathname !== "/"}
+  <Navbar title="PourOverPotato">
+    <NavbarBackLink slot="left" text="Back" onClick={handleBackButtonClick} />
+    <div slot="right" style="display: flex; flex-direction: row;">
+      <p>Login</p>
+      <button on:click={onMenuClick}>
+        <span class="material-icons md-36">menu</span>
+      </button>
+    </div>
+  </Navbar>
+{:else}
+  <Navbar title="PourOverPotato">
+    <div slot="right" style="display: flex; flex-direction: row;">
+      <p>Login</p>
+      <button on:click={onMenuClick}>
+        <span class="material-icons md-36">menu</span>
+      </button>
+    </div>
+  </Navbar>
+{/if}
