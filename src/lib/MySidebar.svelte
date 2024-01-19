@@ -1,37 +1,43 @@
 <script lang="ts">
   import { Page, Navbar, NavbarBackLink, Block, MenuList, MenuListItem } from "konsta/svelte";
-  // import DemoIcon from "../components/DemoIcon.svelte";
-  let selected = "home";
-  let selectedMedia = "home";
+  import { page } from "$app/stores";
+  import { goto } from "$app/navigation";
 
   export let opacity: Boolean = false;
-  let opacityNumber = opacity ? 0 : 1;
-  let positionStr: string = opacity ? "static" : "fixed";
-  let st: string = ``;
+
+  $: selected = $page.route.id?.split("/")[1];
+
+  function handleClick(route: string) {
+    goto(route);
+  }
 </script>
 
 <div>
   {#if opacity === false}
     <MenuList class="menu-list" style="padding: 0; margin: 0; position: fixed;">
-      <MenuListItem title="Home" active={selected === "home"} onClick={() => (selected = "home")}>
+      <MenuListItem
+        title="Coffee beans"
+        active={selected === "beans" || selected === ""}
+        onClick={() => handleClick("/")}
+      >
         <!-- <DemoIcon slot="media" /> -->
       </MenuListItem>
-      <MenuListItem title="Profile" active={selected === "profile"} onClick={() => (selected = "profile")}>
+      <MenuListItem title="All recipes" active={selected === "demo"} onClick={() => handleClick("/demo")}>
         <!-- <DemoIcon slot="media" /> -->
       </MenuListItem>
-      <MenuListItem title="Settings" active={selected === "settings"} onClick={() => (selected = "settings")}>
+      <MenuListItem title="Settings" active={selected === "settings"} onClick={() => handleClick("/")}>
         <!-- <DemoIcon slot="media" /> -->
       </MenuListItem>
     </MenuList>
   {:else}
-    <MenuList class="menu-list" style="padding: 0; margin: 0; opacity: 0;">
-      <MenuListItem title="Home" active={selected === "home"} onClick={() => (selected = "home")}>
+    <MenuList class="menu-list" style="padding: 0; margin: 0; opacity: 0; z-index: -1;">
+      <MenuListItem title="Coffee beans">
         <!-- <DemoIcon slot="media" /> -->
       </MenuListItem>
-      <MenuListItem title="Profile" active={selected === "profile"} onClick={() => (selected = "profile")}>
+      <MenuListItem title="All recipes">
         <!-- <DemoIcon slot="media" /> -->
       </MenuListItem>
-      <MenuListItem title="Settings" active={selected === "settings"} onClick={() => (selected = "settings")}>
+      <MenuListItem title="Settings">
         <!-- <DemoIcon slot="media" /> -->
       </MenuListItem>
     </MenuList>

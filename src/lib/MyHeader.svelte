@@ -6,6 +6,9 @@
 
   export let onMenuClick: () => void;
 
+  $: pathname = "/";
+  page.subscribe((obj) => (pathname = obj.url.pathname));
+
   function handleBackButtonClick() {
     if (history.length === 0 || document.referrer.indexOf(window.location.host) === -1) {
       goto("/", { replaceState: true });
@@ -15,9 +18,10 @@
   }
 </script>
 
-{#if $page.url.pathname !== "/"}
+{#if pathname !== "/"}
   <Navbar title="PourOverPotato">
     <NavbarBackLink slot="left" text="Back" onClick={handleBackButtonClick} />
+    <p slot="subtitle">Save your best recipes for later here</p>
     <div slot="right" style="display: flex; flex-direction: row;">
       <p>Login</p>
       <button class="menu-button" on:click={onMenuClick}>
@@ -27,6 +31,8 @@
   </Navbar>
 {:else}
   <Navbar title="PourOverPotato">
+    <NavbarBackLink slot="left" text="Back" onClick={handleBackButtonClick} style="opacity: 0;" />
+    <p slot="subtitle">Save your best recipes for later here</p>
     <div slot="right" style="display: flex; flex-direction: row;">
       <p>Login</p>
       <button class="menu-button" on:click={onMenuClick}>

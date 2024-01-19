@@ -1,7 +1,5 @@
 <script lang="ts">
   import { App, Block, Link, Navbar, Page, Panel } from "konsta/svelte";
-  import { page } from "$app/stores";
-  import { goto } from "$app/navigation";
   import MyHeader from "./MyHeader.svelte";
   import MySidebar from "./MySidebar.svelte";
   import "../app.css";
