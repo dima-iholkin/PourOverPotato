@@ -1,14 +1,25 @@
 import { coffeeBeansToFillDB } from "./fillDbData_DevOnly";
+const { MODE } = import.meta.env;
 
-// export function saveData(key: string, value: any) {
-//   localStorage.setItem(key, JSON.stringify(value));
-// }
+let coffeeBeans: CoffeeBeansItem[] | undefined;
 
 export function loadCoffeeBeans(): CoffeeBeansItem[] {
-  fillDbIfEmpty_DevOnly();
+  if (MODE === "development") {
+    fillDbIfEmpty_DevOnly();
+  }
 
-  const coffeeBeans: CoffeeBeansItem[] = JSON.parse(localStorage.getItem("recipes") ?? "[]");
-  return coffeeBeans;
+  if (coffeeBeans === undefined) {
+    let rawRecipes: string = localStorage.getItem("recipes") ?? "[]";
+    coffeeBeans = JSON.parse(rawRecipes);
+
+    coffeeBeans!.forEach(
+      item => item.recipes.forEach(
+        recipe => recipe.dateTime = new Date(recipe.dateTime as unknown as string)
+      )
+    )
+  }
+
+  return coffeeBeans!;
 }
 
 function fillDbIfEmpty_DevOnly() {

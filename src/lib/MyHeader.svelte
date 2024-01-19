@@ -21,7 +21,7 @@
 {#if pathname !== "/"}
   <Navbar title="PourOverPotato">
     <NavbarBackLink slot="left" text="Back" onClick={handleBackButtonClick} />
-    <p slot="subtitle">Save your best recipes for later here</p>
+    <p slot="subtitle">Save your best recipes for later use</p>
     <div slot="right" style="display: flex; flex-direction: row;">
       <p>Login</p>
       <button class="menu-button" on:click={onMenuClick}>
@@ -32,7 +32,7 @@
 {:else}
   <Navbar title="PourOverPotato">
     <NavbarBackLink slot="left" text="Back" onClick={handleBackButtonClick} style="opacity: 0;" />
-    <p slot="subtitle">Save your best recipes for later here</p>
+    <p slot="subtitle">Save your best recipes for later use</p>
     <div slot="right" style="display: flex; flex-direction: row;">
       <p>Login</p>
       <button class="menu-button" on:click={onMenuClick}>

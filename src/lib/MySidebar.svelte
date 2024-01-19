@@ -17,7 +17,7 @@
     <MenuList class="menu-list" style="padding: 0; margin: 0; position: fixed;">
       <MenuListItem
         title="Coffee beans"
-        active={selected === "beans" || selected === ""}
+        active={selected === ""}
         onClick={() => handleClick("/")}
       >
         <!-- <DemoIcon slot="media" /> -->
