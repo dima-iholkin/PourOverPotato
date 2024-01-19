@@ -1,16 +1,20 @@
 <script lang="ts">
-  import { App, Icon, Block, Button, Link, Navbar, NavbarBackLink, Page, Panel } from "konsta/svelte";
+  import { App, Block, Link, Navbar, Page, Panel } from "konsta/svelte";
   import { page } from "$app/stores";
   import { goto } from "$app/navigation";
-  import "../app.css";
   import MyHeader from "./MyHeader.svelte";
+  import MySidebar from "./MySidebar.svelte";
+  import "../app.css";
 
   let rightPanelOpened = false;
 </script>
 
 <App theme="material">
-  <Page>
-    <MyHeader onMenuClick={() => (rightPanelOpened = true)} />
+  <MyHeader onMenuClick={() => (rightPanelOpened = true)} />
+
+  <div style="display: flex; flex-direction: row;">
+    <MySidebar />
+    <MySidebar opacity />
 
     <Panel side="right" opened={rightPanelOpened} onBackdropClick={() => (rightPanelOpened = false)}>
       <Page>
@@ -23,6 +27,8 @@
       </Page>
     </Panel>
 
-    <slot />
-  </Page>
+    <div>
+      <slot />
+    </div>
+  </div>
 </App>

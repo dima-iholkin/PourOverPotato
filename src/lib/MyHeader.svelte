@@ -20,7 +20,7 @@
     <NavbarBackLink slot="left" text="Back" onClick={handleBackButtonClick} />
     <div slot="right" style="display: flex; flex-direction: row;">
       <p>Login</p>
-      <button on:click={onMenuClick}>
+      <button class="menu-button" on:click={onMenuClick}>
         <span class="material-icons md-36">menu</span>
       </button>
     </div>
@@ -29,9 +29,19 @@
   <Navbar title="PourOverPotato">
     <div slot="right" style="display: flex; flex-direction: row;">
       <p>Login</p>
-      <button on:click={onMenuClick}>
+      <button class="menu-button" on:click={onMenuClick}>
         <span class="material-icons md-36">menu</span>
       </button>
     </div>
   </Navbar>
 {/if}
+
+<!-- <div style="height: min-content;"><p>Fuck you CSS</p></div> -->
+
+<style>
+  @media only screen and (min-width: 800px) {
+    .menu-button {
+      display: none;
+    }
+  }
+</style>

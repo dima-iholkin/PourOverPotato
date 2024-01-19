@@ -3,7 +3,5 @@
 </script>
 
 <MyLayout>
-  <!-- <div style="padding-left: 120px;"> -->
   <slot />
-  <!-- </div> -->
 </MyLayout>
