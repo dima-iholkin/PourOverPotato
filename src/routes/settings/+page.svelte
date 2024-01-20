@@ -1,9 +1,10 @@
 <script lang="ts">
+  import { onMount } from "svelte";
   import { Page, Navbar, Block, Button, List, ListItem, BlockTitle, NavbarBackLink } from "konsta/svelte";
   import { page } from "$app/stores";
-  import { onMount } from "svelte";
 </script>
 
+<h1>Settings</h1>
 <Block strong>
   <p>Here is your SvelteKit & Konsta UI app. Let's see what we have here.</p>
 </Block>

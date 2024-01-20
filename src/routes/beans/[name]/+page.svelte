@@ -51,6 +51,8 @@
   {/each}
 
   <Fab class="fixed left-1/2 bottom-4-safe transform -translate-x-1/2 z-20" text="Create" t extPosition="after">
-    <svelte:component this={PlusIcon} slot="icon" />
+    <a href="/recipes/add?coffee_beans_name={coffeeBeans.name}">
+      <svelte:component this={PlusIcon} slot="icon" />
+    </a>
   </Fab>
 {/if}

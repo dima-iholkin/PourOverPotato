@@ -5,7 +5,7 @@
 
   export let opacity: Boolean = false;
 
-  $: selected = $page.route.id?.split("/")[1];
+  $: selected = $page.route.id ?? "";
 
   function handleClick(route: string) {
     goto(route);
@@ -15,31 +15,21 @@
 <div>
   {#if opacity === false}
     <MenuList class="menu-list" style="padding: 0; margin: 0; position: fixed;">
-      <MenuListItem
-        title="Coffee beans"
-        active={selected === ""}
-        onClick={() => handleClick("/")}
-      >
-        <!-- <DemoIcon slot="media" /> -->
-      </MenuListItem>
-      <MenuListItem title="All recipes" active={selected === "demo"} onClick={() => handleClick("/demo")}>
-        <!-- <DemoIcon slot="media" /> -->
-      </MenuListItem>
-      <MenuListItem title="Settings" active={selected === "settings"} onClick={() => handleClick("/")}>
-        <!-- <DemoIcon slot="media" /> -->
-      </MenuListItem>
+      <a href="/">
+        <MenuListItem title="Coffee beans" active={selected === "/" || selected === "/beans"} />
+      </a>
+      <a href="/recipes">
+        <MenuListItem title="All recipes" active={selected === "/recipes"} />
+      </a>
+      <a href="/settings">
+        <MenuListItem title="Settings" active={selected === "/settings"} />
+      </a>
     </MenuList>
   {:else}
     <MenuList class="menu-list" style="padding: 0; margin: 0; opacity: 0; z-index: -1;">
-      <MenuListItem title="Coffee beans">
-        <!-- <DemoIcon slot="media" /> -->
-      </MenuListItem>
-      <MenuListItem title="All recipes">
-        <!-- <DemoIcon slot="media" /> -->
-      </MenuListItem>
-      <MenuListItem title="Settings">
-        <!-- <DemoIcon slot="media" /> -->
-      </MenuListItem>
+      <MenuListItem title="Coffee beans" />
+      <MenuListItem title="All recipes" />
+      <MenuListItem title="Settings" />
     </MenuList>
   {/if}
 </div>
