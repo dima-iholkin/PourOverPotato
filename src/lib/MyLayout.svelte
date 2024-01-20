@@ -25,7 +25,7 @@
       </Page>
     </Panel>
 
-    <div>
+    <div style="min-width: 30%;">
       <slot />
     </div>
   </div>
