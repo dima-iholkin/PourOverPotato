@@ -1,6 +1,7 @@
 {
   "recommendations": [
     "formulahendry.auto-rename-tag",
-    "svelte.svelte-vscode"
+    "svelte.svelte-vscode",
+    "naumovs.color-highlight"
   ]
 }
