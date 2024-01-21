@@ -18,9 +18,14 @@
 </script>
 
 {#if pathname !== "/"}
-  <Navbar title="PourOverPotato">
+  <Navbar>
+    <a slot="title" href="/">
+      <h1>PourOverPotato</h1>
+    </a>
+    <a slot="subtitle" href="/">
+      <p>Save your best recipes for later use</p>
+    </a>
     <NavbarBackLink slot="left" text="Back" onClick={handleBackButtonClick} />
-    <p slot="subtitle">Save your best recipes for later use</p>
     <div slot="right" style="display: flex; flex-direction: row;">
       <p>Login</p>
       <button class="menu-button" on:click={onMenuClick}>
@@ -29,9 +34,14 @@
     </div>
   </Navbar>
 {:else}
-  <Navbar title="PourOverPotato">
+  <Navbar>
+    <a slot="title" href="/">
+      <h1>PourOverPotato</h1>
+    </a>
+    <a slot="subtitle" href="/">
+      <p>Save your best recipes for later use</p>
+    </a>
     <NavbarBackLink slot="left" text="Back" onClick={handleBackButtonClick} style="opacity: 0;" />
-    <p slot="subtitle">Save your best recipes for later use</p>
     <div slot="right" style="display: flex; flex-direction: row;">
       <p>Login</p>
       <button class="menu-button" on:click={onMenuClick}>
