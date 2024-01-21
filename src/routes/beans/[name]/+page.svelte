@@ -39,7 +39,6 @@
   <h1>{coffeeBeans.name}</h1>
 
   {#each coffeeBeans.recipes as recipe}
-    <!-- {@const dateTime = recipe.dateTime.getDate()} -->
     <div style="margin: 16px 0; border: solid #EEEEEE;">
       <p style="font-family: 'Courier New', Courier, monospace; margin: 8px 0;">
         {recipe.dateTime.toLocaleString(undefined, options)}
@@ -50,9 +49,11 @@
     </div>
   {/each}
 
-  <Fab class="fixed left-1/2 bottom-4-safe transform -translate-x-1/2 z-20" text="Create" t extPosition="after">
-    <a href="/recipes/add?coffee_beans_name={coffeeBeans.name}">
-      <svelte:component this={PlusIcon} slot="icon" />
-    </a>
+  <Fab
+    class="fixed left-1/2 bottom-4-safe transform -translate-x-1/2 z-20"
+    text="Create"
+    href="/recipes/add?coffee_beans_name={coffeeBeans.name}"
+  >
+    <svelte:component this={PlusIcon} slot="icon" />
   </Fab>
 {/if}

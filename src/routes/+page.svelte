@@ -24,8 +24,6 @@
   </a>
 {/each}
 
-<Fab class="fixed left-1/2 bottom-4-safe transform -translate-x-1/2 z-20" text="Create" t extPosition="after">
-  <a href="/recipes/add">
-    <svelte:component this={PlusIcon} slot="icon" />
-  </a>
+<Fab class="fixed left-1/2 bottom-4-safe transform -translate-x-1/2 z-20" text="Create" href="/recipes/add">
+  <svelte:component this={PlusIcon} slot="icon" />
 </Fab>

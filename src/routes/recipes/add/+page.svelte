@@ -5,10 +5,12 @@
 
   const coffeeBeansName = $page.data.coffeeBeansName;
 
-  let coffeeBeansItems: CoffeeBeansItem[] = [];
+  let coffeeBeansItems: CoffeeBeansItem[] | undefined;
 
   let createNewCoffeeBeansInputEnabled = false;
   let emptyCoffeeBeansOptionShown = coffeeBeansName === "" || coffeeBeansName === null;
+
+  const tzOffsetMs = new Date().getTimezoneOffset() * 60000; // Timezone offset in milliseconds.
 
   onMount(() => {
     coffeeBeansItems = loadCoffeeBeans();
@@ -17,7 +19,7 @@
   function handleSelectChange(event: Event & { currentTarget: EventTarget & HTMLSelectElement }) {
     emptyCoffeeBeansOptionShown = false;
 
-    if (event.target?.value === "create_new") {
+    if (event.currentTarget?.value === "create_new") {
       createNewCoffeeBeansInputEnabled = true;
     } else {
       createNewCoffeeBeansInputEnabled = false;
@@ -28,22 +30,26 @@
 <h1>Add recipe</h1>
 
 <form action="#">
-  <div>
-    <label for="coffee-beans">Coffee beans:</label>
-    <select name="coffee-beans" on:change={handleSelectChange}>
-      {#if emptyCoffeeBeansOptionShown}
-        <option disabled selected value></option>
+  {#if coffeeBeansItems !== undefined}
+    <div>
+      <label for="coffee-beans">Coffee beans:</label>
+      <select name="coffee-beans" on:change={handleSelectChange}>
+        {#if emptyCoffeeBeansOptionShown}
+          <option disabled selected value></option>
+        {/if}
+        {#each coffeeBeansItems as item}
+          <option selected={coffeeBeansName === item.name} value={item.name}>{item.name}</option>
+        {/each}
+        <option value="create_new">create new...</option>
+      </select>
+      {#if createNewCoffeeBeansInputEnabled}
+        <label for="new-coffee-beans">Add new coffee beans:</label>
+        <input type="text" name="new-coffee-beans" placeholder="Example: Brazil Mogiana" />
       {/if}
-      {#each coffeeBeansItems as item}
-        <option selected={coffeeBeansName === item.name} value={item.name}>{item.name}</option>
-      {/each}
-      <option value="create_new">create new...</option>
-    </select>
-    {#if createNewCoffeeBeansInputEnabled}
-      <label for="new-coffee-beans">Add new coffee beans:</label>
-      <input type="text" name="new-coffee-beans" placeholder="Example: Brazil Mogiana" />
-    {/if}
-  </div>
+    </div>
+  {:else}
+    <div>loading...</div>
+  {/if}
 
   <div>
     <label for="recipe-aim">Recipe aim:</label>
@@ -61,7 +67,7 @@
 
   <div>
     <label for="rating">Rating:</label>
-    <input type="number" name="number" min="0" max="5" step="0.5" />
+    <input type="number" name="number" min="0" max="5" step="0.5" value="4.5" />
   </div>
 
   <div>
@@ -77,7 +83,11 @@
 
   <div>
     <label for="timestamp">Timestamp:</label>
-    <input type="datetime-local" name="timestamp" value={new Date().toISOString().slice(0, -8)} />
+    <input
+      type="datetime-local"
+      name="timestamp"
+      value={new Date(Date.now() - tzOffsetMs).toISOString().slice(0, -8)}
+    />
   </div>
 </form>
 
