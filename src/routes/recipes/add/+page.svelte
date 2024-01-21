@@ -1,14 +1,14 @@
 <script lang="ts">
-  import { page } from "$app/stores";
   import { onMount } from "svelte";
+  import { page } from "$app/stores";
   import { loadCoffeeBeans } from "../../../database/localStorage";
 
   const coffeeBeansName = $page.data.coffeeBeansName;
 
   let coffeeBeansItems: CoffeeBeansItem[] | undefined;
 
-  let createNewCoffeeBeansInputEnabled = false;
-  let emptyCoffeeBeansOptionShown = coffeeBeansName === "" || coffeeBeansName === null;
+  let showNewCoffeeBeansInput = false;
+  let showEmptyOption = coffeeBeansName === "" || coffeeBeansName === null;
 
   const tzOffsetMs = new Date().getTimezoneOffset() * 60000; // Timezone offset in milliseconds.
 
@@ -17,12 +17,12 @@
   });
 
   function handleSelectChange(event: Event & { currentTarget: EventTarget & HTMLSelectElement }) {
-    emptyCoffeeBeansOptionShown = false;
+    showEmptyOption = false;
 
     if (event.currentTarget?.value === "create_new") {
-      createNewCoffeeBeansInputEnabled = true;
+      showNewCoffeeBeansInput = true;
     } else {
-      createNewCoffeeBeansInputEnabled = false;
+      showNewCoffeeBeansInput = false;
     }
   }
 </script>
@@ -34,15 +34,18 @@
     <div>
       <label for="coffee-beans">Coffee beans:</label>
       <select name="coffee-beans" on:change={handleSelectChange}>
-        {#if emptyCoffeeBeansOptionShown}
+        {#if showEmptyOption}
           <option disabled selected value></option>
         {/if}
+
         {#each coffeeBeansItems as item}
           <option selected={coffeeBeansName === item.name} value={item.name}>{item.name}</option>
         {/each}
+
         <option value="create_new">create new...</option>
       </select>
-      {#if createNewCoffeeBeansInputEnabled}
+
+      {#if showNewCoffeeBeansInput}
         <label for="new-coffee-beans">Add new coffee beans:</label>
         <input type="text" name="new-coffee-beans" placeholder="Example: Brazil Mogiana" />
       {/if}
