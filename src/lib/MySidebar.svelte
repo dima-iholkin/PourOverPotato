@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { Page, Navbar, NavbarBackLink, Block, MenuList, MenuListItem } from "konsta/svelte";
+  import { MenuList, MenuListItem } from "konsta/svelte";
   import { page } from "$app/stores";
   import { goto } from "$app/navigation";
 
-  export let opacity: Boolean = false;
+  export let hidden: Boolean = false;
 
   $: selected = $page.route.id ?? "";
 
@@ -13,7 +13,7 @@
 </script>
 
 <div>
-  {#if opacity === false}
+  {#if hidden === false}
     <MenuList class="menu-list" style="padding: 0; margin: 0; position: fixed;">
       <a href="/">
         <MenuListItem title="Coffee beans" active={selected === "/" || selected === "/beans"} />

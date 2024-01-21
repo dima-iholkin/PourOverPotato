@@ -12,7 +12,7 @@
 
   <div style="display: flex; flex-direction: row;">
     <MySidebar />
-    <MySidebar opacity />
+    <MySidebar hidden />
 
     <Panel side="right" opened={rightPanelOpened} onBackdropClick={() => (rightPanelOpened = false)}>
       <Page>

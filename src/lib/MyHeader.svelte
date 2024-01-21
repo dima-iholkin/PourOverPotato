@@ -2,7 +2,6 @@
   import { Navbar, NavbarBackLink } from "konsta/svelte";
   import { page } from "$app/stores";
   import { goto } from "$app/navigation";
-  import "../app.css";
 
   export let onMenuClick: () => void;
 
