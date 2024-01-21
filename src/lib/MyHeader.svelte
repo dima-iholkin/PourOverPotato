@@ -51,8 +51,6 @@
   </Navbar>
 {/if}
 
-<!-- <div style="height: min-content;"><p>Fuck you CSS</p></div> -->
-
 <style>
   @media only screen and (min-width: 800px) {
     .menu-button {
