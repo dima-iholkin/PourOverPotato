@@ -4,7 +4,7 @@
   import PlusIcon from "$lib/PlusIcon.svelte";
   import { loadCoffeeBeans } from "../database/localStorage";
 
-  let coffeeBeans: CoffeeBeansItem[] = [];
+  let coffeeBeans: CoffeeBeans[] = [];
 
   onMount(() => {
     coffeeBeans = loadCoffeeBeans();

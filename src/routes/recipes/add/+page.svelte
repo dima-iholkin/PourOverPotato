@@ -5,7 +5,7 @@
 
   const coffeeBeansName = $page.data.coffeeBeansName;
 
-  let coffeeBeansItems: CoffeeBeansItem[] | undefined;
+  let coffeeBeansItems: CoffeeBeans[] | undefined;
 
   let showNewCoffeeBeansInput = false;
   let showEmptyOption = coffeeBeansName === "" || coffeeBeansName === null;
@@ -69,8 +69,14 @@
   </div>
 
   <div>
+    <label for="output-weight">Output weight:</label>
+    <input name="output-weight" type="number" min="0" step="1" value="250" />
+    <label for="output-weight">g</label>
+  </div>
+
+  <div>
     <label for="rating">Rating:</label>
-    <input type="number" name="number" min="0" max="5" step="0.5" value="4.5" />
+    <input name="rating" type="number" min="0" max="5" step="0.5" value="4.5" />
   </div>
 
   <div>
@@ -87,8 +93,8 @@
   <div>
     <label for="timestamp">Timestamp:</label>
     <input
-      type="datetime-local"
       name="timestamp"
+      type="datetime-local"
       value={new Date(Date.now() - tzOffsetMs).toISOString().slice(0, -8)}
     />
   </div>

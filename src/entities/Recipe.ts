@@ -1,6 +1,10 @@
 interface Recipe {
-  dateTime: Date;
-  rating: number;
+  id: number;
+  coffeeBeansId: number;
+  recipeAim: string;
+  recipeOutput: string;
   outputWeight: number;
-  recipeDetails: string;
+  rating: number;
+  opinion: string;
+  timestamp: Date;
 }

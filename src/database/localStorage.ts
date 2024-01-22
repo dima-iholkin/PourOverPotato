@@ -1,9 +1,9 @@
 import { coffeeBeansToFillDB } from "./fillDbData_DevOnly";
 const { MODE } = import.meta.env;
 
-let coffeeBeans: CoffeeBeansItem[] | undefined;
+let coffeeBeans: CoffeeBeans[] | undefined;
 
-export function loadCoffeeBeans(): CoffeeBeansItem[] {
+export function loadCoffeeBeans(): CoffeeBeans[] {
   if (MODE === "development") {
     fillDbIfEmpty_DevOnly();
   }
@@ -14,7 +14,7 @@ export function loadCoffeeBeans(): CoffeeBeansItem[] {
 
     coffeeBeans!.forEach(
       item => item.recipes.forEach(
-        recipe => recipe.dateTime = new Date(recipe.dateTime as unknown as string)
+        recipe => recipe.timestamp = new Date(recipe.timestamp as unknown as string)
       )
     )
   }

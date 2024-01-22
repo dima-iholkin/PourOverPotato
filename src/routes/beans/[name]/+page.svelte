@@ -10,7 +10,7 @@
 
   let didMount: boolean = false;
 
-  let coffeeBeans: CoffeeBeansItem | undefined;
+  let coffeeBeans: CoffeeBeans | undefined;
   $: coffeeBeans;
 
   const options: Intl.DateTimeFormatOptions = {
@@ -41,11 +41,11 @@
   {#each coffeeBeans.recipes as recipe}
     <div style="margin: 16px 0; border: solid #EEEEEE;">
       <p style="font-family: 'Courier New', Courier, monospace; margin: 8px 0;">
-        {recipe.dateTime.toLocaleString(undefined, options)}
+        {recipe.timestamp.toLocaleString(undefined, options)}
       </p>
       <p style="margin: 8px 0;">Rating: {recipe.rating}</p>
       <p style="margin: 8px 0;">Out: {recipe.outputWeight}g</p>
-      <p style="margin: 8px 0;">Details: {recipe.recipeDetails}</p>
+      <p style="margin: 8px 0;">Details: {recipe.recipeAim}</p>
     </div>
   {/each}
 
