@@ -1,16 +1,17 @@
 <script lang="ts">
-  import MyLayout from "$lib/MyLayout.svelte";
   import { onMount } from "svelte";
   import { createDemoDB, addCoffeeBeans } from "../database/indexedDB";
+  import { UniquenessCollisionFailure } from "../database/types/UniquenessCollisionFailure";
+  import MyLayout from "$lib/MyLayout.svelte";
 
   onMount(() => {
-    const demoCoffeeBeans: CoffeeBeans = {
-      id: 999,
-      name: "Rwanda Mabanza",
-      details: "Filter roast. Washed process. Dark plum, burned cherry notes."
-    };
-
-    createDemoDB().then(() => addCoffeeBeans(demoCoffeeBeans));
+    // createDemoDB()
+    //   .then(() => addCoffeeBeans(demoCoffeeBeans))
+    //   .then((result) => {
+    //     if (result instanceof UniquenessCollisionFailure) {
+    //       console.log(`It seems an item with the same "${result.propertyName}" already exist in the database.`);
+    //     }
+    //   });
   });
 </script>
 

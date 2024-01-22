@@ -1,25 +1,10 @@
-import { openDB, type DBSchema } from "idb";
+import { openDB } from "idb";
+import type { MyDB } from "./types/MyDB";
+import { UniquenessCollisionFailure } from "./types/UniquenessCollisionFailure";
+import { checkUniqueness } from "./helpers/checkUniqueness";
 
-interface MyDB extends DBSchema {
-  coffeeBeans: {
-    key: number,
-    value: Omit<CoffeeBeans, "id">,
-    indexes: { name: string }
-  },
-  recipes: {
-    key: number,
-    value: Recipe,
-    indexes: {
-      coffeeBeansId: number,
-      outputWeight: number,
-      rating: number,
-      timestamp: Date
-    }
-  }
-}
-
-const dbName = "example-database";
-const dbVersion = 1;
+export const dbName = "example-database";
+export const dbVersion = 1;
 
 const coffeeBeansName = "coffeeBeans";
 const recipesName = "recipes";
@@ -43,54 +28,45 @@ export async function createDemoDB() {
   });
 }
 
-// export async function addDemoCoffeeBeans(): Promise<SaveSuccess | SaveFailed> {
-//   const db = await openDB<MyDB>(dbName, dbVersion);
-
-//   const coffeeBeansItem: Omit<CoffeeBeans, "id"> = {
-//     name: "Rwanda Mabanza",
-//     details: "Filter roast. Washed process. Dark plum, burned cherry notes.",
-//   }
-
-//   try {
-//     await db.add(coffeeBeansName, coffeeBeansItem);
-//     return new SaveSuccess();
-//   } catch (error) {
-//     if (error instanceof DOMException) {
-//       if (error.name === "ConstraintError") {
-//         console.log("It seems a coffee beans with the same name already exist in the database.");
-//       }
-
-//       return new SaveFailed();
-//     }
-//   }
-
-//   return new SaveFailed();
-// }
-
-export async function addCoffeeBeans(coffeeBeansItem: CoffeeBeans): Promise<SaveSuccess | SaveFailed> {
+export async function addCoffeeBeans(coffeeBeansItem: CoffeeBeans): Promise<CoffeeBeans | UniquenessCollisionFailure> {
   const db = await openDB<MyDB>(dbName, dbVersion);
 
+  // Check that the CoffeeBeans record with the same name doesn't exist.
+
+  const checkUniquenessResult = await checkUniqueness(coffeeBeansName, "name", coffeeBeansItem.name);
+
+  if (checkUniquenessResult instanceof UniquenessCollisionFailure) {
+    return checkUniquenessResult;
+  }
+
   // Remove the Id property, so that the DB can assign it. Add the proper type support.
+
   const coffeeBeansObj: Partial<CoffeeBeans> = Object.assign({}, coffeeBeansItem);
   delete coffeeBeansObj.id;
   const coffeeBeansFinal = coffeeBeansObj as Omit<CoffeeBeans, "id">;
 
   try {
-    await db.add(coffeeBeansName, coffeeBeansFinal);
-    return new SaveSuccess();
+    const id = await db.add(coffeeBeansName, coffeeBeansFinal as CoffeeBeans);
+    const coffeeBeansFinal2 = coffeeBeansFinal as CoffeeBeans;
+    coffeeBeansFinal2.id = id;
+    return coffeeBeansFinal2;
   } catch (error) {
-    if (error instanceof DOMException) {
-      if (error.name === "ConstraintError") {
-        console.log("It seems a coffee beans with the same name already exist in the database.");
-      }
-
-      return new SaveFailed();
+    if (error instanceof DOMException && error.name === "ConstraintError") {
+      console.error(
+        `It seems a ConstraintError occurred while saving CoffeeBeans: ${coffeeBeansFinal.name} to the database.`
+      );
     }
+
+    throw error;
   }
 
-  return new SaveFailed();
+  return new UniquenessCollisionFailure("name");
 }
 
-class SaveFailed { }
+export function getCoffeeBeans(): CoffeeBeans[] {
 
-class SaveSuccess { }
+}
+
+export function getRecipes(): Recipe[] {
+
+}
