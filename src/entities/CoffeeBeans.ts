@@ -1,7 +1,7 @@
-interface CoffeeBeans {
+export interface CoffeeBeans {
   id: number;
   name: string;
   details: string;
 }
 
-type CoffeeBeansSubmit = Omit<CoffeeBeans, "id">;
+export type CoffeeBeansSubmit = Omit<CoffeeBeans, "id">;

@@ -1,4 +1,4 @@
-interface Recipe {
+export interface Recipe {
   id: number;
   coffeeBeansId: number;
   recipeAim: string;
@@ -8,3 +8,5 @@ interface Recipe {
   opinion: string;
   timestamp: Date;
 }
+
+export type RecipeSubmit = Omit<Recipe, "id">;

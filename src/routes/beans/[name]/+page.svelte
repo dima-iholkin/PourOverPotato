@@ -4,7 +4,8 @@
   import type { PageData } from "./$types";
   import { Fab } from "konsta/svelte";
   import PlusIcon from "$lib/PlusIcon.svelte";
-  import { loadCoffeeBeans } from "../../../database/localStorage";
+  import type { CoffeeBeans } from "../../../entities/CoffeeBeans";
+  // import { loadCoffeeBeans } from "../../../database/localStorage";
 
   export let data: PageData;
 
@@ -19,12 +20,12 @@
   };
 
   onMount(() => {
-    let coffeeBeansItems = loadCoffeeBeans();
-    coffeeBeans = coffeeBeansItems.find((item) => item.name.toLowerCase() === data.coffeeBeansName.toLowerCase());
+    // let coffeeBeansItems = loadCoffeeBeans();
+    // coffeeBeans = coffeeBeansItems.find((item) => item.name.toLowerCase() === data.coffeeBeansName.toLowerCase());
 
-    if (coffeeBeans !== undefined) {
-      coffeeBeans.recipes = coffeeBeans.recipes.sort((recipeA, recipeB) => recipeB.rating - recipeA.rating);
-    }
+    // if (coffeeBeans !== undefined) {
+    //   coffeeBeans.recipes = coffeeBeans.recipes.sort((recipeA, recipeB) => recipeB.rating - recipeA.rating);
+    // }
 
     didMount = true;
   });
@@ -38,7 +39,7 @@
 {:else}
   <h1>{coffeeBeans.name}</h1>
 
-  {#each coffeeBeans.recipes as recipe}
+  <!-- {#each coffeeBeans.recipes as recipe}
     <div style="margin: 16px 0; border: solid #EEEEEE;">
       <p style="font-family: 'Courier New', Courier, monospace; margin: 8px 0;">
         {recipe.timestamp.toLocaleString(undefined, options)}
@@ -47,7 +48,7 @@
       <p style="margin: 8px 0;">Out: {recipe.outputWeight}g</p>
       <p style="margin: 8px 0;">Details: {recipe.recipeAim}</p>
     </div>
-  {/each}
+  {/each} -->
 
   <Fab
     class="fixed left-1/2 bottom-4-safe transform -translate-x-1/2 z-20"

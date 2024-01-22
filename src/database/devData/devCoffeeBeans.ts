@@ -1,3 +1,5 @@
+import type { CoffeeBeansSubmit } from "../../entities/CoffeeBeans";
+
 export const devCoffeeBeans: CoffeeBeansSubmit[] = [
   {
     name: "Rwanda Mabanza",

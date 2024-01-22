@@ -2,12 +2,13 @@
   import { Fab } from "konsta/svelte";
   import { onMount } from "svelte";
   import PlusIcon from "$lib/PlusIcon.svelte";
-  import { loadCoffeeBeans } from "../database/localStorage";
+  import type { CoffeeBeans } from "../entities/CoffeeBeans";
+  // import { loadCoffeeBeans } from "../database/localStorage";
 
   let coffeeBeans: CoffeeBeans[] = [];
 
   onMount(() => {
-    coffeeBeans = loadCoffeeBeans();
+    // coffeeBeans = loadCoffeeBeans();
   });
 </script>
 

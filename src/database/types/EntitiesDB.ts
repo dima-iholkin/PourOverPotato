@@ -1,6 +1,6 @@
 import { type DBSchema } from "idb";
 
-export interface MyDB extends DBSchema {
+export interface EntitiesDB extends DBSchema {
   coffeeBeans: {
     key: number;
     value: CoffeeBeans;

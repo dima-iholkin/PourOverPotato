@@ -1,24 +1,28 @@
 import { openDB } from "idb";
-import type { MyDB } from "./types/MyDB";
+import type { EntitiesDB } from "./types/EntitiesDB";
+import type { CoffeeBeans, CoffeeBeansSubmit } from "../entities/CoffeeBeans";
 import { UniquenessCollisionFailure } from "./types/UniquenessCollisionFailure";
 import { checkUniqueness } from "./helpers/checkUniqueness";
+import type { Recipe, RecipeSubmit } from "../entities/Recipe";
 
-export const dbName = "example-database";
+export const dbName = "entities";
 export const dbVersion = 1;
 
-const coffeeBeansName = "coffeeBeans";
-const recipesName = "recipes";
+const coffeeBeansStoreName = "coffeeBeans";
+const recipesStoreName = "recipes";
 
-export async function createDemoDB() {
-  const dbPromise = await openDB<MyDB>(dbName, dbVersion, {
+export async function createDB() {
+  await openDB<EntitiesDB>(dbName, dbVersion, {
     upgrade(db) {
-      if (db.objectStoreNames.contains(coffeeBeansName) === false) {
-        const coffeeBeansStore = db.createObjectStore(coffeeBeansName, { keyPath: "id", autoIncrement: true });
+      if (db.objectStoreNames.contains(coffeeBeansStoreName) === false) {
+        const coffeeBeansStore = db.createObjectStore(coffeeBeansStoreName, { keyPath: "id", autoIncrement: true });
+
         coffeeBeansStore.createIndex("name", "name", { unique: true });
       }
 
-      if (db.objectStoreNames.contains(recipesName) === false) {
-        const recipesStore = db.createObjectStore(recipesName, { keyPath: "id", autoIncrement: true });
+      if (db.objectStoreNames.contains(recipesStoreName) === false) {
+        const recipesStore = db.createObjectStore(recipesStoreName, { keyPath: "id", autoIncrement: true });
+
         recipesStore.createIndex("coffeeBeansId", "coffeeBeansId", { unique: false });
         recipesStore.createIndex("outputWeight", "outputWeight", { unique: false });
         recipesStore.createIndex("rating", "rating", { unique: false });
@@ -28,45 +32,73 @@ export async function createDemoDB() {
   });
 }
 
-export async function addCoffeeBeans(coffeeBeansItem: CoffeeBeans): Promise<CoffeeBeans | UniquenessCollisionFailure> {
-  const db = await openDB<MyDB>(dbName, dbVersion);
+export async function addCoffeeBeans(item: CoffeeBeansSubmit): Promise<CoffeeBeans | UniquenessCollisionFailure> {
+  const db = await openDB<EntitiesDB>(dbName, dbVersion);
 
-  // Check that the CoffeeBeans record with the same name doesn't exist.
+  // Check that a CoffeeBeans record with the same name property doesn't exist:
+  {
+    const checkUniquenessResult: true | UniquenessCollisionFailure = await checkUniqueness(
+      coffeeBeansStoreName, "name", item.name
+    );
 
-  const checkUniquenessResult = await checkUniqueness(coffeeBeansName, "name", coffeeBeansItem.name);
-
-  if (checkUniquenessResult instanceof UniquenessCollisionFailure) {
-    return checkUniquenessResult;
+    if (checkUniquenessResult instanceof UniquenessCollisionFailure) {
+      return checkUniquenessResult as UniquenessCollisionFailure;
+    }
   }
 
-  // Remove the Id property, so that the DB can assign it. Add the proper type support.
-
-  const coffeeBeansObj: Partial<CoffeeBeans> = Object.assign({}, coffeeBeansItem);
-  delete coffeeBeansObj.id;
-  const coffeeBeansFinal = coffeeBeansObj as Omit<CoffeeBeans, "id">;
-
   try {
-    const id = await db.add(coffeeBeansName, coffeeBeansFinal as CoffeeBeans);
-    const coffeeBeansFinal2 = coffeeBeansFinal as CoffeeBeans;
-    coffeeBeansFinal2.id = id;
-    return coffeeBeansFinal2;
+    // Get the Id inserted into the DB:
+    const id = await db.add(coffeeBeansStoreName, item as CoffeeBeans);
+
+    // Assign the Id to the CoffeeBeans object:
+    const itemSaved = item as CoffeeBeans;
+    itemSaved.id = id;
+
+    return itemSaved;
   } catch (error) {
     if (error instanceof DOMException && error.name === "ConstraintError") {
       console.error(
-        `It seems a ConstraintError occurred while saving CoffeeBeans: ${coffeeBeansFinal.name} to the database.`
+        `It seems a ConstraintError occurred while saving CoffeeBeans: ${item.name} to the database.`
       );
     }
 
     throw error;
   }
-
-  return new UniquenessCollisionFailure("name");
 }
 
-export function getCoffeeBeans(): CoffeeBeans[] {
+export async function addRecipe(item: RecipeSubmit): Promise<Recipe> {
+  const db = await openDB<EntitiesDB>(dbName, dbVersion);
 
+  // Get the Id inserted into the DB:
+  const id = await db.add(recipesStoreName, item as Recipe);
+
+  // Assign the Id to the Recipe object:
+  const itemSaved = item as Recipe;
+  itemSaved.id = id;
+
+  return itemSaved;
 }
 
-export function getRecipes(): Recipe[] {
+export async function anyCoffeeBeansSaved() {
+  const db = await openDB<EntitiesDB>(dbName, dbVersion);
 
+  const count: number = await db.count(coffeeBeansStoreName);
+
+  return count > 0;
 }
+
+export async function anyRecipesSaved() {
+  const db = await openDB<EntitiesDB>(dbName, dbVersion);
+
+  const count: number = await db.count(recipesStoreName);
+
+  return count > 0;
+}
+
+// export function getCoffeeBeans(): CoffeeBeans[] {
+
+// }
+
+// export function getRecipes(): Recipe[] {
+
+// }

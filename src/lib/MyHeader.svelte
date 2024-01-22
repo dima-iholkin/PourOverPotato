@@ -2,6 +2,8 @@
   import { Navbar, NavbarBackLink } from "konsta/svelte";
   import { page } from "$app/stores";
   import { goto } from "$app/navigation";
+  import { devFillDB } from "../database/devData/devFillDB";
+  const { MODE } = import.meta.env;
 
   export let onMenuClick: () => void;
 
@@ -13,6 +15,13 @@
       goto("/", { replaceState: true });
     } else {
       history.back();
+    }
+  }
+
+  async function handleInitDevDB() {
+    if (MODE === "development") {
+      await devFillDB();
+      alert("Dev DB filled.");
     }
   }
 </script>
@@ -27,7 +36,10 @@
     </a>
     <NavbarBackLink slot="left" text="Back" onClick={handleBackButtonClick} />
     <div slot="right" style="display: flex; flex-direction: row;">
-      <p>Login</p>
+      {#if MODE === "development"}
+        <button style="border: solid orange;" on:click={handleInitDevDB}>Initialize dev DB</button>
+      {/if}
+
       <button class="menu-button" on:click={onMenuClick}>
         <span class="material-icons md-36">menu</span>
       </button>
@@ -43,7 +55,10 @@
     </a>
     <NavbarBackLink slot="left" text="Back" onClick={handleBackButtonClick} style="opacity: 0;" />
     <div slot="right" style="display: flex; flex-direction: row;">
-      <p>Login</p>
+      {#if MODE === "development"}
+        <button style="border: solid orange;" on:click={handleInitDevDB}>Initialize dev DB</button>
+      {/if}
+
       <button class="menu-button" on:click={onMenuClick}>
         <span class="material-icons md-36">menu</span>
       </button>

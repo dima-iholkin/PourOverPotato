@@ -1,7 +1,8 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { page } from "$app/stores";
-  import { loadCoffeeBeans } from "../../../database/localStorage";
+  // import { loadCoffeeBeans } from "../../../database/localStorage";
+  import type { CoffeeBeans } from "../../../entities/CoffeeBeans";
 
   const coffeeBeansName = $page.data.coffeeBeansName;
 
@@ -13,7 +14,7 @@
   const tzOffsetMs = new Date().getTimezoneOffset() * 60000; // Timezone offset in milliseconds.
 
   onMount(() => {
-    coffeeBeansItems = loadCoffeeBeans();
+    // coffeeBeansItems = loadCoffeeBeans();
   });
 
   function handleSelectChange(event: Event & { currentTarget: EventTarget & HTMLSelectElement }) {
@@ -55,7 +56,7 @@
   {/if}
 
   <div>
-    <label for="recipe-aim">Recipe aim:</label>
+    <label for="recipe-aim">Recipe target:</label>
   </div>
   <div>
     <textarea name="recipe-aim" placeholder="Example: 17 clicks, 15g + 260g. 5m boil." style="width: 100%;"></textarea>
