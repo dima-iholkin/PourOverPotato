@@ -2,54 +2,47 @@
   import { onMount } from "svelte";
   import { error } from "@sveltejs/kit";
   import { Fab } from "konsta/svelte";
+  import RecipeCard from "$lib/RecipeCard.svelte";
+  import PlusIcon from "$lib/PlusIcon.svelte";
   import type { PageData } from "./$types";
   import type { CoffeeBeans } from "../../../entities/CoffeeBeans";
   import type { Recipe } from "../../../entities/Recipe";
-  import PlusIcon from "$lib/PlusIcon.svelte";
   import { getAllCoffeeBeans, getCoffeeBeansByName, getRecipesByCoffeeBeansId } from "../../../database/indexedDB";
+  import { sortRecipesByRatingDesc as byRatingDesc } from "../../../database/helpers/sortRecipes";
+
+  // Props:
 
   export let data: PageData;
 
-  let didMount: boolean = false;
+  // State:
 
-  let coffeeBeans: CoffeeBeans | undefined;
-  $: coffeeBeans;
-
+  let coffeeBeans: CoffeeBeans | undefined | "NotFound";
   let recipes: Recipe[] | undefined;
-  $: recipes;
-
-  const options: Intl.DateTimeFormatOptions = {
-    timeStyle: "short",
-    dateStyle: "long"
-  };
 
   onMount(() => {
     getCoffeeBeansByName(data.coffeeBeansName)
-      .then((item: CoffeeBeans | undefined) => {
+      .then((item: CoffeeBeans | undefined): Promise<Recipe[] | undefined | "NotFound"> => {
         if (item === undefined) {
-          return undefined;
+          coffeeBeans = "NotFound";
+          return Promise.resolve("NotFound");
         }
 
         coffeeBeans = item;
-
         return getRecipesByCoffeeBeansId(coffeeBeans.id);
       })
-      .then((items: Recipe[] | undefined) => {
-        if (items === undefined) {
+      .then((items: Recipe[] | undefined | "NotFound") => {
+        if (items === undefined || items === "NotFound") {
           return;
         }
 
-        recipes = items.sort((recipeA, recipeB) => recipeB.rating - recipeA.rating);
-      })
-      .then(() => {
-        didMount = true;
+        recipes = items.sort(byRatingDesc);
       });
   });
 </script>
 
-{#if didMount === false}
+{#if coffeeBeans === undefined}
   <p>waiting...</p>
-{:else if coffeeBeans === undefined}
+{:else if coffeeBeans === "NotFound"}
   <h1>404</h1>
   <p>Coffee beans not found.</p>
 {:else}
@@ -59,14 +52,7 @@
     <p>No recipes added yet.</p>
   {:else}
     {#each recipes as recipe}
-      <div style="margin: 16px 0; border: solid #EEEEEE;">
-        <p style="font-family: 'Courier New', Courier, monospace; margin: 8px 0;">
-          {recipe.timestamp.toLocaleString(undefined, options)}
-        </p>
-        <p style="margin: 8px 0;">Rating: {recipe.rating}</p>
-        <p style="margin: 8px 0;">Out: {recipe.outputWeight}g</p>
-        <p style="margin: 8px 0;">Details: {recipe.recipeAim}</p>
-      </div>
+      <RecipeCard {recipe} />
     {/each}
   {/if}
 
