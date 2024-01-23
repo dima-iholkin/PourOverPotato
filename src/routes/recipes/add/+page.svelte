@@ -1,8 +1,8 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { page } from "$app/stores";
-  // import { loadCoffeeBeans } from "../../../database/localStorage";
   import type { CoffeeBeans } from "../../../entities/CoffeeBeans";
+  import { getAllCoffeeBeans } from "../../../database/indexedDB";
 
   const coffeeBeansName = $page.data.coffeeBeansName;
 
@@ -14,7 +14,9 @@
   const tzOffsetMs = new Date().getTimezoneOffset() * 60000; // Timezone offset in milliseconds.
 
   onMount(() => {
-    // coffeeBeansItems = loadCoffeeBeans();
+    getAllCoffeeBeans().then((items: CoffeeBeans[]) => {
+      coffeeBeansItems = items;
+    });
   });
 
   function handleSelectChange(event: Event & { currentTarget: EventTarget & HTMLSelectElement }) {

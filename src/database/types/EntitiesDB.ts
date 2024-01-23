@@ -1,10 +1,12 @@
 import { type DBSchema } from "idb";
+import type { Recipe } from "../../entities/Recipe";
+import type { CoffeeBeansDBSubmit } from "./CoffeeBeansDB";
 
 export interface EntitiesDB extends DBSchema {
   coffeeBeans: {
     key: number;
-    value: CoffeeBeans;
-    indexes: { name: string; };
+    value: CoffeeBeansDBSubmit;
+    indexes: { nameLowerCase: string; };
   };
   recipes: {
     key: number;

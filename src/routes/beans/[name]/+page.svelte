@@ -1,11 +1,12 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { error } from "@sveltejs/kit";
-  import type { PageData } from "./$types";
   import { Fab } from "konsta/svelte";
-  import PlusIcon from "$lib/PlusIcon.svelte";
+  import type { PageData } from "./$types";
   import type { CoffeeBeans } from "../../../entities/CoffeeBeans";
-  // import { loadCoffeeBeans } from "../../../database/localStorage";
+  import type { Recipe } from "../../../entities/Recipe";
+  import PlusIcon from "$lib/PlusIcon.svelte";
+  import { getAllCoffeeBeans, getCoffeeBeansByName, getRecipesByCoffeeBeansId } from "../../../database/indexedDB";
 
   export let data: PageData;
 
@@ -14,20 +15,35 @@
   let coffeeBeans: CoffeeBeans | undefined;
   $: coffeeBeans;
 
+  let recipes: Recipe[] | undefined;
+  $: recipes;
+
   const options: Intl.DateTimeFormatOptions = {
     timeStyle: "short",
     dateStyle: "long"
   };
 
   onMount(() => {
-    // let coffeeBeansItems = loadCoffeeBeans();
-    // coffeeBeans = coffeeBeansItems.find((item) => item.name.toLowerCase() === data.coffeeBeansName.toLowerCase());
+    getCoffeeBeansByName(data.coffeeBeansName)
+      .then((item: CoffeeBeans | undefined) => {
+        if (item === undefined) {
+          return undefined;
+        }
 
-    // if (coffeeBeans !== undefined) {
-    //   coffeeBeans.recipes = coffeeBeans.recipes.sort((recipeA, recipeB) => recipeB.rating - recipeA.rating);
-    // }
+        coffeeBeans = item;
 
-    didMount = true;
+        return getRecipesByCoffeeBeansId(coffeeBeans.id);
+      })
+      .then((items: Recipe[] | undefined) => {
+        if (items === undefined) {
+          return;
+        }
+
+        recipes = items.sort((recipeA, recipeB) => recipeB.rating - recipeA.rating);
+      })
+      .then(() => {
+        didMount = true;
+      });
   });
 </script>
 
@@ -39,16 +55,20 @@
 {:else}
   <h1>{coffeeBeans.name}</h1>
 
-  <!-- {#each coffeeBeans.recipes as recipe}
-    <div style="margin: 16px 0; border: solid #EEEEEE;">
-      <p style="font-family: 'Courier New', Courier, monospace; margin: 8px 0;">
-        {recipe.timestamp.toLocaleString(undefined, options)}
-      </p>
-      <p style="margin: 8px 0;">Rating: {recipe.rating}</p>
-      <p style="margin: 8px 0;">Out: {recipe.outputWeight}g</p>
-      <p style="margin: 8px 0;">Details: {recipe.recipeAim}</p>
-    </div>
-  {/each} -->
+  {#if recipes === undefined}
+    <p>No recipes added yet.</p>
+  {:else}
+    {#each recipes as recipe}
+      <div style="margin: 16px 0; border: solid #EEEEEE;">
+        <p style="font-family: 'Courier New', Courier, monospace; margin: 8px 0;">
+          {recipe.timestamp.toLocaleString(undefined, options)}
+        </p>
+        <p style="margin: 8px 0;">Rating: {recipe.rating}</p>
+        <p style="margin: 8px 0;">Out: {recipe.outputWeight}g</p>
+        <p style="margin: 8px 0;">Details: {recipe.recipeAim}</p>
+      </div>
+    {/each}
+  {/if}
 
   <Fab
     class="fixed left-1/2 bottom-4-safe transform -translate-x-1/2 z-20"
