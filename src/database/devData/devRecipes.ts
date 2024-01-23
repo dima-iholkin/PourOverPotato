@@ -3,7 +3,7 @@ import type { RecipeSubmit } from "../../entities/Recipe";
 export const devRecipes: RecipeSubmit[] = [
   {
     coffeeBeansId: 1,
-    recipeAim: "17g + 270g. 5m boil.",
+    recipeTarget: "17g + 270g. 5m boil.",
     recipeOutput: "2m10s + 15s drip.",
     outputWeight: 230,
     rating: 3.5,
@@ -12,7 +12,7 @@ export const devRecipes: RecipeSubmit[] = [
   },
   {
     coffeeBeansId: 1,
-    recipeAim: "18g + 290g. 5m boil.",
+    recipeTarget: "18g + 290g. 5m boil.",
     recipeOutput: "2m10s + 15s drip.",
     outputWeight: 235,
     rating: 4,
@@ -21,7 +21,7 @@ export const devRecipes: RecipeSubmit[] = [
   },
   {
     coffeeBeansId: 1,
-    recipeAim: "20g + 300g. 5m boil.",
+    recipeTarget: "20g + 300g. 5m boil.",
     recipeOutput: "2m30s + 5s drip.",
     outputWeight: 240,
     rating: 4.5,
@@ -30,7 +30,7 @@ export const devRecipes: RecipeSubmit[] = [
   },
   {
     coffeeBeansId: 2,
-    recipeAim: "17g + 270g. 5m boil.",
+    recipeTarget: "17g + 270g. 5m boil.",
     recipeOutput: "2m10s + 15s drip.",
     outputWeight: 230,
     rating: 3.5,
@@ -39,7 +39,7 @@ export const devRecipes: RecipeSubmit[] = [
   },
   {
     coffeeBeansId: 2,
-    recipeAim: "18g + 290g. 5m boil.",
+    recipeTarget: "18g + 290g. 5m boil.",
     recipeOutput: "2m10s + 15s drip.",
     outputWeight: 235,
     rating: 4,
@@ -48,7 +48,7 @@ export const devRecipes: RecipeSubmit[] = [
   },
   {
     coffeeBeansId: 2,
-    recipeAim: "20g + 300g. 5m boil.",
+    recipeTarget: "20g + 300g. 5m boil.",
     recipeOutput: "2m30s + 5s drip.",
     outputWeight: 240,
     rating: 4.5,
@@ -57,7 +57,7 @@ export const devRecipes: RecipeSubmit[] = [
   },
   {
     coffeeBeansId: 3,
-    recipeAim: "17g + 270g. 5m boil.",
+    recipeTarget: "17g + 270g. 5m boil.",
     recipeOutput: "2m10s + 15s drip.",
     outputWeight: 230,
     rating: 3.5,
@@ -66,7 +66,7 @@ export const devRecipes: RecipeSubmit[] = [
   },
   {
     coffeeBeansId: 3,
-    recipeAim: "18g + 290g. 5m boil.",
+    recipeTarget: "18g + 290g. 5m boil.",
     recipeOutput: "2m10s + 15s drip.",
     outputWeight: 235,
     rating: 4,
@@ -75,7 +75,7 @@ export const devRecipes: RecipeSubmit[] = [
   },
   {
     coffeeBeansId: 3,
-    recipeAim: "20g + 300g. 5m boil.",
+    recipeTarget: "20g + 300g. 5m boil.",
     recipeOutput: "2m30s + 5s drip.",
     outputWeight: 240,
     rating: 4.5,

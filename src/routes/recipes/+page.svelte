@@ -21,6 +21,6 @@
   <p>loading...</p>
 {:else}
   {#each recipes as recipe}
-    <RecipeCard {recipe} />
+    <RecipeCard {recipe} showCoffeeBeans />
   {/each}
 {/if}

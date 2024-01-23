@@ -1,9 +1,5 @@
 import type { Recipe } from "../../entities/Recipe";
 
-// export const sortRecipesByRatingDesc = (recipeA: Recipe, recipeB: Recipe) => {
-//   return recipeB.rating - recipeA.rating;
-// }
-
 export function sortRecipesByRatingDesc(recipeA: Recipe, recipeB: Recipe) {
   return recipeB.rating - recipeA.rating;
 }

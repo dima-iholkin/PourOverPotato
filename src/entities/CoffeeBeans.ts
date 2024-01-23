@@ -23,3 +23,7 @@ export class CoffeeBeansDBSubmit implements CoffeeBeansSubmit {
     this.nameLowerCase = item.name.toLowerCase();
   }
 }
+
+export interface CoffeeBeansDB extends CoffeeBeans {
+  nameLowerCase: string;
+}

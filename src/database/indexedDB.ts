@@ -1,6 +1,6 @@
 import { openDB } from "idb";
 import type { EntitiesDB } from "./types/EntitiesDB";
-import { CoffeeBeansDBSubmit, CoffeeBeans, type CoffeeBeansSubmit } from "../entities/CoffeeBeans";
+import { CoffeeBeansDBSubmit, CoffeeBeans, type CoffeeBeansSubmit, type CoffeeBeansDB } from "../entities/CoffeeBeans";
 import { UniquenessCollisionFailure } from "./types/UniquenessCollisionFailure";
 import type { Recipe, RecipeSubmit } from "../entities/Recipe";
 
@@ -57,7 +57,7 @@ export async function addCoffeeBeans(itemSubmit: CoffeeBeansSubmit): Promise<Cof
   try {
     // Save and get the Id inserted into the DB:
     const db = await openEntitiesDB();
-    const id = await db.add(coffeeBeansStoreName, itemDBSubmit);
+    const id = await db.add(coffeeBeansStoreName, itemDBSubmit as CoffeeBeansDB);
 
     // Assign the Id to the CoffeeBeans object:
     const savedItem: CoffeeBeans = new CoffeeBeans(itemSubmit, id);
@@ -116,6 +116,14 @@ export async function getAllRecipes(): Promise<Recipe[]> {
   const items = await db.getAll(recipesStoreName);
 
   return items;
+}
+
+export async function getCoffeeBeansById(id: number): Promise<CoffeeBeans | undefined> {
+  const db = await openEntitiesDB();
+
+  const item = await db.get(coffeeBeansStoreName, id);
+
+  return item;
 }
 
 export async function getCoffeeBeansByName(name: string): Promise<CoffeeBeans | undefined> {

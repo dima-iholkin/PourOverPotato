@@ -3,12 +3,21 @@
   import { page } from "$app/stores";
   import { goto } from "$app/navigation";
   import { devFillDB } from "../database/devData/devFillDB";
+  import LoveIcon from "./LoveIcon.svelte";
   const { MODE } = import.meta.env;
+
+  // Props:
 
   export let onMenuClick: () => void;
 
+  // State:
+
   $: pathname = "/";
-  page.subscribe((obj) => (pathname = obj.url.pathname));
+  page.subscribe((pageInfo) => {
+    pathname = pageInfo.url.pathname;
+  });
+
+  // Event handlers:
 
   function handleBackButtonClick() {
     if (history.length === 0 || document.referrer.indexOf(window.location.host) === -1) {
@@ -28,13 +37,13 @@
 
 {#if pathname !== "/"}
   <Navbar>
+    <NavbarBackLink slot="left" text="Back" onClick={handleBackButtonClick} />
     <a slot="title" href="/">
       <h1>PourOverPotato</h1>
     </a>
     <a slot="subtitle" href="/">
       <p>Save your best recipes for later use</p>
     </a>
-    <NavbarBackLink slot="left" text="Back" onClick={handleBackButtonClick} />
     <div slot="right" style="display: flex; flex-direction: row;">
       {#if MODE === "development"}
         <button style="border: solid orange;" on:click={handleInitDevDB}>Initialize dev DB</button>
@@ -47,13 +56,13 @@
   </Navbar>
 {:else}
   <Navbar>
+    <LoveIcon slot="left" />
     <a slot="title" href="/">
       <h1>PourOverPotato</h1>
     </a>
     <a slot="subtitle" href="/">
       <p>Save your best recipes for later use</p>
     </a>
-    <NavbarBackLink slot="left" text="Back" onClick={handleBackButtonClick} style="opacity: 0;" />
     <div slot="right" style="display: flex; flex-direction: row;">
       {#if MODE === "development"}
         <button style="border: solid orange;" on:click={handleInitDevDB}>Initialize dev DB</button>
