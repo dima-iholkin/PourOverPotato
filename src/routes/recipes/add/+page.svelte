@@ -1,7 +1,7 @@
 <script context="module" lang="ts">
   const COFFEEBEANS_ID = "coffee-beans";
-  const NEW_BEANS_NAME = "new-coffee-beans";
-  const NEW_BEANS_PH = "Example: Brazil Mogiana";
+  const NEW_COFFEEBEANS_NAME = "new-coffee-beans";
+  const NEW_COFFEEBEANS_PH = "Example: Brazil Mogiana";
   const RECIPE_PLAN = "recipe-plan";
   const RECIPE_PLAN_PH = "Example: 17 clicks, 15g + 260g. 5m boil.";
   const RECIPE_RESULT = "recipe-result";
@@ -16,9 +16,12 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { page } from "$app/stores";
-  import type { CoffeeBeans } from "../../../entities/CoffeeBeans";
-  import { getAllCoffeeBeans } from "../../../database/indexedDB";
+  import { goto } from "$app/navigation";
+  import { CoffeeBeans, type CoffeeBeansSubmit } from "../../../entities/CoffeeBeans";
+  import { addCoffeeBeans, addRecipe, getAllCoffeeBeans } from "../../../database/indexedDB";
   import { formatTimeForInput, parseDateFromInputString, validateAndParseCoffeeBeans } from "./helpers";
+  import type { RecipeSubmit } from "../../../entities/Recipe";
+  import { UniquenessCollisionFailure } from "../../../database/types/UniquenessCollisionFailure";
 
   // From load function:
 
@@ -32,10 +35,11 @@
 
   let showNewCoffeeBeansInput = false;
 
+  let coffeeBeansId: string | null | undefined;
+  let newCoffeeBeansName: string | null | undefined;
   let recipePlan: string | null | undefined;
   let recipeResult: string | null | undefined;
   let recipeOpinion: string | null | undefined;
-
   let outputWeight: number | null | undefined;
   let rating: number | null | undefined;
 
@@ -66,37 +70,73 @@
   async function handleSubmit(event: SubmitEvent & { currentTarget: EventTarget & HTMLFormElement }) {
     // Deal with the CoffeeBeans select:
 
-    const coffeeBeansSelect: HTMLSelectElement | undefined = event.currentTarget[COFFEEBEANS_ID];
-    const newCoffeeBeansInput: HTMLInputElement | undefined = event.currentTarget[NEW_BEANS_NAME];
-
-    if (coffeeBeansSelect === undefined) {
-      throw new Error("Couldn't find the select element for CoffeeBeans.");
-    }
-
-    const coffeeBeansValidationResult = await validateAndParseCoffeeBeans(
-      coffeeBeansSelect.value,
-      newCoffeeBeansInput?.value
-    );
+    const coffeeBeansValidationResult = await validateAndParseCoffeeBeans(coffeeBeansId, newCoffeeBeansName);
 
     // Deal with the 3 textarea inputs:
 
-    if (recipePlan !== null && recipePlan !== undefined) {
-      recipePlan = recipePlan.trim();
+    if (recipePlan === null || recipePlan === undefined) {
+      recipePlan = "";
     }
+    recipePlan = recipePlan.trim();
 
-    if (recipeResult !== null && recipeResult !== undefined) {
-      recipeResult = recipeResult.trim();
+    if (recipeResult === null || recipeResult === undefined) {
+      recipeResult = "";
     }
+    recipeResult = recipeResult.trim();
 
-    if (recipeOpinion !== null && recipeOpinion !== undefined) {
-      recipeOpinion = recipeOpinion.trim();
+    if (recipeOpinion === null || recipeOpinion === undefined) {
+      recipeOpinion = "";
     }
+    recipeOpinion = recipeOpinion.trim();
 
     // Deal with Rating and OutputWeight:
 
+    if (rating === undefined || rating === null) {
+      rating = 0;
+    }
+
+    if (outputWeight === undefined || outputWeight === null) {
+      outputWeight = 0;
+    }
+
     // Deal with the timestamp:
+
+    const timestamp: Date = parseDateFromInputString(timestampStr);
+
+    // If all validation is successful, proceed to:
+    // 1. save the new coffee beans,
+    // 2. save the recipe.
+
+    if (coffeeBeansValidationResult.newBeansName !== undefined) {
+      const coffeeBeansSubmit: CoffeeBeansSubmit = {
+        name: newCoffeeBeansName!,
+        details: ""
+      };
+      const coffeeBeansResult = await addCoffeeBeans(coffeeBeansSubmit);
+
+      if (coffeeBeansResult instanceof UniquenessCollisionFailure) {
+        throw new Error("A coffee beans with this name already exist. Failed to save the new coffee beans.");
+      }
+
+      const recipeSubmit: RecipeSubmit = {
+        coffeeBeansId: coffeeBeansResult.id,
+        recipeTarget: recipePlan,
+        recipeOutput: recipeResult,
+        opinion: recipeOpinion,
+        outputWeight: outputWeight,
+        rating: rating,
+        timestamp: timestamp
+      };
+      await addRecipe(recipeSubmit);
+
+      goto("/");
+    }
   }
 </script>
+
+<svelte:head>
+  <title>Add recipe</title>
+</svelte:head>
 
 <h1>Add recipe</h1>
 
@@ -104,21 +144,33 @@
   {#if coffeeBeansItems !== undefined}
     <div>
       <label for={COFFEEBEANS_ID}>Coffee beans:</label>
-      <select name={COFFEEBEANS_ID} id={COFFEEBEANS_ID} on:change={handleSelectChange} required>
+      <select
+        name={COFFEEBEANS_ID}
+        id={COFFEEBEANS_ID}
+        on:change={handleSelectChange}
+        required
+        bind:value={coffeeBeansId}
+      >
         {#if showEmptyOption}
           <option disabled selected value></option>
         {/if}
-
         {#each coffeeBeansItems as item}
           <option selected={coffeeBeansName === item.name} value={item.id}>{item.name}</option>
         {/each}
-
         <option value="create_new">create new...</option>
       </select>
 
       {#if showNewCoffeeBeansInput}
-        <label for={NEW_BEANS_NAME}>Add new coffee beans name:</label>
-        <input name={NEW_BEANS_NAME} id={NEW_BEANS_NAME} type="text" placeholder={NEW_BEANS_PH} required />
+        <label for={NEW_COFFEEBEANS_NAME}>New coffee beans name:</label>
+        <input
+          name={NEW_COFFEEBEANS_NAME}
+          id={NEW_COFFEEBEANS_NAME}
+          type="text"
+          placeholder={NEW_COFFEEBEANS_PH}
+          required
+          minlength="3"
+          bind:value={newCoffeeBeansName}
+        />
       {/if}
     </div>
   {:else}

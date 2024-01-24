@@ -14,6 +14,10 @@
   });
 </script>
 
+<svelte:head>
+  <title>PourOverPotato</title>
+</svelte:head>
+
 {#if coffeeBeans === undefined}
   <p>waiting...</p>
 {:else if coffeeBeans.length === 0}
@@ -33,6 +37,6 @@
   {/each}
 {/if}
 
-<Fab class="fixed left-1/2 bottom-4-safe transform -translate-x-1/2 z-20" text="Create" href="/recipes/add">
+<Fab class="fixed left-1/2 bottom-4-safe transform -translate-x-1/2 z-20" text="Add recipe" href="/recipes/add">
   <svelte:component this={PlusIcon} slot="icon" />
 </Fab>

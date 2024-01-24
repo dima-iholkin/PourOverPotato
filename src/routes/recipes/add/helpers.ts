@@ -3,18 +3,21 @@ import type { CoffeeBeans } from "../../../entities/CoffeeBeans";
 import type { CoffeeBeansValidationResult } from "./CoffeeBeansValidationResult";
 
 export async function validateAndParseCoffeeBeans(
-  coffeeBeansIdStr: string, newCoffeeBeansName: string | undefined
+  coffeeBeansIdStr: string | undefined | null, newCoffeeBeansName: string | undefined | null
 ): Promise<CoffeeBeansValidationResult> {
   // Validate new coffee beans creation:
 
+  if (coffeeBeansIdStr === undefined || coffeeBeansIdStr === null) {
+    throw new Error("CoffeeBeansId from the form's select cannot be null or undefined.");
+  }
+
   if (coffeeBeansIdStr === "create_new") {
-    if (newCoffeeBeansName === undefined) {
+    if (newCoffeeBeansName === undefined || newCoffeeBeansName === null) {
       throw new Error("Couldn't find the new CoffeeBeans name from the form's HTML.")
     }
 
     if (newCoffeeBeansName.trim() === "") {
       return Promise.resolve({ failureResult: "CoffeeBeansName_CannotBeEmpty" });
-
     }
 
     if (newCoffeeBeansName.length < 3) {

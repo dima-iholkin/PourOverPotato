@@ -44,7 +44,7 @@ export async function addCoffeeBeans(itemSubmit: CoffeeBeansSubmit): Promise<Cof
 
   const item: CoffeeBeans | undefined = await getCoffeeBeansByName(itemSubmit.name);
 
-  if (item === undefined) {
+  if (item !== undefined) {
     return new UniquenessCollisionFailure("name");
   }
 
@@ -127,15 +127,19 @@ export async function getCoffeeBeansById(id: number): Promise<CoffeeBeans | unde
 export async function getCoffeeBeansByName(name: string): Promise<CoffeeBeans | undefined> {
   const db = await openEntitiesDB();
 
-  const item = await db.getFromIndex(coffeeBeansStoreName, coffeeBeansIndexName, name.toLowerCase());
+  const item: CoffeeBeansDB | undefined = await db.getFromIndex(coffeeBeansStoreName, coffeeBeansIndexName, name.toLowerCase());
 
-  return item;
+  if (item === undefined) {
+    return undefined;
+  }
+
+  return CoffeeBeans.fromCoffeeBeansDB(item);
 }
 
-export async function getRecipesByCoffeeBeansId(id: number): Promise<Recipe[] | undefined> {
+export async function getRecipesByCoffeeBeansId(id: number): Promise<Recipe[]> {
   const db = await openEntitiesDB();
 
-  const items = await db.getAllFromIndex(recipesStoreName, "coffeeBeansId", id);
+  const items: Recipe[] = await db.getAllFromIndex(recipesStoreName, "coffeeBeansId", id);
 
   return items;
 }

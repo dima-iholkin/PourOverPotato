@@ -43,11 +43,11 @@
     </h1>
   {/if}
   <p class="timestamp">{recipe.timestamp.toLocaleString(undefined, options)}</p>
-  <p>Target notes: {recipe.recipeTarget}</p>
-  <p>Output notes: {recipe.recipeOutput}</p>
+  <p>Recipe target: {recipe.recipeTarget}</p>
+  <p>Recipe output: {recipe.recipeOutput}</p>
   <p>Output weight: {recipe.outputWeight}g</p>
   <p>Rating: {recipe.rating}</p>
-  <p>Notes: {recipe.opinion}</p>
+  <p>Opinion: {recipe.opinion}</p>
 </div>
 
 <style>

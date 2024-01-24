@@ -8,6 +8,10 @@ export class CoffeeBeans {
     this.details = item.details;
     this.id = id;
   }
+
+  static fromCoffeeBeansDB(coffeeBeansDB: CoffeeBeansDB) {
+    return new CoffeeBeans(coffeeBeansDB, coffeeBeansDB.id);
+  }
 }
 
 export type CoffeeBeansSubmit = Omit<CoffeeBeans, "id">;
