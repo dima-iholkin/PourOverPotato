@@ -1,5 +1,16 @@
 <script context="module" lang="ts">
-  const tzOffsetMs = new Date().getTimezoneOffset() * 60000; // Timezone offset in milliseconds.
+  const COFFEEBEANS_ID = "coffee-beans";
+  const NEW_BEANS_NAME = "new-coffee-beans";
+  const NEW_BEANS_PH = "Example: Brazil Mogiana";
+  const RECIPE_PLAN = "recipe-plan";
+  const RECIPE_PLAN_PH = "Example: 17 clicks, 15g + 260g. 5m boil.";
+  const RECIPE_RESULT = "recipe-result";
+  const RECIPE_RESULT_PH = "Example: 2m15s + 15s drip. 250g out.";
+  const RECIPE_OPINION = "recipe-opinion";
+  const RECIPE_OPINION_PH = "Example: Perfect balance. Perfect concentration. Flowery notes.";
+  const OUTPUT_WEIGHT = "output-weight";
+  const RATING = "rating";
+  const TIMESTAMP = "timestamp";
 </script>
 
 <script lang="ts">
@@ -7,7 +18,7 @@
   import { page } from "$app/stores";
   import type { CoffeeBeans } from "../../../entities/CoffeeBeans";
   import { getAllCoffeeBeans } from "../../../database/indexedDB";
-  import { validateAndParseCoffeeBeans } from "./helpers";
+  import { formatTimeForInput, parseDateFromInputString, validateAndParseCoffeeBeans } from "./helpers";
 
   // From load function:
 
@@ -21,12 +32,23 @@
 
   let showNewCoffeeBeansInput = false;
 
+  let recipePlan: string | null | undefined;
+  let recipeResult: string | null | undefined;
+  let recipeOpinion: string | null | undefined;
+
+  let outputWeight: number | null | undefined;
+  let rating: number | null | undefined;
+
+  let timestampStr: string = formatTimeForInput(new Date());
+
   // Lifecycle hooks:
 
   onMount(() => {
     getAllCoffeeBeans().then((items: CoffeeBeans[]) => {
       coffeeBeansItems = items;
     });
+
+    timestampStr = formatTimeForInput(new Date());
   });
 
   // Handler functions:
@@ -43,29 +65,46 @@
 
   async function handleSubmit(event: SubmitEvent & { currentTarget: EventTarget & HTMLFormElement }) {
     // Deal with the CoffeeBeans select:
-    const coffeeBeansSelect: HTMLSelectElement | undefined = event.currentTarget["coffee-beans"];
-    const newCoffeeBeansInput: HTMLInputElement | undefined = event.currentTarget["new-coffee-beans"];
+
+    const coffeeBeansSelect: HTMLSelectElement | undefined = event.currentTarget[COFFEEBEANS_ID];
+    const newCoffeeBeansInput: HTMLInputElement | undefined = event.currentTarget[NEW_BEANS_NAME];
+
     if (coffeeBeansSelect === undefined) {
       throw new Error("Couldn't find the select element for CoffeeBeans.");
     }
+
     const coffeeBeansValidationResult = await validateAndParseCoffeeBeans(
       coffeeBeansSelect.value,
       newCoffeeBeansInput?.value
     );
 
-    // Deal with the RecipeTarget:
+    // Deal with the 3 textarea inputs:
 
-    // debugger;
+    if (recipePlan !== null && recipePlan !== undefined) {
+      recipePlan = recipePlan.trim();
+    }
+
+    if (recipeResult !== null && recipeResult !== undefined) {
+      recipeResult = recipeResult.trim();
+    }
+
+    if (recipeOpinion !== null && recipeOpinion !== undefined) {
+      recipeOpinion = recipeOpinion.trim();
+    }
+
+    // Deal with Rating and OutputWeight:
+
+    // Deal with the timestamp:
   }
 </script>
 
 <h1>Add recipe</h1>
 
-<form action="#" on:submit|preventDefault={handleSubmit}>
+<form id="add-recipe" on:submit|preventDefault={handleSubmit}>
   {#if coffeeBeansItems !== undefined}
     <div>
-      <label for="coffee-beans">Coffee beans:</label>
-      <select name="coffee-beans" id="coffee-beans" on:change={handleSelectChange} required>
+      <label for={COFFEEBEANS_ID}>Coffee beans:</label>
+      <select name={COFFEEBEANS_ID} id={COFFEEBEANS_ID} on:change={handleSelectChange} required>
         {#if showEmptyOption}
           <option disabled selected value></option>
         {/if}
@@ -78,14 +117,8 @@
       </select>
 
       {#if showNewCoffeeBeansInput}
-        <label for="new-coffee-beans">Add new coffee beans:</label>
-        <input
-          name="new-coffee-beans"
-          id="new-coffee-beans"
-          type="text"
-          placeholder="Example: Brazil Mogiana"
-          required
-        />
+        <label for={NEW_BEANS_NAME}>Add new coffee beans name:</label>
+        <input name={NEW_BEANS_NAME} id={NEW_BEANS_NAME} type="text" placeholder={NEW_BEANS_PH} required />
       {/if}
     </div>
   {:else}
@@ -93,68 +126,55 @@
   {/if}
 
   <div>
-    <label for="recipe-aim">Recipe target:</label>
+    <label for={RECIPE_PLAN}>Recipe target:</label>
   </div>
   <div>
-    <textarea
-      name="recipe-aim"
-      id="recipe-aim"
-      placeholder="Example: 17 clicks, 15g + 260g. 5m boil."
-      style="width: 100%;"
-    ></textarea>
+    <textarea name={RECIPE_PLAN} id={RECIPE_PLAN} placeholder={RECIPE_PLAN_PH} bind:value={recipePlan} />
   </div>
 
   <div>
-    <label for="recipe-output">Recipe output:</label>
+    <label for={RECIPE_RESULT}>Recipe result:</label>
   </div>
   <div>
-    <textarea
-      name="recipe-output"
-      id="recipe-output"
-      placeholder="Example: 2m15s + 15s drip. 250g out."
-      style="width: 100%;"
-    ></textarea>
+    <textarea name={RECIPE_RESULT} id={RECIPE_RESULT} placeholder={RECIPE_RESULT_PH} bind:value={recipeResult} />
   </div>
 
   <div>
-    <label for="output-weight">Output weight:</label>
-    <input name="output-weight" id="output-weight" type="number" min="0" step="1" value="200" />
-    <label for="output-weight">g</label>
+    <label for={OUTPUT_WEIGHT}>Output weight:</label>
+    <input name={OUTPUT_WEIGHT} id={OUTPUT_WEIGHT} type="number" min="0" step="1" bind:value={outputWeight} />
+    <label for={OUTPUT_WEIGHT}>g</label>
   </div>
 
   <div>
-    <label for="rating">Rating:</label>
-    <input name="rating" id="rating" type="number" min="0" max="5" step="0.5" value="4" />
+    <label for={RATING}>Rating:</label>
+    <input name={RATING} id={RATING} type="number" min="0" max="5" step="0.5" bind:value={rating} />
   </div>
 
   <div>
-    <label for="opinion">Opinion:</label>
+    <label for={RECIPE_OPINION}>Opinion:</label>
   </div>
   <div>
-    <textarea
-      name="opinion"
-      id="opinion"
-      placeholder="Example: Perfect balance. Perfect concentration. Flowery notes."
-      style="width: 100%;"
-    ></textarea>
+    <textarea name={RECIPE_OPINION} id={RECIPE_OPINION} placeholder={RECIPE_OPINION_PH} bind:value={recipeOpinion} />
   </div>
 
   <div>
-    <label for="timestamp">Timestamp:</label>
-    <input
-      name="timestamp"
-      id="timestamp"
-      type="datetime-local"
-      value={new Date(Date.now() - tzOffsetMs).toISOString().slice(0, -8)}
-    />
+    <label for={TIMESTAMP}>Timestamp:</label>
+    <input name={TIMESTAMP} id={TIMESTAMP} type="datetime-local" bind:value={timestampStr} />
   </div>
-  <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"> Save </button>
+
+  <button type="submit" form="add-recipe" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+    Save
+  </button>
 </form>
 
 <style>
   input,
   textarea {
     border: solid #eeeeee;
+  }
+
+  textarea {
+    width: 100%;
   }
 
   button {
