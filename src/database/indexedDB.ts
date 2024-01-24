@@ -42,12 +42,10 @@ export async function openEntitiesDB() {
 export async function addCoffeeBeans(itemSubmit: CoffeeBeansSubmit): Promise<CoffeeBeans | UniquenessCollisionFailure> {
   // Check that a CoffeeBeans record with the same property "name" doesn't exist:
 
-  const checkUniquenessResult: true | UniquenessCollisionFailure = await checkCoffeeBeansNameUniqueness(
-    itemSubmit.name
-  );
+  const item: CoffeeBeans | undefined = await getCoffeeBeansByName(itemSubmit.name);
 
-  if (checkUniquenessResult instanceof UniquenessCollisionFailure) {
-    return checkUniquenessResult as UniquenessCollisionFailure;
+  if (item === undefined) {
+    return new UniquenessCollisionFailure("name");
   }
 
   // Normal flow:
@@ -143,15 +141,3 @@ export async function getRecipesByCoffeeBeansId(id: number): Promise<Recipe[] | 
 }
 
 // Private functions:
-
-async function checkCoffeeBeansNameUniqueness(indexKey: string): Promise<true | UniquenessCollisionFailure> {
-  const db = await openEntitiesDB();
-
-  const itemFromDB = await db.getFromIndex(coffeeBeansStoreName, coffeeBeansIndexName, indexKey);
-
-  if (itemFromDB !== undefined) {
-    return new UniquenessCollisionFailure(coffeeBeansIndexName);
-  }
-
-  return true;
-}

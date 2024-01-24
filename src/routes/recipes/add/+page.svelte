@@ -7,6 +7,7 @@
   import { page } from "$app/stores";
   import type { CoffeeBeans } from "../../../entities/CoffeeBeans";
   import { getAllCoffeeBeans } from "../../../database/indexedDB";
+  import { validateAndParseCoffeeBeans } from "./helpers";
 
   // From load function:
 
@@ -40,20 +41,17 @@
     }
   }
 
-  function handleSubmit(event: SubmitEvent & { currentTarget: EventTarget & HTMLFormElement }) {
+  async function handleSubmit(event: SubmitEvent & { currentTarget: EventTarget & HTMLFormElement }) {
     // Deal with the CoffeeBeans select:
-
-    const selectElem: HTMLSelectElement = event.currentTarget["coffee-beans"];
-    const coffeeBeansIdStr: string = selectElem.value;
-    const coffeeBeansId: number = Number.parseInt(coffeeBeansIdStr);
-
-    if (isNaN(coffeeBeansId)) {
-      if (coffeeBeansIdStr === "create_new") {
-        // Deal with the creation of new CoffeeBeans.
-      } else {
-        throw new Error("Something went really wrong with parsing CoffeeBeansId from the form.");
-      }
+    const coffeeBeansSelect: HTMLSelectElement | undefined = event.currentTarget["coffee-beans"];
+    const newCoffeeBeansInput: HTMLInputElement | undefined = event.currentTarget["new-coffee-beans"];
+    if (coffeeBeansSelect === undefined) {
+      throw new Error("Couldn't find the select element for CoffeeBeans.");
     }
+    const coffeeBeansValidationResult = await validateAndParseCoffeeBeans(
+      coffeeBeansSelect.value,
+      newCoffeeBeansInput?.value
+    );
 
     // Deal with the RecipeTarget:
 
@@ -81,7 +79,13 @@
 
       {#if showNewCoffeeBeansInput}
         <label for="new-coffee-beans">Add new coffee beans:</label>
-        <input name="new-coffee-beans" id="new-coffee-beans" type="text" placeholder="Example: Brazil Mogiana" />
+        <input
+          name="new-coffee-beans"
+          id="new-coffee-beans"
+          type="text"
+          placeholder="Example: Brazil Mogiana"
+          required
+        />
       {/if}
     </div>
   {:else}
@@ -120,7 +124,7 @@
 
   <div>
     <label for="rating">Rating:</label>
-    <input name="rating" id="rating" type="number" min="0" max="5" step="0.5" value="4.5" />
+    <input name="rating" id="rating" type="number" min="0" max="5" step="0.5" value="4" />
   </div>
 
   <div>
