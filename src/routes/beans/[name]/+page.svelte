@@ -1,9 +1,8 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { error } from "@sveltejs/kit";
-  import { Fab } from "konsta/svelte";
   import RecipeCard from "$lib/RecipeCard.svelte";
-  import PlusIcon from "$lib/PlusIcon.svelte";
+  import MyFab from "$lib/MyFab.svelte";
   import type { PageData } from "./$types";
   import { CoffeeBeans } from "../../../entities/CoffeeBeans";
   import type { Recipe } from "../../../entities/Recipe";
@@ -64,13 +63,7 @@
     <p>loading...</p>
   {/if}
 
-  <Fab
-    class="fixed left-1/2 bottom-4-safe transform -translate-x-1/2 z-20"
-    text="Add recipe"
-    href="/recipes/add?coffee_beans_name={coffeeBeans.name}"
-  >
-    <svelte:component this={PlusIcon} slot="icon" />
-  </Fab>
+  <MyFab href="/recipes/add?coffee_beans_name={coffeeBeans.name}" />
 {:else if coffeeBeans === undefined}
   <p>loading...</p>
 {:else if coffeeBeans === "CoffeeBeansNotFound"}

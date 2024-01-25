@@ -4,6 +4,7 @@
   import PlusIcon from "$lib/PlusIcon.svelte";
   import type { CoffeeBeans } from "../entities/CoffeeBeans";
   import { getAllCoffeeBeans } from "../database/indexedDB";
+  import MyFab from "$lib/MyFab.svelte";
 
   let coffeeBeans: CoffeeBeans[] | undefined;
 
@@ -37,6 +38,4 @@
   {/each}
 {/if}
 
-<Fab class="fixed left-1/2 bottom-4-safe transform -translate-x-1/2 z-20" text="Add recipe" href="/recipes/add">
-  <svelte:component this={PlusIcon} slot="icon" />
-</Fab>
+<MyFab href="/recipes/add" />

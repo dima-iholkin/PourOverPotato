@@ -3,6 +3,7 @@
   import MyHeader from "./MyHeader.svelte";
   import MySidebar from "./MySidebar.svelte";
   import "../app.css";
+  import MyBottomNav from "./MyBottomNav.svelte";
 
   let rightPanelOpened = false;
 </script>
@@ -27,6 +28,9 @@
 
     <div style="min-width: 30%;">
       <slot />
+      <div style="height: 64px;" />
     </div>
   </div>
+
+  <MyBottomNav />
 </App>

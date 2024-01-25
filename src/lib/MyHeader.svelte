@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Navbar, NavbarBackLink } from "konsta/svelte";
   import { page } from "$app/stores";
-  import { goto } from "$app/navigation";
+  import { goto, invalidateAll } from "$app/navigation";
   import { devFillDB } from "../database/devData/devFillDB";
   import LoveIcon from "./LoveIcon.svelte";
   const { MODE } = import.meta.env;
@@ -30,6 +30,9 @@
   async function handleInitDevDB() {
     if (MODE === "development") {
       await devFillDB();
+
+      setTimeout(() => location.reload(), 1000);
+
       alert("Dev DB filled.");
     }
   }
@@ -49,9 +52,9 @@
         <button style="border: solid orange;" on:click={handleInitDevDB}>Initialize dev DB</button>
       {/if}
 
-      <button class="menu-button" on:click={onMenuClick}>
+      <!-- <button class="menu-button" on:click={onMenuClick}>
         <span class="material-icons md-36">menu</span>
-      </button>
+      </button> -->
     </div>
   </Navbar>
 {:else}
@@ -68,9 +71,9 @@
         <button style="border: solid orange;" on:click={handleInitDevDB}>Initialize dev DB</button>
       {/if}
 
-      <button class="menu-button" on:click={onMenuClick}>
+      <!-- <button class="menu-button" on:click={onMenuClick}>
         <span class="material-icons md-36">menu</span>
-      </button>
+      </button> -->
     </div>
   </Navbar>
 {/if}

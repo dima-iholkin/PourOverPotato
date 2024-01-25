@@ -1,8 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { Fab } from "konsta/svelte";
   import RecipeCard from "$lib/RecipeCard.svelte";
-  import PlusIcon from "$lib/PlusIcon.svelte";
+  import MyFab from "$lib/MyFab.svelte";
   import type { Recipe } from "../../entities/Recipe";
   import { getAllRecipes } from "../../database/indexedDB";
   import { sortRecipesByTimestampDesc as byTimestampDesc } from "../../database/helpers/sortRecipes";
@@ -31,6 +30,4 @@
   {/each}
 {/if}
 
-<Fab class="fixed left-1/2 bottom-4-safe transform -translate-x-1/2 z-20" text="Add recipe" href="/recipes/add">
-  <svelte:component this={PlusIcon} slot="icon" />
-</Fab>
+<MyFab href="/recipes/add" />
