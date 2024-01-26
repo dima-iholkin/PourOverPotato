@@ -1,8 +1,13 @@
 <script lang="ts">
-  // Props:
-
+  import { addCoffeeBeans } from "../../database/indexedDB";
+  import { UniquenessCollisionFailure } from "../../database/types/UniquenessCollisionFailure";
+  import { CoffeeBeans, CoffeeBeansSubmit } from "../../entities/CoffeeBeans";
   import CloseButton from "./CloseButton.svelte";
   import Header from "./Header.svelte";
+
+  // Props:
+
+  export let savedCoffeeBeans: CoffeeBeans | undefined = undefined;
 
   // State:
 
@@ -14,7 +19,6 @@
   // Handler functions:
 
   function openModal() {
-    console.log("Open modal");
     showModal = true;
     // document.getElementsByTagName("body")[0].classList.add("overflow-y-hidden");
   }
@@ -31,10 +35,35 @@
     }
   }
 
-  function handleSubmit(event: SubmitEvent) {
-    // Validate and save the new coffee beans.
+  async function handleSubmit(event: SubmitEvent) {
+    // Validate and save the new coffee beans:
 
-    // Return the new Coffee Beans entity to the "Add recipe" page.
+    const coffeeBeansSubmit: CoffeeBeansSubmit | "ValidationFailed_NameMustBeAtLeast3CharsLong" =
+      CoffeeBeansSubmit.create(name, description);
+
+    if (coffeeBeansSubmit === "ValidationFailed_NameMustBeAtLeast3CharsLong") {
+      alert("ValidationFailed_NameMustBeAtLeast3CharsLong");
+      return;
+      // TODO: Raise the validation error on the form.
+    }
+
+    const coffeeBeans: CoffeeBeans | "Failure_NameAlreadyExist" = await addCoffeeBeans(coffeeBeansSubmit);
+    if (coffeeBeans === "Failure_NameAlreadyExist") {
+      alert("Failure_NameAlreadyExist");
+      return;
+      // TODO: Raise the error in the UI.
+    }
+
+    alert("New coffee beans saved successfully.");
+    // TODO: Inform user that the new coffee beans were saved successfully.
+
+    // Return the new Coffee Beans entity to the "Add recipe" page:
+    savedCoffeeBeans = coffeeBeans;
+
+    // Clear the modal state.
+    closeModal();
+    name = "";
+    description = "";
   }
 </script>
 
@@ -48,7 +77,7 @@
   <div class="inner-container">
     <Header on:click={() => closeModal()}>Add new coffee beans</Header>
 
-    <form class="max-w-sm mx-auto">
+    <form class="max-w-sm mx-auto" on:submit|preventDefault={handleSubmit}>
       <div class="mb-5">
         <label for="name">Coffee beans name</label>
         <input
@@ -70,7 +99,7 @@
           bind:value={description}
         />
       </div>
-      <button type="submit" class="button-submit" on:submit|preventDefault={handleSubmit}>Save</button>
+      <button type="submit" class="button-submit">Save</button>
     </form>
   </div>
 </div>

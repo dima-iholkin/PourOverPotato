@@ -5,11 +5,16 @@
   export let href: string | undefined;
 </script>
 
-<Fab
-  class="fixed left-1/2 bottom-4-safe transform -translate-x-1/2 z-20"
-  text="Add recipe"
-  href={href}
-  style="margin-bottom: 64px;"
->
-  <svelte:component this={PlusIcon} slot="icon" />
-</Fab>
+<div class="my-fab">
+  <Fab class="fixed left-1/2 bottom-4-safe transform -translate-x-1/2 z-20" text="Add recipe" {href}>
+    <svelte:component this={PlusIcon} slot="icon" />
+  </Fab>
+</div>
+
+<style>
+  @media only screen and (width < 800px) {
+    .my-fab {
+      margin-bottom: 64px;
+    }
+  }
+</style>

@@ -62,8 +62,6 @@
   async function handleSubmit(event: SubmitEvent & { currentTarget: EventTarget & HTMLFormElement }) {
     // Deal with the CoffeeBeans select:
 
-    // const coffeeBeansValidationResult = await validateAndParseCoffeeBeans(selectedCoffeeBeans?.id, newCoffeeBeansName);
-
     // Deal with the 3 textarea inputs:
 
     if (recipePlan === null || recipePlan === undefined) {
@@ -95,20 +93,7 @@
 
     const timestamp: Date = parseDateFromInputString(timestampStr);
 
-    // If all validation is successful, proceed to:
-    // 1. save the new coffee beans,
-    // 2. save the recipe.
-
-    // if (coffeeBeansValidationResult.newBeansName !== undefined) {
-    // const coffeeBeansSubmit: CoffeeBeansSubmit = {
-    //   name: newCoffeeBeansName!,
-    //   details: ""
-    // };
-    // const coffeeBeansResult = await addCoffeeBeans(coffeeBeansSubmit);
-
-    // if (coffeeBeansResult instanceof UniquenessCollisionFailure) {
-    //   throw new Error("A coffee beans with this name already exist. Failed to save the new coffee beans.");
-    // }
+    // Save the new recipe:
 
     if (selectedCoffeeBeans === undefined) {
       throw new Error("Please select the coffee beans.");
@@ -126,7 +111,6 @@
     await addRecipe(recipeSubmit);
 
     goto("/");
-    // }
   }
 </script>
 

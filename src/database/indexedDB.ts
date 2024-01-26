@@ -39,13 +39,13 @@ export async function openEntitiesDB() {
 
 // Public functions:
 
-export async function addCoffeeBeans(itemSubmit: CoffeeBeansSubmit): Promise<CoffeeBeans | UniquenessCollisionFailure> {
+export async function addCoffeeBeans(itemSubmit: CoffeeBeansSubmit): Promise<CoffeeBeans | "Failure_NameAlreadyExist"> {
   // Check that a CoffeeBeans record with the same property "name" doesn't exist:
 
   const item: CoffeeBeans | undefined = await getCoffeeBeansByName(itemSubmit.name);
 
   if (item !== undefined) {
-    return new UniquenessCollisionFailure("name");
+    return "Failure_NameAlreadyExist";
   }
 
   // Normal flow:

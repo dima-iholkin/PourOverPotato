@@ -5,7 +5,7 @@
 </script>
 
 <script lang="ts">
-  import type { CoffeeBeans } from "../../../entities/CoffeeBeans";
+  import { CoffeeBeans } from "../../../entities/CoffeeBeans";
   import NewCoffeeBeansModal from "$lib/CoffeeBeansSelect/NewCoffeeBeansModal.svelte";
 
   // Props:
@@ -21,10 +21,23 @@
 
   let selectedCoffeeBeansId: number | undefined = selectedCoffeeBeans?.id;
 
+  let savedCoffeeBeans: CoffeeBeans | undefined;
+  $: {
+    savedCoffeeBeans;
+    if (savedCoffeeBeans instanceof CoffeeBeans) {
+      if (allCoffeeBeans?.find((item) => item.id === savedCoffeeBeans?.id) === undefined) {
+        allCoffeeBeans?.push(savedCoffeeBeans);
+      }
+      selectedCoffeeBeans = savedCoffeeBeans; // Set the value in the Select.
+      // savedCoffeeBeans = undefined; // Clear the modal's value.
+    }
+  }
+
   // Handler functions:
 
   function handleSelectChange(event: Event & { currentTarget: EventTarget & HTMLSelectElement }) {
     showEmptyOption = false;
+    savedCoffeeBeans = undefined;
 
     // if (event.currentTarget?.value === "create_new") {
     //   showNewCoffeeBeansInput = true;
@@ -59,7 +72,7 @@
       {/if}
     </select>
     <!-- <div>Loading coffee beans...</div> -->
-    <NewCoffeeBeansModal />
+    <NewCoffeeBeansModal bind:savedCoffeeBeans />
   </div>
 
   <!-- {#if showNewCoffeeBeansInput}

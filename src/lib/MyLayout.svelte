@@ -28,7 +28,7 @@
 
     <div class="page-container">
       <slot />
-      <div style="height: 64px;" />
+      <div class="bottom-margin" />
     </div>
   </div>
 
@@ -40,5 +40,9 @@
     min-width: 30%;
     margin-left: auto;
     margin-right: auto;
+  }
+
+  .bottom-margin {
+    height: 64px;
   }
 </style>
