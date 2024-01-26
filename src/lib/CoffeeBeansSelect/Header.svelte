@@ -1,20 +1,24 @@
 <script lang="ts">
-  import CloseModalButton from "./CloseModalButton.svelte";
+  import CloseModalButton from "./CloseButton.svelte";
 </script>
 
-<div class="my-header">
+<div>
   <CloseModalButton hidden={true} />
-  <h1 class="text-xl text-center font-bold dark:text-white">
+  <h1>
     <slot />
   </h1>
   <CloseModalButton on:click />
 </div>
 
 <style lang="postcss">
-  .my-header {
+  div {
     display: flex;
     justify-content: space-between;
 
     @apply p-2;
+  }
+
+  h1 {
+    @apply text-xl text-center font-bold dark:text-white;
   }
 </style>

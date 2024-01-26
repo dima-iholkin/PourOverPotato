@@ -6,7 +6,7 @@
 
 <script lang="ts">
   import type { CoffeeBeans } from "../../../entities/CoffeeBeans";
-  import NewCoffeeBeansModal from "$lib/NewCoffeeBeansModal.svelte";
+  import NewCoffeeBeansModal from "$lib/CoffeeBeansSelect/NewCoffeeBeansModal.svelte";
 
   // Props:
 
