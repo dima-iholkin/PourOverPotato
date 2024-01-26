@@ -26,7 +26,7 @@
       </Page>
     </Panel>
 
-    <div style="min-width: 30%;">
+    <div class="page-container">
       <slot />
       <div style="height: 64px;" />
     </div>
@@ -34,3 +34,11 @@
 
   <MyBottomNav />
 </App>
+
+<style>
+  .page-container {
+    min-width: 30%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+</style>
