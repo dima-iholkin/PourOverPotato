@@ -19,7 +19,8 @@
   import { goto } from "$app/navigation";
   import { CoffeeBeans, type CoffeeBeansSubmit } from "../../../entities/CoffeeBeans";
   import { addCoffeeBeans, addRecipe, getAllCoffeeBeans } from "../../../database/indexedDB";
-  import { formatTimeForInput, parseDateFromInputString, validateAndParseCoffeeBeans } from "./helpers";
+  // import { formatTimeForInput, parseDateFromInputString, validateAndParseCoffeeBeans } from "./helpers";
+  import { formatTimeForInput, parseDateFromInputString } from "./helpers";
   import type { RecipeSubmit } from "../../../entities/Recipe";
   import { UniquenessCollisionFailure } from "../../../database/types/UniquenessCollisionFailure";
   import CoffeeBeansSelect from "./CoffeeBeansSelect.svelte";
@@ -36,7 +37,7 @@
 
   let showNewCoffeeBeansInput = false;
 
-  let coffeeBeansId: string | null | undefined;
+  let selectedCoffeeBeans: CoffeeBeans | undefined;
   let newCoffeeBeansName: string | null | undefined;
   let recipePlan: string | null | undefined;
   let recipeResult: string | null | undefined;
@@ -61,7 +62,7 @@
   async function handleSubmit(event: SubmitEvent & { currentTarget: EventTarget & HTMLFormElement }) {
     // Deal with the CoffeeBeans select:
 
-    const coffeeBeansValidationResult = await validateAndParseCoffeeBeans(coffeeBeansId, newCoffeeBeansName);
+    // const coffeeBeansValidationResult = await validateAndParseCoffeeBeans(selectedCoffeeBeans?.id, newCoffeeBeansName);
 
     // Deal with the 3 textarea inputs:
 
@@ -98,30 +99,34 @@
     // 1. save the new coffee beans,
     // 2. save the recipe.
 
-    if (coffeeBeansValidationResult.newBeansName !== undefined) {
-      const coffeeBeansSubmit: CoffeeBeansSubmit = {
-        name: newCoffeeBeansName!,
-        details: ""
-      };
-      const coffeeBeansResult = await addCoffeeBeans(coffeeBeansSubmit);
+    // if (coffeeBeansValidationResult.newBeansName !== undefined) {
+    // const coffeeBeansSubmit: CoffeeBeansSubmit = {
+    //   name: newCoffeeBeansName!,
+    //   details: ""
+    // };
+    // const coffeeBeansResult = await addCoffeeBeans(coffeeBeansSubmit);
 
-      if (coffeeBeansResult instanceof UniquenessCollisionFailure) {
-        throw new Error("A coffee beans with this name already exist. Failed to save the new coffee beans.");
-      }
+    // if (coffeeBeansResult instanceof UniquenessCollisionFailure) {
+    //   throw new Error("A coffee beans with this name already exist. Failed to save the new coffee beans.");
+    // }
 
-      const recipeSubmit: RecipeSubmit = {
-        coffeeBeansId: coffeeBeansResult.id,
-        recipeTarget: recipePlan,
-        recipeOutput: recipeResult,
-        opinion: recipeOpinion,
-        outputWeight: outputWeight,
-        rating: rating,
-        timestamp: timestamp
-      };
-      await addRecipe(recipeSubmit);
-
-      goto("/");
+    if (selectedCoffeeBeans === undefined) {
+      throw new Error("Please select the coffee beans.");
     }
+
+    const recipeSubmit: RecipeSubmit = {
+      coffeeBeansId: selectedCoffeeBeans.id,
+      recipeTarget: recipePlan,
+      recipeOutput: recipeResult,
+      opinion: recipeOpinion,
+      outputWeight: outputWeight,
+      rating: rating,
+      timestamp: timestamp
+    };
+    await addRecipe(recipeSubmit);
+
+    goto("/");
+    // }
   }
 </script>
 
@@ -129,12 +134,10 @@
   <title>Add recipe</title>
 </svelte:head>
 
-<!-- <h1>Add recipe</h1> -->
-
-<h5 class="text-xl text-center font-bold dark:text-white">Add recipe</h5>
+<h1 class="text-xl text-center font-bold dark:text-white">Add recipe</h1>
 
 <form id="add-recipe" on:submit|preventDefault={handleSubmit}>
-  <CoffeeBeansSelect allCoffeeBeans={coffeeBeansItems} selectedCoffeeBeans={undefined} />
+  <CoffeeBeansSelect allCoffeeBeans={coffeeBeansItems} bind:selectedCoffeeBeans />
 
   <div>
     <label for={RECIPE_PLAN}>Recipe target:</label>

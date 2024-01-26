@@ -6,7 +6,7 @@
 
 <script lang="ts">
   import type { CoffeeBeans } from "../../../entities/CoffeeBeans";
-  import NewCoffeeBeansModal from "./NewCoffeeBeansModal.svelte";
+  import NewCoffeeBeansModal from "$lib/NewCoffeeBeansModal.svelte";
 
   // Props:
 
@@ -34,20 +34,19 @@
   }
 </script>
 
-{#if allCoffeeBeans !== undefined}
-  <div>
-    <label for={COFFEEBEANS_ID} class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-      Coffee beans:
-    </label>
-    <div class="select-container">
-      <select
-        name={COFFEEBEANS_ID}
-        id={COFFEEBEANS_ID}
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-        required
-        on:change={handleSelectChange}
-        bind:value={selectedCoffeeBeansId}
-      >
+<div>
+  <label for={COFFEEBEANS_ID} class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+    Coffee beans:
+  </label>
+  <div class="select-container">
+    <select
+      name={COFFEEBEANS_ID}
+      id={COFFEEBEANS_ID}
+      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+      on:change={handleSelectChange}
+      bind:value={selectedCoffeeBeansId}
+    >
+      {#if allCoffeeBeans !== undefined}
         {#if showEmptyOption}
           <option disabled selected value></option>
         {/if}
@@ -55,11 +54,15 @@
           <option selected={selectedCoffeeBeans?.id === item.id} value={item.id}>{item.name}</option>
         {/each}
         <!-- <option value="create_new">create new...</option> -->
-      </select>
-      <NewCoffeeBeansModal />
-    </div>
+      {:else}
+        <option disabled selected value>Loading coffee beans...</option>
+      {/if}
+    </select>
+    <!-- <div>Loading coffee beans...</div> -->
+    <NewCoffeeBeansModal />
+  </div>
 
-    <!-- {#if showNewCoffeeBeansInput}
+  <!-- {#if showNewCoffeeBeansInput}
       <label for={NEW_COFFEEBEANS_NAME}>New coffee beans name:</label>
       <input
         name={NEW_COFFEEBEANS_NAME}
@@ -71,10 +74,7 @@
         bind:value={newCoffeeBeansName}
       />
     {/if} -->
-  </div>
-{:else}
-  <div>Loading coffee beans...</div>
-{/if}
+</div>
 
 <style>
   .select-container {

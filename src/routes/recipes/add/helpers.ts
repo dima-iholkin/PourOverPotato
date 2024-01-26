@@ -2,8 +2,9 @@ import { getCoffeeBeansByName } from "../../../database/indexedDB";
 import type { CoffeeBeans } from "../../../entities/CoffeeBeans";
 import type { CoffeeBeansValidationResult } from "./CoffeeBeansValidationResult";
 
+/*
 export async function validateAndParseCoffeeBeans(
-  coffeeBeansIdStr: string | undefined | null, newCoffeeBeansName: string | undefined | null
+  coffeeBeansId: number | undefined, newCoffeeBeansName: string | undefined | null
 ): Promise<CoffeeBeansValidationResult> {
   // Validate new coffee beans creation:
 
@@ -42,6 +43,7 @@ export async function validateAndParseCoffeeBeans(
 
   return Promise.resolve({ presentBeansId: coffeeBeansId });
 }
+*/
 
 export function formatTimeForInput(date: Date) {
   const timezoneOffsetMs = date.getTimezoneOffset() * 60000; // Timezone offset in milliseconds.
