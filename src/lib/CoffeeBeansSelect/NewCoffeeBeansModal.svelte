@@ -1,4 +1,10 @@
+<script context="module">
+  const DESCRIPTION_PH = "Example: Washed process. Notes: plum, cherry.";
+</script>
+
 <script lang="ts">
+  import Label from "$lib/forms/Label.svelte";
+  import Textarea from "$lib/forms/Textarea.svelte";
   import { addCoffeeBeans } from "../../database/indexedDB";
   import { UniquenessCollisionFailure } from "../../database/types/UniquenessCollisionFailure";
   import { CoffeeBeans, CoffeeBeansSubmit } from "../../entities/CoffeeBeans";
@@ -16,6 +22,16 @@
   let name: string = "";
   let description: string = "";
 
+  let nameValidationFailed: boolean = false;
+  $: {
+    nameValidationFailed;
+    if (nameValidationFailed === false) {
+      validationMessage = "";
+    }
+  }
+
+  let validationMessage: string = "";
+
   // Handler functions:
 
   function openModal() {
@@ -25,10 +41,11 @@
 
   function closeModal() {
     showModal = false;
+    nameValidationFailed = false;
     // document.getElementsByTagName("body")[0].classList.remove("overflow-y-hidden");
   }
 
-  // Close all modals when press ESC
+  // Close the modal on Escape key.
   function handleEscKey(event: KeyboardEvent) {
     if (showModal && event.key === "Escape") {
       showModal = false;
@@ -42,16 +59,17 @@
       CoffeeBeansSubmit.create(name, description);
 
     if (coffeeBeansSubmit === "ValidationFailed_NameMustBeAtLeast3CharsLong") {
-      alert("ValidationFailed_NameMustBeAtLeast3CharsLong");
+      nameValidationFailed = true;
+      validationMessage = "Name must be at least 3 characters long.";
       return;
-      // TODO: Raise the validation error on the form.
     }
 
     const coffeeBeans: CoffeeBeans | "Failure_NameAlreadyExist" = await addCoffeeBeans(coffeeBeansSubmit);
+
     if (coffeeBeans === "Failure_NameAlreadyExist") {
-      alert("Failure_NameAlreadyExist");
+      nameValidationFailed = true;
+      validationMessage = "Coffee beans with this name already exist.";
       return;
-      // TODO: Raise the error in the UI.
     }
 
     alert("New coffee beans saved successfully.");
@@ -60,10 +78,17 @@
     // Return the new Coffee Beans entity to the "Add recipe" page:
     savedCoffeeBeans = coffeeBeans;
 
-    // Clear the modal state.
+    // Clear the modal state:
     closeModal();
     name = "";
     description = "";
+  }
+
+  function handleInputChange(event: Event & { currentTarget: EventTarget & HTMLInputElement }) {
+    if (nameValidationFailed) {
+      nameValidationFailed = false;
+      validationMessage = "";
+    }
   }
 </script>
 
@@ -79,25 +104,21 @@
 
     <form class="max-w-sm mx-auto" on:submit|preventDefault={handleSubmit}>
       <div class="mb-5">
-        <label for="name">Coffee beans name</label>
+        <Label _for="name" valid={!nameValidationFailed}>Coffee beans name</Label>
         <input
           type="text"
           id="name"
           name="name"
-          class="input-name"
-          placeholder="Rwanda Mabanza"
-          required
+          class={nameValidationFailed ? "input-name-validation-failed" : "input-name"}
+          placeholder={nameValidationFailed ? "" : "Example: Rwanda Mabanza"}
           bind:value={name}
+          on:input={handleInputChange}
         />
+        <p class="mt-2 text-sm text-red-600 dark:text-red-500">{validationMessage}</p>
       </div>
       <div class="my-div mb-5">
-        <label for="description"> Description </label>
-        <textarea
-          id="description"
-          class="textarea-description"
-          placeholder="Washed process. Notes: plum, cherry."
-          bind:value={description}
-        />
+        <Label _for="description">Description</Label>
+        <Textarea id="description" name="description" placeholder={DESCRIPTION_PH} bind:value={description} />
       </div>
       <button type="submit" class="button-submit">Save</button>
     </form>
@@ -117,13 +138,10 @@
     @apply relative top-40 mx-auto shadow-xl rounded-md bg-white max-w-md;
   }
 
-  button {
-    margin-left: 8px;
-    margin-right: 4px;
-  }
-
   .button-add {
     @apply bg-green-500 text-white rounded-md px-4 py-2 hover:bg-green-700 transition;
+
+    margin-left: 8px;
   }
 
   .input-name {
@@ -132,14 +150,11 @@
     @apply dark:focus:ring-blue-500 dark:focus:border-blue-500;
   }
 
-  label {
-    @apply block mb-2 text-sm font-medium text-gray-900 dark:text-white;
-  }
+  .input-name-validation-failed {
+    @apply bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-sm rounded-lg focus:ring-red-500;
+    @apply focus:border-red-500 block w-full p-2.5 dark:bg-red-100 dark:border-red-400;
 
-  .textarea-description {
-    @apply bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500;
-    @apply block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white;
-    @apply dark:focus:ring-blue-500 dark:focus:border-blue-500;
+    background-color: #fef2f2;
   }
 
   .my-div {

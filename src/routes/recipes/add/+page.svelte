@@ -1,15 +1,10 @@
 <script context="module" lang="ts">
-  const COFFEEBEANS_ID = "coffee-beans";
-  const NEW_COFFEEBEANS_NAME = "new-coffee-beans";
-  const NEW_COFFEEBEANS_PH = "Example: Brazil Mogiana";
   const RECIPE_PLAN = "recipe-plan";
   const RECIPE_PLAN_PH = "Example: 17 clicks, 15g + 260g. 5m boil.";
   const RECIPE_RESULT = "recipe-result";
   const RECIPE_RESULT_PH = "Example: 2m15s + 15s drip. 250g out.";
   const RECIPE_OPINION = "recipe-opinion";
   const RECIPE_OPINION_PH = "Example: Perfect balance. Perfect concentration. Flowery notes.";
-  const OUTPUT_WEIGHT = "output-weight";
-  const RATING = "rating";
   const TIMESTAMP = "timestamp";
 </script>
 
@@ -19,11 +14,14 @@
   import { goto } from "$app/navigation";
   import { CoffeeBeans, type CoffeeBeansSubmit } from "../../../entities/CoffeeBeans";
   import { addCoffeeBeans, addRecipe, getAllCoffeeBeans } from "../../../database/indexedDB";
-  // import { formatTimeForInput, parseDateFromInputString, validateAndParseCoffeeBeans } from "./helpers";
   import { formatTimeForInput, parseDateFromInputString } from "./helpers";
   import type { RecipeSubmit } from "../../../entities/Recipe";
   import { UniquenessCollisionFailure } from "../../../database/types/UniquenessCollisionFailure";
   import CoffeeBeansSelect from "./CoffeeBeansSelect.svelte";
+  import Label from "$lib/forms/Label.svelte";
+  import Textarea from "$lib/forms/Textarea.svelte";
+  import RatingInput from "./RatingInput.svelte";
+  import OutWeight from "./OutWeight.svelte";
 
   // From load function:
 
@@ -38,12 +36,13 @@
   let showNewCoffeeBeansInput = false;
 
   let selectedCoffeeBeans: CoffeeBeans | undefined;
+  let uiCoffeeBeansValidationFailed: boolean = false;
   let newCoffeeBeansName: string | null | undefined;
-  let recipePlan: string | null | undefined;
-  let recipeResult: string | null | undefined;
-  let recipeOpinion: string | null | undefined;
-  let outputWeight: number | null | undefined;
-  let rating: number | null | undefined;
+  let recipePlan: string;
+  let recipeResult: string;
+  let recipeOpinion: string;
+  let outputWeight: number;
+  let rating: number;
 
   let timestampStr: string = formatTimeForInput(new Date());
 
@@ -61,6 +60,10 @@
 
   async function handleSubmit(event: SubmitEvent & { currentTarget: EventTarget & HTMLFormElement }) {
     // Deal with the CoffeeBeans select:
+    if (selectedCoffeeBeans === undefined) {
+      uiCoffeeBeansValidationFailed = true;
+      return;
+    }
 
     // Deal with the 3 textarea inputs:
 
@@ -78,16 +81,6 @@
       recipeOpinion = "";
     }
     recipeOpinion = recipeOpinion.trim();
-
-    // Deal with Rating and OutputWeight:
-
-    if (rating === undefined || rating === null) {
-      rating = 0;
-    }
-
-    if (outputWeight === undefined || outputWeight === null) {
-      outputWeight = 0;
-    }
 
     // Deal with the timestamp:
 
@@ -118,66 +111,83 @@
   <title>Add recipe</title>
 </svelte:head>
 
-<h1 class="text-xl text-center font-bold dark:text-white">Add recipe</h1>
+<h1>Add recipe</h1>
 
 <form id="add-recipe" on:submit|preventDefault={handleSubmit}>
-  <CoffeeBeansSelect allCoffeeBeans={coffeeBeansItems} bind:selectedCoffeeBeans />
-
   <div>
-    <label for={RECIPE_PLAN}>Recipe target:</label>
-  </div>
-  <div>
-    <textarea name={RECIPE_PLAN} id={RECIPE_PLAN} placeholder={RECIPE_PLAN_PH} bind:value={recipePlan} />
-  </div>
-
-  <div>
-    <label for={RECIPE_RESULT}>Recipe result:</label>
-  </div>
-  <div>
-    <textarea name={RECIPE_RESULT} id={RECIPE_RESULT} placeholder={RECIPE_RESULT_PH} bind:value={recipeResult} />
+    <CoffeeBeansSelect
+      allCoffeeBeans={coffeeBeansItems}
+      bind:selectedCoffeeBeans
+      validationFailed={uiCoffeeBeansValidationFailed}
+    />
   </div>
 
   <div>
-    <label for={OUTPUT_WEIGHT}>Output weight:</label>
-    <input name={OUTPUT_WEIGHT} id={OUTPUT_WEIGHT} type="number" min="0" step="1" bind:value={outputWeight} />
-    <label for={OUTPUT_WEIGHT}>g</label>
+    <Label _for={RECIPE_PLAN}>Recipe target:</Label>
+  </div>
+  <div>
+    <Textarea name={RECIPE_PLAN} id={RECIPE_PLAN} placeholder={RECIPE_PLAN_PH} bind:value={recipePlan} />
   </div>
 
   <div>
-    <label for={RATING}>Rating:</label>
-    <input name={RATING} id={RATING} type="number" min="0" max="5" step="0.5" bind:value={rating} />
+    <Label _for={RECIPE_RESULT}>Recipe result:</Label>
+  </div>
+  <div>
+    <Textarea name={RECIPE_RESULT} id={RECIPE_RESULT} placeholder={RECIPE_RESULT_PH} bind:value={recipeResult} />
   </div>
 
   <div>
-    <label for={RECIPE_OPINION}>Opinion:</label>
-  </div>
-  <div>
-    <textarea name={RECIPE_OPINION} id={RECIPE_OPINION} placeholder={RECIPE_OPINION_PH} bind:value={recipeOpinion} />
+    <OutWeight bind:value={outputWeight} />
   </div>
 
   <div>
-    <label for={TIMESTAMP}>Timestamp:</label>
-    <input name={TIMESTAMP} id={TIMESTAMP} type="datetime-local" bind:value={timestampStr} />
+    <RatingInput bind:value={rating} />
   </div>
 
-  <button type="submit" form="add-recipe" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-    Save
-  </button>
+  <div>
+    <Label _for={RECIPE_OPINION}>Opinion:</Label>
+  </div>
+  <div>
+    <Textarea name={RECIPE_OPINION} id={RECIPE_OPINION} placeholder={RECIPE_OPINION_PH} bind:value={recipeOpinion} />
+  </div>
+
+  <div>
+    <Label _for={TIMESTAMP}>Timestamp:</Label>
+    <input name={TIMESTAMP} id={TIMESTAMP} type="datetime-local" bind:value={timestampStr} class="timestamp-input" />
+  </div>
+
+  <button type="submit" form="add-recipe" class="my-button"> Save </button>
 </form>
 
-<style>
-  input,
-  textarea {
+<style lang="postcss">
+  h1 {
+    @apply text-xl text-center font-bold dark:text-white;
+
+    margin-top: 8px;
+    margin-bottom: 8px;
+  }
+
+  div {
+    margin-bottom: 8px;
+  }
+
+  .timestamp-input {
     border: solid #eeeeee;
   }
 
-  textarea {
-    width: 100%;
-  }
+  /* .input-number {
+    @apply bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500;
+    @apply block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white;
+    @apply dark:focus:ring-blue-500 dark:focus:border-blue-500;
+  } */
 
   button {
     width: 100%;
     margin-top: 16px;
     margin-bottom: 16px;
+  }
+
+  .my-button {
+    @apply bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded;
   }
 </style>
