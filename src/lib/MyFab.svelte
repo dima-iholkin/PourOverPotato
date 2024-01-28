@@ -1,25 +1,48 @@
 <script lang="ts">
-  import { Fab } from "konsta/svelte";
   import PlusIcon from "./PlusIcon.svelte";
+
+  // Props:
 
   export let href: string | undefined;
 </script>
 
-<div class="my-fab">
-  <Fab
-    class="fixed left-1/2 bottom-4-safe transform -translate-x-1/2 z-20"
-    text="Add recipe"
-    style="margin-bottom: 64px;"
-    {href}
-  >
-    <svelte:component this={PlusIcon} slot="icon" />
-  </Fab>
-</div>
+<a {href}>
+  <button class="my-button">
+    <div>
+      <PlusIcon />
+      <p>Add recipe</p>
+    </div>
+  </button>
+</a>
 
-<style>
-  /* @media only screen and (width < 800px) {
-    .my-fab {
-      margin-bottom: 128px;
+<style lang="postcss">
+  button {
+    @apply fixed bg-blue-600 rounded-full drop-shadow-lg flex justify-center items-center text-white;
+    @apply hover:bg-blue-700 hover:drop-shadow-2xl;
+
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  @media only screen and (min-width: 800px) {
+    .my-button {
+      bottom: 16px;
     }
-  } */
+  }
+
+  @media only screen and (width < 800px) {
+    .my-button {
+      bottom: 80px;
+    }
+  }
+
+  div {
+    display: flex;
+    flex-direction: row;
+    margin: 16px;
+  }
+
+  p {
+    margin-right: 8px;
+  }
 </style>
