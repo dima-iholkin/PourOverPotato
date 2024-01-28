@@ -1,43 +1,44 @@
 <script lang="ts">
-  import { MenuList, MenuListItem } from "konsta/svelte";
   import { page } from "$app/stores";
   import { goto } from "$app/navigation";
 
-  export let hidden: Boolean = false;
+  // State:
 
   $: selected = $page.route.id ?? "";
-
-  function handleClick(route: string) {
-    goto(route);
-  }
 </script>
 
-<div>
-  {#if hidden === false}
-    <MenuList class="menu-list" style="padding: 0; margin: 0; position: fixed;">
-      <a href="/">
-        <MenuListItem title="Coffee beans" active={selected === "/" || selected === "/beans"} />
-      </a>
-      <a href="/recipes">
-        <MenuListItem title="All recipes" active={selected === "/recipes"} />
-      </a>
-      <a href="/settings">
-        <MenuListItem title="Settings" active={selected === "/settings"} />
-      </a>
-    </MenuList>
-  {:else}
-    <MenuList class="menu-list" style="padding: 0; margin: 0; opacity: 0; z-index: -1;">
-      <MenuListItem title="Coffee beans" />
-      <MenuListItem title="All recipes" />
-      <MenuListItem title="Settings" />
-    </MenuList>
-  {/if}
-</div>
+<aside aria-label="Sidebar">
+  <div class="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
+    <ul class="space-y-2 font-medium">
+      <li>
+        <a href="/" class:bg-gray-200={selected === "/"}>
+          <span class="ms-3">Coffee Beans</span>
+        </a>
+        <a href="/recipes" class:bg-gray-200={selected === "/recipes"}>
+          <span class="ms-3">Recipes</span>
+        </a>
+        <a href="/settings" class:bg-gray-200={selected === "/settings"}>
+          <span class="ms-3">Other</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</aside>
 
-<style>
+<style lang="postcss">
   @media only screen and (width < 800px) {
-    div {
+    aside {
       display: none;
     }
+  }
+
+  aside {
+    @apply fixed top-0 left-0 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0;
+
+    padding-top: 64px;
+  }
+
+  a {
+    @apply flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700;
   }
 </style>

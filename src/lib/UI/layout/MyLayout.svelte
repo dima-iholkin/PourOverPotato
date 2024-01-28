@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { App, Block, Link, Navbar, Page, Panel } from "konsta/svelte";
+  import { App } from "konsta/svelte";
   import MyBottomNav from "./components/MyBottomNav.svelte";
   import MySidebar from "./components/MySidebar.svelte";
   import MyHeader from "./components/MyHeader.svelte";
@@ -14,18 +14,7 @@
 
   <div style="display: flex; flex-direction: row;">
     <MySidebar />
-    <MySidebar hidden />
-
-    <Panel side="right" opened={rightPanelOpened} onBackdropClick={() => (rightPanelOpened = false)}>
-      <Page>
-        <Navbar title="Right Panel">
-          <Link slot="right" navbar onClick={() => (rightPanelOpened = false)}>Close</Link>
-        </Navbar>
-        <Block class="space-y-4">
-          <p>Hello from Menu</p>
-        </Block>
-      </Page>
-    </Panel>
+    <!-- <MySidebar hidden /> -->
 
     <div class="page-container">
       <slot />
