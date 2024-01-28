@@ -1,8 +1,8 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { error } from "@sveltejs/kit";
-  import RecipeCard from "$lib/RecipeCard.svelte";
-  import MyFab from "$lib/MyFab.svelte";
+  import RecipeCard from "$lib/UI/RecipeCard.svelte";
+  import MyFab from "$lib/UI/MyFab.svelte";
   import type { PageData } from "./$types";
   import { CoffeeBeans } from "../../../entities/CoffeeBeans";
   import type { Recipe } from "../../../entities/Recipe";

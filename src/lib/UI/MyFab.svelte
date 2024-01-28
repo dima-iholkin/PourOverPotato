@@ -1,5 +1,5 @@
 <script lang="ts">
-  import PlusIcon from "./PlusIcon.svelte";
+  import PlusIcon from "./icons/PlusIcon.svelte";
 
   // Props:
 

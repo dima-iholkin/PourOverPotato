@@ -1,5 +1,6 @@
 <script lang="ts">
-  import MyLayout from "$lib/MyLayout.svelte";
+  import MyLayout from "$lib/UI/layout/MyLayout.svelte";
+  import "../app.css";
 </script>
 
 <MyLayout>

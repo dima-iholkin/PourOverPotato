@@ -2,8 +2,8 @@
   import { Navbar, NavbarBackLink } from "konsta/svelte";
   import { page } from "$app/stores";
   import { goto, invalidateAll } from "$app/navigation";
-  import { devFillDB } from "../database/devData/devFillDB";
-  import LoveIcon from "./LoveIcon.svelte";
+  import { devFillDB } from "../../../../database/devData/devFillDB";
+  import LoveIcon from "$lib/UI/icons/LoveIcon.svelte";
   const { MODE } = import.meta.env;
 
   // Props:
@@ -17,7 +17,7 @@
     pathname = pageInfo.url.pathname;
   });
 
-  // Event handlers:
+  // Handler functions:
 
   function handleBackButtonClick() {
     if (history.length === 0 || document.referrer.indexOf(window.location.host) === -1) {

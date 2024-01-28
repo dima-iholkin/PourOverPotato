@@ -1,64 +1,104 @@
-<script context="module">
-  const RATING = "rating";
-</script>
-
 <script lang="ts">
-  import Label from "$lib/forms/Label.svelte";
+  import Label from "$lib/UI/forms/Label.svelte";
 
   // Props:
 
   export let value: number = 0;
 
+  export let labelText: string = "";
+  export let nameAttr: string = "";
+
+  export let min: number = 0;
+  export let max: number = Number.MAX_SAFE_INTEGER;
+
+  /**
+   * Step starting from the min value.
+   * Therefore if min = 0 and step = 0.5, the possible values are integers and .5 values.
+   */
+  export let step: number = 1;
+
   // Handler functions:
 
-  function validateInput(event: Event & { currentTarget: EventTarget & HTMLInputElement }) {
-    const number: number = Number(event.currentTarget.value);
-
-    if (isNaN(number)) {
-      value = 0;
+  function handleKeydown(event: KeyboardEvent & { currentTarget: EventTarget & HTMLInputElement }) {
+    const key = event.key;
+    if (
+      (key < "0" || key > "9") &&
+      key !== "." &&
+      key !== "Backspace" &&
+      key !== "Delete" &&
+      key !== "ArrowLeft" &&
+      key !== "ArrowRight"
+    ) {
+      event.preventDefault();
       return;
     }
+  }
 
-    if (number > 5) {
-      value = 5;
-      return;
-    }
-
-    if (number < 0) {
-      value = 0;
-      return;
-    }
-
-    if (number % 0.5 !== 0) {
-      value = Math.floor(number);
-      return;
-    }
-
-    return;
+  function handleFocusOut(event: Event & { currentTarget: EventTarget & HTMLInputElement }) {
+    parseValue(event.currentTarget.value);
   }
 
   function handleMinus() {
-    if (value >= 0.5) {
-      value -= 0.5;
+    parseValue(value);
+
+    if (value >= min + step) {
+      value -= step;
     }
   }
 
   function handlePlus() {
-    if (value <= 4.5) {
-      value += 0.5;
+    parseValue(value);
+
+    if (value <= max - step) {
+      value += step;
     }
+  }
+
+  // Helpers:
+
+  function parseValue(num: number | string) {
+    const parsedNum: number = Number(num);
+
+    if (isNaN(parsedNum)) {
+      value = min;
+      return;
+    }
+
+    if (parsedNum > max) {
+      value = max;
+      return;
+    }
+
+    if (parsedNum < min) {
+      value = min;
+      return;
+    }
+
+    if (parsedNum % step !== 0) {
+      value = Math.floor(parsedNum / step) * step;
+      return;
+    }
+
+    value = parsedNum;
   }
 </script>
 
 <div class="container">
-  <Label _for={RATING}>Rating:</Label>
+  <Label _for={nameAttr}>{labelText}</Label>
   <div class="input-container">
     <button type="button" id="decrement-button" class="minus-button" on:click={handleMinus}>
       <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h16" />
       </svg>
     </button>
-    <input id={RATING} name={RATING} type="text" bind:value on:input={validateInput} />
+    <input
+      id={nameAttr}
+      name={nameAttr}
+      type="text"
+      bind:value
+      on:keydown={handleKeydown}
+      on:focusout={handleFocusOut}
+    />
     <button type="button" id="increment-button" class="plus-button" on:click={handlePlus}>
       <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
         <path

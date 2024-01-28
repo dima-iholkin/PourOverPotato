@@ -18,11 +18,9 @@
   import type { RecipeSubmit } from "../../../entities/Recipe";
   import { UniquenessCollisionFailure } from "../../../database/types/UniquenessCollisionFailure";
   import CoffeeBeansSelect from "./CoffeeBeansSelect.svelte";
-  import Label from "$lib/forms/Label.svelte";
-  import Textarea from "$lib/forms/Textarea.svelte";
-  import RatingInput from "./RatingInput.svelte";
-  import OutWeight from "./OutWeight.svelte";
-  import NumberInput from "$lib/forms/NumberInput.svelte";
+  import Label from "$lib/UI/forms/Label.svelte";
+  import Textarea from "$lib/UI/forms/Textarea.svelte";
+  import NumberInput from "$lib/UI/forms/NumberInput.svelte";
   import TimestampPicker from "./TimestampPicker.svelte";
 
   // From load function:

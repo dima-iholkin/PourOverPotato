@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import RecipeCard from "$lib/RecipeCard.svelte";
-  import MyFab from "$lib/MyFab.svelte";
+  import RecipeCard from "$lib/UI/RecipeCard.svelte";
+  import MyFab from "$lib/UI/MyFab.svelte";
   import type { Recipe } from "../../entities/Recipe";
   import { getAllRecipes } from "../../database/indexedDB";
   import { sortRecipesByTimestampDesc as byTimestampDesc } from "../../database/helpers/sortRecipes";

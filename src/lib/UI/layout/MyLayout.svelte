@@ -1,9 +1,10 @@
 <script lang="ts">
   import { App, Block, Link, Navbar, Page, Panel } from "konsta/svelte";
-  import MyHeader from "./MyHeader.svelte";
-  import MySidebar from "./MySidebar.svelte";
-  import "../app.css";
-  import MyBottomNav from "./MyBottomNav.svelte";
+  import MyBottomNav from "./components/MyBottomNav.svelte";
+  import MySidebar from "./components/MySidebar.svelte";
+  import MyHeader from "./components/MyHeader.svelte";
+
+  // State:
 
   let rightPanelOpened = false;
 </script>

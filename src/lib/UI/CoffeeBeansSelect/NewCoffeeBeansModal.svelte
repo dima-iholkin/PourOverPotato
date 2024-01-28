@@ -3,13 +3,12 @@
 </script>
 
 <script lang="ts">
-  import Label from "$lib/forms/Label.svelte";
-  import Textarea from "$lib/forms/Textarea.svelte";
-  import { addCoffeeBeans } from "../../database/indexedDB";
-  import { UniquenessCollisionFailure } from "../../database/types/UniquenessCollisionFailure";
-  import { CoffeeBeans, CoffeeBeansSubmit } from "../../entities/CoffeeBeans";
-  import CloseButton from "./CloseButton.svelte";
-  import Header from "./Header.svelte";
+  import Label from "$lib/UI/forms/Label.svelte";
+  import Textarea from "$lib/UI/forms/Textarea.svelte";
+  import { addCoffeeBeans } from "../../../database/indexedDB";
+  import { UniquenessCollisionFailure } from "../../../database/types/UniquenessCollisionFailure";
+  import { CoffeeBeans, CoffeeBeansSubmit } from "../../../entities/CoffeeBeans";
+  import Header from "./components/Header.svelte";
 
   // Props:
 

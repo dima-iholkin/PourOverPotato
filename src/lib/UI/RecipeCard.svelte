@@ -7,9 +7,9 @@
 
 <script lang="ts">
   import { onMount } from "svelte";
-  import type { Recipe } from "../entities/Recipe";
-  import { getCoffeeBeansById } from "../database/indexedDB";
-  import type { CoffeeBeans } from "../entities/CoffeeBeans";
+  import type { Recipe } from "../../entities/Recipe";
+  import type { CoffeeBeans } from "../../entities/CoffeeBeans";
+  import { getCoffeeBeansById } from "../../database/indexedDB";
 
   // Props:
 
