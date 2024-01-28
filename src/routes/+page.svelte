@@ -15,7 +15,7 @@
 </script>
 
 <svelte:head>
-  <title>PourOverPotato</title>
+  <title>PourOverPotato app</title>
 </svelte:head>
 
 {#if coffeeBeans === undefined}

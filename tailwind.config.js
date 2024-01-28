@@ -1,13 +1,7 @@
-const konstaConfig = require('konsta/config');
-
-module.exports = konstaConfig({
+export default {
   content: ['./src/**/*.{html,js,svelte,ts}'],
-  darkMode: 'media', // or 'class'
   theme: {
-    extend: {},
+    extend: {}
   },
-  variants: {
-    extend: {},
-  },
-  plugins: [],
-});
+  plugins: []
+};

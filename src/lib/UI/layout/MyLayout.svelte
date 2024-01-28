@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { App } from "konsta/svelte";
   import MyBottomNav from "./components/MyBottomNav.svelte";
   import MySidebar from "./components/MySidebar.svelte";
   import MyHeader from "./components/MyHeader.svelte";
@@ -9,23 +8,25 @@
   let rightPanelOpened = false;
 </script>
 
-<App theme="material">
-  <MyHeader onMenuClick={() => (rightPanelOpened = true)} />
+<MyHeader />
+<div class="header-gap" />
 
-  <div style="display: flex; flex-direction: row;">
-    <MySidebar />
-    <!-- <MySidebar hidden /> -->
+<div style="display: flex; flex-direction: row;">
+  <MySidebar />
 
-    <div class="page-container">
-      <slot />
-      <div class="bottom-margin" />
-    </div>
+  <div class="page-container">
+    <slot />
+    <div class="bottom-margin" />
   </div>
+</div>
 
-  <MyBottomNav />
-</App>
+<MyBottomNav />
 
-<style>
+<style lang="postcss">
+  .header-gap {
+    height: 88px;
+  }
+
   .page-container {
     min-width: 30%;
     margin-left: auto;
