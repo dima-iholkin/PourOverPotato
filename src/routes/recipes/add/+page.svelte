@@ -22,6 +22,8 @@
   import Textarea from "$lib/forms/Textarea.svelte";
   import RatingInput from "./RatingInput.svelte";
   import OutWeight from "./OutWeight.svelte";
+  import NumberInput from "$lib/forms/NumberInput.svelte";
+  import TimestampPicker from "./TimestampPicker.svelte";
 
   // From load function:
 
@@ -41,7 +43,7 @@
   let recipePlan: string;
   let recipeResult: string;
   let recipeOpinion: string;
-  let outputWeight: number;
+  let outWeight: number;
   let rating: number;
 
   let timestampStr: string = formatTimeForInput(new Date());
@@ -97,7 +99,7 @@
       recipeTarget: recipePlan,
       recipeOutput: recipeResult,
       opinion: recipeOpinion,
-      outputWeight: outputWeight,
+      outputWeight: outWeight,
       rating: rating,
       timestamp: timestamp
     };
@@ -137,11 +139,11 @@
   </div>
 
   <div>
-    <OutWeight bind:value={outputWeight} />
+    <NumberInput labelText="Out weight (g):" min={0} step={5} nameAttr={"out-weight"} bind:value={outWeight} />
   </div>
 
   <div>
-    <RatingInput bind:value={rating} />
+    <NumberInput labelText="Rating:" min={0} max={5} step={0.5} nameAttr={"rating"} bind:value={rating} />
   </div>
 
   <div>
@@ -152,8 +154,7 @@
   </div>
 
   <div>
-    <Label _for={TIMESTAMP}>Timestamp:</Label>
-    <input name={TIMESTAMP} id={TIMESTAMP} type="datetime-local" bind:value={timestampStr} class="timestamp-input" />
+    <TimestampPicker bind:value={timestampStr} />
   </div>
 
   <button type="submit" form="add-recipe" class="my-button"> Save </button>
@@ -170,16 +171,6 @@
   div {
     margin-bottom: 8px;
   }
-
-  .timestamp-input {
-    border: solid #eeeeee;
-  }
-
-  /* .input-number {
-    @apply bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500;
-    @apply block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white;
-    @apply dark:focus:ring-blue-500 dark:focus:border-blue-500;
-  } */
 
   button {
     width: 100%;
