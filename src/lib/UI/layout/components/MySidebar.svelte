@@ -1,12 +1,16 @@
 <script lang="ts">
   import { page } from "$app/stores";
 
+  // Props:
+
+  export let asGap: boolean = false;
+
   // State:
 
   $: selected = $page.route.id ?? "";
 </script>
 
-<aside aria-label="Sidebar">
+<aside class="my-aside" class:as-gap={asGap} aria-label="Sidebar">
   <div class="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
     <ul class="space-y-2 font-medium">
       <li>
@@ -26,15 +30,20 @@
 
 <style lang="postcss">
   @media only screen and (width < 800px) {
-    aside {
+    .my-aside {
       display: none;
     }
   }
 
-  aside {
+  .my-aside {
     @apply fixed top-0 left-0 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0;
 
     padding-top: 88px;
+  }
+
+  .as-gap {
+    position: static;
+    visibility: hidden;
   }
 
   a {

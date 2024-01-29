@@ -134,6 +134,9 @@
 
   .inner-container {
     @apply relative top-40 mx-auto shadow-xl rounded-md bg-white max-w-md;
+
+    padding-left: 16px;
+    padding-right: 16px;
   }
 
   .button-add {

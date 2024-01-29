@@ -9,11 +9,13 @@
 </script>
 
 <MyHeader />
+<!-- <MyHeader asGap /> -->
 <div class="header-gap" />
 
-<div style="display: flex; flex-direction: row;">
-  <MySidebar />
+<MySidebar />
 
+<div style="display: flex; flex-direction: row;">
+  <MySidebar asGap />
   <div class="page-container">
     <slot />
     <div class="bottom-gap" />
@@ -28,7 +30,9 @@
   }
 
   .page-container {
-    min-width: 40%;
+    flex-grow: 1;
+    max-width: 80ch;
+
     margin-left: auto;
     margin-right: auto;
 
