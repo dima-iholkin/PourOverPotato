@@ -1,6 +1,7 @@
 <script lang="ts">
   import MyFab from "$lib/UI/MyFab.svelte";
-  import RecipeCard from "$lib/UI/RecipeCard.svelte";
+  import RecipeCard from "$lib/UI/cards/RecipeCard.svelte";
+  import PageHeadline from "$lib/UI/layout/PageHeadline.svelte";
   import { onMount } from "svelte";
   import { sortRecipesByTimestampDesc as byTimestampDesc } from "../../database/helpers/sortRecipes";
   import { getAllRecipes } from "../../database/indexedDB";
@@ -20,11 +21,10 @@
 </script>
 
 <svelte:head>
-  <title>All recipes</title>
+  <title>Recipes</title>
 </svelte:head>
 
-<h1>All recipes</h1>
-<p>Sorted by timestamp</p>
+<PageHeadline>Recipes</PageHeadline>
 
 {#if recipes === undefined}
   <p>loading...</p>

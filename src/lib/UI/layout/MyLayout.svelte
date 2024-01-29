@@ -28,9 +28,18 @@
   }
 
   .page-container {
-    min-width: 30%;
+    min-width: 40%;
     margin-left: auto;
     margin-right: auto;
+
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  @media only screen and (width < 800px) {
+    .page-container {
+      width: 100%;
+    }
   }
 
   .bottom-margin {

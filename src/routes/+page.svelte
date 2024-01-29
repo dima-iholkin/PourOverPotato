@@ -1,10 +1,16 @@
 <script lang="ts">
   import MyFab from "$lib/UI/MyFab.svelte";
+  import CoffeeBeansCard from "$lib/UI/cards/CoffeeBeansCard.svelte";
+  import PageHeadline from "$lib/UI/layout/PageHeadline.svelte";
   import { onMount } from "svelte";
   import { getAllCoffeeBeans } from "../database/indexedDB";
   import type { CoffeeBeans } from "../entities/CoffeeBeans";
 
+  // State:
+
   let coffeeBeans: CoffeeBeans[] | undefined;
+
+  // Lifecycle hooks:
 
   onMount(() => {
     getAllCoffeeBeans().then((items) => {
@@ -17,23 +23,16 @@
   <title>PourOverPotato app</title>
 </svelte:head>
 
-{#if coffeeBeans === undefined}
-  <p>waiting...</p>
-{:else if coffeeBeans.length === 0}
+<PageHeadline>Coffee beans</PageHeadline>
+
+{#if coffeeBeans !== undefined && coffeeBeans.length > 0}
+  {#each coffeeBeans as item}
+    <CoffeeBeansCard {item} href="/beans/{item.name}" />
+  {/each}
+{:else if coffeeBeans !== undefined && coffeeBeans.length === 0}
   <p>No coffee beans added yet.</p>
 {:else}
-  {#each coffeeBeans as coffeeBeansItem}
-    <a href="/beans/{coffeeBeansItem.name}">
-      <div style="margin: 16px 0; border: solid #EEEEEE;">
-        <p style="font-family: 'Courier New', Courier, monospace; font-size: 20pt; margin: 8px 0;">
-          {coffeeBeansItem.name}
-        </p>
-        <p style="margin: 8px 0;">
-          {coffeeBeansItem.details}
-        </p>
-      </div>
-    </a>
-  {/each}
+  <p>loading...</p>
 {/if}
 
 <MyFab href="/recipes/add" />

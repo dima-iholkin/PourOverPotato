@@ -1,6 +1,6 @@
 <script lang="ts">
   import MyFab from "$lib/UI/MyFab.svelte";
-  import RecipeCard from "$lib/UI/RecipeCard.svelte";
+  import RecipeCard from "$lib/UI/cards/RecipeCard.svelte";
   import { onMount } from "svelte";
   import { sortRecipesByRatingDesc as byRatingDesc } from "../../../database/helpers/sortRecipes";
   import { getCoffeeBeansByName, getRecipesByCoffeeBeansId } from "../../../database/indexedDB";
