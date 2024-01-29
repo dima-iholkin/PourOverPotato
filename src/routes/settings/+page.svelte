@@ -16,11 +16,21 @@
   }
 </script>
 
+<svelte:head>
+  <title>Other</title>
+</svelte:head>
+
 <PageHeadline>Settings</PageHeadline>
 
 {#if MODE === "development"}
   <button type="button" class="init-db-button" on:click={handleInitDevDB}>Initialize dev DB</button>
 {/if}
+
+<h5>Credits</h5>
+
+<a href="https://www.flaticon.com/free-icons/coffee-beans" style="color: cornflowerblue;" title="coffee beans icons">
+  Coffee beans icons created by Freepik - Flaticon
+</a>
 
 <style lang="postcss">
   .init-db-button {
@@ -30,5 +40,12 @@
     @apply dark:focus:ring-yellow-900;
 
     margin-top: 1rem;
+  }
+
+  h5 {
+    @apply text-2xl font-bold tracking-tight text-gray-900 dark:text-white;
+
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
   }
 </style>

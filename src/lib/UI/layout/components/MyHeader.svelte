@@ -1,7 +1,7 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
   import { page } from "$app/stores";
-  import LeftArrow from "$lib/UI/icons/LeftArrow.svelte";
+  import LeftArrowIcon from "$lib/UI/icons/LeftArrowIcon.svelte";
   import LoveIcon from "$lib/UI/icons/LoveIcon.svelte";
 
   // State:
@@ -67,7 +67,7 @@
       <div style="padding-right: 16px;">
         {#if pathname !== "/"}
           <button on:click={handleBackButtonClick}>
-            <LeftArrow />
+            <LeftArrowIcon />
           </button>
         {:else}
           <LoveIcon />
