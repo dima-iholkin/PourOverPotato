@@ -7,6 +7,8 @@
   import Textarea from "$lib/UI/forms/Textarea.svelte";
   import { addCoffeeBeans } from "$lib/database/indexedDB";
   import { CoffeeBeans, CoffeeBeansSubmit } from "$lib/entities/CoffeeBeans";
+  import { tick } from "svelte";
+  import MySidebar from "../layout/components/MySidebar.svelte";
   import Header from "./components/Header.svelte";
 
   // Props:
@@ -16,6 +18,12 @@
   // State:
 
   let showModal: boolean = false;
+
+  let modalDom: Element;
+  let menuButtonDom: Element;
+  let inputDom: HTMLInputElement;
+  let textareaDom: HTMLTextAreaElement;
+  let formDom: HTMLFormElement;
 
   let name: string = "";
   let description: string = "";
@@ -34,6 +42,11 @@
 
   function openModal() {
     showModal = true;
+
+    tick().then(() => {
+      inputDom.focus();
+    });
+
     // document.getElementsByTagName("body")[0].classList.add("overflow-y-hidden");
   }
 
@@ -47,6 +60,20 @@
   function handleEscKey(event: KeyboardEvent) {
     if (showModal && event.key === "Escape") {
       showModal = false;
+    }
+  }
+
+  function handleEnterKey(event: KeyboardEvent & { currentTarget: EventTarget & HTMLInputElement }) {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      textareaDom.focus();
+    }
+  }
+
+  function handleCtrlEnterKey(event: KeyboardEvent) {
+    if (event.key === "Enter" && (event.metaKey || event.ctrlKey)) {
+      event.preventDefault();
+      formDom.requestSubmit();
     }
   }
 
@@ -66,7 +93,7 @@
 
     if (coffeeBeans === "Failure_NameAlreadyExist") {
       nameValidationFailed = true;
-      validationMessage = "Coffee beans with this name already exist.";
+      validationMessage = "Coffee beans with this name exist already.";
       return;
     }
 
@@ -88,19 +115,46 @@
       validationMessage = "";
     }
   }
+
+  function handleDocumentClick(event: MouseEvent & { currentTarget: EventTarget & Document }) {
+    if (showModal === false) {
+      return;
+    }
+
+    if (clickOutsideBox(modalDom, event) && clickOutsideBox(menuButtonDom, event)) {
+      closeModal();
+    }
+  }
+
+  // Helper functions:
+
+  function clickOutsideBox(element: Element, click: MouseEvent) {
+    const box: DOMRect = element.getBoundingClientRect();
+    let x: number = click.clientX;
+    let y: number = click.clientY;
+
+    if (x < box.left || x > box.right || y < box.top || y > box.bottom) {
+      return true;
+    }
+
+    return false;
+  }
 </script>
 
 <svelte:window on:keydown={handleEscKey} />
 
-<button class="button-add" on:click|preventDefault={() => openModal()}>
+<svelte:document on:click={handleDocumentClick} />
+
+<button class="button-add" on:click|preventDefault={() => openModal()} bind:this={menuButtonDom}>
   <span class="material-icons md-18"> add </span>
 </button>
 
 <div class="modal-container" class:show-modal={showModal}>
-  <div class="inner-container">
+  <MySidebar asGap />
+  <div class="inner-container" bind:this={modalDom}>
     <Header on:click={() => closeModal()}>Add new coffee beans</Header>
 
-    <form class="max-w-sm mx-auto" on:submit|preventDefault={handleSubmit}>
+    <form class="max-w-sm mx-auto" on:submit|preventDefault={handleSubmit} bind:this={formDom}>
       <div class="mb-5">
         <Label _for="name" valid={!nameValidationFailed}>Coffee beans name:</Label>
         <input
@@ -111,12 +165,21 @@
           placeholder={nameValidationFailed ? "" : "Example: Rwanda Mabanza"}
           bind:value={name}
           on:input={handleInputChange}
+          on:keydown={handleEnterKey}
+          bind:this={inputDom}
         />
         <p class="mt-2 text-sm text-red-600 dark:text-red-500">{validationMessage}</p>
       </div>
       <div class="my-div mb-5">
         <Label _for="description">Description:</Label>
-        <Textarea id="description" name="description" placeholder={DESCRIPTION_PH} bind:value={description} />
+        <Textarea
+          id="description"
+          name="description"
+          placeholder={DESCRIPTION_PH}
+          bind:value={description}
+          bind:_this={textareaDom}
+          on:keydown={handleCtrlEnterKey}
+        />
       </div>
       <button type="submit" class="button-submit">Save</button>
     </form>
@@ -125,18 +188,27 @@
 
 <style lang="postcss">
   .modal-container {
-    @apply fixed hidden z-50 inset-0 bg-gray-900 bg-opacity-60 overflow-y-auto h-full w-full px-4;
+    @apply fixed hidden inset-0 bg-gray-900 bg-opacity-60 overflow-y-auto h-full w-full px-4;
+
+    /* display: flex; */
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+    z-index: 50;
   }
 
   .show-modal {
-    display: block;
+    display: flex;
   }
 
   .inner-container {
-    @apply relative top-40 mx-auto shadow-xl rounded-md bg-white max-w-md;
+    @apply relative mx-auto shadow-xl rounded-md bg-white max-w-md;
 
     padding-left: 16px;
     padding-right: 16px;
+
+    flex-grow: 1;
   }
 
   .button-add {
