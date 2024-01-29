@@ -1,12 +1,16 @@
 <script lang="ts">
-  import { onMount } from "svelte";
-  import RecipeCard from "$lib/UI/RecipeCard.svelte";
   import MyFab from "$lib/UI/MyFab.svelte";
-  import type { Recipe } from "../../entities/Recipe";
-  import { getAllRecipes } from "../../database/indexedDB";
+  import RecipeCard from "$lib/UI/RecipeCard.svelte";
+  import { onMount } from "svelte";
   import { sortRecipesByTimestampDesc as byTimestampDesc } from "../../database/helpers/sortRecipes";
+  import { getAllRecipes } from "../../database/indexedDB";
+  import type { Recipe } from "../../entities/Recipe";
+
+  // State:
 
   let recipes: Recipe[] | undefined;
+
+  // Lifecycle hooks:
 
   onMount(() => {
     getAllRecipes().then((items: Recipe[]) => {

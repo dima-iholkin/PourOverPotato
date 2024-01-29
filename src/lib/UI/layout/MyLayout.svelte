@@ -1,7 +1,7 @@
 <script lang="ts">
   import MyBottomNav from "./components/MyBottomNav.svelte";
-  import MySidebar from "./components/MySidebar.svelte";
   import MyHeader from "./components/MyHeader.svelte";
+  import MySidebar from "./components/MySidebar.svelte";
 
   // State:
 

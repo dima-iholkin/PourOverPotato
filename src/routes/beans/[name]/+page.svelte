@@ -1,13 +1,12 @@
 <script lang="ts">
-  import { onMount } from "svelte";
-  import { error } from "@sveltejs/kit";
-  import RecipeCard from "$lib/UI/RecipeCard.svelte";
   import MyFab from "$lib/UI/MyFab.svelte";
-  import type { PageData } from "./$types";
+  import RecipeCard from "$lib/UI/RecipeCard.svelte";
+  import { onMount } from "svelte";
+  import { sortRecipesByRatingDesc as byRatingDesc } from "../../../database/helpers/sortRecipes";
+  import { getCoffeeBeansByName, getRecipesByCoffeeBeansId } from "../../../database/indexedDB";
   import { CoffeeBeans } from "../../../entities/CoffeeBeans";
   import type { Recipe } from "../../../entities/Recipe";
-  import { getAllCoffeeBeans, getCoffeeBeansByName, getRecipesByCoffeeBeansId } from "../../../database/indexedDB";
-  import { sortRecipesByRatingDesc as byRatingDesc } from "../../../database/helpers/sortRecipes";
+  import type { PageData } from "./$types";
 
   // Props:
 

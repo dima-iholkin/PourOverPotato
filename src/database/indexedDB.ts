@@ -1,8 +1,7 @@
 import { openDB } from "idb";
-import type { EntitiesDB } from "./types/EntitiesDB";
-import { CoffeeBeansDBSubmit, CoffeeBeans, type CoffeeBeansSubmit, type CoffeeBeansDB } from "../entities/CoffeeBeans";
-import { UniquenessCollisionFailure } from "./types/UniquenessCollisionFailure";
+import { CoffeeBeans, CoffeeBeansDBSubmit, type CoffeeBeansDB, type CoffeeBeansSubmit } from "../entities/CoffeeBeans";
 import type { Recipe, RecipeSubmit } from "../entities/Recipe";
+import type { EntitiesDB } from "./types/EntitiesDB";
 
 // Static:
 

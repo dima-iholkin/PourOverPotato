@@ -1,4 +1,6 @@
 <script lang="ts">
+  // Props:
+
   export let _for: string | undefined;
 
   export let valid: boolean | undefined = true;

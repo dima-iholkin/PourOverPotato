@@ -1,4 +1,3 @@
-import type { CoffeeBeans } from "../../entities/CoffeeBeans";
 import { addCoffeeBeans, addRecipe, anyCoffeeBeansSaved, anyRecipesSaved } from "../indexedDB";
 import { devCoffeeBeans } from "./devCoffeeBeans";
 import { devRecipes } from "./devRecipes";

@@ -3,9 +3,9 @@
 </script>
 
 <script lang="ts">
-  import { CoffeeBeans } from "../../../entities/CoffeeBeans";
   import NewCoffeeBeansModal from "$lib/UI/CoffeeBeansSelect/NewCoffeeBeansModal.svelte";
   import Label from "$lib/UI/forms/Label.svelte";
+  import { CoffeeBeans } from "../../../entities/CoffeeBeans";
 
   // Props:
 

@@ -1,7 +1,3 @@
-import { getCoffeeBeansByName } from "../../../database/indexedDB";
-import type { CoffeeBeans } from "../../../entities/CoffeeBeans";
-import type { CoffeeBeansValidationResult } from "./CoffeeBeansValidationResult";
-
 export function formatTimeForInput(date: Date) {
   const timezoneOffsetMs = date.getTimezoneOffset() * 60000; // Timezone offset in milliseconds.
 

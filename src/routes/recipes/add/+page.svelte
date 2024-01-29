@@ -9,19 +9,18 @@
 </script>
 
 <script lang="ts">
-  import { onMount } from "svelte";
-  import { page } from "$app/stores";
   import { goto } from "$app/navigation";
-  import { CoffeeBeans, type CoffeeBeansSubmit } from "../../../entities/CoffeeBeans";
-  import { addCoffeeBeans, addRecipe, getAllCoffeeBeans } from "../../../database/indexedDB";
-  import { formatTimeForInput, parseDateFromInputString } from "./helpers";
-  import type { RecipeSubmit } from "../../../entities/Recipe";
-  import { UniquenessCollisionFailure } from "../../../database/types/UniquenessCollisionFailure";
-  import CoffeeBeansSelect from "./CoffeeBeansSelect.svelte";
+  import { page } from "$app/stores";
   import Label from "$lib/UI/forms/Label.svelte";
-  import Textarea from "$lib/UI/forms/Textarea.svelte";
   import NumberInput from "$lib/UI/forms/NumberInput.svelte";
+  import Textarea from "$lib/UI/forms/Textarea.svelte";
+  import { onMount } from "svelte";
+  import { addRecipe, getAllCoffeeBeans } from "../../../database/indexedDB";
+  import { CoffeeBeans } from "../../../entities/CoffeeBeans";
+  import type { RecipeSubmit } from "../../../entities/Recipe";
+  import CoffeeBeansSelect from "./CoffeeBeansSelect.svelte";
   import TimestampPicker from "./TimestampPicker.svelte";
+  import { formatTimeForInput, parseDateFromInputString } from "./helpers";
 
   // From load function:
 

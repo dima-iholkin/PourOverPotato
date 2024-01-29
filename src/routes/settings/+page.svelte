@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { onMount } from "svelte";
   import { devFillDB } from "../../database/devData/devFillDB";
   const { MODE } = import.meta.env;
 

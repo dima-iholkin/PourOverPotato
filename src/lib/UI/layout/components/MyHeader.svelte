@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { page } from "$app/stores";
   import { goto } from "$app/navigation";
-  import LoveIcon from "$lib/UI/icons/LoveIcon.svelte";
+  import { page } from "$app/stores";
   import LeftArrow from "$lib/UI/icons/LeftArrow.svelte";
+  import LoveIcon from "$lib/UI/icons/LoveIcon.svelte";
 
   // State:
 

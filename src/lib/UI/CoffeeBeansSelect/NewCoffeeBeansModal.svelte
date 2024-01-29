@@ -6,7 +6,6 @@
   import Label from "$lib/UI/forms/Label.svelte";
   import Textarea from "$lib/UI/forms/Textarea.svelte";
   import { addCoffeeBeans } from "../../../database/indexedDB";
-  import { UniquenessCollisionFailure } from "../../../database/types/UniquenessCollisionFailure";
   import { CoffeeBeans, CoffeeBeansSubmit } from "../../../entities/CoffeeBeans";
   import Header from "./components/Header.svelte";
 

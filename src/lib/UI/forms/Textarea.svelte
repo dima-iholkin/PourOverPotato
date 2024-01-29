@@ -1,4 +1,6 @@
 <script lang="ts">
+  // Props:
+
   export let id: string = "";
   export let name: string = "";
   export let value: string = "";

@@ -1,6 +1,6 @@
 import { type DBSchema } from "idb";
-import type { Recipe } from "../../entities/Recipe";
 import type { CoffeeBeansDB } from "../../entities/CoffeeBeans";
+import type { Recipe } from "../../entities/Recipe";
 
 export interface EntitiesDB extends DBSchema {
   coffeeBeans: {

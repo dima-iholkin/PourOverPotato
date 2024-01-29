@@ -1,9 +1,8 @@
 <script lang="ts">
-  import { onMount } from "svelte";
-  import PlusIcon from "$lib/UI/icons/PlusIcon.svelte";
-  import type { CoffeeBeans } from "../entities/CoffeeBeans";
-  import { getAllCoffeeBeans } from "../database/indexedDB";
   import MyFab from "$lib/UI/MyFab.svelte";
+  import { onMount } from "svelte";
+  import { getAllCoffeeBeans } from "../database/indexedDB";
+  import type { CoffeeBeans } from "../entities/CoffeeBeans";
 
   let coffeeBeans: CoffeeBeans[] | undefined;
 
