@@ -4,6 +4,10 @@
   import LeftArrowIcon from "$lib/UI/icons/LeftArrowIcon.svelte";
   import LoveIcon from "$lib/UI/icons/LoveIcon.svelte";
 
+  // Props:
+
+  export let asGap: boolean = false;
+
   // State:
 
   $: pathname = "/";
@@ -61,7 +65,7 @@
 
 <svelte:document on:click={handleDocumentClick} />
 
-<nav class="bg-white dark:bg-gray-900 fixed w-full z-20 top-0 start-0 border-b border-gray-200 dark:border-gray-600">
+<nav class:as-gap={asGap}>
   <div class="flex flex-wrap items-center justify-between mx-auto p-4">
     <div style="display: flex; flex-direction: row; align-items: center;">
       <div style="padding-right: 16px;">
@@ -117,6 +121,15 @@
 </nav>
 
 <style lang="postcss">
+  nav {
+    @apply bg-white dark:bg-gray-900 fixed w-full z-20 top-0 start-0 border-b border-gray-200 dark:border-gray-600;
+  }
+
+  .as-gap {
+    position: static !important;
+    visibility: hidden;
+  }
+
   .hidden {
     display: none !important;
   }
@@ -148,7 +161,13 @@
     @apply items-center justify-between w-full md:flex md:w-auto md:order-1;
 
     position: fixed;
-    top: 88px;
+    /* top: 88px; */
+  }
+
+  @media only screen and (min-width: 800px) {
+    .menu-div {
+      display: none;
+    }
   }
 
   .ul-menu {

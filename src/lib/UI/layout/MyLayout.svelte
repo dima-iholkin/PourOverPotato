@@ -9,8 +9,7 @@
 </script>
 
 <MyHeader />
-<!-- <MyHeader asGap /> -->
-<div class="header-gap" />
+<MyHeader asGap />
 
 <MySidebar />
 
@@ -25,10 +24,6 @@
 <MyBottomNav />
 
 <style lang="postcss">
-  .header-gap {
-    height: 88px;
-  }
-
   .page-container {
     flex-grow: 1;
     max-width: 80ch;
