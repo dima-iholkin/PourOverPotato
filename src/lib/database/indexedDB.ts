@@ -1,6 +1,6 @@
+import { CoffeeBeans, CoffeeBeansDBSubmit, type CoffeeBeansDB, type CoffeeBeansSubmit } from "$lib/entities/CoffeeBeans";
+import type { Recipe, RecipeSubmit } from "$lib/entities/Recipe";
 import { openDB } from "idb";
-import { CoffeeBeans, CoffeeBeansDBSubmit, type CoffeeBeansDB, type CoffeeBeansSubmit } from "../entities/CoffeeBeans";
-import type { Recipe, RecipeSubmit } from "../entities/Recipe";
 import type { EntitiesDB } from "./types/EntitiesDB";
 
 // Static:

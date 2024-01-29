@@ -1,4 +1,4 @@
-import type { Recipe } from "../../entities/Recipe";
+import type { Recipe } from "$lib/entities/Recipe";
 
 export function sortRecipesByRatingDesc(recipeA: Recipe, recipeB: Recipe) {
   return recipeB.rating - recipeA.rating;

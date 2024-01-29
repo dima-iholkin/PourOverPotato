@@ -6,10 +6,10 @@
 </script>
 
 <script lang="ts">
+  import { getCoffeeBeansById } from "$lib/database/indexedDB";
+  import type { CoffeeBeans } from "$lib/entities/CoffeeBeans";
+  import type { Recipe } from "$lib/entities/Recipe";
   import { onMount } from "svelte";
-  import { getCoffeeBeansById } from "../../../database/indexedDB";
-  import type { CoffeeBeans } from "../../../entities/CoffeeBeans";
-  import type { Recipe } from "../../../entities/Recipe";
   import Card from "./Card.svelte";
 
   // Props:

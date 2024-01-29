@@ -5,7 +5,7 @@
 <script lang="ts">
   import NewCoffeeBeansModal from "$lib/UI/CoffeeBeansSelect/NewCoffeeBeansModal.svelte";
   import Label from "$lib/UI/forms/Label.svelte";
-  import { CoffeeBeans } from "../../../entities/CoffeeBeans";
+  import { CoffeeBeans } from "$lib/entities/CoffeeBeans";
 
   // Props:
 

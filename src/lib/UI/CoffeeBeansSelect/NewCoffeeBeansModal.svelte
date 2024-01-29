@@ -5,8 +5,8 @@
 <script lang="ts">
   import Label from "$lib/UI/forms/Label.svelte";
   import Textarea from "$lib/UI/forms/Textarea.svelte";
-  import { addCoffeeBeans } from "../../../database/indexedDB";
-  import { CoffeeBeans, CoffeeBeansSubmit } from "../../../entities/CoffeeBeans";
+  import { addCoffeeBeans } from "$lib/database/indexedDB";
+  import { CoffeeBeans, CoffeeBeansSubmit } from "$lib/entities/CoffeeBeans";
   import Header from "./components/Header.svelte";
 
   // Props:

@@ -1,6 +1,6 @@
 <script lang="ts">
+  import { devFillDB } from "$lib/database/devData/devFillDB";
   import PageHeadline from "$lib/UI/layout/PageHeadline.svelte";
-  import { devFillDB } from "../../database/devData/devFillDB";
   const { MODE } = import.meta.env;
 
   // Handler functions:
@@ -31,5 +31,4 @@
 
     margin-top: 1rem;
   }
-
 </style>

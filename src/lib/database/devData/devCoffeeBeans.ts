@@ -1,4 +1,4 @@
-import type { CoffeeBeansSubmit } from "../../entities/CoffeeBeans";
+import type { CoffeeBeansSubmit } from "$lib/entities/CoffeeBeans";
 
 export const devCoffeeBeans: CoffeeBeansSubmit[] = [
   {

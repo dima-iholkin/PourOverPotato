@@ -14,10 +14,10 @@
   import Label from "$lib/UI/forms/Label.svelte";
   import NumberInput from "$lib/UI/forms/NumberInput.svelte";
   import Textarea from "$lib/UI/forms/Textarea.svelte";
+  import { addRecipe, getAllCoffeeBeans } from "$lib/database/indexedDB";
+  import { CoffeeBeans } from "$lib/entities/CoffeeBeans";
+  import type { RecipeSubmit } from "$lib/entities/Recipe";
   import { onMount } from "svelte";
-  import { addRecipe, getAllCoffeeBeans } from "../../../database/indexedDB";
-  import { CoffeeBeans } from "../../../entities/CoffeeBeans";
-  import type { RecipeSubmit } from "../../../entities/Recipe";
   import CoffeeBeansSelect from "./CoffeeBeansSelect.svelte";
   import TimestampPicker from "./TimestampPicker.svelte";
   import { formatTimeForInput, parseDateFromInputString } from "./helpers";

@@ -2,10 +2,10 @@
   import MyFab from "$lib/UI/MyFab.svelte";
   import RecipeCard from "$lib/UI/cards/RecipeCard.svelte";
   import PageHeadline from "$lib/UI/layout/PageHeadline.svelte";
+  import { sortRecipesByTimestampDesc as byTimestampDesc } from "$lib/database/helpers/sortRecipes";
+  import { getAllRecipes } from "$lib/database/indexedDB";
+  import type { Recipe } from "$lib/entities/Recipe";
   import { onMount } from "svelte";
-  import { sortRecipesByTimestampDesc as byTimestampDesc } from "../../database/helpers/sortRecipes";
-  import { getAllRecipes } from "../../database/indexedDB";
-  import type { Recipe } from "../../entities/Recipe";
 
   // State:
 
