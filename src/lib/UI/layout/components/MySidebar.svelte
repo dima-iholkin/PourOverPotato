@@ -11,7 +11,7 @@
     <ul class="space-y-2 font-medium">
       <li>
         <a href="/" class:bg-gray-200={selected === "/"}>
-          <span class="ms-3">Coffee Beans</span>
+          <span class="ms-3">Coffee beans</span>
         </a>
         <a href="/recipes" class:bg-gray-200={selected === "/recipes"}>
           <span class="ms-3">Recipes</span>
