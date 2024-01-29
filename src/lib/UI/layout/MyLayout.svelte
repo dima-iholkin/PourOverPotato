@@ -16,7 +16,7 @@
 
   <div class="page-container">
     <slot />
-    <div class="bottom-margin" />
+    <div class="bottom-gap" />
   </div>
 </div>
 
@@ -36,13 +36,17 @@
     padding-right: 1rem;
   }
 
+  .bottom-gap {
+    height: 80px;
+  }
+
   @media only screen and (width < 800px) {
     .page-container {
       width: 100%;
     }
-  }
 
-  .bottom-margin {
-    height: 64px;
+    .bottom-gap {
+      height: 140px;
+    }
   }
 </style>
