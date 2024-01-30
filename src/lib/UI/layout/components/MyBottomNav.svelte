@@ -7,18 +7,18 @@
 
 <div class="bottom-nav">
   <div class="grid h-full max-w-lg grid-cols-3 mx-auto font-medium">
-    <a href="/recipes">
-      <button class:active={$page.route.id === "/recipes"} type="button">
-        <span class:active={$page.route.id === "/recipes"} class="material-icons md-24" style="padding: 2px 0;">
+    <a href={routes.recipes}>
+      <button class:active={$page.route.id === routes.recipes} type="button">
+        <span class:active={$page.route.id === routes.recipes} class="material-icons md-24" style="padding: 2px 0;">
           content_copy
         </span>
-        <span class:active={$page.route.id === "/recipes"} class=""> Recipes </span>
+        <span class:active={$page.route.id === routes.recipes}> Recipes </span>
       </button>
     </a>
-    <a href="/">
-      <button class:active={$page.route.id === "/"} type="button">
-        <img alt="A coffee beans icon" src={coffeeBeansIcon} class:active-img={$page.route.id === "/"} />
-        <span class:active={$page.route.id === "/"}> Coffee beans </span>
+    <a href={routes.home}>
+      <button class:active={$page.route.id === routes.home} type="button">
+        <img alt="A coffee beans icon" src={coffeeBeansIcon} class:active-img={$page.route.id === routes.home} />
+        <span class:active={$page.route.id === routes.home}> Coffee beans </span>
       </button>
     </a>
     <a href={routes.other}>

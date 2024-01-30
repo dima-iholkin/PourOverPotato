@@ -1,6 +1,6 @@
 <script lang="ts">
   import { page } from "$app/stores";
-    import { routes } from "$lib/domain/routes";
+  import { routes } from "$lib/domain/routes";
 
   // Props:
 
@@ -15,10 +15,10 @@
   <div class="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
     <ul class="space-y-2 font-medium">
       <li>
-        <a href="/" class:bg-gray-200={selected === "/"}>
+        <a href={routes.home} class:bg-gray-200={selected === routes.home}>
           <span class="ms-3">Coffee beans</span>
         </a>
-        <a href="/recipes" class:bg-gray-200={selected === "/recipes"}>
+        <a href={routes.recipes} class:bg-gray-200={selected === routes.recipes}>
           <span class="ms-3">Recipes</span>
         </a>
         <a href={routes.other} class:bg-gray-200={selected === routes.other}>

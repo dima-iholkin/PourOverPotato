@@ -5,6 +5,7 @@
   import LoveIcon from "$lib/UI/icons/LoveIcon.svelte";
   import { onMount } from "svelte";
   import HamburgerMenu from "./HamburgerMenu.svelte";
+  import { routes } from "$lib/domain/routes";
 
   // Props:
 
@@ -12,7 +13,7 @@
 
   // State:
 
-  $: pathname = "/";
+  $: pathname = routes.home;
   page.subscribe((pageInfo) => {
     pathname = pageInfo.url.pathname;
   });
@@ -21,7 +22,7 @@
 
   function handleBackButtonClick() {
     if (history.length === 0 || document.referrer.indexOf(window.location.host) === -1) {
-      goto("/", { replaceState: true });
+      goto(routes.home, { replaceState: true });
     } else {
       history.back();
     }

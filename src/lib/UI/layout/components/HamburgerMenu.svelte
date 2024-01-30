@@ -1,6 +1,5 @@
 <script lang="ts">
   import { routes } from "$lib/domain/routes";
-  import MyHeader from "./MyHeader.svelte";
 
   // State:
 
@@ -69,10 +68,10 @@
 <div class="menu-div" class:hidden={!menuOpen} bind:this={menuDom}>
   <ul class="ul-menu">
     <li>
-      <a href="/" class="a-menu" aria-current="page" on:click={handleMenuItemClick}> Coffee Beans </a>
+      <a href={routes.home} class="a-menu" aria-current="page" on:click={handleMenuItemClick}> Coffee Beans </a>
     </li>
     <li>
-      <a href="/recipes" class="a-menu" aria-current="page" on:click={handleMenuItemClick}> Recipes </a>
+      <a href={routes.recipes} class="a-menu" aria-current="page" on:click={handleMenuItemClick}> Recipes </a>
     </li>
     <li>
       <a href={routes.other} class="a-menu" aria-current="page" on:click={handleMenuItemClick}> Other </a>

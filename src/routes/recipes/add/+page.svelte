@@ -15,13 +15,13 @@
   import NumberInput from "$lib/UI/forms/NumberInput.svelte";
   import Textarea from "$lib/UI/forms/Textarea.svelte";
   import { addRecipe, getAllCoffeeBeans } from "$lib/database/indexedDB";
+  import { naming } from "$lib/domain/naming";
   import { CoffeeBeans } from "$lib/entities/CoffeeBeans";
   import type { RecipeSubmit } from "$lib/entities/Recipe";
   import { onMount } from "svelte";
   import CoffeeBeansSelect from "./CoffeeBeansSelect.svelte";
   import TimestampPicker from "./TimestampPicker.svelte";
   import { formatTimeForInput, parseDateFromInputString } from "./helpers";
-    import { naming } from "$lib/domain/naming";
 
   // From load function:
 

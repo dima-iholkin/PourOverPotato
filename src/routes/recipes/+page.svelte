@@ -4,6 +4,7 @@
   import PageHeadline from "$lib/UI/layout/PageHeadline.svelte";
   import { sortRecipesByTimestampDesc as byTimestampDesc } from "$lib/database/helpers/sortRecipes";
   import { getAllRecipes } from "$lib/database/indexedDB";
+  import { routes } from "$lib/domain/routes";
   import type { Recipe } from "$lib/entities/Recipe";
   import { onMount } from "svelte";
 
@@ -34,4 +35,4 @@
   {/each}
 {/if}
 
-<MyFab href="/recipes/add" />
+<MyFab href={routes.addRecipe()} />

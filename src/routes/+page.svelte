@@ -3,6 +3,7 @@
   import CoffeeBeansCard from "$lib/UI/cards/CoffeeBeansCard.svelte";
   import PageHeadline from "$lib/UI/layout/PageHeadline.svelte";
   import { getAllCoffeeBeans } from "$lib/database/indexedDB";
+  import { routes } from "$lib/domain/routes";
   import type { CoffeeBeans } from "$lib/entities/CoffeeBeans";
   import { onMount } from "svelte";
 
@@ -27,7 +28,7 @@
 
 {#if coffeeBeans !== undefined && coffeeBeans.length > 0}
   {#each coffeeBeans as item}
-    <CoffeeBeansCard {item} href="/beans/{item.name}" />
+    <CoffeeBeansCard {item} href={routes.coffeeBeansItem(item.name)} />
   {/each}
 {:else if coffeeBeans !== undefined && coffeeBeans.length === 0}
   <p>No coffee beans added yet.</p>
@@ -35,4 +36,4 @@
   <p>loading...</p>
 {/if}
 
-<MyFab href="/recipes/add" />
+<MyFab href={routes.addRecipe()} />
