@@ -11,7 +11,7 @@
 
 <Card {href}>
   <h5>{item.name}</h5>
-  <p>{item.details}</p>
+  <p>{item.description}</p>
 </Card>
 
 <style lang="postcss">

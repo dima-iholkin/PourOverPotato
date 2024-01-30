@@ -2,10 +2,10 @@ export interface Recipe {
   id: number;
   coffeeBeansId: number;
   recipeTarget: string;
-  recipeOutput: string;
-  opinion: string;
+  recipeResult: string;
+  recipeThoughts: string;
   rating: number;
-  outputWeight: number;
+  outWeight: number;
   timestamp: Date;
 }
 

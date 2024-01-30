@@ -45,9 +45,9 @@
     </h5>
   {/if}
   <p>{naming.recipe.recipeTarget}: {recipe.recipeTarget}</p>
-  <p>{naming.recipe.recipeOut}: {recipe.recipeOutput}</p>
-  <p>{naming.recipe.outWeight}: {recipe.outputWeight}g</p>
-  <p>{naming.recipe.recipeThoughts}: {recipe.opinion}</p>
+  <p>{naming.recipe.recipeResult}: {recipe.recipeResult}</p>
+  <p>{naming.recipe.outWeight}: {recipe.outWeight}g</p>
+  <p>{naming.recipe.recipeThoughts}: {recipe.recipeThoughts}</p>
 </Card>
 
 <style lang="postcss">

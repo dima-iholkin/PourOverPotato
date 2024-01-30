@@ -9,9 +9,10 @@
     if (MODE === "development") {
       await devFillDB();
 
-      setTimeout(() => location.reload(), 1000);
-
-      alert("Dev DB filled.");
+      setTimeout(() => {
+        location.reload();
+        alert("Dev DB filled.");
+      }, 1000);
     }
   }
 </script>

@@ -3,7 +3,7 @@ import type { Recipe, RecipeSubmit } from "$lib/entities/Recipe";
 import { openDB } from "idb";
 import type { EntitiesDB } from "./types/EntitiesDB";
 
-// Static:
+// Static data:
 
 const dbName = "entities";
 const dbVersion = 1;
@@ -28,7 +28,7 @@ export async function openEntitiesDB() {
         const recipesStore = db.createObjectStore(recipesStoreName, { keyPath: "id", autoIncrement: true });
 
         recipesStore.createIndex("coffeeBeansId", "coffeeBeansId", { unique: false });
-        recipesStore.createIndex("outputWeight", "outputWeight", { unique: false });
+        recipesStore.createIndex("outWeight", "outWeight", { unique: false });
         recipesStore.createIndex("rating", "rating", { unique: false });
         recipesStore.createIndex("timestamp", "timestamp", { unique: false });
       }
@@ -126,7 +126,9 @@ export async function getCoffeeBeansById(id: number): Promise<CoffeeBeans | unde
 export async function getCoffeeBeansByName(name: string): Promise<CoffeeBeans | undefined> {
   const db = await openEntitiesDB();
 
-  const item: CoffeeBeansDB | undefined = await db.getFromIndex(coffeeBeansStoreName, coffeeBeansIndexName, name.toLowerCase());
+  const item: CoffeeBeansDB | undefined = await db.getFromIndex(
+    coffeeBeansStoreName, coffeeBeansIndexName, name.toLowerCase()
+  );
 
   if (item === undefined) {
     return undefined;
@@ -142,5 +144,3 @@ export async function getRecipesByCoffeeBeansId(id: number): Promise<Recipe[]> {
 
   return items;
 }
-
-// Private functions:

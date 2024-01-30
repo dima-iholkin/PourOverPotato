@@ -1,16 +1,16 @@
 interface CoffeeBeansBase {
   name: string;
-  details: string;
+  description: string;
 }
 
 export class CoffeeBeans implements CoffeeBeansBase {
   id: number;
   name: string;
-  details: string;
+  description: string;
 
   constructor(item: CoffeeBeansBase, id: number) {
     this.name = item.name;
-    this.details = item.details;
+    this.description = item.description;
     this.id = id;
   }
 
@@ -21,11 +21,11 @@ export class CoffeeBeans implements CoffeeBeansBase {
 
 export class CoffeeBeansSubmit implements CoffeeBeansBase {
   name: string;
-  details: string;
+  description: string;
 
   private constructor(name: string, description: string) {
     this.name = name;
-    this.details = description;
+    this.description = description;
   }
 
   static create(name: string, description: string): CoffeeBeansSubmit | "ValidationFailed_NameMustBeAtLeast3CharsLong" {
@@ -42,12 +42,12 @@ export class CoffeeBeansSubmit implements CoffeeBeansBase {
 
 export class CoffeeBeansDBSubmit implements CoffeeBeansBase {
   name: string;
-  details: string;
+  description: string;
   nameLowerCase: string;
 
   constructor(item: CoffeeBeansSubmit) {
     this.name = item.name;
-    this.details = item.details;
+    this.description = item.description;
     this.nameLowerCase = item.name.toLowerCase();
   }
 }

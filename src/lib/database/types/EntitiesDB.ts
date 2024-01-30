@@ -13,7 +13,7 @@ export interface EntitiesDB extends DBSchema {
     value: Recipe;
     indexes: {
       coffeeBeansId: number;
-      outputWeight: number;
+      outWeight: number;
       rating: number;
       timestamp: Date;
     };

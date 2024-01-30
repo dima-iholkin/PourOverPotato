@@ -1,8 +1,8 @@
 export const naming = {
   recipe: {
     recipeTarget: "Recipe target",
-    recipeOut: "Recipe result",
+    recipeResult: "Recipe result",
+    recipeThoughts: "My thoughts",
     outWeight: "Out weight",
-    recipeThoughts: "Feedback"
   }
 }

@@ -95,9 +95,9 @@
     const recipeSubmit: RecipeSubmit = {
       coffeeBeansId: selectedCoffeeBeans.id,
       recipeTarget: recipePlan,
-      recipeOutput: recipeResult,
-      opinion: recipeOpinion,
-      outputWeight: outWeight,
+      recipeResult: recipeResult,
+      recipeThoughts: recipeOpinion,
+      outWeight: outWeight,
       rating: rating,
       timestamp: timestamp
     };
@@ -130,14 +130,20 @@
   </div>
 
   <div>
-    <Label _for={RECIPE_RESULT}>{naming.recipe.recipeOut}:</Label>
+    <Label _for={RECIPE_RESULT}>{naming.recipe.recipeResult}:</Label>
   </div>
   <div>
     <Textarea name={RECIPE_RESULT} id={RECIPE_RESULT} placeholder={RECIPE_RESULT_PH} bind:value={recipeResult} />
   </div>
 
   <div>
-    <NumberInput labelText="{naming.recipe.outWeight} (g):" min={0} step={5} nameAttr={"out-weight"} bind:value={outWeight} />
+    <NumberInput
+      labelText="{naming.recipe.outWeight} (g):"
+      min={0}
+      step={5}
+      nameAttr={"out-weight"}
+      bind:value={outWeight}
+    />
   </div>
 
   <div>
