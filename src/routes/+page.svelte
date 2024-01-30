@@ -26,14 +26,14 @@
 
 <PageHeadline>Coffee beans</PageHeadline>
 
-{#if coffeeBeans !== undefined && coffeeBeans.length > 0}
+{#if coffeeBeans === undefined}
+  <p>loading...</p>
+{:else if coffeeBeans.length === 0}
+  <p>No coffee beans added yet.</p>
+{:else}
   {#each coffeeBeans as item}
     <CoffeeBeansCard {item} href={routes.coffeeBeansItem(item.name)} />
   {/each}
-{:else if coffeeBeans !== undefined && coffeeBeans.length === 0}
-  <p>No coffee beans added yet.</p>
-{:else}
-  <p>loading...</p>
 {/if}
 
 <MyFab href={routes.addRecipe()} />

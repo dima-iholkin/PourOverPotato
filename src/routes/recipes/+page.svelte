@@ -22,13 +22,15 @@
 </script>
 
 <svelte:head>
-  <title>Recipes</title>
+  <title>Pour over recipes</title>
 </svelte:head>
 
 <PageHeadline>Recipes</PageHeadline>
 
 {#if recipes === undefined}
   <p>loading...</p>
+{:else if recipes.length === 0}
+  <p>No recipes added yet.</p>
 {:else}
   {#each recipes as recipe}
     <RecipeCard {recipe} showCoffeeBeans />
