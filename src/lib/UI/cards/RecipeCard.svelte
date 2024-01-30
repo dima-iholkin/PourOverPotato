@@ -7,6 +7,7 @@
 
 <script lang="ts">
   import { getCoffeeBeansById } from "$lib/database/indexedDB";
+  import { naming } from "$lib/domain/naming";
   import type { CoffeeBeans } from "$lib/entities/CoffeeBeans";
   import type { Recipe } from "$lib/entities/Recipe";
   import { onMount } from "svelte";
@@ -43,10 +44,10 @@
       {coffeeBeans ? coffeeBeans.name : "loading..."}
     </h5>
   {/if}
-  <p>Recipe target: {recipe.recipeTarget}</p>
-  <p>Recipe output: {recipe.recipeOutput}</p>
-  <p>Output weight: {recipe.outputWeight}g</p>
-  <p>Opinion: {recipe.opinion}</p>
+  <p>{naming.recipe.recipeTarget}: {recipe.recipeTarget}</p>
+  <p>{naming.recipe.recipeOut}: {recipe.recipeOutput}</p>
+  <p>{naming.recipe.outWeight}: {recipe.outputWeight}g</p>
+  <p>{naming.recipe.recipeThoughts}: {recipe.opinion}</p>
 </Card>
 
 <style lang="postcss">
@@ -70,10 +71,5 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    /* margin-bottom: 8px; */
   }
-
-  /* p {
-    margin: 8px 0;
-  } */
 </style>
