@@ -80,8 +80,8 @@
     </select>
     <NewCoffeeBeansModal bind:savedCoffeeBeans />
   </div>
-  <p class="mt-2 text-sm text-red-600 dark:text-red-500">{validationMessage}</p>
 </div>
+<p class="mt-2 text-sm text-red-600 dark:text-red-500">{validationMessage}</p>
 
 <style lang="postcss">
   .container {

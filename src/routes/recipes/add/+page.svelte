@@ -21,6 +21,7 @@
   import CoffeeBeansSelect from "./CoffeeBeansSelect.svelte";
   import TimestampPicker from "./TimestampPicker.svelte";
   import { formatTimeForInput, parseDateFromInputString } from "./helpers";
+    import { naming } from "$lib/domain/naming";
 
   // From load function:
 
@@ -122,21 +123,21 @@
   </div>
 
   <div>
-    <Label _for={RECIPE_PLAN}>Recipe target:</Label>
+    <Label _for={RECIPE_PLAN}>{naming.recipe.recipeTarget}:</Label>
   </div>
   <div>
     <Textarea name={RECIPE_PLAN} id={RECIPE_PLAN} placeholder={RECIPE_PLAN_PH} bind:value={recipePlan} />
   </div>
 
   <div>
-    <Label _for={RECIPE_RESULT}>Recipe result:</Label>
+    <Label _for={RECIPE_RESULT}>{naming.recipe.recipeOut}:</Label>
   </div>
   <div>
     <Textarea name={RECIPE_RESULT} id={RECIPE_RESULT} placeholder={RECIPE_RESULT_PH} bind:value={recipeResult} />
   </div>
 
   <div>
-    <NumberInput labelText="Out weight (g):" min={0} step={5} nameAttr={"out-weight"} bind:value={outWeight} />
+    <NumberInput labelText="{naming.recipe.outWeight} (g):" min={0} step={5} nameAttr={"out-weight"} bind:value={outWeight} />
   </div>
 
   <div>
@@ -144,7 +145,7 @@
   </div>
 
   <div>
-    <Label _for={RECIPE_OPINION}>Opinion:</Label>
+    <Label _for={RECIPE_OPINION}>{naming.recipe.recipeThoughts}:</Label>
   </div>
   <div>
     <Textarea name={RECIPE_OPINION} id={RECIPE_OPINION} placeholder={RECIPE_OPINION_PH} bind:value={recipeOpinion} />
