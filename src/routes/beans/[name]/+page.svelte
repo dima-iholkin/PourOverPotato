@@ -1,8 +1,10 @@
 <script lang="ts">
   import MyFab from "$lib/UI/MyFab.svelte";
   import RecipeCard from "$lib/UI/cards/RecipeCard.svelte";
+  import PageHeadline from "$lib/UI/layout/PageHeadline.svelte";
   import { sortRecipesByRatingDesc as byRatingDesc } from "$lib/database/helpers/sortRecipes";
   import { getCoffeeBeansByName, getRecipesByCoffeeBeansId } from "$lib/database/indexedDB";
+  import { routes } from "$lib/domain/routes";
   import { CoffeeBeans } from "$lib/entities/CoffeeBeans";
   import type { Recipe } from "$lib/entities/Recipe";
   import { onMount } from "svelte";
@@ -50,7 +52,7 @@
 </svelte:head>
 
 {#if coffeeBeans instanceof CoffeeBeans}
-  <h1>{coffeeBeans.name}</h1>
+  <PageHeadline>Best recipes for {coffeeBeans.name}</PageHeadline>
 
   {#if recipes !== undefined && recipes.length > 0}
     {#each recipes as recipe}
@@ -62,7 +64,7 @@
     <p>loading...</p>
   {/if}
 
-  <MyFab href="/recipes/add?coffee_beans_name={coffeeBeans.name}" />
+  <MyFab href={routes.addRecipe(coffeeBeans.name)} />
 {:else if coffeeBeans === undefined}
   <p>loading...</p>
 {:else if coffeeBeans === "CoffeeBeansNotFound"}
