@@ -2,6 +2,7 @@
   import { page } from "$app/stores";
   import OtherIcon from "$lib/UI/icons/OtherIcon.svelte";
   import coffeeBeansIcon from "$lib/assets/coffee-beans-icon.png";
+  import { routes } from "$lib/domain/routes";
 </script>
 
 <div class="bottom-nav">
@@ -20,10 +21,10 @@
         <span class:active={$page.route.id === "/"}> Coffee beans </span>
       </button>
     </a>
-    <a href="/settings">
-      <button class:active={$page.route.id === "/settings"} type="button">
+    <a href={routes.other}>
+      <button class:active={$page.route.id === routes.other} type="button">
         <OtherIcon />
-        <span class:active={$page.route.id === "/settings"}> Other </span>
+        <span class:active={$page.route.id === routes.other}> Other </span>
       </button>
     </a>
   </div>
@@ -53,13 +54,25 @@
   }
 
   span {
-    @apply text-sm text-gray-500 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-500;
+    @apply text-sm text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-500;
   }
 
   button {
-    @apply inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 dark:hover:bg-gray-800;
+    @apply inline-flex flex-col items-center justify-center px-5 dark:hover:bg-gray-800;
 
     width: 100%;
+  }
+
+  button:active {
+    --tw-bg-opacity: 1;
+    background-color: rgb(249 250 251 / var(--tw-bg-opacity));
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    button:hover {
+      --tw-bg-opacity: 1;
+      background-color: rgb(249 250 251 / var(--tw-bg-opacity));
+    }
   }
 
   .bottom-nav {
