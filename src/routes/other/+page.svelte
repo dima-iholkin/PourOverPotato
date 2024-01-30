@@ -20,7 +20,7 @@
   <title>Other</title>
 </svelte:head>
 
-<PageHeadline>Settings</PageHeadline>
+<PageHeadline>Other</PageHeadline>
 
 {#if MODE === "development"}
   <button type="button" class="init-db-button" on:click={handleInitDevDB}>Initialize dev DB</button>

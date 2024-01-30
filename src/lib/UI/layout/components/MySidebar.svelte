@@ -1,5 +1,6 @@
 <script lang="ts">
   import { page } from "$app/stores";
+    import { routes } from "$lib/domain/routes";
 
   // Props:
 
@@ -20,7 +21,7 @@
         <a href="/recipes" class:bg-gray-200={selected === "/recipes"}>
           <span class="ms-3">Recipes</span>
         </a>
-        <a href="/settings" class:bg-gray-200={selected === "/settings"}>
+        <a href={routes.other} class:bg-gray-200={selected === routes.other}>
           <span class="ms-3">Other</span>
         </a>
       </li>

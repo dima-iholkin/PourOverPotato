@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { routes } from "$lib/domain/routes";
   import MyHeader from "./MyHeader.svelte";
 
   // State:
@@ -74,7 +75,7 @@
       <a href="/recipes" class="a-menu" aria-current="page" on:click={handleMenuItemClick}> Recipes </a>
     </li>
     <li>
-      <a href="/settings" class="a-menu" aria-current="page" on:click={handleMenuItemClick}> Other </a>
+      <a href={routes.other} class="a-menu" aria-current="page" on:click={handleMenuItemClick}> Other </a>
     </li>
   </ul>
 </div>

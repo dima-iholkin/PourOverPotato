@@ -5,7 +5,7 @@
   export let name: string = "";
   export let value: string = "";
   export let placeholder: string = "";
-  export let _this: HTMLTextAreaElement;
+  export let _this: HTMLTextAreaElement | undefined = undefined;
 </script>
 
 <textarea {id} {name} {placeholder} bind:value bind:this={_this} on:keydown />
