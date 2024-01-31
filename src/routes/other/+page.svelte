@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { devFillDB } from "$lib/database/devData/devFillDB";
+  import { devFillDB } from "$lib/database/v1/devData/devFillDB";
   import PageHeadline from "$lib/UI/layout/PageHeadline.svelte";
   const { MODE } = import.meta.env;
 
