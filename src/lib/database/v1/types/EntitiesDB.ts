@@ -1,16 +1,18 @@
-import type { CoffeeBeansDB } from "$lib/entities/CoffeeBeans";
-import type { Recipe } from "$lib/entities/Recipe";
-import { type DBSchema } from "idb";
+import type { DBSchema } from "idb";
+import type { ICoffeeBeansDB } from "./CoffeeBeansDB";
+import type { IRecipeDB } from "./RecipeDB";
 
 export interface EntitiesDB extends DBSchema {
   coffeeBeans: {
     key: number;
-    value: CoffeeBeansDB;
-    indexes: { nameLowerCase: string; };
+    value: ICoffeeBeansDB;
+    indexes: {
+      nameLowerCase: string;
+    };
   };
   recipes: {
     key: number;
-    value: Recipe;
+    value: IRecipeDB;
     indexes: {
       coffeeBeansId: number;
       outWeight: number;

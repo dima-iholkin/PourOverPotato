@@ -3,8 +3,6 @@
   import { page } from "$app/stores";
   import LeftArrowIcon from "$lib/UI/icons/LeftArrowIcon.svelte";
   import LoveIcon from "$lib/UI/icons/LoveIcon.svelte";
-  import { onMount } from "svelte";
-  import HamburgerMenu from "./HamburgerMenu.svelte";
   import { routes } from "$lib/domain/routes";
 
   // Props:

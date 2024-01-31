@@ -1,4 +1,4 @@
-import type { RecipeSubmit } from "$lib/entities/Recipe";
+import type { RecipeSubmit } from "$lib/domain/entities/Recipe";
 
 export const devRecipes: RecipeSubmit[] = [
   {

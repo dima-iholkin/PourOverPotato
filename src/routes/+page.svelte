@@ -2,9 +2,9 @@
   import MyFab from "$lib/UI/MyFab.svelte";
   import CoffeeBeansCard from "$lib/UI/cards/CoffeeBeansCard.svelte";
   import PageHeadline from "$lib/UI/layout/PageHeadline.svelte";
-  import { getAllCoffeeBeans } from "$lib/database/indexedDB";
+  import { getAllCoffeeBeans } from "$lib/database/v1/indexedDB";
+  import type { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
   import { routes } from "$lib/domain/routes";
-  import type { CoffeeBeans } from "$lib/entities/CoffeeBeans";
   import { onMount } from "svelte";
 
   // State:

@@ -3,10 +3,10 @@
   import RecipeCard from "$lib/UI/cards/RecipeCard.svelte";
   import PageHeadline from "$lib/UI/layout/PageHeadline.svelte";
   import { sortRecipesByRatingDesc as byRatingDesc } from "$lib/database/helpers/sortRecipes";
-  import { getCoffeeBeansByName, getRecipesByCoffeeBeansId } from "$lib/database/indexedDB";
+  import { getCoffeeBeansByName, getRecipesByCoffeeBeansId } from "$lib/database/v1/indexedDB";
+  import { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
+  import type { Recipe } from "$lib/domain/entities/Recipe";
   import { routes } from "$lib/domain/routes";
-  import { CoffeeBeans } from "$lib/entities/CoffeeBeans";
-  import type { Recipe } from "$lib/entities/Recipe";
   import { onMount } from "svelte";
   import type { PageData } from "./$types";
 

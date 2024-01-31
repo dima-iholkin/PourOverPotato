@@ -3,9 +3,9 @@
   import RecipeCard from "$lib/UI/cards/RecipeCard.svelte";
   import PageHeadline from "$lib/UI/layout/PageHeadline.svelte";
   import { sortRecipesByTimestampDesc as byTimestampDesc } from "$lib/database/helpers/sortRecipes";
-  import { getAllRecipes } from "$lib/database/indexedDB";
+  import { getAllRecipes } from "$lib/database/v1/indexedDB";
+  import type { Recipe } from "$lib/domain/entities/Recipe";
   import { routes } from "$lib/domain/routes";
-  import type { Recipe } from "$lib/entities/Recipe";
   import { onMount } from "svelte";
 
   // State:

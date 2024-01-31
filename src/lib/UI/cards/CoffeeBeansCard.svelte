@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { CoffeeBeans } from "$lib/entities/CoffeeBeans";
+  import type { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
   import Card from "./Card.svelte";
 
   // Props:

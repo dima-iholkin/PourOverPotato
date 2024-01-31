@@ -5,8 +5,8 @@
 <script lang="ts">
   import Label from "$lib/UI/forms/Label.svelte";
   import Textarea from "$lib/UI/forms/Textarea.svelte";
-  import { addCoffeeBeans } from "$lib/database/indexedDB";
-  import { CoffeeBeans, CoffeeBeansSubmit } from "$lib/entities/CoffeeBeans";
+  import { addCoffeeBeans } from "$lib/database/v1/indexedDB";
+  import { CoffeeBeans, CoffeeBeansSubmit } from "$lib/domain/entities/CoffeeBeans";
   import { tick } from "svelte";
   import MySidebar from "../layout/components/MySidebar.svelte";
   import Header from "./components/Header.svelte";
@@ -81,7 +81,7 @@
     // Validate and save the new coffee beans:
 
     const coffeeBeansSubmit: CoffeeBeansSubmit | "ValidationFailed_NameMustBeAtLeast3CharsLong" =
-      CoffeeBeansSubmit.create(name, description);
+      CoffeeBeansSubmit.create({ name, description });
 
     if (coffeeBeansSubmit === "ValidationFailed_NameMustBeAtLeast3CharsLong") {
       nameValidationFailed = true;

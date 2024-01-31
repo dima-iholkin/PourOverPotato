@@ -6,10 +6,10 @@
 </script>
 
 <script lang="ts">
-  import { getCoffeeBeansById } from "$lib/database/indexedDB";
+  import { getCoffeeBeansById } from "$lib/database/v1/indexedDB";
+  import type { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
+  import type { Recipe } from "$lib/domain/entities/Recipe";
   import { naming } from "$lib/domain/naming";
-  import type { CoffeeBeans } from "$lib/entities/CoffeeBeans";
-  import type { Recipe } from "$lib/entities/Recipe";
   import { onMount } from "svelte";
   import Card from "./Card.svelte";
 
