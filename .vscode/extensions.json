@@ -1,7 +1,8 @@
 {
   "recommendations": [
-    "formulahendry.auto-rename-tag",
     "svelte.svelte-vscode",
-    "naumovs.color-highlight"
+    "bradlc.vscode-tailwindcss",
+    "formulahendry.auto-rename-tag",
+    "naumovs.color-highlight",
   ]
 }

@@ -1,102 +1,188 @@
+<script context="module" lang="ts">
+  const RECIPE_PLAN = "recipe-plan";
+  const RECIPE_PLAN_PH = "Example: 17 clicks, 15g + 260g. 5m boil.";
+  const RECIPE_RESULT = "recipe-result";
+  const RECIPE_RESULT_PH = "Example: 2m15s + 15s drip. 250g out.";
+  const RECIPE_OPINION = "recipe-opinion";
+  const RECIPE_OPINION_PH = "Example: Perfect balance. Perfect concentration. Flowery notes.";
+  const TIMESTAMP = "timestamp";
+</script>
+
 <script lang="ts">
-  import { onMount } from "svelte";
+  import { goto } from "$app/navigation";
   import { page } from "$app/stores";
-  import { loadCoffeeBeans } from "../../../database/localStorage";
+  import Label from "$lib/UI/forms/Label.svelte";
+  import NumberInput from "$lib/UI/forms/NumberInput.svelte";
+  import Textarea from "$lib/UI/forms/Textarea.svelte";
+  import { addRecipe, getAllCoffeeBeans } from "$lib/database/v1/indexedDB";
+  import { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
+  import type { RecipeSubmit } from "$lib/domain/entities/Recipe";
+  import { naming } from "$lib/domain/naming";
+  import { onMount } from "svelte";
+  import CoffeeBeansSelect from "./CoffeeBeansSelect.svelte";
+  import TimestampPicker from "./TimestampPicker.svelte";
+  import { formatTimeForInput, parseDateFromInputString } from "./helpers";
+
+  // From load function:
 
   const coffeeBeansName = $page.data.coffeeBeansName;
 
-  let coffeeBeansItems: CoffeeBeansItem[] | undefined;
+  // State:
 
-  let showNewCoffeeBeansInput = false;
   let showEmptyOption = coffeeBeansName === "" || coffeeBeansName === null;
 
-  const tzOffsetMs = new Date().getTimezoneOffset() * 60000; // Timezone offset in milliseconds.
+  let coffeeBeansItems: CoffeeBeans[] | undefined;
+
+  let showNewCoffeeBeansInput = false;
+
+  let selectedCoffeeBeans: CoffeeBeans | undefined;
+  let uiCoffeeBeansValidationFailed: boolean = false;
+  let newCoffeeBeansName: string | null | undefined;
+  let recipePlan: string;
+  let recipeResult: string;
+  let recipeOpinion: string;
+  let outWeight: number;
+  let rating: number;
+
+  let timestampStr: string = formatTimeForInput(new Date());
+
+  // Lifecycle hooks:
 
   onMount(() => {
-    coffeeBeansItems = loadCoffeeBeans();
+    getAllCoffeeBeans().then((items: CoffeeBeans[]) => {
+      coffeeBeansItems = items;
+    });
+
+    timestampStr = formatTimeForInput(new Date());
   });
 
-  function handleSelectChange(event: Event & { currentTarget: EventTarget & HTMLSelectElement }) {
-    showEmptyOption = false;
+  // Handler functions:
 
-    if (event.currentTarget?.value === "create_new") {
-      showNewCoffeeBeansInput = true;
-    } else {
-      showNewCoffeeBeansInput = false;
+  async function handleSubmit(event: SubmitEvent & { currentTarget: EventTarget & HTMLFormElement }) {
+    // Deal with the CoffeeBeans select:
+    if (selectedCoffeeBeans === undefined) {
+      uiCoffeeBeansValidationFailed = true;
+      return;
     }
+
+    // Deal with the 3 textarea inputs:
+
+    if (recipePlan === null || recipePlan === undefined) {
+      recipePlan = "";
+    }
+    recipePlan = recipePlan.trim();
+
+    if (recipeResult === null || recipeResult === undefined) {
+      recipeResult = "";
+    }
+    recipeResult = recipeResult.trim();
+
+    if (recipeOpinion === null || recipeOpinion === undefined) {
+      recipeOpinion = "";
+    }
+    recipeOpinion = recipeOpinion.trim();
+
+    // Deal with the timestamp:
+
+    const timestamp: Date = parseDateFromInputString(timestampStr);
+
+    // Save the new recipe:
+
+    if (selectedCoffeeBeans === undefined) {
+      throw new Error("Please select the coffee beans.");
+    }
+
+    const recipeSubmit: RecipeSubmit = {
+      coffeeBeansId: selectedCoffeeBeans.id,
+      recipeTarget: recipePlan,
+      recipeResult: recipeResult,
+      recipeThoughts: recipeOpinion,
+      outWeight: outWeight,
+      rating: rating,
+      timestamp: timestamp
+    };
+    await addRecipe(recipeSubmit);
+
+    goto("/");
   }
 </script>
 
+<svelte:head>
+  <title>Add recipe</title>
+</svelte:head>
+
 <h1>Add recipe</h1>
 
-<form action="#">
-  {#if coffeeBeansItems !== undefined}
-    <div>
-      <label for="coffee-beans">Coffee beans:</label>
-      <select name="coffee-beans" on:change={handleSelectChange}>
-        {#if showEmptyOption}
-          <option disabled selected value></option>
-        {/if}
-
-        {#each coffeeBeansItems as item}
-          <option selected={coffeeBeansName === item.name} value={item.name}>{item.name}</option>
-        {/each}
-
-        <option value="create_new">create new...</option>
-      </select>
-
-      {#if showNewCoffeeBeansInput}
-        <label for="new-coffee-beans">Add new coffee beans:</label>
-        <input type="text" name="new-coffee-beans" placeholder="Example: Brazil Mogiana" />
-      {/if}
-    </div>
-  {:else}
-    <div>loading...</div>
-  {/if}
-
+<form id="add-recipe" on:submit|preventDefault={handleSubmit}>
   <div>
-    <label for="recipe-aim">Recipe aim:</label>
-  </div>
-  <div>
-    <textarea name="recipe-aim" placeholder="Example: 17 clicks, 15g + 260g. 5m boil." style="width: 100%;"></textarea>
-  </div>
-
-  <div>
-    <label for="recipe-output">Recipe output:</label>
-  </div>
-  <div>
-    <textarea name="recipe-output" placeholder="Example: 2m15s + 15s drip. 250g out." style="width: 100%;"></textarea>
-  </div>
-
-  <div>
-    <label for="rating">Rating:</label>
-    <input type="number" name="number" min="0" max="5" step="0.5" value="4.5" />
-  </div>
-
-  <div>
-    <label for="opinion">Opinion:</label>
-  </div>
-  <div>
-    <textarea
-      name="opinion"
-      placeholder="Example: Perfect balance. Perfect concentration. Flowery notes."
-      style="width: 100%;"
-    ></textarea>
-  </div>
-
-  <div>
-    <label for="timestamp">Timestamp:</label>
-    <input
-      type="datetime-local"
-      name="timestamp"
-      value={new Date(Date.now() - tzOffsetMs).toISOString().slice(0, -8)}
+    <CoffeeBeansSelect
+      allCoffeeBeans={coffeeBeansItems}
+      bind:selectedCoffeeBeans
+      validationFailed={uiCoffeeBeansValidationFailed}
     />
   </div>
+
+  <div>
+    <Label _for={RECIPE_PLAN}>{naming.recipe.recipeTarget}:</Label>
+  </div>
+  <div>
+    <Textarea name={RECIPE_PLAN} id={RECIPE_PLAN} placeholder={RECIPE_PLAN_PH} bind:value={recipePlan} />
+  </div>
+
+  <div>
+    <Label _for={RECIPE_RESULT}>{naming.recipe.recipeResult}:</Label>
+  </div>
+  <div>
+    <Textarea name={RECIPE_RESULT} id={RECIPE_RESULT} placeholder={RECIPE_RESULT_PH} bind:value={recipeResult} />
+  </div>
+
+  <div>
+    <NumberInput
+      labelText="{naming.recipe.outWeight} (g):"
+      min={0}
+      step={5}
+      nameAttr={"out-weight"}
+      bind:value={outWeight}
+    />
+  </div>
+
+  <div>
+    <NumberInput labelText="Rating:" min={0} max={5} step={0.5} nameAttr={"rating"} bind:value={rating} />
+  </div>
+
+  <div>
+    <Label _for={RECIPE_OPINION}>{naming.recipe.recipeThoughts}:</Label>
+  </div>
+  <div>
+    <Textarea name={RECIPE_OPINION} id={RECIPE_OPINION} placeholder={RECIPE_OPINION_PH} bind:value={recipeOpinion} />
+  </div>
+
+  <div>
+    <TimestampPicker bind:value={timestampStr} />
+  </div>
+
+  <button type="submit" form="add-recipe" class="my-button"> Save </button>
 </form>
 
-<style>
-  input,
-  textarea {
-    border: solid #eeeeee;
+<style lang="postcss">
+  h1 {
+    @apply text-xl text-center font-bold dark:text-white;
+
+    margin-top: 8px;
+    margin-bottom: 8px;
+  }
+
+  div {
+    margin-bottom: 8px;
+  }
+
+  button {
+    width: 100%;
+    margin-top: 16px;
+    margin-bottom: 16px;
+  }
+
+  .my-button {
+    @apply bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded;
   }
 </style>

@@ -1,29 +1,39 @@
 <script lang="ts">
-  import { Fab } from "konsta/svelte";
+  import MyFab from "$lib/UI/MyFab.svelte";
+  import CoffeeBeansCard from "$lib/UI/cards/CoffeeBeansCard.svelte";
+  import PageHeadline from "$lib/UI/layout/PageHeadline.svelte";
+  import { getAllCoffeeBeans } from "$lib/database/v1/indexedDB";
+  import type { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
+  import { routes } from "$lib/domain/routes";
   import { onMount } from "svelte";
-  import PlusIcon from "$lib/PlusIcon.svelte";
-  import { loadCoffeeBeans } from "../database/localStorage";
 
-  let coffeeBeans: CoffeeBeansItem[] = [];
+  // State:
+
+  let coffeeBeans: CoffeeBeans[] | undefined;
+
+  // Lifecycle hooks:
 
   onMount(() => {
-    coffeeBeans = loadCoffeeBeans();
+    getAllCoffeeBeans().then((items) => {
+      coffeeBeans = items;
+    });
   });
 </script>
 
-{#each coffeeBeans as coffeeBeansItem}
-  <a href="/beans/{coffeeBeansItem.name}">
-    <div style="margin: 16px 0; border: solid #EEEEEE;">
-      <p style="font-family: 'Courier New', Courier, monospace; font-size: 20pt; margin: 8px 0;">
-        {coffeeBeansItem.name}
-      </p>
-      <p style="margin: 8px 0;">
-        {coffeeBeansItem.details}
-      </p>
-    </div>
-  </a>
-{/each}
+<svelte:head>
+  <title>PourOverPotato app</title>
+</svelte:head>
 
-<Fab class="fixed left-1/2 bottom-4-safe transform -translate-x-1/2 z-20" text="Create" href="/recipes/add">
-  <svelte:component this={PlusIcon} slot="icon" />
-</Fab>
+<PageHeadline>Coffee beans</PageHeadline>
+
+{#if coffeeBeans === undefined}
+  <p>loading...</p>
+{:else if coffeeBeans.length === 0}
+  <p>No coffee beans added yet.</p>
+{:else}
+  {#each coffeeBeans as item}
+    <CoffeeBeansCard {item} href={routes.coffeeBeansItem(item.name)} />
+  {/each}
+{/if}
+
+<MyFab href={routes.addRecipe()} />
