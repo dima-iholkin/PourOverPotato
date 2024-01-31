@@ -31,7 +31,7 @@
   <div class="flex flex-wrap items-center justify-between mx-auto p-4">
     <div style="display: flex; flex-direction: row; align-items: center;">
       <div style="padding-right: 16px;">
-        {#if pathname !== "/"}
+        {#if pathname !== routes.home}
           <button on:click={handleBackButtonClick}>
             <LeftArrowIcon />
           </button>
@@ -39,7 +39,7 @@
           <LoveIcon />
         {/if}
       </div>
-      <a href="/">
+      <a href={routes.home}>
         <div class="logo-div">
           <span class="text-2xl font-semibold whitespace-nowrap dark:text-white">PourOverPotato</span>
           <p class="subtitle">Save your best recipes for later use</p>

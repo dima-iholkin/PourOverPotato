@@ -1,9 +1,11 @@
+import { base } from "$app/paths";
+
 export const routes = {
-  home: "/",
-  coffeeBeansItem: (coffeeBeansName: string) => `/coffee_beans/${coffeeBeansName}`,
-  recipes: "/recipes",
+  home: base + "/",
+  coffeeBeansItem: (coffeeBeansName: string) => base + `/coffee_beans/${coffeeBeansName}`,
+  recipes: base + "/recipes",
   addRecipe: (coffeeBeansName: string | undefined = undefined) => coffeeBeansName ?
-    `/recipes/add?coffee_beans_name=${coffeeBeansName}` :
-    "/recipes/add",
-  other: "/other",
+    base + `/recipes/add?coffee_beans_name=${coffeeBeansName}` :
+    base + "/recipes/add",
+  other: base + "/other",
 }
