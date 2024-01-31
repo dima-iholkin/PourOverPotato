@@ -1,0 +1,1 @@
+import{r}from"../chunks/routes.cPq6d6_6.js";import{R as t}from"../chunks/entry.HUWYQ4PW.js";function n(e,o){throw new t(e,o.toString())}new TextEncoder;function i(){n(302,r.home)}const l=Object.freeze(Object.defineProperty({__proto__:null,load:i},Symbol.toStringTag,{value:"Module"}));export{l as universal};
