@@ -21,6 +21,10 @@
   $: showEmptyOption = selectedCoffeeBeans === undefined;
 
   let selectedCoffeeBeansId: number | undefined = selectedCoffeeBeans?.id;
+  $: {
+    selectedCoffeeBeansId;
+    selectedCoffeeBeans = allCoffeeBeans?.find(item => item.id === selectedCoffeeBeansId);
+  }
 
   let savedCoffeeBeans: CoffeeBeans | undefined;
   $: {
