@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { base } from "$app/paths";
   import { page } from "$app/stores";
   import { routes } from "$lib/domain/routes";
 
@@ -8,7 +9,7 @@
 
   // State:
 
-  $: selected = $page.route.id ?? "";
+  $: selected = base + $page.route.id ?? "";
 </script>
 
 <aside class="my-aside" class:as-gap={asGap} aria-label="Sidebar">

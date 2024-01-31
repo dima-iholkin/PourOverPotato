@@ -1,30 +1,35 @@
 <script lang="ts">
+  import { base } from "$app/paths";
   import { page } from "$app/stores";
   import OtherIcon from "$lib/UI/icons/OtherIcon.svelte";
   import coffeeBeansIcon from "$lib/assets/coffee-beans-icon.png";
   import { routes } from "$lib/domain/routes";
+
+  // State:
+
+  $: route = base + $page.route.id;
 </script>
 
 <div class="bottom-nav">
   <div class="grid h-full max-w-lg grid-cols-3 mx-auto font-medium">
     <a href={routes.recipes}>
-      <button class:active={$page.route.id === routes.recipes} type="button">
-        <span class:active={$page.route.id === routes.recipes} class="material-icons md-24" style="padding: 2px 0;">
+      <button class:active={route === routes.recipes} type="button">
+        <span class:active={route === routes.recipes} class="material-icons md-24" style="padding: 2px 0;">
           content_copy
         </span>
-        <span class:active={$page.route.id === routes.recipes}> Recipes </span>
+        <span class:active={route === routes.recipes}> Recipes </span>
       </button>
     </a>
     <a href={routes.home}>
-      <button class:active={$page.route.id === routes.home} type="button">
-        <img alt="A coffee beans icon" src={coffeeBeansIcon} class:active-img={$page.route.id === routes.home} />
-        <span class:active={$page.route.id === routes.home}> Coffee beans </span>
+      <button class:active={route === routes.home} type="button">
+        <img alt="A coffee beans icon" src={coffeeBeansIcon} class:active-img={route === routes.home} />
+        <span class:active={route === routes.home}> Coffee beans </span>
       </button>
     </a>
     <a href={routes.other}>
-      <button class:active={$page.route.id === routes.other} type="button">
+      <button class:active={route === routes.other} type="button">
         <OtherIcon />
-        <span class:active={$page.route.id === routes.other}> Other </span>
+        <span class:active={route === routes.other}> Other </span>
       </button>
     </a>
   </div>
