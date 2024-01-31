@@ -19,7 +19,7 @@
   // Handler functions:
 
   function handleBackButtonClick() {
-    if (history.length === 0 || document.referrer.indexOf(window.location.host) === -1) {
+    if (history.length === 0) {
       goto(routes.home, { replaceState: true });
     } else {
       history.back();
