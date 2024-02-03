@@ -6,7 +6,7 @@
   export let href: string | undefined;
 </script>
 
-<div class="fab-container" style="">
+<div class="fab-container">
   <a {href}>
     <button class="my-button">
       <div>

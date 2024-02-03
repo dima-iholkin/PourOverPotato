@@ -18,6 +18,7 @@
   import { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
   import type { RecipeSubmit } from "$lib/domain/entities/Recipe";
   import { naming } from "$lib/domain/naming";
+  import { routes } from "$lib/domain/routes";
   import { onMount } from "svelte";
   import CoffeeBeansSelect from "./CoffeeBeansSelect.svelte";
   import TimestampPicker from "./TimestampPicker.svelte";
@@ -103,7 +104,7 @@
     };
     await addRecipe(recipeSubmit);
 
-    goto("/");
+    goto(routes.home);
   }
 </script>
 
