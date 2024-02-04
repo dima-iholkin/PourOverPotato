@@ -5,10 +5,10 @@
 <script lang="ts">
   import Label from "$lib/UI/forms/Label.svelte";
   import Textarea from "$lib/UI/forms/Textarea.svelte";
-  import { addCoffeeBeans } from "$lib/database/v1/indexedDB";
-  import { CoffeeBeans, CoffeeBeansSubmit } from "$lib/domain/entities/CoffeeBeans";
-  import { tick } from "svelte";
   import MySidebar from "$lib/UI/layout/components/MySidebar.svelte";
+  import { addCoffeeBeans } from "$lib/database/v1/indexedDB";
+  import { CoffeeBeans, CoffeeBeansCreateSubmit } from "$lib/domain/entities/CoffeeBeans";
+  import { tick } from "svelte";
   import Header from "./components/ModalHeader.svelte";
 
   // Props:
@@ -80,8 +80,8 @@
   async function handleSubmit() {
     // Validate and save the new coffee beans:
 
-    const coffeeBeansSubmit: CoffeeBeansSubmit | "ValidationFailed_NameMustBeAtLeast3CharsLong" =
-      CoffeeBeansSubmit.create({ name, description });
+    const coffeeBeansSubmit: CoffeeBeansCreateSubmit | "ValidationFailed_NameMustBeAtLeast3CharsLong" =
+      CoffeeBeansCreateSubmit.create({ name, description });
 
     if (coffeeBeansSubmit === "ValidationFailed_NameMustBeAtLeast3CharsLong") {
       nameValidationFailed = true;
@@ -130,8 +130,8 @@
 
   function clickOutsideBox(element: Element, click: MouseEvent) {
     const box: DOMRect = element.getBoundingClientRect();
-    let x: number = click.clientX;
-    let y: number = click.clientY;
+    const x: number = click.clientX;
+    const y: number = click.clientY;
 
     if (x < box.left || x > box.right || y < box.top || y > box.bottom) {
       return true;

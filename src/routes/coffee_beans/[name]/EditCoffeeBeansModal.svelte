@@ -7,8 +7,9 @@
   import Label from "$lib/UI/forms/Label.svelte";
   import Textarea from "$lib/UI/forms/Textarea.svelte";
   import MySidebar from "$lib/UI/layout/components/MySidebar.svelte";
-  import { addCoffeeBeans } from "$lib/database/v1/indexedDB";
-  import { CoffeeBeans, CoffeeBeansSubmit } from "$lib/domain/entities/CoffeeBeans";
+  import { editCoffeeBeans } from "$lib/database/v1/indexedDB";
+  import { CoffeeBeans, CoffeeBeansEditSubmit } from "$lib/domain/entities/CoffeeBeans";
+  import { routes } from "$lib/domain/routes";
   import { tick } from "svelte";
 
   // Props:
@@ -77,11 +78,12 @@
   }
 
   async function handleSubmit() {
-    // Validate and save the new coffee beans:
+    // Validate and save the edited coffee beans:
 
-    /*
-    const coffeeBeansSubmit: CoffeeBeansSubmit | "ValidationFailed_NameMustBeAtLeast3CharsLong" =
-      CoffeeBeansSubmit.create({ name, description });
+    const editedCoffeeBeans: CoffeeBeans = new CoffeeBeans({ name, description }, coffeeBeansItem.id);
+
+    const coffeeBeansSubmit: CoffeeBeansEditSubmit | "ValidationFailed_NameMustBeAtLeast3CharsLong" =
+      CoffeeBeansEditSubmit.create(editedCoffeeBeans);
 
     if (coffeeBeansSubmit === "ValidationFailed_NameMustBeAtLeast3CharsLong") {
       nameValidationFailed = true;
@@ -89,7 +91,7 @@
       return;
     }
 
-    const coffeeBeans: CoffeeBeans | "Failure_NameAlreadyExist" = await addCoffeeBeans(coffeeBeansSubmit);
+    const coffeeBeans: CoffeeBeans | "Failure_NameAlreadyExist" = await editCoffeeBeans(coffeeBeansSubmit);
 
     if (coffeeBeans === "Failure_NameAlreadyExist") {
       nameValidationFailed = true;
@@ -97,15 +99,17 @@
       return;
     }
 
-    alert("New coffee beans saved successfully.");
+    alert("We saved the edited coffee beans successfully.");
     // TODO: Inform user that the new coffee beans were saved successfully.
 
     // Return the new Coffee Beans entity to the "Add recipe" page:
     coffeeBeansItem = coffeeBeans;
-    */
 
     // Clear the modal state:
     closeModal();
+
+    // Reload the page with the new CoffeeBeans name, to avoid any stale state:
+    window.location.replace(routes.coffeeBeansItem(coffeeBeans.name));
   }
 
   function handleInputChange() {
@@ -129,8 +133,8 @@
 
   function clickOutsideBox(element: Element, click: MouseEvent) {
     const box: DOMRect = element.getBoundingClientRect();
-    let x: number = click.clientX;
-    let y: number = click.clientY;
+    const x: number = click.clientX;
+    const y: number = click.clientY;
 
     if (x < box.left || x > box.right || y < box.top || y > box.bottom) {
       return true;

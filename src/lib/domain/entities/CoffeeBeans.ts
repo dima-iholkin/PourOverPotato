@@ -10,7 +10,7 @@ export class CoffeeBeans {
   }
 }
 
-export class CoffeeBeansSubmit implements Omit<CoffeeBeans, "id"> {
+export class CoffeeBeansCreateSubmit implements Omit<CoffeeBeans, "id"> {
   name: string;
   description: string;
 
@@ -19,9 +19,9 @@ export class CoffeeBeansSubmit implements Omit<CoffeeBeans, "id"> {
     this.description = item.description;
   }
 
-  static create(item: Omit<CoffeeBeans, "id">): CoffeeBeansSubmit | "ValidationFailed_NameMustBeAtLeast3CharsLong" {
-    let _name = item.name.trim();
-    let _description = item.description.trim();
+  static create(item: Omit<CoffeeBeans, "id">): CoffeeBeansCreateSubmit | "ValidationFailed_NameMustBeAtLeast3CharsLong" {
+    const _name = item.name.trim();
+    const _description = item.description.trim();
 
     if (_name.length < 3) {
       return "ValidationFailed_NameMustBeAtLeast3CharsLong"
@@ -32,6 +32,35 @@ export class CoffeeBeansSubmit implements Omit<CoffeeBeans, "id"> {
       description: _description
     };
 
-    return new CoffeeBeansSubmit(obj);
+    return new CoffeeBeansCreateSubmit(obj);
+  }
+}
+
+export class CoffeeBeansEditSubmit implements CoffeeBeans {
+  id: number;
+  name: string;
+  description: string;
+
+  private constructor(item: CoffeeBeans) {
+    this.id = item.id;
+    this.name = item.name;
+    this.description = item.description;
+  }
+
+  static create(item: CoffeeBeans): CoffeeBeansEditSubmit | "ValidationFailed_NameMustBeAtLeast3CharsLong" {
+    const _name = item.name.trim();
+    const _description = item.description.trim();
+
+    if (_name.length < 3) {
+      return "ValidationFailed_NameMustBeAtLeast3CharsLong"
+    }
+
+    const obj: CoffeeBeans = {
+      id: item.id,
+      name: _name,
+      description: _description
+    };
+
+    return new CoffeeBeansEditSubmit(obj);
   }
 }

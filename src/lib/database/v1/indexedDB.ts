@@ -1,4 +1,4 @@
-import { CoffeeBeans, type CoffeeBeansSubmit } from "$lib/domain/entities/CoffeeBeans";
+import { CoffeeBeans, CoffeeBeansEditSubmit, type CoffeeBeansCreateSubmit } from "$lib/domain/entities/CoffeeBeans";
 import { Recipe, type RecipeSubmit } from "$lib/domain/entities/Recipe";
 import { openDB } from "idb";
 import { CoffeeBeansDB, CoffeeBeansDBSubmit, type ICoffeeBeansDB } from "./types/CoffeeBeansDB";
@@ -40,7 +40,7 @@ export async function openEntitiesDB() {
 
 // Public functions:
 
-export async function addCoffeeBeans(item: CoffeeBeansSubmit): Promise<CoffeeBeans | "Failure_NameAlreadyExist"> {
+export async function addCoffeeBeans(item: CoffeeBeansCreateSubmit): Promise<CoffeeBeans | "Failure_NameAlreadyExist"> {
   // Check that a CoffeeBeans record with the same property "name" doesn't exist:
 
   const itemFromDB: CoffeeBeans | undefined = await getCoffeeBeansByName(item.name);
@@ -101,6 +101,34 @@ export async function anyRecipesSaved() {
   const count: number = await db.count(recipesStoreName);
 
   return count > 0;
+}
+
+export async function editCoffeeBeans(submitItem: CoffeeBeansEditSubmit): Promise<CoffeeBeans | "Failure_NameAlreadyExist"> {
+  const db = await openEntitiesDB();
+
+  const dbItem: ICoffeeBeansDB | undefined = await db.getFromIndex(
+    coffeeBeansStoreName, coffeeBeansIndexName, submitItem.name.toLowerCase()
+  );
+
+  if (dbItem !== undefined && dbItem.id !== submitItem.id) {
+    return "Failure_NameAlreadyExist";
+  }
+
+  const dbSubmitItem: ICoffeeBeansDB = {
+    id: submitItem.id,
+    name: submitItem.name,
+    description: submitItem.description,
+    nameLowerCase: submitItem.name.toLowerCase()
+  };
+  const newId = await db.put(coffeeBeansStoreName, dbSubmitItem);
+
+  console.log(`Edit CoffeeBeans item. New name: ${submitItem.name}. Old Id: ${submitItem.id} New Id: ${newId}.`);
+
+  const coffeeBeans: Omit<CoffeeBeans, "id"> = {
+    name: dbSubmitItem.name,
+    description: dbSubmitItem.description
+  };
+  return new CoffeeBeans(coffeeBeans, dbSubmitItem.id);
 }
 
 export async function getAllCoffeeBeans(): Promise<CoffeeBeans[]> {
