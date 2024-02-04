@@ -24,7 +24,7 @@
 <PageHeadline>Other</PageHeadline>
 
 {#if MODE === "development"}
-  <button type="button" class="init-db-button" on:click={handleInitDevDB}>Initialize dev DB</button>
+  <button class="init-db-button" type="button" on:click={handleInitDevDB}>Initialize dev DB</button>
 {/if}
 
 <h5>Credits</h5>
