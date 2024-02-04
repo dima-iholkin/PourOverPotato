@@ -1,9 +1,9 @@
 {
   "recommendations": [
-    "svelte.svelte-vscode",
     "bradlc.vscode-tailwindcss",
+    "dbaeumer.vscode-eslint",
     "formulahendry.auto-rename-tag",
     "naumovs.color-highlight",
-    "dbaeumer.vscode-eslint",
+    "svelte.svelte-vscode",
   ]
 }
