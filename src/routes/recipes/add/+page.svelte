@@ -35,16 +35,20 @@
 
   const coffeeBeansName = $page.data.coffeeBeansName;
 
-  // State:
+  // State UI:
 
-  let showEmptyOption = coffeeBeansName === "" || coffeeBeansName === null;
+  let uiCoffeeBeansValidationFailed: boolean = false;
+
+  let onMountFinished: boolean = false;
+
+  // State entities:
 
   let coffeeBeansItems: CoffeeBeans[] | undefined;
 
-  let showNewCoffeeBeansInput = false;
+  // State form:
 
   let selectedCoffeeBeans: CoffeeBeans | undefined;
-  let uiCoffeeBeansValidationFailed: boolean = false;
+
   let recipeTarget: string;
   let recipeResult: string;
   let recipeThoughts: string;
@@ -80,13 +84,13 @@
   }
 
   $: {
-    if (outWeight !== undefined && outWeight !== 0) {
+    if (outWeight !== undefined && onMountFinished) {
       persistFormField(FORM_NAME, OUT_WEIGHT, outWeight);
     }
   }
 
   $: {
-    if (rating !== undefined && rating !== 0) {
+    if (rating !== undefined && onMountFinished) {
       persistFormField(FORM_NAME, RATING, rating);
     }
   }
@@ -191,6 +195,8 @@
             rating = persistedValue;
           }
         }
+
+        onMountFinished = true;
       });
 
     timestampStr = formatTimeForInput(new Date());
