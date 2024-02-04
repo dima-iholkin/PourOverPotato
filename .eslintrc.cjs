@@ -44,6 +44,7 @@ module.exports = {
         ]
       }
     ],
-    "svelte/sort-attributes": "off"
+    "svelte/sort-attributes": "off",
+    "@typescript-eslint/no-unused-vars": "warn"
   }
 };
