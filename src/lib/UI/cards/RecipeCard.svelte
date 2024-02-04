@@ -45,10 +45,22 @@
       {coffeeBeans ? coffeeBeans.name : "loading..."}
     </h5>
   {/if}
-  <p>{naming.recipe.recipeTarget}: {recipe.recipeTarget}</p>
-  <p>{naming.recipe.recipeResult}: {recipe.recipeResult}</p>
-  <p>{naming.recipe.outWeight}: {recipe.outWeight}g</p>
-  <p>{naming.recipe.recipeThoughts}: {recipe.recipeThoughts}</p>
+  <div>
+    <p class="text-gray-400 inline">{naming.recipe.recipeTarget}:</p>
+    <p class="inline">{recipe.recipeTarget}</p>
+  </div>
+  <div>
+    <p class="text-gray-400 inline">{naming.recipe.recipeResult}:</p>
+    <p class="inline">{recipe.recipeResult}</p>
+  </div>
+  <div>
+    <p class="text-gray-400 inline">{naming.recipe.outWeight}:</p>
+    <p class="inline">{recipe.outWeight}g</p>
+  </div>
+  <div>
+    <p class="text-gray-400 inline">{naming.recipe.recipeThoughts}:</p>
+    <p class="inline">{recipe.recipeThoughts}</p>
+  </div>
 </Card>
 
 <style lang="postcss">
@@ -59,7 +71,7 @@
   }
 
   p {
-    @apply font-normal text-gray-700 dark:text-gray-400;
+    @apply font-normal dark:text-gray-400;
   }
 
   .timestamp {
