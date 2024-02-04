@@ -32,6 +32,7 @@ module.exports = {
     }
   ],
   "rules": {
+    // Sort the HTML attributes:
     "perfectionist/sort-svelte-attributes": [
       "warn",
       {
@@ -45,6 +46,11 @@ module.exports = {
       }
     ],
     "svelte/sort-attributes": "off",
-    "@typescript-eslint/no-unused-vars": "warn"
+    // Semi-colons:
+    "semi": "warn",
+    // Tune the default rules:
+    "@typescript-eslint/no-unused-vars": "warn",
+    "prefer-const": "warn",
+    "no-debugger": "warn"
   }
 };
