@@ -79,6 +79,7 @@
   async function handleSubmit() {
     // Validate and save the new coffee beans:
 
+    /*
     const coffeeBeansSubmit: CoffeeBeansSubmit | "ValidationFailed_NameMustBeAtLeast3CharsLong" =
       CoffeeBeansSubmit.create({ name, description });
 
@@ -101,11 +102,10 @@
 
     // Return the new Coffee Beans entity to the "Add recipe" page:
     coffeeBeansItem = coffeeBeans;
+    */
 
     // Clear the modal state:
     closeModal();
-    name = "";
-    description = "";
   }
 
   function handleInputChange() {

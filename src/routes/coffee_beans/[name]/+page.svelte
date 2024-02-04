@@ -60,9 +60,8 @@
   </FlexRow>
   <p class="coffee-beans-description">{coffeeBeans.description}</p>
 
-  <h2>Best recipes</h2>
-
   {#if recipes !== undefined && recipes.length > 0}
+    <h2>Best recipes</h2>
     {#each recipes as recipe}
       <RecipeCard {recipe} />
     {/each}
