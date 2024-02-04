@@ -155,3 +155,11 @@ export async function getRecipesByCoffeeBeansId(id: number): Promise<Recipe[]> {
   const items: Recipe[] = itemsShape.map(item => new RecipeDB(item, item.id).toRecipe());
   return items;
 }
+
+export async function getRecipesCountByCoffeeBeansId(coffeeBeansid: number): Promise<number> {
+  const db = await openEntitiesDB();
+
+  const items = await db.getAllFromIndex(recipesStoreName, "coffeeBeansId", coffeeBeansid);
+
+  return items.length;
+}

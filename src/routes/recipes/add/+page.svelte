@@ -1,11 +1,17 @@
 <script context="module" lang="ts">
-  const RECIPE_PLAN = "recipe-plan";
-  const RECIPE_PLAN_PH = "Example: 17 clicks, 15g + 260g. 5m boil.";
+  const RECIPE_TARGET = "recipe-target";
+  const RECIPE_TARGET_PH = "Example: 17 clicks, 15g + 260g. 5m boil.";
   const RECIPE_RESULT = "recipe-result";
   const RECIPE_RESULT_PH = "Example: 2m15s + 15s drip. 250g out.";
-  const RECIPE_OPINION = "recipe-opinion";
-  const RECIPE_OPINION_PH = "Example: Perfect balance. Perfect concentration. Flowery notes.";
+  const RECIPE_THOUGHTS = "recipe-thoughts";
+  const RECIPE_THOUGHTS_PH = "Example: Perfect balance. Perfect concentration. Flowery notes.";
+  const OUT_WEIGHT = "out-weight";
   const TIMESTAMP = "timestamp";
+  const RATING = "rating";
+
+  const FORM_NAME = "addRecipe";
+
+  const COFFEEBEANS_ID = "coffee-beans";
 </script>
 
 <script lang="ts">
@@ -18,6 +24,8 @@
   import { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
   import type { RecipeSubmit } from "$lib/domain/entities/Recipe";
   import { naming } from "$lib/domain/naming";
+  import { routes } from "$lib/domain/routes";
+  import { clearFormField, loadFormField, persistFormField } from "$lib/persistForms/localStorage";
   import { onMount } from "svelte";
   import CoffeeBeansSelect from "./CoffeeBeansSelect.svelte";
   import TimestampPicker from "./TimestampPicker.svelte";
@@ -37,21 +45,156 @@
 
   let selectedCoffeeBeans: CoffeeBeans | undefined;
   let uiCoffeeBeansValidationFailed: boolean = false;
-  let newCoffeeBeansName: string | null | undefined;
-  let recipePlan: string;
+  let recipeTarget: string;
   let recipeResult: string;
-  let recipeOpinion: string;
+  let recipeThoughts: string;
   let outWeight: number;
   let rating: number;
 
   let timestampStr: string = formatTimeForInput(new Date());
 
+  // Reactivity:
+
+  $: {
+    if (selectedCoffeeBeans !== undefined) {
+      persistFormField(FORM_NAME, COFFEEBEANS_ID, selectedCoffeeBeans.id);
+    }
+  }
+
+  $: {
+    if (recipeTarget !== undefined && recipeTarget !== null) {
+      persistFormField(FORM_NAME, RECIPE_TARGET, recipeTarget);
+    }
+  }
+
+  $: {
+    if (recipeResult !== undefined && recipeResult !== null) {
+      persistFormField(FORM_NAME, RECIPE_RESULT, recipeResult);
+    }
+  }
+
+  $: {
+    if (recipeThoughts !== undefined && recipeThoughts !== null) {
+      persistFormField(FORM_NAME, RECIPE_THOUGHTS, recipeThoughts);
+    }
+  }
+
+  $: {
+    if (outWeight !== undefined && outWeight !== 0) {
+      persistFormField(FORM_NAME, OUT_WEIGHT, outWeight);
+    }
+  }
+
+  $: {
+    if (rating !== undefined && rating !== 0) {
+      persistFormField(FORM_NAME, RATING, rating);
+    }
+  }
+
   // Lifecycle hooks:
 
   onMount(() => {
-    getAllCoffeeBeans().then((items: CoffeeBeans[]) => {
-      coffeeBeansItems = items;
-    });
+    if (recipeTarget === "") {
+      // @ts-ignore
+      recipeTarget = undefined;
+    }
+
+    if (recipeResult === "") {
+      // @ts-ignore
+      recipeResult = undefined;
+    }
+
+    if (recipeThoughts === "") {
+      // @ts-ignore
+      recipeThoughts = undefined;
+    }
+
+    // if (outWeight === 0) {
+    //   // @ts-ignore
+    //   outWeight = undefined;
+    // }
+
+    getAllCoffeeBeans()
+      .then((items: CoffeeBeans[]) => {
+        // Load the CoffeeBeans array from IndexedDB.
+        coffeeBeansItems = items;
+      })
+      .then(() => {
+        // Load the persisted SelectedCoffeeBeans from Local Storage:
+
+        if (selectedCoffeeBeans === undefined) {
+          const persistedValue = loadFormField(FORM_NAME, COFFEEBEANS_ID, "number") as number | null;
+
+          if (persistedValue === null) {
+            return;
+            // If there isn't a valid persisted value, don't make any assignment, as it would trigger reactivity.
+          }
+
+          selectedCoffeeBeans = coffeeBeansItems?.find((item) => item.id === persistedValue);
+        }
+
+        // Load the persisted RecipeTarget from Local Storage:
+
+        if (recipeTarget === undefined || recipeTarget === "") {
+          const persistedValue = loadFormField(FORM_NAME, RECIPE_TARGET, "string") as string | null;
+
+          if (persistedValue === null) {
+            return;
+          }
+
+          recipeTarget = persistedValue;
+        }
+
+        // Load the persisted RecipeResult from Local Storage:
+
+        if (recipeResult === undefined || recipeResult === "") {
+          const persistedValue = loadFormField(FORM_NAME, RECIPE_RESULT, "string") as string | null;
+
+          if (persistedValue === null) {
+            return;
+          }
+
+          recipeResult = persistedValue;
+        }
+
+        // Load the persisted RecipeThoughts from Local Storage:
+
+        if (recipeThoughts === undefined || recipeThoughts === "") {
+          const persistedValue = loadFormField(FORM_NAME, RECIPE_THOUGHTS, "string") as string | null;
+
+          if (persistedValue === null) {
+            return;
+          }
+
+          recipeThoughts = persistedValue;
+        }
+
+        // Load the persisted OutWeight from Local Storage:
+
+        if (outWeight === undefined || outWeight === 0) {
+          const persistedValue = loadFormField(FORM_NAME, OUT_WEIGHT, "number") as number | null;
+
+          if (persistedValue === null || persistedValue === 0) {
+            return;
+            // If there isn't a valid persisted value, don't make any assignment, as it would trigger reactivity.
+          }
+
+          outWeight = persistedValue;
+        }
+
+        // Load the persisted Rating from Local Storage:
+
+        if (rating === undefined || rating === 0) {
+          const persistedValue = loadFormField(FORM_NAME, RATING, "number") as number | null;
+
+          if (persistedValue === null || persistedValue === 0) {
+            return;
+            // If there isn't a valid persisted value, don't make any assignment, as it would trigger reactivity.
+          }
+
+          rating = persistedValue;
+        }
+      });
 
     timestampStr = formatTimeForInput(new Date());
   });
@@ -67,20 +210,20 @@
 
     // Deal with the 3 textarea inputs:
 
-    if (recipePlan === null || recipePlan === undefined) {
-      recipePlan = "";
+    if (recipeTarget === null || recipeTarget === undefined) {
+      recipeTarget = "";
     }
-    recipePlan = recipePlan.trim();
+    recipeTarget = recipeTarget.trim();
 
     if (recipeResult === null || recipeResult === undefined) {
       recipeResult = "";
     }
     recipeResult = recipeResult.trim();
 
-    if (recipeOpinion === null || recipeOpinion === undefined) {
-      recipeOpinion = "";
+    if (recipeThoughts === null || recipeThoughts === undefined) {
+      recipeThoughts = "";
     }
-    recipeOpinion = recipeOpinion.trim();
+    recipeThoughts = recipeThoughts.trim();
 
     // Deal with the timestamp:
 
@@ -94,16 +237,23 @@
 
     const recipeSubmit: RecipeSubmit = {
       coffeeBeansId: selectedCoffeeBeans.id,
-      recipeTarget: recipePlan,
+      recipeTarget: recipeTarget,
       recipeResult: recipeResult,
-      recipeThoughts: recipeOpinion,
+      recipeThoughts: recipeThoughts,
       outWeight: outWeight,
       rating: rating,
       timestamp: timestamp
     };
     await addRecipe(recipeSubmit);
 
-    goto("/");
+    clearFormField(FORM_NAME, COFFEEBEANS_ID);
+    clearFormField(FORM_NAME, RECIPE_TARGET);
+    clearFormField(FORM_NAME, RECIPE_RESULT);
+    clearFormField(FORM_NAME, RECIPE_THOUGHTS);
+    clearFormField(FORM_NAME, OUT_WEIGHT);
+    clearFormField(FORM_NAME, RATING);
+
+    goto(routes.home);
   }
 </script>
 
@@ -123,10 +273,10 @@
   </div>
 
   <div>
-    <Label _for={RECIPE_PLAN}>{naming.recipe.recipeTarget}:</Label>
+    <Label _for={RECIPE_TARGET}>{naming.recipe.recipeTarget}:</Label>
   </div>
   <div>
-    <Textarea name={RECIPE_PLAN} id={RECIPE_PLAN} placeholder={RECIPE_PLAN_PH} bind:value={recipePlan} />
+    <Textarea name={RECIPE_TARGET} id={RECIPE_TARGET} placeholder={RECIPE_TARGET_PH} bind:value={recipeTarget} />
   </div>
 
   <div>
@@ -141,20 +291,26 @@
       labelText="{naming.recipe.outWeight} (g):"
       min={0}
       step={5}
-      nameAttr={"out-weight"}
+      nameAttr={OUT_WEIGHT}
       bind:value={outWeight}
     />
   </div>
 
   <div>
-    <NumberInput labelText="Rating:" min={0} max={5} step={0.5} nameAttr={"rating"} bind:value={rating} />
+    <NumberInput labelText="Rating:" min={0} max={5} step={0.5} nameAttr={RATING} bind:value={rating} />
   </div>
 
   <div>
-    <Label _for={RECIPE_OPINION}>{naming.recipe.recipeThoughts}:</Label>
+    <Label _for={RECIPE_THOUGHTS}>{naming.recipe.recipeThoughts}:</Label>
   </div>
   <div>
-    <Textarea name={RECIPE_OPINION} id={RECIPE_OPINION} placeholder={RECIPE_OPINION_PH} bind:value={recipeOpinion} />
+    <Textarea
+      name={RECIPE_THOUGHTS}
+      id={RECIPE_THOUGHTS}
+      placeholder={RECIPE_THOUGHTS_PH}
+      textLinesCount={4}
+      bind:value={recipeThoughts}
+    />
   </div>
 
   <div>

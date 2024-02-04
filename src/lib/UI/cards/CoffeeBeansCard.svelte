@@ -1,16 +1,22 @@
 <script lang="ts">
   import type { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
   import Card from "./Card.svelte";
+  import CardFlexRow from "./components/CardFlexRow.svelte";
 
   // Props:
 
   export let item: CoffeeBeans;
 
+  export let recipeCount: number = 0;
+
   export let href: string;
 </script>
 
 <Card {href}>
-  <h5>{item.name}</h5>
+  <CardFlexRow>
+    <h5>{item.name}</h5>
+    <p>{recipeCount} {recipeCount === 1 ? "recipe" : "recipes"}</p>
+  </CardFlexRow>
   <p>{item.description}</p>
 </Card>
 
