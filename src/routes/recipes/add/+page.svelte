@@ -126,11 +126,10 @@
           const persistedValue = loadFormField(FORM_NAME, COFFEEBEANS_ID, "number") as number | null;
 
           if (persistedValue === null) {
-            return;
             // If there isn't a valid persisted value, don't make any assignment, as it would trigger reactivity.
+          } else {
+            selectedCoffeeBeans = coffeeBeansItems?.find((item) => item.id === persistedValue);
           }
-
-          selectedCoffeeBeans = coffeeBeansItems?.find((item) => item.id === persistedValue);
         }
 
         // Load the persisted RecipeTarget from Local Storage:
@@ -139,10 +138,10 @@
           const persistedValue = loadFormField(FORM_NAME, RECIPE_TARGET, "string") as string | null;
 
           if (persistedValue === null) {
-            return;
+            // If there isn't a valid persisted value, don't make any assignment, as it would trigger reactivity.
+          } else {
+            recipeTarget = persistedValue;
           }
-
-          recipeTarget = persistedValue;
         }
 
         // Load the persisted RecipeResult from Local Storage:
@@ -151,10 +150,10 @@
           const persistedValue = loadFormField(FORM_NAME, RECIPE_RESULT, "string") as string | null;
 
           if (persistedValue === null) {
-            return;
+            // If there isn't a valid persisted value, don't make any assignment, as it would trigger reactivity.
+          } else {
+            recipeResult = persistedValue;
           }
-
-          recipeResult = persistedValue;
         }
 
         // Load the persisted RecipeThoughts from Local Storage:
@@ -163,10 +162,10 @@
           const persistedValue = loadFormField(FORM_NAME, RECIPE_THOUGHTS, "string") as string | null;
 
           if (persistedValue === null) {
-            return;
+            // If there isn't a valid persisted value, don't make any assignment, as it would trigger reactivity.
+          } else {
+            recipeThoughts = persistedValue;
           }
-
-          recipeThoughts = persistedValue;
         }
 
         // Load the persisted OutWeight from Local Storage:
@@ -175,11 +174,10 @@
           const persistedValue = loadFormField(FORM_NAME, OUT_WEIGHT, "number") as number | null;
 
           if (persistedValue === null || persistedValue === 0) {
-            return;
             // If there isn't a valid persisted value, don't make any assignment, as it would trigger reactivity.
+          } else {
+            outWeight = persistedValue;
           }
-
-          outWeight = persistedValue;
         }
 
         // Load the persisted Rating from Local Storage:
@@ -188,11 +186,10 @@
           const persistedValue = loadFormField(FORM_NAME, RATING, "number") as number | null;
 
           if (persistedValue === null || persistedValue === 0) {
-            return;
             // If there isn't a valid persisted value, don't make any assignment, as it would trigger reactivity.
+          } else {
+            rating = persistedValue;
           }
-
-          rating = persistedValue;
         }
       });
 
