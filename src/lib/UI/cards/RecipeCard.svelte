@@ -12,6 +12,7 @@
   import { naming } from "$lib/domain/naming";
   import { onMount } from "svelte";
   import Card from "./Card.svelte";
+  import CardFlexRow from "./components/CardFlexRow.svelte";
 
   // Props:
 
@@ -35,10 +36,10 @@
 </script>
 
 <Card>
-  <div class="card-header">
+  <CardFlexRow>
     <p class="timestamp">{recipe.timestamp.toLocaleString(undefined, options)}</p>
     <p>{recipe.rating}/5</p>
-  </div>
+  </CardFlexRow>
   {#if showCoffeeBeans}
     <h5>
       {coffeeBeans ? coffeeBeans.name : "loading..."}
@@ -64,12 +65,5 @@
   .timestamp {
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     font-size: 10pt;
-  }
-
-  .card-header {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
   }
 </style>
