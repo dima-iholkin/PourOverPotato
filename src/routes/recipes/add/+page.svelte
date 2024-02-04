@@ -1,11 +1,15 @@
 <script context="module" lang="ts">
-  const RECIPE_PLAN = "recipe-plan";
-  const RECIPE_PLAN_PH = "Example: 17 clicks, 15g + 260g. 5m boil.";
+  const RECIPE_TARGET = "recipe-target";
+  const RECIPE_TARGET_PH = "Example: 17 clicks, 15g + 260g. 5m boil.";
   const RECIPE_RESULT = "recipe-result";
   const RECIPE_RESULT_PH = "Example: 2m15s + 15s drip. 250g out.";
-  const RECIPE_OPINION = "recipe-opinion";
-  const RECIPE_OPINION_PH = "Example: Perfect balance. Perfect concentration. Flowery notes.";
+  const RECIPE_THOUGHTS = "recipe-thoughts";
+  const RECIPE_THOUGHTS_PH = "Example: Perfect balance. Perfect concentration. Flowery notes.";
   const TIMESTAMP = "timestamp";
+
+  const FORM_NAME = "addRecipe";
+
+  const COFFEEBEANS_ID = "coffee-beans";
 </script>
 
 <script lang="ts">
@@ -19,6 +23,7 @@
   import type { RecipeSubmit } from "$lib/domain/entities/Recipe";
   import { naming } from "$lib/domain/naming";
   import { routes } from "$lib/domain/routes";
+  import { clearFormField, loadFormField, persistFormField } from "$lib/persistForms/localStorage";
   import { onMount } from "svelte";
   import CoffeeBeansSelect from "./CoffeeBeansSelect.svelte";
   import TimestampPicker from "./TimestampPicker.svelte";
@@ -38,8 +43,7 @@
 
   let selectedCoffeeBeans: CoffeeBeans | undefined;
   let uiCoffeeBeansValidationFailed: boolean = false;
-  let newCoffeeBeansName: string | null | undefined;
-  let recipePlan: string;
+  let recipeTarget: string;
   let recipeResult: string;
   let recipeOpinion: string;
   let outWeight: number;
@@ -47,12 +51,59 @@
 
   let timestampStr: string = formatTimeForInput(new Date());
 
+  // Reactivity:
+
+  $: {
+    if (selectedCoffeeBeans !== undefined) {
+      persistFormField(FORM_NAME, COFFEEBEANS_ID, selectedCoffeeBeans.id);
+    }
+  }
+
+  $: {
+    if (recipeTarget !== undefined && recipeTarget !== null) {
+      persistFormField(FORM_NAME, RECIPE_TARGET, recipeTarget);
+    }
+  }
+
   // Lifecycle hooks:
 
   onMount(() => {
-    getAllCoffeeBeans().then((items: CoffeeBeans[]) => {
-      coffeeBeansItems = items;
-    });
+    if (recipeTarget === "") {
+      // @ts-ignore
+      recipeTarget = undefined;
+    }
+
+    getAllCoffeeBeans()
+      .then((items: CoffeeBeans[]) => {
+        // Load the CoffeeBeans array from IndexedDB.
+        coffeeBeansItems = items;
+      })
+      .then(() => {
+        // Load the persisted selected CoffeeBeans from Local Storage:
+
+        if (selectedCoffeeBeans === undefined) {
+          const persistedCoffeeBeansId = loadFormField(FORM_NAME, COFFEEBEANS_ID, "number") as number | null;
+
+          if (persistedCoffeeBeansId === null) {
+            return;
+            // If there isn't a valid persisted value, don't make any assignment, as it would trigger reactivity.
+          }
+
+          selectedCoffeeBeans = coffeeBeansItems?.find((item) => item.id === persistedCoffeeBeansId);
+        }
+
+        // Load the persisted RecipeTarget from Local Storage:
+
+        if (recipeTarget === undefined || recipeTarget === "") {
+          const persistedValue = loadFormField(FORM_NAME, RECIPE_TARGET, "string") as string | null;
+
+          if (persistedValue === null) {
+            return;
+          }
+
+          recipeTarget = persistedValue;
+        }
+      });
 
     timestampStr = formatTimeForInput(new Date());
   });
@@ -68,10 +119,10 @@
 
     // Deal with the 3 textarea inputs:
 
-    if (recipePlan === null || recipePlan === undefined) {
-      recipePlan = "";
+    if (recipeTarget === null || recipeTarget === undefined) {
+      recipeTarget = "";
     }
-    recipePlan = recipePlan.trim();
+    recipeTarget = recipeTarget.trim();
 
     if (recipeResult === null || recipeResult === undefined) {
       recipeResult = "";
@@ -95,7 +146,7 @@
 
     const recipeSubmit: RecipeSubmit = {
       coffeeBeansId: selectedCoffeeBeans.id,
-      recipeTarget: recipePlan,
+      recipeTarget: recipeTarget,
       recipeResult: recipeResult,
       recipeThoughts: recipeOpinion,
       outWeight: outWeight,
@@ -103,6 +154,9 @@
       timestamp: timestamp
     };
     await addRecipe(recipeSubmit);
+
+    clearFormField(FORM_NAME, COFFEEBEANS_ID);
+    clearFormField(FORM_NAME, RECIPE_TARGET);
 
     goto(routes.home);
   }
@@ -124,10 +178,10 @@
   </div>
 
   <div>
-    <Label _for={RECIPE_PLAN}>{naming.recipe.recipeTarget}:</Label>
+    <Label _for={RECIPE_TARGET}>{naming.recipe.recipeTarget}:</Label>
   </div>
   <div>
-    <Textarea name={RECIPE_PLAN} id={RECIPE_PLAN} placeholder={RECIPE_PLAN_PH} bind:value={recipePlan} />
+    <Textarea name={RECIPE_TARGET} id={RECIPE_TARGET} placeholder={RECIPE_TARGET_PH} bind:value={recipeTarget} />
   </div>
 
   <div>
@@ -152,10 +206,10 @@
   </div>
 
   <div>
-    <Label _for={RECIPE_OPINION}>{naming.recipe.recipeThoughts}:</Label>
+    <Label _for={RECIPE_THOUGHTS}>{naming.recipe.recipeThoughts}:</Label>
   </div>
   <div>
-    <Textarea name={RECIPE_OPINION} id={RECIPE_OPINION} placeholder={RECIPE_OPINION_PH} bind:value={recipeOpinion} />
+    <Textarea name={RECIPE_THOUGHTS} id={RECIPE_THOUGHTS} placeholder={RECIPE_THOUGHTS_PH} bind:value={recipeOpinion} />
   </div>
 
   <div>

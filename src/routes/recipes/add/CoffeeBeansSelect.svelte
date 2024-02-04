@@ -17,13 +17,10 @@
 
   // State:
 
-  let showEmptyOption: boolean;
-  $: showEmptyOption = selectedCoffeeBeans === undefined;
-
   let selectedCoffeeBeansId: number | undefined = selectedCoffeeBeans?.id;
   $: {
     selectedCoffeeBeansId;
-    selectedCoffeeBeans = allCoffeeBeans?.find(item => item.id === selectedCoffeeBeansId);
+    selectedCoffeeBeans = allCoffeeBeans?.find((item) => item.id === selectedCoffeeBeansId);
   }
 
   let savedCoffeeBeans: CoffeeBeans | undefined;
@@ -55,7 +52,6 @@
       validationFailed = false;
     }
 
-    showEmptyOption = false;
     savedCoffeeBeans = undefined;
   }
 </script>
@@ -72,7 +68,7 @@
       disabled={allCoffeeBeans === undefined}
     >
       {#if allCoffeeBeans !== undefined}
-        {#if showEmptyOption}
+        {#if selectedCoffeeBeans === undefined}
           <option disabled selected value></option>
         {/if}
         {#each allCoffeeBeans as item}
