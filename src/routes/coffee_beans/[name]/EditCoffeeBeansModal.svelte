@@ -3,17 +3,18 @@
 </script>
 
 <script lang="ts">
+  import ModalHeader from "$lib/UI/CoffeeBeansSelect/components/ModalHeader.svelte";
   import Label from "$lib/UI/forms/Label.svelte";
   import Textarea from "$lib/UI/forms/Textarea.svelte";
   import MySidebar from "$lib/UI/layout/components/MySidebar.svelte";
-  import { addCoffeeBeans } from "$lib/database/v1/indexedDB";
-  import { CoffeeBeans, CoffeeBeansCreateSubmit } from "$lib/domain/entities/CoffeeBeans";
+  import { editCoffeeBeans } from "$lib/database/v1/indexedDB";
+  import { CoffeeBeans, CoffeeBeansEditSubmit } from "$lib/domain/entities/CoffeeBeans";
+  import { routes } from "$lib/domain/routes";
   import { tick } from "svelte";
-  import Header from "./components/ModalHeader.svelte";
 
   // Props:
 
-  export let savedCoffeeBeans: CoffeeBeans | undefined = undefined;
+  export let coffeeBeansItem: CoffeeBeans;
 
   // State:
 
@@ -25,12 +26,11 @@
   let textareaDom: HTMLTextAreaElement;
   let formDom: HTMLFormElement;
 
-  let name: string = "";
-  let description: string = "";
+  let name: string = coffeeBeansItem.name;
+  let description: string = coffeeBeansItem.description;
 
   let nameValidationFailed: boolean = false;
   $: {
-    nameValidationFailed;
     if (nameValidationFailed === false) {
       validationMessage = "";
     }
@@ -78,10 +78,12 @@
   }
 
   async function handleSubmit() {
-    // Validate and save the new coffee beans:
+    // Validate and save the edited coffee beans:
 
-    const coffeeBeansSubmit: CoffeeBeansCreateSubmit | "ValidationFailed_NameMustBeAtLeast3CharsLong" =
-      CoffeeBeansCreateSubmit.create({ name, description });
+    const editedCoffeeBeans: CoffeeBeans = new CoffeeBeans({ name, description }, coffeeBeansItem.id);
+
+    const coffeeBeansSubmit: CoffeeBeansEditSubmit | "ValidationFailed_NameMustBeAtLeast3CharsLong" =
+      CoffeeBeansEditSubmit.create(editedCoffeeBeans);
 
     if (coffeeBeansSubmit === "ValidationFailed_NameMustBeAtLeast3CharsLong") {
       nameValidationFailed = true;
@@ -89,7 +91,7 @@
       return;
     }
 
-    const coffeeBeans: CoffeeBeans | "Failure_NameAlreadyExist" = await addCoffeeBeans(coffeeBeansSubmit);
+    const coffeeBeans: CoffeeBeans | "Failure_NameAlreadyExist" = await editCoffeeBeans(coffeeBeansSubmit);
 
     if (coffeeBeans === "Failure_NameAlreadyExist") {
       nameValidationFailed = true;
@@ -97,16 +99,17 @@
       return;
     }
 
-    alert("New coffee beans saved successfully.");
+    alert("We saved the edited coffee beans successfully.");
     // TODO: Inform user that the new coffee beans were saved successfully.
 
     // Return the new Coffee Beans entity to the "Add recipe" page:
-    savedCoffeeBeans = coffeeBeans;
+    coffeeBeansItem = coffeeBeans;
 
     // Clear the modal state:
     closeModal();
-    name = "";
-    description = "";
+
+    // Reload the page with the new CoffeeBeans name, to avoid any stale state:
+    window.location.replace(routes.coffeeBeansItem(coffeeBeans.name));
   }
 
   function handleInputChange() {
@@ -145,14 +148,12 @@
 
 <svelte:document on:click={handleDocumentClick} />
 
-<button class="button-add" bind:this={menuButtonDom} on:click|preventDefault={() => openModal()}>
-  <span class="material-icons md-18"> add </span>
-</button>
+<button class="edit-button" type="button" bind:this={menuButtonDom} on:click={() => openModal()}> Edit </button>
 
 <div class="modal-container" class:show-modal={showModal}>
   <MySidebar asGap />
   <div class="inner-container" bind:this={modalDom}>
-    <Header on:click={() => closeModal()}>Add new coffee beans</Header>
+    <ModalHeader on:click={() => closeModal()}>Edit coffee beans</ModalHeader>
 
     <form class="max-w-sm mx-auto" bind:this={formDom} on:submit|preventDefault={handleSubmit}>
       <div class="mb-5">
@@ -210,10 +211,13 @@
     flex-grow: 1;
   }
 
-  .button-add {
-    @apply bg-green-500 text-white rounded-md px-4 py-2 hover:bg-green-700 transition;
+  .edit-button {
+    @apply text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4;
+    @apply focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800;
+    @apply dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600;
+    @apply dark:focus:ring-gray-700;
 
-    margin-left: 8px;
+    margin: 0.5rem 0 0 0;
   }
 
   .input-name {

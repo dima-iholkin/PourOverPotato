@@ -1,7 +1,7 @@
 <script lang="ts">
+  import FlexRow from "$lib/UI/FlexRow.svelte";
   import type { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
   import Card from "./Card.svelte";
-  import CardFlexRow from "./components/CardFlexRow.svelte";
 
   // Props:
 
@@ -13,10 +13,10 @@
 </script>
 
 <Card {href}>
-  <CardFlexRow>
+  <FlexRow>
     <h5>{item.name}</h5>
     <p>{recipeCount} {recipeCount === 1 ? "recipe" : "recipes"}</p>
-  </CardFlexRow>
+  </FlexRow>
   <p>{item.description}</p>
 </Card>
 

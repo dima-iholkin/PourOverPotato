@@ -1,4 +1,4 @@
-import { CoffeeBeans, type CoffeeBeansSubmit } from "$lib/domain/entities/CoffeeBeans";
+import { CoffeeBeans, type CoffeeBeansCreateSubmit } from "$lib/domain/entities/CoffeeBeans";
 
 export interface ICoffeeBeansDB {
   id: number;
@@ -30,7 +30,7 @@ export class CoffeeBeansDBSubmit implements Omit<ICoffeeBeansDB, "id"> {
   description: string;
   nameLowerCase: string;
 
-  constructor(item: CoffeeBeansSubmit) {
+  constructor(item: CoffeeBeansCreateSubmit) {
     this.name = item.name;
     this.description = item.description;
     this.nameLowerCase = item.name.toLowerCase();
