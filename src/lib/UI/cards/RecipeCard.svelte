@@ -6,13 +6,13 @@
 </script>
 
 <script lang="ts">
+  import FlexRow from "$lib/UI/FlexRow.svelte";
   import { getCoffeeBeansById } from "$lib/database/v1/indexedDB";
   import type { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
   import type { Recipe } from "$lib/domain/entities/Recipe";
   import { naming } from "$lib/domain/naming";
   import { onMount } from "svelte";
   import Card from "./Card.svelte";
-  import CardFlexRow from "./components/CardFlexRow.svelte";
 
   // Props:
 
@@ -36,10 +36,10 @@
 </script>
 
 <Card>
-  <CardFlexRow>
+  <FlexRow>
     <p class="timestamp">{recipe.timestamp.toLocaleString(undefined, options)}</p>
     <p>{recipe.rating}/5</p>
-  </CardFlexRow>
+  </FlexRow>
   {#if showCoffeeBeans}
     <h5>
       {coffeeBeans ? coffeeBeans.name : "loading..."}

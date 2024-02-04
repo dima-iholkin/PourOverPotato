@@ -1,4 +1,5 @@
 <script lang="ts">
+  import FlexRow from "$lib/UI/FlexRow.svelte";
   import MyFab from "$lib/UI/MyFab.svelte";
   import RecipeCard from "$lib/UI/cards/RecipeCard.svelte";
   import PageHeadline from "$lib/UI/layout/PageHeadline.svelte";
@@ -9,6 +10,7 @@
   import { routes } from "$lib/domain/routes";
   import { onMount } from "svelte";
   import type { PageData } from "./$types";
+  import EditCoffeeBeansModal from "./EditCoffeeBeansModal.svelte";
 
   // Props:
 
@@ -52,7 +54,13 @@
 </svelte:head>
 
 {#if coffeeBeans instanceof CoffeeBeans}
-  <PageHeadline>Best recipes for {coffeeBeans.name}</PageHeadline>
+  <FlexRow>
+    <PageHeadline>{coffeeBeans.name}</PageHeadline>
+    <EditCoffeeBeansModal coffeeBeansItem={coffeeBeans} />
+  </FlexRow>
+  <p class="coffee-beans-description">{coffeeBeans.description}</p>
+
+  <h2>Best recipes</h2>
 
   {#if recipes !== undefined && recipes.length > 0}
     {#each recipes as recipe}
@@ -71,3 +79,15 @@
   <h1>404</h1>
   <p>Coffee beans not found.</p>
 {/if}
+
+<style lang="postcss">
+  .coffee-beans-description {
+    margin-top: 0.25rem;
+  }
+
+  h2 {
+    @apply text-xl font-normal tracking-tight text-gray-900 dark:text-white;
+
+    margin-top: 1rem;
+  }
+</style>
