@@ -33,7 +33,7 @@
   <p>No recipes added yet.</p>
 {:else}
   {#each recipes as recipe}
-    <RecipeCard {recipe} showCoffeeBeans />
+    <RecipeCard href={routes.recipeItem(recipe.id)} {recipe} showCoffeeBeansName />
   {/each}
 {/if}
 

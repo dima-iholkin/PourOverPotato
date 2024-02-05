@@ -63,7 +63,7 @@
   {#if recipes !== undefined && recipes.length > 0}
     <h2>Best recipes</h2>
     {#each recipes as recipe}
-      <RecipeCard {recipe} />
+      <RecipeCard href={routes.recipeItem(recipe.id)} {recipe} />
     {/each}
   {:else if recipes !== undefined && recipes.length === 0}
     <p>No recipes added yet.</p>

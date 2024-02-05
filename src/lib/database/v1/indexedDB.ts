@@ -174,6 +174,18 @@ export async function getCoffeeBeansByName(name: string): Promise<CoffeeBeans | 
   return new CoffeeBeansDB(itemShape, itemShape.id).toCoffeeBeans();
 }
 
+export async function getRecipeById(id: number): Promise<Recipe | undefined> {
+  const db = await openEntitiesDB();
+
+  const itemShape: IRecipeDB | undefined = await db.get(recipesStoreName, id);
+
+  if (itemShape === undefined) {
+    return undefined;
+  }
+
+  return new RecipeDB(itemShape, itemShape.id).toRecipe();
+}
+
 export async function getRecipesByCoffeeBeansId(id: number): Promise<Recipe[]> {
   const db = await openEntitiesDB();
 

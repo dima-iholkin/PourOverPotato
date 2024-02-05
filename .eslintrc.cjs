@@ -36,6 +36,7 @@ module.exports = {
   "rules": {
     // Tune the default rules:
     "@typescript-eslint/no-unused-vars": "warn",
+    "svelte/valid-compile": "warn", // Fixed the error on unused "data" prop from Svelte load function.
     "prefer-const": "warn",
     "no-debugger": "warn",
     "@typescript-eslint/ban-ts-comment": "off",

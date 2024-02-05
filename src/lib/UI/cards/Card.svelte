@@ -17,6 +17,8 @@
     padding: 1rem 1.5rem 1.5rem 1.5rem;
   }
 
+  /* Both "active" and "hover" to fix the hover on mobile: */
+
   a:active {
     --tw-bg-opacity: 1;
     background-color: rgb(243 244 246 / var(--tw-bg-opacity));
