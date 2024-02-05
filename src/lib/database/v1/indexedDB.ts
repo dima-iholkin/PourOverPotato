@@ -120,9 +120,7 @@ export async function editCoffeeBeans(submitItem: CoffeeBeansEditSubmit): Promis
     description: submitItem.description,
     nameLowerCase: submitItem.name.toLowerCase()
   };
-  const newId = await db.put(coffeeBeansStoreName, dbSubmitItem);
-
-  console.log(`Edit CoffeeBeans item. New name: ${submitItem.name}. Old Id: ${submitItem.id} New Id: ${newId}.`);
+  await db.put(coffeeBeansStoreName, dbSubmitItem);
 
   const coffeeBeans: Omit<CoffeeBeans, "id"> = {
     name: dbSubmitItem.name,
