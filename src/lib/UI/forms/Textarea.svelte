@@ -15,12 +15,12 @@
 
 <textarea
   style:height="calc({textLinesCount}rlh + 1rem)"
+  bind:this={_this}
+  bind:value
   {id}
   {name}
-  {placeholder}
-  bind:value
-  bind:this={_this}
   on:keydown
+  {placeholder}
 />
 
 <style lang="postcss">

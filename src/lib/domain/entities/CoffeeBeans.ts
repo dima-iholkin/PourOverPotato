@@ -19,12 +19,13 @@ export class CoffeeBeansCreateSubmit implements Omit<CoffeeBeans, "id"> {
     this.description = item.description;
   }
 
-  static create(item: Omit<CoffeeBeans, "id">): CoffeeBeansCreateSubmit | "ValidationFailed_NameMustBeAtLeast3CharsLong" {
+  static create(item: Omit<CoffeeBeans, "id">)
+    : CoffeeBeansCreateSubmit | "ValidationFailed_NameMustBeAtLeast3CharsLong" {
     const _name = item.name.trim();
     const _description = item.description.trim();
 
     if (_name.length < 3) {
-      return "ValidationFailed_NameMustBeAtLeast3CharsLong"
+      return "ValidationFailed_NameMustBeAtLeast3CharsLong";
     }
 
     const obj: Omit<CoffeeBeans, "id"> = {
@@ -52,7 +53,7 @@ export class CoffeeBeansEditSubmit implements CoffeeBeans {
     const _description = item.description.trim();
 
     if (_name.length < 3) {
-      return "ValidationFailed_NameMustBeAtLeast3CharsLong"
+      return "ValidationFailed_NameMustBeAtLeast3CharsLong";
     }
 
     const obj: CoffeeBeans = {

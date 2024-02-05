@@ -6,7 +6,6 @@
   const RECIPE_THOUGHTS = "recipe-thoughts";
   const RECIPE_THOUGHTS_PH = "Example: Perfect balance. Perfect concentration. Flowery notes.";
   const OUT_WEIGHT = "out-weight";
-  const TIMESTAMP = "timestamp";
   const RATING = "rating";
 
   const FORM_NAME = "addRecipe";
@@ -15,25 +14,25 @@
 </script>
 
 <script lang="ts">
+  import { onMount } from "svelte";
   import { goto } from "$app/navigation";
-  import { page } from "$app/stores";
-  import Label from "$lib/UI/forms/Label.svelte";
-  import NumberInput from "$lib/UI/forms/NumberInput.svelte";
-  import Textarea from "$lib/UI/forms/Textarea.svelte";
+  // import { page } from "$app/stores";
   import { addRecipe, getAllCoffeeBeans } from "$lib/database/v1/indexedDB";
   import { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
   import type { RecipeSubmit } from "$lib/domain/entities/Recipe";
   import { naming } from "$lib/domain/naming";
   import { routes } from "$lib/domain/routes";
   import { clearFormField, loadFormField, persistFormField } from "$lib/persistForms/localStorage";
-  import { onMount } from "svelte";
+  import Label from "$lib/UI/forms/Label.svelte";
+  import NumberInput from "$lib/UI/forms/NumberInput.svelte";
+  import Textarea from "$lib/UI/forms/Textarea.svelte";
   import CoffeeBeansSelect from "./CoffeeBeansSelect.svelte";
-  import TimestampPicker from "./TimestampPicker.svelte";
   import { formatTimeForInput, parseDateFromInputString } from "./helpers";
+  import TimestampPicker from "./TimestampPicker.svelte";
 
   // From load function:
 
-  const coffeeBeansName = $page.data.coffeeBeansName;
+  // const coffeeBeansName = $page.data.coffeeBeansName;
 
   // State UI:
 
@@ -204,7 +203,7 @@
 
   // Handler functions:
 
-  async function handleSubmit(event: SubmitEvent & { currentTarget: EventTarget & HTMLFormElement }) {
+  async function handleSubmit() {
     // Deal with the CoffeeBeans select:
     if (selectedCoffeeBeans === undefined) {
       uiCoffeeBeansValidationFailed = true;
@@ -270,8 +269,8 @@
   <div>
     <CoffeeBeansSelect
       allCoffeeBeans={coffeeBeansItems}
-      bind:selectedCoffeeBeans
       validationFailed={uiCoffeeBeansValidationFailed}
+      bind:selectedCoffeeBeans
     />
   </div>
 
@@ -279,28 +278,28 @@
     <Label _for={RECIPE_TARGET}>{naming.recipe.recipeTarget}:</Label>
   </div>
   <div>
-    <Textarea name={RECIPE_TARGET} id={RECIPE_TARGET} placeholder={RECIPE_TARGET_PH} bind:value={recipeTarget} />
+    <Textarea id={RECIPE_TARGET} name={RECIPE_TARGET} placeholder={RECIPE_TARGET_PH} bind:value={recipeTarget} />
   </div>
 
   <div>
     <Label _for={RECIPE_RESULT}>{naming.recipe.recipeResult}:</Label>
   </div>
   <div>
-    <Textarea name={RECIPE_RESULT} id={RECIPE_RESULT} placeholder={RECIPE_RESULT_PH} bind:value={recipeResult} />
+    <Textarea id={RECIPE_RESULT} name={RECIPE_RESULT} placeholder={RECIPE_RESULT_PH} bind:value={recipeResult} />
   </div>
 
   <div>
     <NumberInput
       labelText="{naming.recipe.outWeight} (g):"
       min={0}
-      step={5}
       nameAttr={OUT_WEIGHT}
+      step={5}
       bind:value={outWeight}
     />
   </div>
 
   <div>
-    <NumberInput labelText="Rating:" min={0} max={5} step={0.5} nameAttr={RATING} bind:value={rating} />
+    <NumberInput labelText="Rating:" max={5} min={0} nameAttr={RATING} step={0.5} bind:value={rating} />
   </div>
 
   <div>
@@ -308,8 +307,8 @@
   </div>
   <div>
     <Textarea
-      name={RECIPE_THOUGHTS}
       id={RECIPE_THOUGHTS}
+      name={RECIPE_THOUGHTS}
       placeholder={RECIPE_THOUGHTS_PH}
       textLinesCount={4}
       bind:value={recipeThoughts}
@@ -320,7 +319,7 @@
     <TimestampPicker bind:value={timestampStr} />
   </div>
 
-  <button type="submit" form="add-recipe" class="my-button"> Save </button>
+  <button class="my-button" form="add-recipe" type="submit"> Save </button>
 </form>
 
 <style lang="postcss">

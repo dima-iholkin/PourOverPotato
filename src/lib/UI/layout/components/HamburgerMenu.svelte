@@ -10,7 +10,7 @@
 
   // Handler functions:
 
-  function toggleMenu(event: MouseEvent & { currentTarget: EventTarget & HTMLButtonElement }) {
+  function toggleMenu() {
     menuOpen = !menuOpen;
   }
 
@@ -24,7 +24,7 @@
     }
   }
 
-  function handleMenuItemClick(event: MouseEvent & { currentTarget: EventTarget & HTMLAnchorElement }) {
+  function handleMenuItemClick() {
     menuOpen = false;
   }
 
@@ -32,8 +32,8 @@
 
   function clickOutsideBox(element: Element, click: MouseEvent) {
     const box: DOMRect = element.getBoundingClientRect();
-    let x: number = click.clientX;
-    let y: number = click.clientY;
+    const x: number = click.clientX;
+    const y: number = click.clientY;
 
     if (x < box.left || x > box.right || y < box.top || y > box.bottom) {
       return true;
@@ -47,34 +47,34 @@
 
 <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
   <button
-    type="button"
-    class="menu-button"
     aria-controls="navbar-sticky"
     aria-expanded="false"
-    on:click={toggleMenu}
+    class="menu-button"
+    type="button"
     bind:this={menuButtonDom}
+    on:click={toggleMenu}
   >
-    <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
+    <svg aria-hidden="true" class="w-5 h-5" fill="none" viewBox="0 0 17 14" xmlns="http://www.w3.org/2000/svg">
       <path
+        d="M1 1h15M1 7h15M1 13h15"
         stroke="currentColor"
         stroke-linecap="round"
         stroke-linejoin="round"
         stroke-width="2"
-        d="M1 1h15M1 7h15M1 13h15"
       />
     </svg>
   </button>
 </div>
-<div class="menu-div" class:hidden={!menuOpen} bind:this={menuDom}>
+<div class="menu-div" bind:this={menuDom} class:hidden={!menuOpen}>
   <ul class="ul-menu">
     <li>
-      <a href={routes.home} class="a-menu" aria-current="page" on:click={handleMenuItemClick}> Coffee Beans </a>
+      <a aria-current="page" class="a-menu" href={routes.home} on:click={handleMenuItemClick}> Coffee Beans </a>
     </li>
     <li>
-      <a href={routes.recipes} class="a-menu" aria-current="page" on:click={handleMenuItemClick}> Recipes </a>
+      <a aria-current="page" class="a-menu" href={routes.recipes} on:click={handleMenuItemClick}> Recipes </a>
     </li>
     <li>
-      <a href={routes.other} class="a-menu" aria-current="page" on:click={handleMenuItemClick}> Other </a>
+      <a aria-current="page" class="a-menu" href={routes.other} on:click={handleMenuItemClick}> Other </a>
     </li>
   </ul>
 </div>

@@ -6,12 +6,12 @@
 </script>
 
 <script lang="ts">
-  import FlexRow from "$lib/UI/FlexRow.svelte";
+  import { onMount } from "svelte";
   import { getCoffeeBeansById } from "$lib/database/v1/indexedDB";
   import type { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
   import type { Recipe } from "$lib/domain/entities/Recipe";
   import { naming } from "$lib/domain/naming";
-  import { onMount } from "svelte";
+  import FlexRow from "$lib/UI/FlexRow.svelte";
   import Card from "./Card.svelte";
 
   // Props:

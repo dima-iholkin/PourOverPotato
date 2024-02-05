@@ -1,14 +1,14 @@
 <script lang="ts">
-  import FlexRow from "$lib/UI/FlexRow.svelte";
-  import MyFab from "$lib/UI/MyFab.svelte";
-  import RecipeCard from "$lib/UI/cards/RecipeCard.svelte";
-  import PageHeadline from "$lib/UI/layout/PageHeadline.svelte";
+  import { onMount } from "svelte";
   import { getCoffeeBeansByName, getRecipesByCoffeeBeansId } from "$lib/database/v1/indexedDB";
   import { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
   import type { Recipe } from "$lib/domain/entities/Recipe";
   import { sortRecipesByRatingDesc as byRatingDesc } from "$lib/domain/helpers/sortRecipes";
   import { routes } from "$lib/domain/routes";
-  import { onMount } from "svelte";
+  import RecipeCard from "$lib/UI/cards/RecipeCard.svelte";
+  import FlexRow from "$lib/UI/FlexRow.svelte";
+  import PageHeadline from "$lib/UI/layout/PageHeadline.svelte";
+  import MyFab from "$lib/UI/MyFab.svelte";
   import type { PageData } from "./$types";
   import EditCoffeeBeansModal from "./EditCoffeeBeansModal.svelte";
 

@@ -8,4 +8,4 @@ export const routes = {
     base + `/recipes/add?coffee_beans_name=${coffeeBeansName}` :
     base + "/recipes/add",
   other: base + "/other",
-}
+};

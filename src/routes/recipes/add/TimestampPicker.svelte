@@ -12,7 +12,7 @@
 
 <div class="container">
   <Label _for={TIMESTAMP}>Timestamp:</Label>
-  <input name={TIMESTAMP} id={TIMESTAMP} type="datetime-local" bind:value />
+  <input id={TIMESTAMP} name={TIMESTAMP} type="datetime-local" bind:value />
 </div>
 
 <style lang="postcss">

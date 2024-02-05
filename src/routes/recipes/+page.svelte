@@ -1,12 +1,12 @@
 <script lang="ts">
-  import MyFab from "$lib/UI/MyFab.svelte";
-  import RecipeCard from "$lib/UI/cards/RecipeCard.svelte";
-  import PageHeadline from "$lib/UI/layout/PageHeadline.svelte";
+  import { onMount } from "svelte";
   import { getAllRecipes } from "$lib/database/v1/indexedDB";
   import type { Recipe } from "$lib/domain/entities/Recipe";
   import { sortRecipesByTimestampDesc as byTimestampDesc } from "$lib/domain/helpers/sortRecipes";
   import { routes } from "$lib/domain/routes";
-  import { onMount } from "svelte";
+  import RecipeCard from "$lib/UI/cards/RecipeCard.svelte";
+  import PageHeadline from "$lib/UI/layout/PageHeadline.svelte";
+  import MyFab from "$lib/UI/MyFab.svelte";
 
   // State:
 

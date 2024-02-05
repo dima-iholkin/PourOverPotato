@@ -3,14 +3,14 @@
 </script>
 
 <script lang="ts">
+  import { tick } from "svelte";
+  import { editCoffeeBeans } from "$lib/database/v1/indexedDB";
+  import { CoffeeBeans, CoffeeBeansEditSubmit } from "$lib/domain/entities/CoffeeBeans";
+  import { routes } from "$lib/domain/routes";
   import ModalHeader from "$lib/UI/CoffeeBeansSelect/components/ModalHeader.svelte";
   import Label from "$lib/UI/forms/Label.svelte";
   import Textarea from "$lib/UI/forms/Textarea.svelte";
   import MySidebar from "$lib/UI/layout/components/MySidebar.svelte";
-  import { editCoffeeBeans } from "$lib/database/v1/indexedDB";
-  import { CoffeeBeans, CoffeeBeansEditSubmit } from "$lib/domain/entities/CoffeeBeans";
-  import { routes } from "$lib/domain/routes";
-  import { tick } from "svelte";
 
   // Props:
 

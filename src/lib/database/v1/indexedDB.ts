@@ -1,9 +1,9 @@
-import { CoffeeBeans, CoffeeBeansEditSubmit, type CoffeeBeansCreateSubmit } from "$lib/domain/entities/CoffeeBeans";
-import { Recipe, type RecipeSubmit } from "$lib/domain/entities/Recipe";
 import { openDB } from "idb";
+import { CoffeeBeans, type CoffeeBeansCreateSubmit, CoffeeBeansEditSubmit } from "$lib/domain/entities/CoffeeBeans";
+import { Recipe, type RecipeSubmit } from "$lib/domain/entities/Recipe";
 import { CoffeeBeansDB, CoffeeBeansDBSubmit, type ICoffeeBeansDB } from "./types/CoffeeBeansDB";
 import type { EntitiesDB } from "./types/EntitiesDB";
-import { RecipeDB, type IRecipeDB, RecipeDBSubmit } from "./types/RecipeDB";
+import { type IRecipeDB, RecipeDB, RecipeDBSubmit } from "./types/RecipeDB";
 
 // Static data:
 
@@ -103,7 +103,8 @@ export async function anyRecipesSaved() {
   return count > 0;
 }
 
-export async function editCoffeeBeans(submitItem: CoffeeBeansEditSubmit): Promise<CoffeeBeans | "Failure_NameAlreadyExist"> {
+export async function
+  editCoffeeBeans(submitItem: CoffeeBeansEditSubmit): Promise<CoffeeBeans | "Failure_NameAlreadyExist"> {
   const db = await openEntitiesDB();
 
   const dbItem: ICoffeeBeansDB | undefined = await db.getFromIndex(

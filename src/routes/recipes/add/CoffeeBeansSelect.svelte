@@ -3,9 +3,9 @@
 </script>
 
 <script lang="ts">
+  import { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
   import NewCoffeeBeansModal from "$lib/UI/CoffeeBeansSelect/NewCoffeeBeansModal.svelte";
   import Label from "$lib/UI/forms/Label.svelte";
-  import { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
 
   // Props:
 
@@ -47,7 +47,7 @@
 
   // Handler functions:
 
-  function handleSelectChange(event: Event & { currentTarget: EventTarget & HTMLSelectElement }) {
+  function handleSelectChange() {
     if (validationFailed) {
       validationFailed = false;
     }
@@ -60,12 +60,12 @@
   <Label _for={COFFEEBEANS_ID} valid={!validationFailed}>Coffee beans:</Label>
   <div class="select-container">
     <select
-      name={COFFEEBEANS_ID}
-      id={COFFEEBEANS_ID}
       class={validationFailed ? "invalid" : "valid"}
-      on:change={handleSelectChange}
-      bind:value={selectedCoffeeBeansId}
       disabled={allCoffeeBeans === undefined}
+      id={COFFEEBEANS_ID}
+      name={COFFEEBEANS_ID}
+      bind:value={selectedCoffeeBeansId}
+      on:change={handleSelectChange}
     >
       {#if allCoffeeBeans !== undefined}
         {#if selectedCoffeeBeans === undefined}

@@ -1,11 +1,11 @@
 <script lang="ts">
-  import MyFab from "$lib/UI/MyFab.svelte";
-  import CoffeeBeansCard from "$lib/UI/cards/CoffeeBeansCard.svelte";
-  import PageHeadline from "$lib/UI/layout/PageHeadline.svelte";
+  import { onMount } from "svelte";
   import { getAllCoffeeBeans, getRecipesCountByCoffeeBeansId } from "$lib/database/v1/indexedDB";
   import type { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
   import { routes } from "$lib/domain/routes";
-  import { onMount } from "svelte";
+  import CoffeeBeansCard from "$lib/UI/cards/CoffeeBeansCard.svelte";
+  import PageHeadline from "$lib/UI/layout/PageHeadline.svelte";
+  import MyFab from "$lib/UI/MyFab.svelte";
 
   // State:
 
@@ -36,7 +36,7 @@
   <p>No coffee beans added yet.</p>
 {:else}
   {#each coffeeBeans as item (item.id)}
-    <CoffeeBeansCard {item} recipeCount={item.recipeCount} href={routes.coffeeBeansItem(item.name)} />
+    <CoffeeBeansCard href={routes.coffeeBeansItem(item.name)} recipeCount={item.recipeCount} {item} />
   {/each}
 {/if}
 
