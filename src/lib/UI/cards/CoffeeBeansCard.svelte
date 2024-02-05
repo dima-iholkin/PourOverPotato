@@ -13,18 +13,22 @@
 </script>
 
 <Card {href}>
-  <FlexRow>
-    <h5>{item.name}</h5>
-    <p>{recipeCount} {recipeCount === 1 ? "recipe" : "recipes"}</p>
-  </FlexRow>
+  <div class="flex-row">
+    <FlexRow>
+      <h5>{item.name}</h5>
+      <p class="recipes-count">{recipeCount} {recipeCount === 1 ? "recipe" : "recipes"}</p>
+    </FlexRow>
+  </div>
   <p>{item.description}</p>
 </Card>
 
 <style lang="postcss">
+  .flex-row {
+    margin-bottom: 0.5rem;
+  }
+
   h5 {
     @apply text-2xl font-bold tracking-tight text-gray-900 dark:text-white;
-
-    margin-bottom: 8px;
   }
 
   p {
