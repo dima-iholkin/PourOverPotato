@@ -6,7 +6,7 @@
   export let valid: boolean | undefined = true;
 </script>
 
-<label for={_for} class={valid === true ? "valid" : "invalid"}>
+<label class={valid === true ? "valid" : "invalid"} for={_for}>
   <slot />
 </label>
 

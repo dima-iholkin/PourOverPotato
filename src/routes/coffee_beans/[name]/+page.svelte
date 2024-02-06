@@ -1,14 +1,14 @@
 <script lang="ts">
-  import FlexRow from "$lib/UI/FlexRow.svelte";
-  import MyFab from "$lib/UI/MyFab.svelte";
-  import RecipeCard from "$lib/UI/cards/RecipeCard.svelte";
-  import PageHeadline from "$lib/UI/layout/PageHeadline.svelte";
+  import { onMount } from "svelte";
   import { getCoffeeBeansByName, getRecipesByCoffeeBeansId } from "$lib/database/v1/indexedDB";
   import { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
   import type { Recipe } from "$lib/domain/entities/Recipe";
-  import { sortRecipesByRatingDesc as byRatingDesc } from "$lib/domain/helpers/sortRecipes";
+  import { sortRecipesByTimestampDesc as byTimestampDesc } from "$lib/domain/helpers/sortRecipes";
   import { routes } from "$lib/domain/routes";
-  import { onMount } from "svelte";
+  import RecipeCard from "$lib/UI/cards/RecipeCard.svelte";
+  import FlexRow from "$lib/UI/FlexRow.svelte";
+  import PageHeadline from "$lib/UI/layout/PageHeadline.svelte";
+  import MyFab from "$lib/UI/MyFab.svelte";
   import type { PageData } from "./$types";
   import EditCoffeeBeansModal from "./EditCoffeeBeansModal.svelte";
 
@@ -38,18 +38,18 @@
           return;
         }
 
-        recipes = items.sort(byRatingDesc);
+        recipes = items.sort(byTimestampDesc);
       });
   });
 </script>
 
 <svelte:head>
   {#if coffeeBeans instanceof CoffeeBeans}
-    <title>{coffeeBeans.name}</title>
+    <title>{coffeeBeans.name} - PourOverPotato app</title>
   {:else if coffeeBeans === undefined}
-    <title>loading...</title>
+    <title>loading... - PourOverPotato app</title>
   {:else if coffeeBeans === "CoffeeBeansNotFound"}
-    <title>404 Not Found</title>
+    <title>404 Not Found - PourOverPotato app</title>
   {/if}
 </svelte:head>
 
@@ -61,9 +61,9 @@
   <p class="coffee-beans-description">{coffeeBeans.description}</p>
 
   {#if recipes !== undefined && recipes.length > 0}
-    <h2>Best recipes</h2>
+    <h2>Sorted by latest recipe</h2>
     {#each recipes as recipe}
-      <RecipeCard {recipe} />
+      <RecipeCard href={routes.recipeItem(recipe.id)} {recipe} />
     {/each}
   {:else if recipes !== undefined && recipes.length === 0}
     <p>No recipes added yet.</p>
@@ -85,7 +85,7 @@
   }
 
   h2 {
-    @apply text-xl font-normal tracking-tight text-gray-900 dark:text-white;
+    @apply text-lg font-normal tracking-tight text-gray-900 dark:text-white;
 
     margin-top: 1rem;
   }

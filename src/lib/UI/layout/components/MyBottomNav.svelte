@@ -1,9 +1,9 @@
 <script lang="ts">
   import { base } from "$app/paths";
   import { page } from "$app/stores";
-  import OtherIcon from "$lib/UI/icons/OtherIcon.svelte";
   import coffeeBeansIcon from "$lib/assets/coffee-beans-icon.png";
   import { routes } from "$lib/domain/routes";
+  import OtherIcon from "$lib/UI/icons/OtherIcon.svelte";
 
   // State:
 
@@ -13,21 +13,21 @@
 <div class="bottom-nav">
   <div class="grid h-full max-w-lg grid-cols-3 mx-auto font-medium">
     <a href={routes.recipes}>
-      <button class:active={route === routes.recipes} type="button">
-        <span class:active={route === routes.recipes} class="material-icons md-24" style="padding: 2px 0;">
+      <button type="button" class:active={route === routes.recipes}>
+        <span class="material-icons md-24" style="padding: 2px 0;" class:active={route === routes.recipes}>
           content_copy
         </span>
         <span class:active={route === routes.recipes}> Recipes </span>
       </button>
     </a>
     <a href={routes.home}>
-      <button class:active={route === routes.home} type="button">
+      <button type="button" class:active={route === routes.home}>
         <img alt="A coffee beans icon" src={coffeeBeansIcon} class:active-img={route === routes.home} />
         <span class:active={route === routes.home}> Coffee beans </span>
       </button>
     </a>
     <a href={routes.other}>
-      <button class:active={route === routes.other} type="button">
+      <button type="button" class:active={route === routes.other}>
         <OtherIcon />
         <span class:active={route === routes.other}> Other </span>
       </button>

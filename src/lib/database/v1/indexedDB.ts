@@ -1,9 +1,9 @@
-import { CoffeeBeans, CoffeeBeansEditSubmit, type CoffeeBeansCreateSubmit } from "$lib/domain/entities/CoffeeBeans";
-import { Recipe, type RecipeSubmit } from "$lib/domain/entities/Recipe";
 import { openDB } from "idb";
+import { CoffeeBeans, type CoffeeBeansCreateSubmit, CoffeeBeansEditSubmit } from "$lib/domain/entities/CoffeeBeans";
+import { Recipe, type RecipeSubmit } from "$lib/domain/entities/Recipe";
 import { CoffeeBeansDB, CoffeeBeansDBSubmit, type ICoffeeBeansDB } from "./types/CoffeeBeansDB";
 import type { EntitiesDB } from "./types/EntitiesDB";
-import { RecipeDB, type IRecipeDB, RecipeDBSubmit } from "./types/RecipeDB";
+import { type IRecipeDB, RecipeDB, RecipeDBSubmit } from "./types/RecipeDB";
 
 // Static data:
 
@@ -103,7 +103,8 @@ export async function anyRecipesSaved() {
   return count > 0;
 }
 
-export async function editCoffeeBeans(submitItem: CoffeeBeansEditSubmit): Promise<CoffeeBeans | "Failure_NameAlreadyExist"> {
+export async function
+  editCoffeeBeans(submitItem: CoffeeBeansEditSubmit): Promise<CoffeeBeans | "Failure_NameAlreadyExist"> {
   const db = await openEntitiesDB();
 
   const dbItem: ICoffeeBeansDB | undefined = await db.getFromIndex(
@@ -120,15 +121,22 @@ export async function editCoffeeBeans(submitItem: CoffeeBeansEditSubmit): Promis
     description: submitItem.description,
     nameLowerCase: submitItem.name.toLowerCase()
   };
-  const newId = await db.put(coffeeBeansStoreName, dbSubmitItem);
-
-  console.log(`Edit CoffeeBeans item. New name: ${submitItem.name}. Old Id: ${submitItem.id} New Id: ${newId}.`);
+  await db.put(coffeeBeansStoreName, dbSubmitItem);
 
   const coffeeBeans: Omit<CoffeeBeans, "id"> = {
     name: dbSubmitItem.name,
     description: dbSubmitItem.description
   };
   return new CoffeeBeans(coffeeBeans, dbSubmitItem.id);
+}
+
+export async function editRecipe(submitItem: Recipe): Promise<Recipe> {
+  const db = await openEntitiesDB();
+
+  const dbSubmitItem: RecipeDB = new RecipeDB(submitItem, submitItem.id);
+  await db.put(recipesStoreName, dbSubmitItem);
+
+  return dbSubmitItem.toRecipe();
 }
 
 export async function getAllCoffeeBeans(): Promise<CoffeeBeans[]> {
@@ -173,6 +181,18 @@ export async function getCoffeeBeansByName(name: string): Promise<CoffeeBeans | 
   }
 
   return new CoffeeBeansDB(itemShape, itemShape.id).toCoffeeBeans();
+}
+
+export async function getRecipeById(id: number): Promise<Recipe | undefined> {
+  const db = await openEntitiesDB();
+
+  const itemShape: IRecipeDB | undefined = await db.get(recipesStoreName, id);
+
+  if (itemShape === undefined) {
+    return undefined;
+  }
+
+  return new RecipeDB(itemShape, itemShape.id).toRecipe();
 }
 
 export async function getRecipesByCoffeeBeansId(id: number): Promise<Recipe[]> {

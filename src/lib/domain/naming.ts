@@ -5,4 +5,4 @@ export const naming = {
     recipeThoughts: "My thoughts",
     outWeight: "Out weight",
   }
-}
+};

@@ -2,10 +2,6 @@
   import MyBottomNav from "./components/MyBottomNav.svelte";
   import MyHeader from "./components/MyHeader.svelte";
   import MySidebar from "./components/MySidebar.svelte";
-
-  // State:
-
-  let rightPanelOpened = false;
 </script>
 
 <MyHeader />

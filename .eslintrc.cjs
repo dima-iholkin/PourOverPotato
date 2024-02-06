@@ -3,9 +3,11 @@ module.exports = {
   root: true,
   extends: [
     "eslint:recommended",
+    "plugin:import/errors",
+    "plugin:import/warnings",
     "plugin:@typescript-eslint/recommended",
     "plugin:svelte/recommended",
-    "prettier"
+    "prettier",
   ],
   parser: "@typescript-eslint/parser",
   plugins: [
@@ -32,6 +34,62 @@ module.exports = {
     }
   ],
   "rules": {
+    // Tune the default rules:
+    "@typescript-eslint/no-unused-vars": "warn",
+    "svelte/valid-compile": "warn", // Fixed the error on unused "data" prop from Svelte load function.
+    "prefer-const": "warn",
+    "no-debugger": "warn",
+    "@typescript-eslint/ban-ts-comment": "off",
+    //
+    // Sort everything:
+    //
+    // Sort imports:
+    "import/order": [
+      "warn",
+      {
+        "groups": ["builtin", "external", "internal", "parent", "sibling", "index", "object"],
+        "pathGroups": [
+          {
+            "pattern": "svelte**",
+            "group": "builtin",
+            "position": "after"
+          },
+          {
+            "pattern": "@sveltejs/kit**",
+            "group": "external",
+            "position": "before"
+          },
+          {
+            "pattern": "$app/**",
+            "group": "external",
+            "position": "after"
+          },
+          {
+            "pattern": "$lib/**",
+            "group": "internal",
+            "position": "before"
+          },
+        ],
+        "pathGroupsExcludedImportTypes": [],
+        "newlines-between": "never",
+        "alphabetize": {
+          "order": "asc",
+          "caseInsensitive": true
+        }
+      }
+    ],
+    "import/no-unresolved": "off", // Disable because it shows false errors for "$lib" paths.
+    // "sort-imports": [
+    //   "warn",
+    //   {
+    //     "ignoreCase": true,
+    //     "ignoreDeclarationSort": true,
+    //     "ignoreMemberSort": false,
+    //     "memberSyntaxSortOrder": ["none", "all", "multiple", "single"],
+    //     "allowSeparatedGroups": false
+    //   }
+    // ],
+    //
     // Sort the HTML attributes:
     "perfectionist/sort-svelte-attributes": [
       "warn",
@@ -46,11 +104,25 @@ module.exports = {
       }
     ],
     "svelte/sort-attributes": "off",
+    // Sort the object properties:
+    // "sort-keys": ["warn", "asc", { "caseSensitive": false, "natural": true, "minKeys": 2 }],
+    //
     // Semi-colons:
     "semi": "warn",
-    // Tune the default rules:
-    "@typescript-eslint/no-unused-vars": "warn",
-    "prefer-const": "warn",
-    "no-debugger": "warn"
+    //
+    // Double quotes:
+    "quotes": "warn",
+    //
+    // Max line length at 120 chars:
+    "max-len": [
+      "warn",
+      {
+        "code": 120,
+        "ignoreComments": false,
+        "ignoreTrailingComments": false,
+        "ignoreStrings": false,
+        "ignoreTemplateLiterals": true
+      }
+    ],
   }
 };

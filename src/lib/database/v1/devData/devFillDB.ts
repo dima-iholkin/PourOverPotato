@@ -13,8 +13,8 @@ export async function devFillDB() {
 
     if (await anyRecipesSaved() === false) {
       devRecipes.forEach(async (item) => {
-        await addRecipe(item)
-      })
+        await addRecipe(item);
+      });
     }
   }
 }

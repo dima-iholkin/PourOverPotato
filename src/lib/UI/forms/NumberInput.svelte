@@ -86,9 +86,9 @@
 <div class="container">
   <Label _for={nameAttr}>{labelText}</Label>
   <div class="input-container">
-    <button type="button" id="decrement-button" class="minus-button" on:click={handleMinus}>
-      <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
-        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h16" />
+    <button class="minus-button" id="decrement-button" type="button" on:click={handleMinus}>
+      <svg aria-hidden="true" fill="none" viewBox="0 0 18 2" xmlns="http://www.w3.org/2000/svg">
+        <path d="M1 1h16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
       </svg>
     </button>
     <input
@@ -96,17 +96,17 @@
       name={nameAttr}
       type="text"
       bind:value
-      on:keydown={handleKeydown}
       on:focusout={handleFocusOut}
+      on:keydown={handleKeydown}
     />
-    <button type="button" id="increment-button" class="plus-button" on:click={handlePlus}>
-      <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
+    <button class="plus-button" id="increment-button" type="button" on:click={handlePlus}>
+      <svg aria-hidden="true" fill="none" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
         <path
+          d="M9 1v16M1 9h16"
           stroke="currentColor"
           stroke-linecap="round"
           stroke-linejoin="round"
           stroke-width="2"
-          d="M9 1v16M1 9h16"
         />
       </svg>
     </button>

@@ -7,5 +7,6 @@
     @apply text-2xl font-bold tracking-tight text-gray-900 dark:text-white;
 
     margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
   }
 </style>

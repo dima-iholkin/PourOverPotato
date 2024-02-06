@@ -3,12 +3,12 @@
 </script>
 
 <script lang="ts">
+  import { tick } from "svelte";
+  import { addCoffeeBeans } from "$lib/database/v1/indexedDB";
+  import { CoffeeBeans, CoffeeBeansCreateSubmit } from "$lib/domain/entities/CoffeeBeans";
   import Label from "$lib/UI/forms/Label.svelte";
   import Textarea from "$lib/UI/forms/Textarea.svelte";
   import MySidebar from "$lib/UI/layout/components/MySidebar.svelte";
-  import { addCoffeeBeans } from "$lib/database/v1/indexedDB";
-  import { CoffeeBeans, CoffeeBeansCreateSubmit } from "$lib/domain/entities/CoffeeBeans";
-  import { tick } from "svelte";
   import Header from "./components/ModalHeader.svelte";
 
   // Props:
@@ -97,7 +97,7 @@
       return;
     }
 
-    alert("New coffee beans saved successfully.");
+    alert("We saved the coffee beans successfully.");
     // TODO: Inform user that the new coffee beans were saved successfully.
 
     // Return the new Coffee Beans entity to the "Add recipe" page:

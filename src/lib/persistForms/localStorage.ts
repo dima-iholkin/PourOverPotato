@@ -1,6 +1,4 @@
-import { browser } from '$app/environment';
-
-const FORM_PREFIX = "form_";
+import { browser } from "$app/environment";
 
 export function persistFormField(formName: string, inputName: string, value: string | number) {
   if (browser === false) {

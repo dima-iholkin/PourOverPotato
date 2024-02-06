@@ -6,19 +6,21 @@
 </script>
 
 <script lang="ts">
-  import FlexRow from "$lib/UI/FlexRow.svelte";
+  import { onMount } from "svelte";
   import { getCoffeeBeansById } from "$lib/database/v1/indexedDB";
   import type { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
   import type { Recipe } from "$lib/domain/entities/Recipe";
   import { naming } from "$lib/domain/naming";
-  import { onMount } from "svelte";
+  import FlexRow from "$lib/UI/FlexRow.svelte";
   import Card from "./Card.svelte";
 
   // Props:
 
   export let recipe: Recipe;
 
-  export let showCoffeeBeans: boolean = false;
+  export let showCoffeeBeansName: boolean = false;
+
+  export let href: string | undefined;
 
   // State:
 
@@ -27,7 +29,7 @@
   // Lifecycle hooks:
 
   onMount(() => {
-    if (showCoffeeBeans === true) {
+    if (showCoffeeBeansName === true) {
       getCoffeeBeansById(recipe.coffeeBeansId).then((item) => {
         coffeeBeans = item;
       });
@@ -35,12 +37,12 @@
   });
 </script>
 
-<Card>
+<Card {href}>
   <FlexRow>
     <p class="timestamp">{recipe.timestamp.toLocaleString(undefined, options)}</p>
     <p>{recipe.rating}/5</p>
   </FlexRow>
-  {#if showCoffeeBeans}
+  {#if showCoffeeBeansName}
     <h5>
       {coffeeBeans ? coffeeBeans.name : "loading..."}
     </h5>

@@ -3,9 +3,9 @@
 </script>
 
 <script lang="ts">
+  import { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
   import NewCoffeeBeansModal from "$lib/UI/CoffeeBeansSelect/NewCoffeeBeansModal.svelte";
   import Label from "$lib/UI/forms/Label.svelte";
-  import { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
 
   // Props:
 
@@ -15,12 +15,16 @@
 
   export let validationFailed: boolean = false;
 
+  export let showAddButton: boolean = true;
+
   // State:
 
   let selectedCoffeeBeansId: number | undefined = selectedCoffeeBeans?.id;
   $: {
     selectedCoffeeBeansId;
-    selectedCoffeeBeans = allCoffeeBeans?.find((item) => item.id === selectedCoffeeBeansId);
+    if (allCoffeeBeans !== undefined) {
+      selectedCoffeeBeans = allCoffeeBeans.find((item) => item.id === selectedCoffeeBeansId);
+    }
   }
 
   let savedCoffeeBeans: CoffeeBeans | undefined;
@@ -47,7 +51,7 @@
 
   // Handler functions:
 
-  function handleSelectChange(event: Event & { currentTarget: EventTarget & HTMLSelectElement }) {
+  function handleSelectChange() {
     if (validationFailed) {
       validationFailed = false;
     }
@@ -60,15 +64,15 @@
   <Label _for={COFFEEBEANS_ID} valid={!validationFailed}>Coffee beans:</Label>
   <div class="select-container">
     <select
-      name={COFFEEBEANS_ID}
-      id={COFFEEBEANS_ID}
       class={validationFailed ? "invalid" : "valid"}
-      on:change={handleSelectChange}
-      bind:value={selectedCoffeeBeansId}
       disabled={allCoffeeBeans === undefined}
+      id={COFFEEBEANS_ID}
+      name={COFFEEBEANS_ID}
+      bind:value={selectedCoffeeBeansId}
+      on:change={handleSelectChange}
     >
       {#if allCoffeeBeans !== undefined}
-        {#if selectedCoffeeBeans === undefined}
+        {#if selectedCoffeeBeans === undefined && showAddButton === true}
           <option disabled selected value></option>
         {/if}
         {#each allCoffeeBeans as item}
@@ -78,7 +82,9 @@
         <option disabled selected value>Loading coffee beans...</option>
       {/if}
     </select>
-    <NewCoffeeBeansModal bind:savedCoffeeBeans />
+    {#if showAddButton}
+      <NewCoffeeBeansModal bind:savedCoffeeBeans />
+    {/if}
   </div>
 </div>
 <p class="mt-2 text-sm text-red-600 dark:text-red-500">{validationMessage}</p>

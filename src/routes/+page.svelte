@@ -1,24 +1,35 @@
 <script lang="ts">
-  import MyFab from "$lib/UI/MyFab.svelte";
+  import { onMount } from "svelte";
+  import { getAllCoffeeBeans, getRecipesByCoffeeBeansId } from "$lib/database/v1/indexedDB";
+  import type { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
+  import type { Recipe } from "$lib/domain/entities/Recipe";
+  import { sortRecipesByTimestampDesc, sortCoffeeBeansByTimestampDesc } from "$lib/domain/helpers/sortRecipes";
+  import { routes } from "$lib/domain/routes";
   import CoffeeBeansCard from "$lib/UI/cards/CoffeeBeansCard.svelte";
   import PageHeadline from "$lib/UI/layout/PageHeadline.svelte";
-  import { getAllCoffeeBeans, getRecipesCountByCoffeeBeansId } from "$lib/database/v1/indexedDB";
-  import type { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
-  import { routes } from "$lib/domain/routes";
-  import { onMount } from "svelte";
+  import MyFab from "$lib/UI/MyFab.svelte";
 
   // State:
 
-  let coffeeBeans: (CoffeeBeans & { recipeCount: number })[] | undefined;
+  let coffeeBeans: (CoffeeBeans & { recipeCount: number; latestRecipeTimestamp: Date | undefined })[] | undefined;
 
   // Lifecycle hooks:
 
   onMount(() => {
     getAllCoffeeBeans().then((items) => {
-      coffeeBeans = items as (CoffeeBeans & { recipeCount: number })[];
-      coffeeBeans?.forEach(async (item) => {
-        item.recipeCount = await getRecipesCountByCoffeeBeansId(item.id);
-        coffeeBeans = coffeeBeans;
+      Promise.all(
+        items.map(async (item) => {
+          const recipes: Recipe[] = await getRecipesByCoffeeBeansId(item.id);
+          const coffeeBeansItem: CoffeeBeans & { recipeCount: number; latestRecipeTimestamp: Date | undefined } = {
+            ...item,
+            recipeCount: recipes.length,
+            latestRecipeTimestamp:
+              recipes.length > 0 ? recipes.sort(sortRecipesByTimestampDesc)[0].timestamp : undefined
+          };
+          return coffeeBeansItem;
+        })
+      ).then((items: (CoffeeBeans & { recipeCount: number; latestRecipeTimestamp: Date | undefined })[]) => {
+        coffeeBeans = items.sort(sortCoffeeBeansByTimestampDesc);
       });
     });
   });
@@ -35,9 +46,18 @@
 {:else if coffeeBeans.length === 0}
   <p>No coffee beans added yet.</p>
 {:else}
+  <h2>Sorted by latest recipe</h2>
   {#each coffeeBeans as item (item.id)}
-    <CoffeeBeansCard {item} recipeCount={item.recipeCount} href={routes.coffeeBeansItem(item.name)} />
+    <CoffeeBeansCard href={routes.coffeeBeansItem(item.name)} recipeCount={item.recipeCount} {item} />
   {/each}
 {/if}
 
 <MyFab href={routes.addRecipe()} />
+
+<style lang="postcss">
+  h2 {
+    @apply text-lg font-normal tracking-tight text-gray-900 dark:text-white;
+
+    margin-top: 1rem;
+  }
+</style>

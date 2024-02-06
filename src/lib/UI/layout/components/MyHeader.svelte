@@ -1,9 +1,9 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
   import { page } from "$app/stores";
+  import { routes } from "$lib/domain/routes";
   import LeftArrowIcon from "$lib/UI/icons/LeftArrowIcon.svelte";
   import LoveIcon from "$lib/UI/icons/LoveIcon.svelte";
-  import { routes } from "$lib/domain/routes";
 
   // Props:
 
