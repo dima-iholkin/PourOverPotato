@@ -95,12 +95,19 @@ module.exports = {
       "warn",
       {
         "type": "alphabetical",
+        "ignore-case": true,
         "order": "asc",
         "groups": [
-          "multiline",
-          "unknown",
-          ["shorthand", "svelte-shorthand"]
-        ]
+          "id",
+          "slot",
+          ["multiline", "unknown", "shorthand", "svelte-shorthand"],
+          "aria"
+        ],
+        "custom-groups": {
+          "id": "id",
+          "slot": "slot",
+          "aria": "aria**",
+        }
       }
     ],
     "svelte/sort-attributes": "off",
