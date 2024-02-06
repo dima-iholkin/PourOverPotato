@@ -130,6 +130,15 @@ export async function
   return new CoffeeBeans(coffeeBeans, dbSubmitItem.id);
 }
 
+export async function editRecipe(submitItem: Recipe): Promise<Recipe> {
+  const db = await openEntitiesDB();
+
+  const dbSubmitItem: RecipeDB = new RecipeDB(submitItem, submitItem.id);
+  await db.put(recipesStoreName, dbSubmitItem);
+
+  return dbSubmitItem.toRecipe();
+}
+
 export async function getAllCoffeeBeans(): Promise<CoffeeBeans[]> {
   const db = await openEntitiesDB();
 

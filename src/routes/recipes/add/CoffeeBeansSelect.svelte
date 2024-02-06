@@ -15,12 +15,16 @@
 
   export let validationFailed: boolean = false;
 
+  export let showAddButton: boolean = true;
+
   // State:
 
   let selectedCoffeeBeansId: number | undefined = selectedCoffeeBeans?.id;
   $: {
     selectedCoffeeBeansId;
-    selectedCoffeeBeans = allCoffeeBeans?.find((item) => item.id === selectedCoffeeBeansId);
+    if (allCoffeeBeans !== undefined) {
+      selectedCoffeeBeans = allCoffeeBeans.find((item) => item.id === selectedCoffeeBeansId);
+    }
   }
 
   let savedCoffeeBeans: CoffeeBeans | undefined;
@@ -68,7 +72,7 @@
       on:change={handleSelectChange}
     >
       {#if allCoffeeBeans !== undefined}
-        {#if selectedCoffeeBeans === undefined}
+        {#if selectedCoffeeBeans === undefined && showAddButton === true}
           <option disabled selected value></option>
         {/if}
         {#each allCoffeeBeans as item}
@@ -78,7 +82,9 @@
         <option disabled selected value>Loading coffee beans...</option>
       {/if}
     </select>
-    <NewCoffeeBeansModal bind:savedCoffeeBeans />
+    {#if showAddButton}
+      <NewCoffeeBeansModal bind:savedCoffeeBeans />
+    {/if}
   </div>
 </div>
 <p class="mt-2 text-sm text-red-600 dark:text-red-500">{validationMessage}</p>

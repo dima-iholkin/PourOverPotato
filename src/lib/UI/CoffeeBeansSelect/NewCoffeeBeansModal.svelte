@@ -97,7 +97,7 @@
       return;
     }
 
-    alert("New coffee beans saved successfully.");
+    alert("We saved the coffee beans successfully.");
     // TODO: Inform user that the new coffee beans were saved successfully.
 
     // Return the new Coffee Beans entity to the "Add recipe" page:
