@@ -259,7 +259,7 @@
 </script>
 
 <svelte:head>
-  <title>Add recipe</title>
+  <title>Add recipe - PourOverPotato app</title>
 </svelte:head>
 
 <PageHeadline>Add recipe</PageHeadline>

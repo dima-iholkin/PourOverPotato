@@ -18,7 +18,7 @@
 </script>
 
 <svelte:head>
-  <title>Other</title>
+  <title>Other - PourOverPotato app</title>
 </svelte:head>
 
 <PageHeadline>Other</PageHeadline>
