@@ -10,6 +10,7 @@
   import PageHeadline from "$lib/UI/layout/PageHeadline.svelte";
   import MyFab from "$lib/UI/MyFab.svelte";
   import type { PageData } from "./$types";
+  import DropdownMenu from "./DropdownMenu.svelte";
   import EditCoffeeBeansModal from "./EditCoffeeBeansModal.svelte";
 
   // Props:
@@ -56,7 +57,10 @@
 {#if coffeeBeans instanceof CoffeeBeans}
   <FlexRow>
     <PageHeadline>{coffeeBeans.name}</PageHeadline>
-    <EditCoffeeBeansModal coffeeBeansItem={coffeeBeans} />
+    <div class="menu-container">
+      <EditCoffeeBeansModal coffeeBeansItem={coffeeBeans} />
+      <DropdownMenu />
+    </div>
   </FlexRow>
   <p class="coffee-beans-description">{coffeeBeans.description}</p>
 
@@ -88,5 +92,11 @@
     @apply text-lg font-normal tracking-tight text-gray-900 dark:text-white;
 
     margin-top: 1rem;
+  }
+
+  .menu-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
   }
 </style>

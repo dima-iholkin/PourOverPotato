@@ -48,7 +48,7 @@
 {:else}
   <h2>Sorted by latest recipe</h2>
   {#each coffeeBeans as item (item.id)}
-    <CoffeeBeansCard href={routes.coffeeBeansItem(item.name)} recipeCount={item.recipeCount} {item} />
+    <CoffeeBeansCard href={routes.coffeeBeansItem(item.name)} {item} recipeCount={item.recipeCount} />
   {/each}
 {/if}
 
