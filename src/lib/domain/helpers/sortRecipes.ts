@@ -6,10 +6,10 @@ export function sortCoffeeBeansByTimestampDesc(
   itemB: CoffeeBeans & { latestRecipeTimestamp: Date | undefined }
 ): number {
   if (itemA.latestRecipeTimestamp === undefined) {
-    return -1;
+    return 1;
   }
   if (itemB.latestRecipeTimestamp === undefined) {
-    return 1;
+    return -1;
   }
 
   return itemB.latestRecipeTimestamp.getTime() - itemA.latestRecipeTimestamp.getTime();

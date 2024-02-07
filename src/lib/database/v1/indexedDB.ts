@@ -109,6 +109,12 @@ export async function deleteCoffeeBeansById(id: number) {
   await db.delete(coffeeBeansStoreName, id);
 }
 
+export async function deleteRecipeById(id: number) {
+  const db = await openEntitiesDB();
+
+  await db.delete(recipesStoreName, id);
+}
+
 export async function deleteRecipesByCoffeeBeansId(coffeeBeansId: number): Promise<number> {
   const db = await openEntitiesDB();
 
