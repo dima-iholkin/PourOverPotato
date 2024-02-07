@@ -9,7 +9,7 @@
   import Label from "$lib/UI/forms/Label.svelte";
   import Textarea from "$lib/UI/forms/Textarea.svelte";
   import MySidebar from "$lib/UI/layout/components/MySidebar.svelte";
-  import Header from "./components/ModalHeader.svelte";
+  import ModalHeader from "./components/ModalHeader.svelte";
 
   // Props:
 
@@ -152,7 +152,7 @@
 <div class="modal-container" class:show-modal={showModal}>
   <MySidebar asGap />
   <div bind:this={modalDom} class="inner-container">
-    <Header on:click={() => closeModal()}>Add new coffee beans</Header>
+    <ModalHeader on:click={() => closeModal()}>Add new coffee beans</ModalHeader>
 
     <form bind:this={formDom} class="max-w-sm mx-auto" on:submit|preventDefault={handleSubmit}>
       <div class="mb-5">

@@ -1,7 +1,10 @@
 <script lang="ts">
+  import ConfirmationModal from "./ConfirmationModal.svelte";
+
   // State:
 
-  let showMenu: boolean = false;
+  let showDropdownMenu: boolean = false;
+  let showModal: boolean = false;
 
   let menuButtonDom: Element;
   let menuDom: Element;
@@ -9,13 +12,18 @@
   // Handler functions:
 
   function handleDocumentClick(event: MouseEvent & { currentTarget: EventTarget & Document }) {
-    if (showMenu === false) {
+    if (showDropdownMenu === false) {
       return;
     }
 
     if (clickOutsideBox(menuDom, event) && clickOutsideBox(menuButtonDom, event)) {
-      showMenu = false;
+      showDropdownMenu = false;
     }
+  }
+
+  function handleDeleteButtonClick() {
+    showModal = true;
+    showDropdownMenu = false;
   }
 
   // Helper functions:
@@ -38,7 +46,12 @@
 <svelte:document on:click={handleDocumentClick} />
 
 <div class="container">
-  <button bind:this={menuButtonDom} class="button" on:click={() => (showMenu = !showMenu)} type="button">
+  <button
+    bind:this={menuButtonDom}
+    class="button"
+    on:click={() => (showDropdownMenu = !showDropdownMenu)}
+    type="button"
+  >
     <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 4 15" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <path
         d="M3.5 1.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 6.041a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 5.959a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z"
@@ -47,21 +60,22 @@
   </button>
 
   <!-- Dropdown menu -->
-  <div bind:this={menuDom} class="dropdown-container" class:menu-shown={showMenu}>
-    <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownMenuIconButton">
-      <li>
-        <button class="menu-item" type="button">Delete</button>
-      </li>
-    </ul>
-  </div>
+  {#if showDropdownMenu}
+    <div bind:this={menuDom} class="dropdown-container">
+      <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownMenuIconButton">
+        <li>
+          <button class="menu-item" on:click={handleDeleteButtonClick} type="button"> Delete </button>
+        </li>
+      </ul>
+    </div>
+  {/if}
+
+  {#if showModal}
+    <ConfirmationModal onClose={() => (showModal = false)} />
+  {/if}
 </div>
 
 <style lang="postcss">
-  .menu-shown {
-    display: block !important;
-    position: absolute;
-  }
-
   .container {
     position: relative;
   }
@@ -76,7 +90,11 @@
   }
 
   .dropdown-container {
-    @apply z-10 hidden bg-white rounded-lg shadow w-44 dark:bg-gray-700;
+    /* @apply z-10 hidden bg-white rounded-lg shadow w-44 dark:bg-gray-700; */
+    @apply z-10 bg-white rounded-lg shadow w-44 dark:bg-gray-700;
+
+    display: block !important;
+    position: absolute;
 
     margin-top: 0.5rem;
     right: 0;
