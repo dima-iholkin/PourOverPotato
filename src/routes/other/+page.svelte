@@ -1,20 +1,5 @@
 <script lang="ts">
-  import { devFillDB } from "$lib/database/v1/devData/devFillDB";
   import PageHeadline from "$lib/UI/layout/PageHeadline.svelte";
-  const { MODE } = import.meta.env;
-
-  // Handler functions:
-
-  async function handleInitDevDB() {
-    if (MODE === "development") {
-      await devFillDB();
-
-      setTimeout(() => {
-        location.reload();
-        alert("Dev DB filled.");
-      }, 1000);
-    }
-  }
 </script>
 
 <svelte:head>
@@ -22,10 +7,6 @@
 </svelte:head>
 
 <PageHeadline>Other</PageHeadline>
-
-{#if MODE === "development"}
-  <button class="init-db-button" type="button" on:click={handleInitDevDB}>Initialize dev DB</button>
-{/if}
 
 <h5>Credits</h5>
 
