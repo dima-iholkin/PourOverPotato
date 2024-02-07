@@ -15,7 +15,7 @@
     display: flex;
     justify-content: space-between;
 
-    @apply p-2;
+    /* @apply p-2; */
   }
 
   h1 {

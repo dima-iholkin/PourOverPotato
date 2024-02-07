@@ -16,6 +16,7 @@
   import { Recipe } from "$lib/domain/entities/Recipe";
   import { naming } from "$lib/domain/naming";
   import { routes } from "$lib/domain/routes";
+  import FlexRow from "$lib/UI/FlexRow.svelte";
   import Label from "$lib/UI/forms/Label.svelte";
   import NumberInput from "$lib/UI/forms/NumberInput.svelte";
   import Textarea from "$lib/UI/forms/Textarea.svelte";
@@ -24,6 +25,7 @@
   import { formatTimeForInput, parseDateFromInputString } from "../add/helpers";
   import TimestampPicker from "../add/TimestampPicker.svelte";
   import type { PageData } from "./$types";
+  import DropdownMenu from "./DropdownMenu.svelte";
 
   // From load function:
 
@@ -121,7 +123,14 @@
   <title>Edit recipe - PourOverPotato app</title>
 </svelte:head>
 
-<PageHeadline>Edit recipe</PageHeadline>
+<FlexRow>
+  <PageHeadline>Edit recipe</PageHeadline>
+  {#if recipe instanceof Recipe}
+    <div class="menu-container">
+      <DropdownMenu recipeItem={recipe} />
+    </div>
+  {/if}
+</FlexRow>
 
 {#if recipe === null}
   <p>loading...</p>
@@ -129,7 +138,7 @@
   <form id="edit-recipe" on:submit|preventDefault={handleSubmit}>
     {#if selectedCoffeeBeans !== undefined}
       <div>
-        <CoffeeBeansSelect showAddButton={false} {allCoffeeBeans} bind:selectedCoffeeBeans />
+        <CoffeeBeansSelect {allCoffeeBeans} bind:selectedCoffeeBeans showAddButton={false} />
       </div>
     {/if}
 
@@ -137,28 +146,28 @@
       <Label _for={RECIPE_TARGET}>{naming.recipe.recipeTarget}:</Label>
     </div>
     <div>
-      <Textarea id={RECIPE_TARGET} name={RECIPE_TARGET} placeholder={RECIPE_TARGET_PH} bind:value={recipeTarget} />
+      <Textarea id={RECIPE_TARGET} bind:value={recipeTarget} name={RECIPE_TARGET} placeholder={RECIPE_TARGET_PH} />
     </div>
 
     <div>
       <Label _for={RECIPE_RESULT}>{naming.recipe.recipeResult}:</Label>
     </div>
     <div>
-      <Textarea id={RECIPE_RESULT} name={RECIPE_RESULT} placeholder={RECIPE_RESULT_PH} bind:value={recipeResult} />
+      <Textarea id={RECIPE_RESULT} bind:value={recipeResult} name={RECIPE_RESULT} placeholder={RECIPE_RESULT_PH} />
     </div>
 
     <div>
       <NumberInput
+        bind:value={outWeight}
         labelText="{naming.recipe.outWeight} (g):"
         min={0}
         nameAttr={OUT_WEIGHT}
         step={5}
-        bind:value={outWeight}
       />
     </div>
 
     <div>
-      <NumberInput labelText="Rating:" max={5} min={0} nameAttr={RATING} step={0.5} bind:value={rating} />
+      <NumberInput bind:value={rating} labelText="Rating:" max={5} min={0} nameAttr={RATING} step={0.5} />
     </div>
 
     <div>
@@ -167,10 +176,10 @@
     <div>
       <Textarea
         id={RECIPE_THOUGHTS}
+        bind:value={recipeThoughts}
         name={RECIPE_THOUGHTS}
         placeholder={RECIPE_THOUGHTS_PH}
         textLinesCount={4}
-        bind:value={recipeThoughts}
       />
     </div>
 
@@ -197,5 +206,11 @@
 
   .my-button {
     @apply bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded;
+  }
+
+  .menu-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
   }
 </style>

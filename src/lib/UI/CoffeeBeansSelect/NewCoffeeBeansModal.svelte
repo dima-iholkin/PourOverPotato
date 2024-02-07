@@ -9,7 +9,7 @@
   import Label from "$lib/UI/forms/Label.svelte";
   import Textarea from "$lib/UI/forms/Textarea.svelte";
   import MySidebar from "$lib/UI/layout/components/MySidebar.svelte";
-  import Header from "./components/ModalHeader.svelte";
+  import ModalHeader from "./components/ModalHeader.svelte";
 
   // Props:
 
@@ -145,28 +145,28 @@
 
 <svelte:document on:click={handleDocumentClick} />
 
-<button class="button-add" bind:this={menuButtonDom} on:click|preventDefault={() => openModal()}>
+<button bind:this={menuButtonDom} class="button-add" on:click|preventDefault={() => openModal()}>
   <span class="material-icons md-18"> add </span>
 </button>
 
 <div class="modal-container" class:show-modal={showModal}>
   <MySidebar asGap />
-  <div class="inner-container" bind:this={modalDom}>
-    <Header on:click={() => closeModal()}>Add new coffee beans</Header>
+  <div bind:this={modalDom} class="inner-container">
+    <ModalHeader on:click={() => closeModal()}>Add new coffee beans</ModalHeader>
 
-    <form class="max-w-sm mx-auto" bind:this={formDom} on:submit|preventDefault={handleSubmit}>
+    <form bind:this={formDom} class="max-w-sm mx-auto" on:submit|preventDefault={handleSubmit}>
       <div class="mb-5">
         <Label _for="name" valid={!nameValidationFailed}>Coffee beans name:</Label>
         <input
-          class={nameValidationFailed ? "input-name-validation-failed" : "input-name"}
           id="name"
-          name="name"
-          placeholder={nameValidationFailed ? "" : "Example: Rwanda Mabanza"}
-          type="text"
           bind:this={inputDom}
           bind:value={name}
+          class={nameValidationFailed ? "input-name-validation-failed" : "input-name"}
+          name="name"
           on:input={handleInputChange}
           on:keydown={handleEnterKey}
+          placeholder={nameValidationFailed ? "" : "Example: Rwanda Mabanza"}
+          type="text"
         />
         <p class="mt-2 text-sm text-red-600 dark:text-red-500">{validationMessage}</p>
       </div>
@@ -174,11 +174,11 @@
         <Label _for="description">Description:</Label>
         <Textarea
           id="description"
-          name="description"
-          placeholder={DESCRIPTION_PH}
           bind:_this={textareaDom}
           bind:value={description}
+          name="description"
           on:keydown={handleCtrlEnterKey}
+          placeholder={DESCRIPTION_PH}
         />
       </div>
       <button class="button-submit" type="submit">Save</button>
