@@ -1,5 +1,10 @@
 <script lang="ts">
+  import type { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
   import ConfirmationModal from "./ConfirmationModal.svelte";
+
+  // Props:
+
+  export let coffeeBeansItem: CoffeeBeans;
 
   // State:
 
@@ -71,7 +76,7 @@
   {/if}
 
   {#if showModal}
-    <ConfirmationModal onClose={() => (showModal = false)} />
+    <ConfirmationModal {coffeeBeansItem} onClose={() => (showModal = false)} />
   {/if}
 </div>
 
@@ -90,7 +95,6 @@
   }
 
   .dropdown-container {
-    /* @apply z-10 hidden bg-white rounded-lg shadow w-44 dark:bg-gray-700; */
     @apply z-10 bg-white rounded-lg shadow w-44 dark:bg-gray-700;
 
     display: block !important;

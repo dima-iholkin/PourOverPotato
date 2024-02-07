@@ -103,6 +103,24 @@ export async function anyRecipesSaved() {
   return count > 0;
 }
 
+export async function deleteCoffeeBeansById(id: number) {
+  const db = await openEntitiesDB();
+
+  await db.delete(coffeeBeansStoreName, id);
+}
+
+export async function deleteRecipesByCoffeeBeansId(coffeeBeansId: number): Promise<number> {
+  const db = await openEntitiesDB();
+
+  const items: IRecipeDB[] = await db.getAllFromIndex(recipesStoreName, "coffeeBeansId", coffeeBeansId);
+
+  await Promise.all(
+    items.map(async (item: IRecipeDB) => await db.delete(recipesStoreName, item.id))
+  );
+
+  return items.length;
+}
+
 export async function
   editCoffeeBeans(submitItem: CoffeeBeansEditSubmit): Promise<CoffeeBeans | "Failure_NameAlreadyExist"> {
   const db = await openEntitiesDB();

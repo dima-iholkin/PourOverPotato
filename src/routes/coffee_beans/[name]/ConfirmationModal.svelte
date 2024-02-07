@@ -1,10 +1,17 @@
 <script lang="ts">
+  import { deleteCoffeeBeansById, deleteRecipesByCoffeeBeansId } from "$lib/database/v1/indexedDB";
+  import type { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
+  import { routes } from "$lib/domain/routes";
   import ModalHeader from "$lib/UI/CoffeeBeansSelect/components/ModalHeader.svelte";
   import MySidebar from "$lib/UI/layout/components/MySidebar.svelte";
 
-  // Props events:
+  // Expose prop events:
 
   export let onClose: () => void;
+
+  // Props:
+
+  export let coffeeBeansItem: CoffeeBeans;
 
   // State:
 
@@ -23,6 +30,20 @@
     if (clickOutsideBox(modalDom, event)) {
       onClose();
     }
+  }
+
+  function handleDeleteClick() {
+    let countDeletedRecipes: number;
+    deleteRecipesByCoffeeBeansId(coffeeBeansItem.id)
+      .then((count: number) => {
+        countDeletedRecipes = count;
+        return deleteCoffeeBeansById(coffeeBeansItem.id);
+      })
+      .then(() => {
+        onClose();
+        window.location.replace(routes.home);
+        alert(`Deleted coffee beans ${coffeeBeansItem.name} and ${countDeletedRecipes} recipes.`);
+      });
   }
 
   // Helper functions:
@@ -53,7 +74,7 @@
       <p>The dependent recipes will be deleted too.</p>
     </div>
     <div class="buttons-container">
-      <button class="button-delete" type="button"> Delete </button>
+      <button class="button-delete" on:click={handleDeleteClick} type="button"> Delete </button>
       <button class="button-cancel" on:click={() => onClose()} type="button"> Cancel </button>
     </div>
   </div>

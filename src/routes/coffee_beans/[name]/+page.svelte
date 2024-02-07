@@ -59,13 +59,13 @@
     <PageHeadline>{coffeeBeans.name}</PageHeadline>
     <div class="menu-container">
       <EditCoffeeBeansModal coffeeBeansItem={coffeeBeans} />
-      <DropdownMenu />
+      <DropdownMenu coffeeBeansItem={coffeeBeans} />
     </div>
   </FlexRow>
   <p class="coffee-beans-description">{coffeeBeans.description}</p>
 
   {#if recipes !== undefined && recipes.length > 0}
-    <h2>Sorted by latest recipe</h2>
+    <h2>Sorted by latest</h2>
     {#each recipes as recipe}
       <RecipeCard href={routes.recipeItem(recipe.id)} {recipe} />
     {/each}
