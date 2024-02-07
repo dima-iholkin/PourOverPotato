@@ -9,6 +9,7 @@
   import FlexRow from "$lib/UI/FlexRow.svelte";
   import PageHeadline from "$lib/UI/layout/PageHeadline.svelte";
   import MyFab from "$lib/UI/MyFab.svelte";
+  import AddDemoCoffeeBeans_PageBlock from "$lib/UI/single-use-components/AddDemoCoffeeBeans_PageBlock.svelte";
   import type { PageData } from "./$types";
   import DropdownMenu from "./DropdownMenu.svelte";
   import EditCoffeeBeansModal from "./EditCoffeeBeansModal.svelte";
@@ -70,7 +71,7 @@
       <RecipeCard href={routes.recipeItem(recipe.id)} {recipe} />
     {/each}
   {:else if recipes !== undefined && recipes.length === 0}
-    <p>No recipes added yet.</p>
+    <AddDemoCoffeeBeans_PageBlock />
   {:else}
     <p>loading...</p>
   {/if}
@@ -86,6 +87,7 @@
 <style lang="postcss">
   .coffee-beans-description {
     margin-top: 0.25rem;
+    margin-bottom: 1rem;
   }
 
   h2 {

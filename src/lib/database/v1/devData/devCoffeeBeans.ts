@@ -3,14 +3,14 @@ import type { CoffeeBeansCreateSubmit } from "$lib/domain/entities/CoffeeBeans";
 export const devCoffeeBeans: CoffeeBeansCreateSubmit[] = [
   {
     name: "Rwanda Mabanza",
-    description: "Filter roast. Washed process. Dark plum, burned cherry notes."
+    description: "Washed process. Dark plum, dark cherry notes. (demo)"
   },
   {
-    name: "Colombia",
-    description: "Washed process. Berry notes."
+    name: "Colombia El Refugio",
+    description: "Natural process. Berry notes. (demo)"
   },
   {
-    name: "Yirgacheffe",
-    description: "Natural process. Grassy notes."
+    name: "Ethiopia Yirgacheffe",
+    description: "Washed process. Grassy notes. (demo)"
   }
 ];

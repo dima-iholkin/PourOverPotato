@@ -8,6 +8,7 @@
   import CoffeeBeansCard from "$lib/UI/cards/CoffeeBeansCard.svelte";
   import PageHeadline from "$lib/UI/layout/PageHeadline.svelte";
   import MyFab from "$lib/UI/MyFab.svelte";
+  import AddDemoCoffeeBeans_PageBlock from "$lib/UI/single-use-components/AddDemoCoffeeBeans_PageBlock.svelte";
 
   // State:
 
@@ -44,7 +45,7 @@
 {#if coffeeBeans === undefined}
   <p>loading...</p>
 {:else if coffeeBeans.length === 0}
-  <p>No coffee beans added yet.</p>
+  <AddDemoCoffeeBeans_PageBlock />
 {:else}
   <h2>Sorted by latest recipe date</h2>
   {#each coffeeBeans as item (item.id)}

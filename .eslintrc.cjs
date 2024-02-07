@@ -40,6 +40,7 @@ module.exports = {
     "prefer-const": "warn",
     "no-debugger": "warn",
     "@typescript-eslint/ban-ts-comment": "off",
+    "no-empty": "warn",
     //
     // Sort everything:
     //

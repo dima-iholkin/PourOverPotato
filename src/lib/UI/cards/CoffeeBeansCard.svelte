@@ -34,4 +34,8 @@
   p {
     @apply font-normal text-gray-700 dark:text-gray-400;
   }
+
+  .recipes-count {
+    white-space: nowrap;
+  }
 </style>
