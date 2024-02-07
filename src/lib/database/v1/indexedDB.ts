@@ -103,6 +103,15 @@ export async function anyRecipesSaved() {
   return count > 0;
 }
 
+export async function deleteAllData() {
+  const db = await openEntitiesDB();
+
+  const all: IDBKeyRange = IDBKeyRange.bound(Number.MIN_SAFE_INTEGER, Number.MAX_SAFE_INTEGER);
+
+  await db.delete(coffeeBeansStoreName, all);
+  await db.delete(recipesStoreName, all);
+}
+
 export async function deleteCoffeeBeansById(id: number) {
   const db = await openEntitiesDB();
 

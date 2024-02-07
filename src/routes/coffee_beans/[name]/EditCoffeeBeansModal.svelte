@@ -146,7 +146,7 @@
 
 <svelte:window on:keydown={handleEscKey} />
 
-<svelte:document on:click={handleDocumentClick} />
+<svelte:document on:mousedown={handleDocumentClick} />
 
 <button class="edit-button" type="button" bind:this={menuButtonDom} on:click={() => openModal()}> Edit </button>
 
