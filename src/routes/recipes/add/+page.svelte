@@ -268,8 +268,8 @@
   <div>
     <CoffeeBeansSelect
       allCoffeeBeans={coffeeBeansItems}
-      bind:selectedCoffeeBeans
       validationFailed={uiCoffeeBeansValidationFailed}
+      bind:selectedCoffeeBeans
     />
   </div>
 
@@ -289,16 +289,16 @@
 
   <div>
     <NumberInput
+      labelText="{naming.recipe.outWeight} (g):"
       min={0}
+      nameAttr={OUT_WEIGHT}
       step={5}
       bind:value={outWeight}
-      labelText="{naming.recipe.outWeight} (g):"
-      nameAttr={OUT_WEIGHT}
     />
   </div>
 
   <div>
-    <NumberInput max={5} min={0} step={0.5} bind:value={rating} labelText="Rating:" nameAttr={RATING} />
+    <NumberInput labelText="Rating:" max={5} min={0} nameAttr={RATING} step={0.5} bind:value={rating} />
   </div>
 
   <div>
@@ -309,8 +309,8 @@
       id={RECIPE_THOUGHTS}
       name={RECIPE_THOUGHTS}
       placeholder={RECIPE_THOUGHTS_PH}
-      bind:value={recipeThoughts}
       textLinesCount={4}
+      bind:value={recipeThoughts}
     />
   </div>
 

@@ -22,7 +22,7 @@
     </a>
     <a href={routes.home}>
       <button type="button" class:active={route === routes.home}>
-        <img src={coffeeBeansIcon} class:active-img={route === routes.home} alt="A coffee beans icon" />
+        <img src={coffeeBeansIcon} alt="A coffee beans icon" class:active-img={route === routes.home} />
         <span class:active={route === routes.home}> Coffee beans </span>
       </button>
     </a>

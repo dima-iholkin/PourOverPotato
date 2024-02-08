@@ -12,7 +12,7 @@
   $: selected = base + $page.route.id ?? "";
 </script>
 
-<aside class="my-aside" class:as-gap={asGap} aria-label="Sidebar">
+<aside class="my-aside" aria-label="Sidebar" class:as-gap={asGap}>
   <div class="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
     <ul class="space-y-2 font-medium">
       <li>

@@ -49,10 +49,10 @@
   <button
     class="menu-button"
     type="button"
-    bind:this={menuButtonDom}
-    on:click={toggleMenu}
     aria-controls="navbar-sticky"
     aria-expanded="false"
+    bind:this={menuButtonDom}
+    on:click={toggleMenu}
   >
     <svg class="w-5 h-5" fill="none" viewBox="0 0 17 14" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <path
@@ -68,13 +68,13 @@
 <div class="menu-div" bind:this={menuDom} class:hidden={!menuOpen}>
   <ul class="ul-menu">
     <li>
-      <a class="a-menu" href={routes.home} on:click={handleMenuItemClick} aria-current="page"> Coffee Beans </a>
+      <a class="a-menu" href={routes.home} aria-current="page" on:click={handleMenuItemClick}> Coffee Beans </a>
     </li>
     <li>
-      <a class="a-menu" href={routes.recipes} on:click={handleMenuItemClick} aria-current="page"> Recipes </a>
+      <a class="a-menu" href={routes.recipes} aria-current="page" on:click={handleMenuItemClick}> Recipes </a>
     </li>
     <li>
-      <a class="a-menu" href={routes.other} on:click={handleMenuItemClick} aria-current="page"> Other </a>
+      <a class="a-menu" href={routes.other} aria-current="page" on:click={handleMenuItemClick}> Other </a>
     </li>
   </ul>
 </div>

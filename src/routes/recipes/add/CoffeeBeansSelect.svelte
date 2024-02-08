@@ -66,9 +66,9 @@
     <select
       id={COFFEEBEANS_ID}
       class={validationFailed ? "invalid" : "valid"}
+      disabled={allCoffeeBeans === undefined}
       name={COFFEEBEANS_ID}
       bind:value={selectedCoffeeBeansId}
-      disabled={allCoffeeBeans === undefined}
       on:change={handleSelectChange}
     >
       {#if allCoffeeBeans !== undefined}

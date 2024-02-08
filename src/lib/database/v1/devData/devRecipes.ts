@@ -9,7 +9,7 @@ export function generateDemoRecipes(coffeeBeansId: number): RecipeSubmit[] {
       outWeight: 230,
       rating: 3.5,
       recipeThoughts: "Can be better.",
-      timestamp: new Date(2023, 12, 20),
+      timestamp: new Date(2023, 12, 20)
     },
     {
       coffeeBeansId: coffeeBeansId,
@@ -18,7 +18,7 @@ export function generateDemoRecipes(coffeeBeansId: number): RecipeSubmit[] {
       outWeight: 235,
       rating: 4,
       recipeThoughts: "It's better.",
-      timestamp: new Date(2023, 12, 23),
+      timestamp: new Date(2023, 12, 23)
     },
     {
       coffeeBeansId: coffeeBeansId,
@@ -27,7 +27,7 @@ export function generateDemoRecipes(coffeeBeansId: number): RecipeSubmit[] {
       outWeight: 240,
       rating: 4.5,
       recipeThoughts: "It's great.",
-      timestamp: new Date(2023, 12, 26),
-    },
+      timestamp: new Date(2023, 12, 26)
+    }
   ];
 }
