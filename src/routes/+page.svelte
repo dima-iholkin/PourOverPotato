@@ -6,9 +6,9 @@
   import { sortRecipesByTimestampDesc, sortCoffeeBeansByTimestampDesc } from "$lib/domain/helpers/sortRecipes";
   import { routes } from "$lib/domain/routes";
   import CoffeeBeansCard from "$lib/UI/cards/CoffeeBeansCard.svelte";
+  import AddDemoCoffeeBeans_PageBlock from "$lib/UI/domain-components/AddDemoCoffeeBeans_PageBlock.svelte";
   import PageHeadline from "$lib/UI/layout/PageHeadline.svelte";
   import MyFab from "$lib/UI/MyFab.svelte";
-  import AddDemoCoffeeBeans_PageBlock from "$lib/UI/single-use-components/AddDemoCoffeeBeans_PageBlock.svelte";
 
   // State:
 
