@@ -8,6 +8,8 @@
   export let _this: HTMLTextAreaElement | undefined = undefined;
   export let textLinesCount: number = 2;
 
+  // Reactivity:
+
   if (textLinesCount === 1) {
     textLinesCount = 1.2;
   }

@@ -16,11 +16,11 @@
   import { Recipe } from "$lib/domain/entities/Recipe";
   import { naming } from "$lib/domain/naming";
   import { routes } from "$lib/domain/routes";
-  import FlexRow from "$lib/UI/FlexRow.svelte";
-  import Label from "$lib/UI/forms/Label.svelte";
-  import NumberInput from "$lib/UI/forms/NumberInput.svelte";
-  import Textarea from "$lib/UI/forms/Textarea.svelte";
   import PageHeadline from "$lib/UI/layout/PageHeadline.svelte";
+  import FlexRow from "$lib/UI/utility-components/FlexRow.svelte";
+  import Label from "$lib/UI/utility-components/forms/Label.svelte";
+  import NumberInput from "$lib/UI/utility-components/forms/NumberInput.svelte";
+  import Textarea from "$lib/UI/utility-components/forms/Textarea.svelte";
   import CoffeeBeansSelect from "../add/CoffeeBeansSelect.svelte";
   import { formatTimeForInput, parseDateFromInputString } from "../add/helpers";
   import TimestampPicker from "../add/TimestampPicker.svelte";

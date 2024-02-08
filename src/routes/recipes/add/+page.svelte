@@ -22,10 +22,10 @@
   import { naming } from "$lib/domain/naming";
   import { routes } from "$lib/domain/routes";
   import { clearFormField, loadFormField, persistFormField } from "$lib/persistForms/localStorage";
-  import Label from "$lib/UI/forms/Label.svelte";
-  import NumberInput from "$lib/UI/forms/NumberInput.svelte";
-  import Textarea from "$lib/UI/forms/Textarea.svelte";
   import PageHeadline from "$lib/UI/layout/PageHeadline.svelte";
+  import Label from "$lib/UI/utility-components/forms/Label.svelte";
+  import NumberInput from "$lib/UI/utility-components/forms/NumberInput.svelte";
+  import Textarea from "$lib/UI/utility-components/forms/Textarea.svelte";
   import CoffeeBeansSelect from "./CoffeeBeansSelect.svelte";
   import { formatTimeForInput, parseDateFromInputString } from "./helpers";
   import TimestampPicker from "./TimestampPicker.svelte";

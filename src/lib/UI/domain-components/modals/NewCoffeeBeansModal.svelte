@@ -6,10 +6,10 @@
   import { tick } from "svelte";
   import { addCoffeeBeans } from "$lib/database/v1/indexedDB";
   import { CoffeeBeans, CoffeeBeansCreateSubmit } from "$lib/domain/entities/CoffeeBeans";
-  import Label from "$lib/UI/forms/Label.svelte";
-  import Textarea from "$lib/UI/forms/Textarea.svelte";
   import MySidebar from "$lib/UI/layout/components/MySidebar.svelte";
-  import ModalHeader from "./components/ModalHeader.svelte";
+  import Label from "$lib/UI/utility-components/forms/Label.svelte";
+  import Textarea from "$lib/UI/utility-components/forms/Textarea.svelte";
+  import ModalHeader from "$lib/UI/utility-components/modals/ModalHeader.svelte";
 
   // Props:
 

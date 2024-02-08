@@ -5,10 +5,10 @@
   import type { Recipe } from "$lib/domain/entities/Recipe";
   import { sortRecipesByTimestampDesc, sortCoffeeBeansByTimestampDesc } from "$lib/domain/helpers/sortRecipes";
   import { routes } from "$lib/domain/routes";
-  import CoffeeBeansCard from "$lib/UI/cards/CoffeeBeansCard.svelte";
-  import AddDemoCoffeeBeans_PageBlock from "$lib/UI/domain-components/AddDemoCoffeeBeans_PageBlock.svelte";
+  import CoffeeBeansCard from "$lib/UI/domain-components/cards/CoffeeBeansCard.svelte";
+  import MyFab from "$lib/UI/domain-components/FABs/AddRecipeFab.svelte";
+  import AddDemoCoffeeBeans_PageBlock from "$lib/UI/domain-components/page-blocks/AddDemoCoffeeBeans_PageBlock.svelte";
   import PageHeadline from "$lib/UI/layout/PageHeadline.svelte";
-  import MyFab from "$lib/UI/MyFab.svelte";
 
   // State:
 

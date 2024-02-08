@@ -5,11 +5,11 @@
   import type { Recipe } from "$lib/domain/entities/Recipe";
   import { sortRecipesByTimestampDesc as byTimestampDesc } from "$lib/domain/helpers/sortRecipes";
   import { routes } from "$lib/domain/routes";
-  import RecipeCard from "$lib/UI/cards/RecipeCard.svelte";
-  import AddDemoCoffeeBeans_PageBlock from "$lib/UI/domain-components/AddDemoCoffeeBeans_PageBlock.svelte";
-  import FlexRow from "$lib/UI/FlexRow.svelte";
+  import RecipeCard from "$lib/UI/domain-components/cards/RecipeCard.svelte";
+  import MyFab from "$lib/UI/domain-components/FABs/AddRecipeFab.svelte";
+  import AddDemoCoffeeBeans_PageBlock from "$lib/UI/domain-components/page-blocks/AddDemoCoffeeBeans_PageBlock.svelte";
   import PageHeadline from "$lib/UI/layout/PageHeadline.svelte";
-  import MyFab from "$lib/UI/MyFab.svelte";
+  import FlexRow from "$lib/UI/utility-components/FlexRow.svelte";
   import type { PageData } from "./$types";
   import DropdownMenu from "./DropdownMenu.svelte";
   import EditCoffeeBeansModal from "./EditCoffeeBeansModal.svelte";

@@ -1,6 +1,6 @@
 <script lang="ts">
-  import ModalHeader from "$lib/UI/CoffeeBeansSelect/components/ModalHeader.svelte";
   import MySidebar from "$lib/UI/layout/components/MySidebar.svelte";
+  import ModalHeader from "$lib/UI/utility-components/modals/ModalHeader.svelte";
 
   // Expose prop events:
 

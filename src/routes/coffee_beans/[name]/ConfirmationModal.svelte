@@ -2,8 +2,8 @@
   import { deleteCoffeeBeansById, deleteRecipesByCoffeeBeansId } from "$lib/database/v1/indexedDB";
   import type { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
   import { routes } from "$lib/domain/routes";
-  import ModalHeader from "$lib/UI/CoffeeBeansSelect/components/ModalHeader.svelte";
   import MySidebar from "$lib/UI/layout/components/MySidebar.svelte";
+  import ModalHeader from "$lib/UI/utility-components/modals/ModalHeader.svelte";
 
   // Expose prop events:
 

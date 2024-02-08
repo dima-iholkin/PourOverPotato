@@ -3,8 +3,8 @@
   import { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
   import type { Recipe } from "$lib/domain/entities/Recipe";
   import { routes } from "$lib/domain/routes";
-  import ModalHeader from "$lib/UI/CoffeeBeansSelect/components/ModalHeader.svelte";
   import MySidebar from "$lib/UI/layout/components/MySidebar.svelte";
+  import ModalHeader from "$lib/UI/utility-components/modals/ModalHeader.svelte";
 
   // Expose prop events:
 

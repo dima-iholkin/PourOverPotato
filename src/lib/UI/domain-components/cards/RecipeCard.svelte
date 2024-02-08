@@ -11,8 +11,8 @@
   import type { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
   import type { Recipe } from "$lib/domain/entities/Recipe";
   import { naming } from "$lib/domain/naming";
-  import FlexRow from "$lib/UI/FlexRow.svelte";
-  import Card from "./Card.svelte";
+  import Card from "$lib/UI/utility-components/Card.svelte";
+  import FlexRow from "$lib/UI/utility-components/FlexRow.svelte";
 
   // Props:
 
