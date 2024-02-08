@@ -5,7 +5,7 @@
   import { routes } from "$lib/domain/routes";
   import OtherIcon from "$lib/UI/icons/OtherIcon.svelte";
 
-  // State:
+  // Reactivity:
 
   $: route = base + $page.route.id;
 </script>
@@ -68,15 +68,25 @@
     width: 100%;
   }
 
+  /* Combination of "active" and "hover" pseudo-classes to fix the touchscreen taps. */
+
   button:active {
     --tw-bg-opacity: 1;
     background-color: rgb(249 250 251 / var(--tw-bg-opacity));
+  }
+
+  img:active {
+    filter: invert(8%) sepia(100%) saturate(7471%) hue-rotate(248deg) brightness(97%) contrast(143%);
   }
 
   @media (hover: hover) and (pointer: fine) {
     button:hover {
       --tw-bg-opacity: 1;
       background-color: rgb(249 250 251 / var(--tw-bg-opacity));
+    }
+
+    img:hover {
+      filter: invert(8%) sepia(100%) saturate(7471%) hue-rotate(248deg) brightness(97%) contrast(143%);
     }
   }
 
