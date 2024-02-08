@@ -48,7 +48,7 @@
 <div class="modal-container">
   <MySidebar asGap />
   <div class="inner-container" bind:this={modalDom}>
-    <ModalHeader on:click={() => onClose()}>Deleting all data...</ModalHeader>
+    <!-- <ModalHeader on:click={() => onClose()}>Deleting all data...</ModalHeader> -->
     <div class="text-container">
       <p>Please confirm you want to delete all data.</p>
     </div>

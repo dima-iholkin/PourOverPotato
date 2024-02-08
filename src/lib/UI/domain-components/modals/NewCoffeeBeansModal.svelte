@@ -3,81 +3,80 @@
 </script>
 
 <script lang="ts">
-  import { tick } from "svelte";
   import { addCoffeeBeans } from "$lib/database/v1/indexedDB";
   import { CoffeeBeans, CoffeeBeansCreateSubmit } from "$lib/domain/entities/CoffeeBeans";
-  import MySidebar from "$lib/UI/layout/components/MySidebar.svelte";
   import Label from "$lib/UI/utility-components/forms/Label.svelte";
   import Textarea from "$lib/UI/utility-components/forms/Textarea.svelte";
-  import ModalHeader from "$lib/UI/utility-components/modals/ModalHeader.svelte";
+  import Modal from "$lib/UI/utility-components/modals/Modal.svelte";
 
-  // Props:
+  // Entity props:
 
   export let savedCoffeeBeans: CoffeeBeans | undefined = undefined;
 
-  // State:
+  // UI props:
 
-  let showModal: boolean = false;
+  export let open: boolean = false;
 
-  let modalDom: Element;
-  let menuButtonDom: Element;
+  // Events:
+
+  export let onClose: (() => void) | undefined = undefined;
+
+  // DOM state:
+
   let inputDom: HTMLInputElement;
   let textareaDom: HTMLTextAreaElement;
   let formDom: HTMLFormElement;
+
+  // Form state:
 
   let name: string = "";
   let description: string = "";
 
   let nameValidationFailed: boolean = false;
+  let validationMessage: string = "";
+
+  // Reactivity:
+
   $: {
-    nameValidationFailed;
     if (nameValidationFailed === false) {
       validationMessage = "";
     }
   }
 
-  let validationMessage: string = "";
+  // Handlers:
 
-  // Handler functions:
-
-  function openModal() {
-    showModal = true;
-
-    tick().then(() => {
-      inputDom.focus();
-    });
-
-    // document.getElementsByTagName("body")[0].classList.add("overflow-y-hidden");
-  }
-
-  function closeModal() {
-    showModal = false;
+  function handleClose() {
     nameValidationFailed = false;
-    // document.getElementsByTagName("body")[0].classList.remove("overflow-y-hidden");
-  }
 
-  // Close the modal on Escape key.
-  function handleEscKey(event: KeyboardEvent) {
-    if (showModal && event.key === "Escape") {
-      showModal = false;
+    open = false;
+
+    if (onClose !== undefined) {
+      onClose();
     }
   }
 
-  function handleEnterKey(event: KeyboardEvent & { currentTarget: EventTarget & HTMLInputElement }) {
-    if (event.key === "Enter") {
-      event.preventDefault();
-      textareaDom.focus();
-    }
-  }
-
-  function handleCtrlEnterKey(event: KeyboardEvent) {
+  function handleCtrlEnter(event: KeyboardEvent) {
     if (event.key === "Enter" && (event.metaKey || event.ctrlKey)) {
       event.preventDefault();
       formDom.requestSubmit();
     }
   }
 
-  async function handleSubmit() {
+  function handleEnter(event: KeyboardEvent & { currentTarget: EventTarget & HTMLInputElement }) {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      textareaDom.focus();
+    }
+  }
+
+  function handleInputChange() {
+    if (nameValidationFailed) {
+      nameValidationFailed = false;
+      validationMessage = "";
+    }
+  }
+
+  async function handleFormSubmit() {
     // Validate and save the new coffee beans:
 
     const coffeeBeansSubmit: CoffeeBeansCreateSubmit | "ValidationFailed_NameMustBeAtLeast3CharsLong" =
@@ -97,125 +96,52 @@
       return;
     }
 
-    alert("We saved the coffee beans successfully.");
+    alert("Coffee beans saved.");
     // TODO: Inform user that the new coffee beans were saved successfully.
 
     // Return the new Coffee Beans entity to the "Add recipe" page:
     savedCoffeeBeans = coffeeBeans;
 
     // Clear the modal state:
-    closeModal();
+    handleClose();
     name = "";
     description = "";
   }
-
-  function handleInputChange() {
-    if (nameValidationFailed) {
-      nameValidationFailed = false;
-      validationMessage = "";
-    }
-  }
-
-  function handleDocumentClick(event: MouseEvent & { currentTarget: EventTarget & Document }) {
-    if (showModal === false) {
-      return;
-    }
-
-    if (clickOutsideBox(modalDom, event) && clickOutsideBox(menuButtonDom, event)) {
-      closeModal();
-    }
-  }
-
-  // Helper functions:
-
-  function clickOutsideBox(element: Element, click: MouseEvent) {
-    const box: DOMRect = element.getBoundingClientRect();
-    const x: number = click.clientX;
-    const y: number = click.clientY;
-
-    if (x < box.left || x > box.right || y < box.top || y > box.bottom) {
-      return true;
-    }
-
-    return false;
-  }
 </script>
 
-<svelte:window on:keydown={handleEscKey} />
-
-<svelte:document on:click={handleDocumentClick} />
-
-<button class="button-add" bind:this={menuButtonDom} on:click|preventDefault={() => openModal()}>
-  <span class="material-icons md-18"> add </span>
-</button>
-
-<div class="modal-container" class:show-modal={showModal}>
-  <MySidebar asGap />
-  <div class="inner-container" bind:this={modalDom}>
-    <ModalHeader on:click={() => closeModal()}>Add new coffee beans</ModalHeader>
-
-    <form class="max-w-sm mx-auto" bind:this={formDom} on:submit|preventDefault={handleSubmit}>
-      <div class="mb-5">
-        <Label _for="name" valid={!nameValidationFailed}>Coffee beans name:</Label>
-        <input
-          id="name"
-          class={nameValidationFailed ? "input-name-validation-failed" : "input-name"}
-          name="name"
-          placeholder={nameValidationFailed ? "" : "Example: Rwanda Mabanza"}
-          type="text"
-          bind:this={inputDom}
-          bind:value={name}
-          on:input={handleInputChange}
-          on:keydown={handleEnterKey}
-        />
-        <p class="mt-2 text-sm text-red-600 dark:text-red-500">{validationMessage}</p>
-      </div>
-      <div class="my-div mb-5">
-        <Label _for="description">Description:</Label>
-        <Textarea
-          id="description"
-          name="description"
-          placeholder={DESCRIPTION_PH}
-          bind:_this={textareaDom}
-          bind:value={description}
-          on:keydown={handleCtrlEnterKey}
-        />
-      </div>
-      <button class="button-submit" type="submit">Save</button>
-    </form>
-  </div>
-</div>
+<Modal onClose={handleClose} {open} title="Add new coffee beans">
+  <form class="mx-auto my-form" bind:this={formDom} on:submit|preventDefault={handleFormSubmit}>
+    <div class="mb-5">
+      <Label _for="name" valid={!nameValidationFailed}>Coffee beans name:</Label>
+      <input
+        id="name"
+        class={nameValidationFailed ? "input-name-validation-failed" : "input-name"}
+        name="name"
+        placeholder={nameValidationFailed ? "" : "Example: Rwanda Mabanza"}
+        type="text"
+        bind:this={inputDom}
+        bind:value={name}
+        on:input={handleInputChange}
+        on:keydown={handleEnter}
+      />
+      <p class="mt-2 text-sm text-red-600 dark:text-red-500">{validationMessage}</p>
+    </div>
+    <div class="my-div mb-5">
+      <Label _for="description">Description:</Label>
+      <Textarea
+        id="description"
+        name="description"
+        placeholder={DESCRIPTION_PH}
+        bind:_this={textareaDom}
+        bind:value={description}
+        on:keydown={handleCtrlEnter}
+      />
+    </div>
+    <button class="button-submit" type="submit">Save</button>
+  </form>
+</Modal>
 
 <style lang="postcss">
-  .modal-container {
-    @apply fixed hidden inset-0 bg-gray-900 bg-opacity-60 overflow-y-auto h-full w-full px-4;
-
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-
-    z-index: 50;
-  }
-
-  .show-modal {
-    display: flex;
-  }
-
-  .inner-container {
-    @apply relative mx-auto shadow-xl rounded-md bg-white max-w-md;
-
-    padding-left: 16px;
-    padding-right: 16px;
-
-    flex-grow: 1;
-  }
-
-  .button-add {
-    @apply bg-green-500 text-white rounded-md px-4 py-2 hover:bg-green-700 transition;
-
-    margin-left: 8px;
-  }
-
   .input-name {
     @apply bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500;
     @apply block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white;
@@ -242,6 +168,5 @@
     width: 100%;
     margin-left: 0;
     margin-right: 0;
-    margin-bottom: 1.25rem;
   }
 </style>

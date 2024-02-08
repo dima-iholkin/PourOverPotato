@@ -7,29 +7,29 @@
   import NewCoffeeBeansModal from "$lib/UI/domain-components/modals/NewCoffeeBeansModal.svelte";
   import Label from "$lib/UI/utility-components/forms/Label.svelte";
 
-  // Props:
+  // Entity props:
 
   export let allCoffeeBeans: CoffeeBeans[] | undefined;
-
   export let selectedCoffeeBeans: CoffeeBeans | undefined;
 
-  export let validationFailed: boolean = false;
+  // UI props:
 
+  export let validationFailed: boolean = false;
   export let showAddButton: boolean = true;
 
-  // State:
+  // Entity state:
 
   let selectedCoffeeBeansId: number | undefined = selectedCoffeeBeans?.id;
-  $: {
-    selectedCoffeeBeansId;
-    if (allCoffeeBeans !== undefined) {
-      selectedCoffeeBeans = allCoffeeBeans.find((item) => item.id === selectedCoffeeBeansId);
-    }
-  }
-
   let savedCoffeeBeans: CoffeeBeans | undefined;
+
+  // UI state:
+
+  let openModal: boolean = false;
+  let validationMessage: string = "";
+
+  // Reactivity:
+
   $: {
-    savedCoffeeBeans;
     if (savedCoffeeBeans instanceof CoffeeBeans) {
       if (allCoffeeBeans?.find((item) => item.id === savedCoffeeBeans?.id) === undefined) {
         allCoffeeBeans?.push(savedCoffeeBeans);
@@ -39,17 +39,22 @@
     }
   }
 
-  let validationMessage: string = "";
   $: {
-    validationFailed;
+    selectedCoffeeBeansId;
+    if (allCoffeeBeans !== undefined) {
+      selectedCoffeeBeans = allCoffeeBeans.find((item) => item.id === selectedCoffeeBeansId);
+    }
+  }
+
+  $: {
     if (validationFailed) {
-      validationMessage = "Please select a coffee beans.";
+      validationMessage = "Please select coffee beans.";
     } else {
       validationMessage = "";
     }
   }
 
-  // Handler functions:
+  // Handlers:
 
   function handleSelectChange() {
     if (validationFailed) {
@@ -83,7 +88,13 @@
       {/if}
     </select>
     {#if showAddButton}
-      <NewCoffeeBeansModal bind:savedCoffeeBeans />
+      <button
+        class="button-add bg-green-500 text-white rounded-md px-4 py-2 hover:bg-green-700 transition"
+        on:click|preventDefault={() => (openModal = true)}
+      >
+        <span class="material-icons md-18"> add </span>
+      </button>
+      <NewCoffeeBeansModal onClose={() => (openModal = false)} open={openModal} bind:savedCoffeeBeans />
     {/if}
   </div>
 </div>
@@ -117,5 +128,9 @@
     @apply focus:border-red-500 block w-full p-2.5 dark:bg-red-100 dark:border-red-400;
 
     background-color: #fef2f2;
+  }
+
+  .button-add {
+    margin-left: 8px;
   }
 </style>

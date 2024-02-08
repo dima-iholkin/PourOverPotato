@@ -1,5 +1,5 @@
 <script lang="ts">
-  export let hidden: boolean = false;
+  export let asGap: boolean = false;
 </script>
 
 <!-- eslint-disable max-len -->
@@ -7,7 +7,7 @@
 <button
   class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 inline-flex items-center"
   type="button"
-  class:my-hidden={hidden}
+  class:as-gap={asGap}
   on:click
 >
   <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -20,7 +20,7 @@
 </button>
 
 <style>
-  .my-hidden {
+  .as-gap {
     visibility: hidden;
   }
 </style>

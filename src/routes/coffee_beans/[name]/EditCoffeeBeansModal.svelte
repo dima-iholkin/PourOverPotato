@@ -153,7 +153,7 @@
 <div class="modal-container" class:show-modal={showModal}>
   <MySidebar asGap />
   <div class="inner-container" bind:this={modalDom}>
-    <ModalHeader on:click={() => closeModal()}>Edit coffee beans</ModalHeader>
+    <!-- <ModalHeader on:click={() => closeModal()}>Edit coffee beans</ModalHeader> -->
 
     <form class="max-w-sm mx-auto" bind:this={formDom} on:submit|preventDefault={handleSubmit}>
       <div class="mb-5">

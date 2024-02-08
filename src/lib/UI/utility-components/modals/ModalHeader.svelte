@@ -1,13 +1,17 @@
 <script lang="ts">
   import CloseModalButton from "./CloseButton.svelte";
+
+  // Props:
+  export let title: string;
+
+  // Events:
+  export let onClose: () => void;
 </script>
 
 <div>
-  <CloseModalButton hidden={true} />
-  <h1>
-    <slot />
-  </h1>
-  <CloseModalButton on:click />
+  <CloseModalButton asGap={true} />
+  <h1>{title}</h1>
+  <CloseModalButton on:click={() => onClose()} />
 </div>
 
 <style lang="postcss">

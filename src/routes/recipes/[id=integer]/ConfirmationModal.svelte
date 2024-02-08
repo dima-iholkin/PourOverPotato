@@ -71,7 +71,7 @@
 <div class="modal-container">
   <MySidebar asGap />
   <div class="inner-container" bind:this={modalDom}>
-    <ModalHeader on:click={() => onClose()}>Deleting recipe...</ModalHeader>
+    <!-- <ModalHeader on:click={() => onClose()}>Deleting recipe...</ModalHeader> -->
     <div class="text-container">
       <p>Please confirm you want to delete the recipe.</p>
     </div>
