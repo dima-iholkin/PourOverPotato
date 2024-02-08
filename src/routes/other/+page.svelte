@@ -17,10 +17,10 @@
     <a href="https://github.com/dima-iholkin/PourOverPotato">on GitHub</a>.
   </p>
   <p>
-    You can view the development process on
+    You can view the development process on the
     <a href="https://github.com/users/dima-iholkin/projects/5/views/1">Projects page</a>.
   </p>
-  <p>You can influence the work on GitHub and by contacting me.</p>
+  <p>You can influence the work in project's GitHub and by contacting me.</p>
 </div>
 
 <h5>About data</h5>
