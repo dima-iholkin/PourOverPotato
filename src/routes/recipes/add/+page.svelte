@@ -18,7 +18,7 @@
   // import { page } from "$app/stores";
   import { addRecipe, getAllCoffeeBeans } from "$lib/database/v1/indexedDB";
   import { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
-  import type { Recipe, RecipeSubmit } from "$lib/domain/entities/Recipe";
+  import type { RecipeSubmit } from "$lib/domain/entities/Recipe";
   import { naming } from "$lib/domain/naming";
   import { routes } from "$lib/domain/routes";
   import { clearFormField, loadFormField, persistFormField } from "$lib/persistForms/localStorage";
@@ -241,7 +241,7 @@
       rating: rating,
       timestamp: timestamp
     };
-    const savedRecipe: Recipe = await addRecipe(recipeSubmit);
+    await addRecipe(recipeSubmit);
 
     clearFormField(FORM_NAME, COFFEEBEANS_ID);
     clearFormField(FORM_NAME, RECIPE_TARGET);
@@ -252,7 +252,7 @@
 
     // Refresh the page to see the updated data:
 
-    alert("We saved the recipe successfully.");
+    alert("Recipe saved.");
 
     window.location.replace(routes.coffeeBeansItem(selectedCoffeeBeans.name));
   }
@@ -268,8 +268,8 @@
   <div>
     <CoffeeBeansSelect
       allCoffeeBeans={coffeeBeansItems}
-      validationFailed={uiCoffeeBeansValidationFailed}
       bind:selectedCoffeeBeans
+      validationFailed={uiCoffeeBeansValidationFailed}
     />
   </div>
 
@@ -289,16 +289,16 @@
 
   <div>
     <NumberInput
-      labelText="{naming.recipe.outWeight} (g):"
       min={0}
-      nameAttr={OUT_WEIGHT}
       step={5}
       bind:value={outWeight}
+      labelText="{naming.recipe.outWeight} (g):"
+      nameAttr={OUT_WEIGHT}
     />
   </div>
 
   <div>
-    <NumberInput labelText="Rating:" max={5} min={0} nameAttr={RATING} step={0.5} bind:value={rating} />
+    <NumberInput max={5} min={0} step={0.5} bind:value={rating} labelText="Rating:" nameAttr={RATING} />
   </div>
 
   <div>
@@ -309,8 +309,8 @@
       id={RECIPE_THOUGHTS}
       name={RECIPE_THOUGHTS}
       placeholder={RECIPE_THOUGHTS_PH}
-      textLinesCount={4}
       bind:value={recipeThoughts}
+      textLinesCount={4}
     />
   </div>
 

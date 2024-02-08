@@ -67,15 +67,15 @@
 
 <div class="modal-container">
   <MySidebar asGap />
-  <div bind:this={modalDom} class="inner-container">
+  <div class="inner-container" bind:this={modalDom}>
     <ModalHeader on:click={() => onClose()}>Deleting coffee beans...</ModalHeader>
     <div class="text-container">
       <p>Please confirm you want to delete the coffee beans.</p>
       <p>The dependent recipes will be deleted too.</p>
     </div>
     <div class="buttons-container">
-      <button class="button-delete" on:click={handleDeleteClick} type="button"> Delete </button>
-      <button class="button-cancel" on:click={() => onClose()} type="button"> Cancel </button>
+      <button class="button-delete" type="button" on:click={handleDeleteClick}> Delete </button>
+      <button class="button-cancel" type="button" on:click={() => onClose()}> Cancel </button>
     </div>
   </div>
 </div>

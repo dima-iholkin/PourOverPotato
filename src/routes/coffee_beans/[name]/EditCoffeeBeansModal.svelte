@@ -159,8 +159,8 @@
       <div class="mb-5">
         <Label _for="name" valid={!nameValidationFailed}>Coffee beans name:</Label>
         <input
-          class={nameValidationFailed ? "input-name-validation-failed" : "input-name"}
           id="name"
+          class={nameValidationFailed ? "input-name-validation-failed" : "input-name"}
           name="name"
           placeholder={nameValidationFailed ? "" : "Example: Rwanda Mabanza"}
           type="text"

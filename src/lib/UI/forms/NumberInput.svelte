@@ -86,8 +86,8 @@
 <div class="container">
   <Label _for={nameAttr}>{labelText}</Label>
   <div class="input-container">
-    <button class="minus-button" id="decrement-button" type="button" on:click={handleMinus}>
-      <svg aria-hidden="true" fill="none" viewBox="0 0 18 2" xmlns="http://www.w3.org/2000/svg">
+    <button id="decrement-button" class="minus-button" type="button" on:click={handleMinus}>
+      <svg fill="none" viewBox="0 0 18 2" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <path d="M1 1h16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
       </svg>
     </button>
@@ -99,8 +99,8 @@
       on:focusout={handleFocusOut}
       on:keydown={handleKeydown}
     />
-    <button class="plus-button" id="increment-button" type="button" on:click={handlePlus}>
-      <svg aria-hidden="true" fill="none" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
+    <button id="increment-button" class="plus-button" type="button" on:click={handlePlus}>
+      <svg fill="none" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <path
           d="M9 1v16M1 9h16"
           stroke="currentColor"

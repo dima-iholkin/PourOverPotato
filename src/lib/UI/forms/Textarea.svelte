@@ -14,13 +14,13 @@
 </script>
 
 <textarea
-  style:height="calc({textLinesCount}rlh + 1rem)"
-  bind:this={_this}
-  bind:value
   {id}
   {name}
-  on:keydown
   {placeholder}
+  bind:this={_this}
+  bind:value
+  on:keydown
+  style:height="calc({textLinesCount}rlh + 1rem)"
 />
 
 <style lang="postcss">

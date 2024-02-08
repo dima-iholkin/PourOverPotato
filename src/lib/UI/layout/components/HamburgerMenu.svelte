@@ -47,14 +47,14 @@
 
 <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
   <button
-    aria-controls="navbar-sticky"
-    aria-expanded="false"
     class="menu-button"
     type="button"
     bind:this={menuButtonDom}
     on:click={toggleMenu}
+    aria-controls="navbar-sticky"
+    aria-expanded="false"
   >
-    <svg aria-hidden="true" class="w-5 h-5" fill="none" viewBox="0 0 17 14" xmlns="http://www.w3.org/2000/svg">
+    <svg class="w-5 h-5" fill="none" viewBox="0 0 17 14" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <path
         d="M1 1h15M1 7h15M1 13h15"
         stroke="currentColor"
@@ -68,13 +68,13 @@
 <div class="menu-div" bind:this={menuDom} class:hidden={!menuOpen}>
   <ul class="ul-menu">
     <li>
-      <a aria-current="page" class="a-menu" href={routes.home} on:click={handleMenuItemClick}> Coffee Beans </a>
+      <a class="a-menu" href={routes.home} on:click={handleMenuItemClick} aria-current="page"> Coffee Beans </a>
     </li>
     <li>
-      <a aria-current="page" class="a-menu" href={routes.recipes} on:click={handleMenuItemClick}> Recipes </a>
+      <a class="a-menu" href={routes.recipes} on:click={handleMenuItemClick} aria-current="page"> Recipes </a>
     </li>
     <li>
-      <a aria-current="page" class="a-menu" href={routes.other} on:click={handleMenuItemClick}> Other </a>
+      <a class="a-menu" href={routes.other} on:click={handleMenuItemClick} aria-current="page"> Other </a>
     </li>
   </ul>
 </div>

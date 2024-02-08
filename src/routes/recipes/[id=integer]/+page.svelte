@@ -146,28 +146,28 @@
       <Label _for={RECIPE_TARGET}>{naming.recipe.recipeTarget}:</Label>
     </div>
     <div>
-      <Textarea id={RECIPE_TARGET} bind:value={recipeTarget} name={RECIPE_TARGET} placeholder={RECIPE_TARGET_PH} />
+      <Textarea id={RECIPE_TARGET} name={RECIPE_TARGET} placeholder={RECIPE_TARGET_PH} bind:value={recipeTarget} />
     </div>
 
     <div>
       <Label _for={RECIPE_RESULT}>{naming.recipe.recipeResult}:</Label>
     </div>
     <div>
-      <Textarea id={RECIPE_RESULT} bind:value={recipeResult} name={RECIPE_RESULT} placeholder={RECIPE_RESULT_PH} />
+      <Textarea id={RECIPE_RESULT} name={RECIPE_RESULT} placeholder={RECIPE_RESULT_PH} bind:value={recipeResult} />
     </div>
 
     <div>
       <NumberInput
+        min={0}
+        step={5}
         bind:value={outWeight}
         labelText="{naming.recipe.outWeight} (g):"
-        min={0}
         nameAttr={OUT_WEIGHT}
-        step={5}
       />
     </div>
 
     <div>
-      <NumberInput bind:value={rating} labelText="Rating:" max={5} min={0} nameAttr={RATING} step={0.5} />
+      <NumberInput max={5} min={0} step={0.5} bind:value={rating} labelText="Rating:" nameAttr={RATING} />
     </div>
 
     <div>
@@ -176,9 +176,9 @@
     <div>
       <Textarea
         id={RECIPE_THOUGHTS}
-        bind:value={recipeThoughts}
         name={RECIPE_THOUGHTS}
         placeholder={RECIPE_THOUGHTS_PH}
+        bind:value={recipeThoughts}
         textLinesCount={4}
       />
     </div>

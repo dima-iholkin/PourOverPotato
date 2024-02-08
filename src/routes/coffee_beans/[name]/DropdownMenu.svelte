@@ -52,10 +52,10 @@
 
 <div class="container">
   <button
-    bind:this={menuButtonDom}
     class="button"
-    on:click={() => (showDropdownMenu = !showDropdownMenu)}
     type="button"
+    bind:this={menuButtonDom}
+    on:click={() => (showDropdownMenu = !showDropdownMenu)}
   >
     <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 4 15" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <path
@@ -66,10 +66,10 @@
 
   <!-- Dropdown menu -->
   {#if showDropdownMenu}
-    <div bind:this={menuDom} class="dropdown-container">
+    <div class="dropdown-container" bind:this={menuDom}>
       <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownMenuIconButton">
         <li>
-          <button class="menu-item" on:click={handleDeleteButtonClick} type="button"> Delete </button>
+          <button class="menu-item" type="button" on:click={handleDeleteButtonClick}> Delete </button>
         </li>
       </ul>
     </div>

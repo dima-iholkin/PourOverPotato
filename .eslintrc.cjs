@@ -101,13 +101,26 @@ module.exports = {
         "groups": [
           "id",
           "slot",
+          ["data-", "builtin-html-element", "builtin-element", "builtin-manual", "builtin-on-events"],
           ["multiline", "unknown", "shorthand", "svelte-shorthand"],
-          "aria"
+          ["aria", "a11y"]
         ],
         "custom-groups": {
           "id": "id",
           "slot": "slot",
+          "data-": "data-**",
+          // Discovered from here: console.log(Object.keys(HTMLElement.prototype));
+          // eslint-disable-next-line max-len
+          "builtin-html-element": "+(accessKey|attachInternals|attributeStyleMap|autocapitalize|autofocus|blur|click|contentEditable|dataset|dir|draggable|enterKeyHint|focus|hidden|hidePopover|inert|innerText|inputMode|isContentEditable|nonce|offsetHeight|offsetLeft|offsetParent|offsetTop|offsetWidth|outerText|popover|showPopover|spellcheck|style|tabIndex|title|togglePopover|translate|virtualKeyboardPolicy)",
+          // I removed "lang" from the above rule.
+          // Discovered from here: console.log(Object.keys(Element.prototype));
+          // eslint-disable-next-line max-len
+          "builtin-element": "+(after|animate|append|assignedSlot|attachShadow|attributes|before|checkVisibility|childElementCount|children|classList|className|clientHeight|clientLeft|clientTop|clientWidth|closest|computedStyleMap|elementTiming|firstElementChild|getAnimations|getAttribute|getAttributeNS|getAttributeNames|getAttributeNode|getAttributeNodeNS|getBoundingClientRect|getClientRects|getElementsByClassName|getElementsByTagName|getElementsByTagNameNS|getInnerHTML|hasAttribute|hasAttributeNS|hasAttributes|hasPointerCapture|id|innerHTML|insertAdjacentElement|insertAdjacentHTML|insertAdjacentText|lastElementChild|localName|matches|namespaceURI|nextElementSibling|outerHTML|part|prefix|prepend|previousElementSibling|querySelector|querySelectorAll|releasePointerCapture|remove|removeAttribute|removeAttributeNS|removeAttributeNode|replaceChildren|replaceWith|requestFullscreen|requestPointerLock|role|scroll|scrollBy|scrollHeight|scrollIntoView|scrollIntoViewIfNeeded|scrollLeft|scrollTo|scrollTop|scrollWidth|setAttribute|setAttributeNS|setAttributeNode|setAttributeNodeNS|setPointerCapture|shadowRoot|slot|tagName|toggleAttribute|webkitMatchesSelector|webkitRequestFullScreen|webkitRequestFullscreen)",
+          // eslint-disable-next-line max-len
+          "builtin-manual": "+(class|href|for|form|max|min|name|placeholder|step|src|type)", // figuring this out manually, logical OR
+          "builtin-on-events": "on[a-z]*", // Starts with "on" and then it's only lowercase letters.
           "aria": "aria**",
+          "a11y": "alt"
         }
       }
     ],

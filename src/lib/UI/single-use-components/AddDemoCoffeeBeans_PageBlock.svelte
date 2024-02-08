@@ -35,7 +35,7 @@
   <div class="empty-db-message-container">
     <p>You have no coffee beans or recipes added yet...</p>
     <p>Would you like to add 3 demo coffee beans with their demo recipes?</p>
-    <button class="add-demo-coffee-beans" on:click={handleAddDemoCoffeeBeans} type="button">
+    <button class="add-demo-coffee-beans" type="button" on:click={handleAddDemoCoffeeBeans}>
       Add demo coffee beans and recipes
     </button>
   </div>

@@ -13,7 +13,7 @@
 
   let recipes: Recipe[] | undefined;
 
-  // Lifecycle hooks:
+  // Lifecycle:
 
   onMount(() => {
     getAllRecipes().then((items: Recipe[]) => {
@@ -33,8 +33,7 @@
 {:else if recipes.length === 0}
   <AddDemoCoffeeBeans_PageBlock />
 {:else}
-  <h2>Sorted by latest recipe</h2>
-
+  <h2>Sorted by latest</h2>
   {#each recipes as recipe}
     <RecipeCard href={routes.recipeItem(recipe.id)} {recipe} showCoffeeBeansName />
   {/each}

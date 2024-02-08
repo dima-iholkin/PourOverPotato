@@ -23,7 +23,7 @@
 
 <div class="container">
   <p>Delete all data:</p>
-  <button class="button-delete" on:click={handleDeleteButtonClick} type="button"> Delete all data </button>
+  <button class="button-delete" type="button" on:click={handleDeleteButtonClick}> Delete all data </button>
 </div>
 
 {#if showConfirmationModal}

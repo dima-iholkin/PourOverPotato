@@ -64,11 +64,11 @@
   <Label _for={COFFEEBEANS_ID} valid={!validationFailed}>Coffee beans:</Label>
   <div class="select-container">
     <select
-      class={validationFailed ? "invalid" : "valid"}
-      disabled={allCoffeeBeans === undefined}
       id={COFFEEBEANS_ID}
+      class={validationFailed ? "invalid" : "valid"}
       name={COFFEEBEANS_ID}
       bind:value={selectedCoffeeBeansId}
+      disabled={allCoffeeBeans === undefined}
       on:change={handleSelectChange}
     >
       {#if allCoffeeBeans !== undefined}
