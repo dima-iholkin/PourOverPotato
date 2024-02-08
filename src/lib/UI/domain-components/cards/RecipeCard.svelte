@@ -40,7 +40,7 @@
 <Card {href}>
   <FlexRow>
     <p class="timestamp">{recipe.timestamp.toLocaleString(undefined, options)}</p>
-    <p>{recipe.rating}/5</p>
+    <p>{recipe.rating}⭐</p>
   </FlexRow>
   {#if showCoffeeBeansName}
     <h5>
