@@ -3,6 +3,7 @@
   import { devFillDB } from "$lib/database/v1/devData/devFillDB";
   import { anyCoffeeBeansSaved, anyRecipesSaved } from "$lib/database/v1/indexedDB";
   import { routes } from "$lib/domain/routes";
+  import NoItemsYetP from "../lists/NoItemsYetP.svelte";
 
   // State:
 
@@ -40,7 +41,7 @@
     </button>
   </div>
 {:else}
-  <p class="no-items-yet">No items added yet...</p>
+  <NoItemsYetP />
 {/if}
 
 <style lang="postcss">
@@ -55,9 +56,5 @@
     @apply dark:focus:ring-yellow-900;
 
     margin-top: 1rem;
-  }
-
-  .no-items-yet {
-    text-align: center;
   }
 </style>

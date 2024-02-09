@@ -7,56 +7,57 @@
   import { routes } from "$lib/domain/routes";
   import RecipeCard from "$lib/UI/domain-components/cards/RecipeCard.svelte";
   import MyFab from "$lib/UI/domain-components/FABs/AddRecipeFab.svelte";
-  import AddDemoCoffeeBeans_PageBlock from "$lib/UI/domain-components/page-blocks/AddDemoCoffeeBeans_PageBlock.svelte";
-  import SortedByP from "$lib/UI/domain-components/SortedByP.svelte";
+  import Loading from "$lib/UI/domain-components/lists/Loading.svelte";
+  import NoItemsYetP from "$lib/UI/domain-components/lists/NoItemsYetP.svelte";
+  import SortedByP from "$lib/UI/domain-components/lists/SortedByP.svelte";
   import PageHeadline from "$lib/UI/layout/PageHeadline.svelte";
   import FlexRow from "$lib/UI/utility-components/FlexRow.svelte";
   import type { PageData } from "./$types";
   import DropdownMenu from "./DropdownMenu.svelte";
   import EditCoffeeBeansModal from "./EditCoffeeBeansModal.svelte";
 
-  // Props:
+  // Load function:
 
   export let data: PageData;
 
-  // State:
+  // Entities state:
 
   let coffeeBeans: CoffeeBeans | undefined | "CoffeeBeansNotFound";
   let recipes: Recipe[] | undefined;
 
+  // Lifecycle:
+
   onMount(() => {
-    getCoffeeBeansByName(data.coffeeBeansName)
-      .then((item: CoffeeBeans | undefined): Promise<Recipe[] | "CoffeeBeansNotFound"> => {
-        if (item === undefined) {
-          coffeeBeans = "CoffeeBeansNotFound";
-          return Promise.resolve("CoffeeBeansNotFound");
-        }
-
-        coffeeBeans = item;
-
-        return getRecipesByCoffeeBeansId(coffeeBeans.id);
-      })
-      .then((items: Recipe[] | "CoffeeBeansNotFound") => {
-        if (items === "CoffeeBeansNotFound") {
-          return;
-        }
-
-        recipes = items.sort(byTimestampDesc);
-      });
+    getCoffeeBeansByName(data.coffeeBeansName).then(async (item: CoffeeBeans | undefined) => {
+      if (item === undefined) {
+        coffeeBeans = "CoffeeBeansNotFound";
+        return;
+      }
+      coffeeBeans = item;
+      const _recipes: Recipe[] = await getRecipesByCoffeeBeansId(coffeeBeans.id);
+      recipes = _recipes.sort(byTimestampDesc);
+    });
   });
 </script>
 
 <svelte:head>
-  {#if coffeeBeans instanceof CoffeeBeans}
-    <title>{coffeeBeans.name} - PourOverPotato app</title>
-  {:else if coffeeBeans === undefined}
+  {#if coffeeBeans === undefined}
     <title>loading... - PourOverPotato app</title>
   {:else if coffeeBeans === "CoffeeBeansNotFound"}
     <title>404 Not Found - PourOverPotato app</title>
+  {:else}
+    <title>{coffeeBeans.name} - PourOverPotato app</title>
   {/if}
 </svelte:head>
 
-{#if coffeeBeans instanceof CoffeeBeans}
+{#if coffeeBeans === undefined}
+  <div class="loading-position">
+    <Loading />
+  </div>
+{:else if coffeeBeans === "CoffeeBeansNotFound"}
+  <h1>404</h1>
+  <p>Coffee beans not found.</p>
+{:else}
   <FlexRow>
     <PageHeadline>{coffeeBeans.name}</PageHeadline>
     <div class="menu-container">
@@ -66,34 +67,33 @@
   </FlexRow>
   <p class="coffee-beans-description">{coffeeBeans.description}</p>
 
-  {#if recipes !== undefined && recipes.length > 0}
+  {#if recipes === undefined}
+    <Loading />
+  {:else if recipes.length === 0}
+    <NoItemsYetP />
+  {:else}
     <SortedByP>Sorted by latest</SortedByP>
-    {#each recipes as recipe}
+    {#each recipes as recipe (recipe.id)}
       <RecipeCard href={routes.recipeItem(recipe.id)} {recipe} />
     {/each}
-  {:else if recipes !== undefined && recipes.length === 0}
-    <AddDemoCoffeeBeans_PageBlock />
-  {:else}
-    <p>loading...</p>
   {/if}
 
   <MyFab href={routes.addRecipe(coffeeBeans.name)} />
-{:else if coffeeBeans === undefined}
-  <p>loading...</p>
-{:else if coffeeBeans === "CoffeeBeansNotFound"}
-  <h1>404</h1>
-  <p>Coffee beans not found.</p>
 {/if}
 
-<style lang="postcss">
-  .coffee-beans-description {
-    margin-top: 0.25rem;
-    margin-bottom: 1rem;
+<style>
+  .loading-position {
+    margin-top: 1rem;
   }
 
   .menu-container {
     display: flex;
     flex-direction: row;
     align-items: center;
+  }
+
+  .coffee-beans-description {
+    margin-top: 0.25rem;
+    margin-bottom: 1rem;
   }
 </style>

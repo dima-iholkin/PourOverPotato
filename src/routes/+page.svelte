@@ -9,8 +9,9 @@
   import { routes } from "$lib/domain/routes";
   import CoffeeBeansCard from "$lib/UI/domain-components/cards/CoffeeBeansCard.svelte";
   import AddRecipeFab from "$lib/UI/domain-components/FABs/AddRecipeFab.svelte";
+  import Loading from "$lib/UI/domain-components/lists/Loading.svelte";
+  import SortedByP from "$lib/UI/domain-components/lists/SortedByP.svelte";
   import AddDemoCoffeeBeans_PageBlock from "$lib/UI/domain-components/page-blocks/AddDemoCoffeeBeans_PageBlock.svelte";
-  import SortedByP from "$lib/UI/domain-components/SortedByP.svelte";
   import PageHeadline from "$lib/UI/layout/PageHeadline.svelte";
   import type { EnhancedCoffeeBeans } from "./EnhancedCoffeeBeans";
 
@@ -46,12 +47,11 @@
 <PageHeadline>Coffee beans</PageHeadline>
 
 {#if coffeeBeans === undefined}
-  <p>loading...</p>
+  <Loading />
 {:else if coffeeBeans.length === 0}
   <AddDemoCoffeeBeans_PageBlock />
 {:else}
   <SortedByP>Sorted by latest recipe date</SortedByP>
-
   {#each coffeeBeans as item (item.id)}
     <CoffeeBeansCard href={routes.coffeeBeansItem(item.name)} {item} recipeCount={item.recipeCount} />
   {/each}

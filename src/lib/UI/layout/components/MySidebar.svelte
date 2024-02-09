@@ -46,6 +46,7 @@
   .as-gap {
     position: static;
     visibility: hidden;
+    height: 100% !important;
   }
 
   a {

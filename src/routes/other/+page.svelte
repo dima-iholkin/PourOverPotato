@@ -7,8 +7,6 @@
   <title>Other - PourOverPotato app</title>
 </svelte:head>
 
-<!-- <PageHeadline>Other</PageHeadline> -->
-
 <h5 class="page-headline">About app</h5>
 
 <div class="about-section">
@@ -31,8 +29,8 @@
     import and export data to a file, and to sync data with Google Drive.
   </p>
   <p>
-    This is not a finilized version of the application. Things may change and data integrity is not guaranteed,
-    however I'll try hard to not break you data.
+    This is not a finilized version of the application. Things may change and data integrity is not guaranteed, however
+    I'll try hard to not break you data.
   </p>
 </div>
 
@@ -42,7 +40,7 @@
 
 <h5>Credits</h5>
 
-<p>Coffee beans icon</p>
+<p>The coffee beans icon</p>
 <a href="https://www.flaticon.com/free-icons/coffee-beans" title="coffee beans icons">
   created by Freepik - Flaticon
 </a>
