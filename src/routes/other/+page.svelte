@@ -1,5 +1,4 @@
 <script lang="ts">
-  // import PageHeadline from "$lib/UI/layout/PageHeadline.svelte";
   import DeleteAllDataBlock from "./DeleteAllDataBlock.svelte";
 </script>
 

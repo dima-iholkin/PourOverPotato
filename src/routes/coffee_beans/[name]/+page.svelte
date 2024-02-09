@@ -55,8 +55,10 @@
     <Loading />
   </div>
 {:else if coffeeBeans === "CoffeeBeansNotFound"}
-  <h1>404</h1>
-  <p>Coffee beans not found.</p>
+  <div class="loading-position">
+    <h1>404</h1>
+    <p>Coffee beans not found.</p>
+  </div>
 {:else}
   <FlexRow>
     <PageHeadline>{coffeeBeans.name}</PageHeadline>

@@ -2,19 +2,21 @@
   import type { Recipe } from "$lib/domain/entities/Recipe";
   import ConfirmationModal from "./ConfirmationModal.svelte";
 
-  // Props:
+  // Entities state:
 
   export let recipeItem: Recipe;
 
-  // State:
+  // UI state:
 
   let showDropdownMenu: boolean = false;
   let showModal: boolean = false;
 
+  // DOM state:
+
   let menuButtonDom: Element;
   let menuDom: Element;
 
-  // Handler functions:
+  // Handlers:
 
   function handleDocumentClick(event: MouseEvent & { currentTarget: EventTarget & Document }) {
     if (showDropdownMenu === false) {
@@ -31,7 +33,7 @@
     showDropdownMenu = false;
   }
 
-  // Helper functions:
+  // Helpers:
 
   function clickOutsideBox(element: Element, click: MouseEvent) {
     const box: DOMRect = element.getBoundingClientRect();
@@ -64,7 +66,6 @@
     </svg>
   </button>
 
-  <!-- Dropdown menu -->
   {#if showDropdownMenu}
     <div class="dropdown-container" bind:this={menuDom}>
       <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownMenuIconButton">
@@ -89,9 +90,6 @@
     @apply inline-flex items-center p-2 text-sm font-medium text-center text-gray-900 bg-white rounded-lg;
     @apply hover:bg-gray-100 focus:ring-4 focus:outline-none dark:text-white focus:ring-gray-50 dark:bg-gray-800;
     @apply dark:hover:bg-gray-700 dark:focus:ring-gray-600;
-
-    margin-top: 0.5rem;
-    margin-left: 0.5rem;
   }
 
   .dropdown-container {

@@ -19,6 +19,7 @@
   import { formatTimeForInput, parseDateFromInputString } from "$lib/helpers/dateHelpers";
   import CoffeeBeansSelect from "$lib/UI/domain-components/forms/CoffeeBeansSelect.svelte";
   import TimestampPicker from "$lib/UI/domain-components/forms/TimestampPicker.svelte";
+  import Loading from "$lib/UI/domain-components/lists/Loading.svelte";
   import PageHeadline from "$lib/UI/layout/PageHeadline.svelte";
   import FlexRow from "$lib/UI/utility-components/FlexRow.svelte";
   import NumberInput from "$lib/UI/utility-components/forms/NumberInput.svelte";
@@ -131,7 +132,7 @@
 </FlexRow>
 
 {#if recipe === null}
-  <p>loading...</p>
+  <Loading />
 {:else if recipe instanceof Recipe}
   <form id="edit-recipe" on:submit|preventDefault={handleSubmit}>
     <CoffeeBeansSelect {allCoffeeBeans} showAddButton={false} bind:selectedCoffeeBeansId />
@@ -176,7 +177,8 @@
     <button class="my-button" form="edit-recipe" type="submit"> Save changes </button>
   </form>
 {:else}
-  <p>404 Not Found</p>
+  <p>404</p>
+  <p>Not Found</p>
 {/if}
 
 <style lang="postcss">
