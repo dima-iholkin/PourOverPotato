@@ -14,16 +14,12 @@
   // Entity props:
 
   export let allCoffeeBeans: CoffeeBeans[] | undefined;
-  export let selectedCoffeeBeans: CoffeeBeans | undefined;
+  export let selectedCoffeeBeansId: number | undefined;
 
   // UI props:
 
   export let validationFailed: boolean = false;
   export let showAddButton: boolean = true;
-
-  // Entity state:
-
-  let selectedCoffeeBeansId: number | undefined = selectedCoffeeBeans?.id;
 
   // UI state:
 
@@ -31,13 +27,6 @@
   let validationMessage: string = "";
 
   // Reactivity:
-
-  $: {
-    selectedCoffeeBeansId;
-    if (allCoffeeBeans !== undefined) {
-      selectedCoffeeBeans = allCoffeeBeans.find((item) => item.id === selectedCoffeeBeansId);
-    }
-  }
 
   $: {
     if (validationFailed) {
@@ -68,11 +57,11 @@
       on:change={handleSelectChange}
     >
       {#if allCoffeeBeans !== undefined}
-        {#if selectedCoffeeBeans === undefined && showAddButton === true}
+        {#if selectedCoffeeBeansId === undefined && showAddButton === true}
           <option disabled selected value></option>
         {/if}
-        {#each allCoffeeBeans as item}
-          <option selected={selectedCoffeeBeans?.id === item.id} value={item.id}>{item.name}</option>
+        {#each allCoffeeBeans as item (item.id)}
+          <option selected={selectedCoffeeBeansId === item.id} value={item.id}>{item.name}</option>
         {/each}
       {:else}
         <option disabled selected value>Loading coffee beans...</option>

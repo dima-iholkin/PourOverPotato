@@ -37,7 +37,6 @@
   // UI state:
 
   let uiCoffeeBeansValidationFailed: boolean = false;
-
   let initFinished: boolean = false;
 
   // Entities state:
@@ -46,20 +45,18 @@
 
   // Form state:
 
-  let selectedCoffeeBeans: CoffeeBeans | undefined = undefined;
-
+  let selectedCoffeeBeansId: number | undefined = undefined;
   let recipeTarget: string = "";
   let recipeResult: string = "";
   let recipeThoughts: string = "";
   let outWeight: number = 0;
   let rating: number = 0;
-
   let timestampStr: string = formatTimeForInput(new Date());
 
   // Reactivity, to persist the form values:
 
-  $: if (selectedCoffeeBeans !== undefined && initFinished) {
-    persistFormField(FORM_NAME, COFFEEBEANS_ID, selectedCoffeeBeans.id);
+  $: if (selectedCoffeeBeansId !== undefined && initFinished) {
+    persistFormField(FORM_NAME, COFFEEBEANS_ID, selectedCoffeeBeansId);
   }
 
   $: {
@@ -105,16 +102,10 @@
       coffeeBeansItems = items;
 
       // Load the persisted form values from LocalStorage:
-
-      const selectedCoffeeBeansId = <number | null>loadFormField(FORM_NAME, COFFEEBEANS_ID, "number");
-      if (selectedCoffeeBeansId !== null) {
-        selectedCoffeeBeans = coffeeBeansItems.find((item) => item.id === selectedCoffeeBeansId);
-      }
-
+      selectedCoffeeBeansId = <number | undefined>loadFormField(FORM_NAME, COFFEEBEANS_ID, "number") ?? undefined;
       recipeTarget = <string>loadFormField(FORM_NAME, RECIPE_TARGET, "string") ?? "";
       recipeResult = <string>loadFormField(FORM_NAME, RECIPE_RESULT, "string") ?? "";
       recipeThoughts = <string>loadFormField(FORM_NAME, RECIPE_THOUGHTS, "string") ?? "";
-
       outWeight = <number>(loadFormField(FORM_NAME, OUT_WEIGHT, "number") ?? 0);
       rating = <number>(loadFormField(FORM_NAME, RATING, "number") ?? 0);
 
@@ -128,7 +119,7 @@
   async function handleFormSubmit() {
     // Validate and format the form values:
 
-    if (selectedCoffeeBeans === undefined) {
+    if (selectedCoffeeBeansId === undefined) {
       uiCoffeeBeansValidationFailed = true;
       return;
     }
@@ -142,7 +133,7 @@
     // Save the new recipe:
 
     const recipeSubmit: RecipeSubmit = {
-      coffeeBeansId: selectedCoffeeBeans.id,
+      coffeeBeansId: selectedCoffeeBeansId,
       recipeTarget: recipeTarget,
       recipeResult: recipeResult,
       recipeThoughts: recipeThoughts,
@@ -164,12 +155,17 @@
     alert("Recipe saved.");
 
     // Refresh the page to see the updated data:
-    window.location.replace(routes.coffeeBeansItem(selectedCoffeeBeans.name));
+    const item: CoffeeBeans | undefined = coffeeBeansItems.find((item) => item.id === selectedCoffeeBeansId);
+    if (item === undefined) {
+      window.location.replace(routes.home);
+      return;
+    }
+    window.location.replace(routes.coffeeBeansItem(item.name));
   }
 
   function handleSavedCoffeeBeans(coffeeBeans: CoffeeBeans) {
     coffeeBeansItems.push(coffeeBeans);
-    selectedCoffeeBeans = coffeeBeansItems.find((item) => item.id === coffeeBeans.id);
+    selectedCoffeeBeansId = coffeeBeans.id;
     uiCoffeeBeansValidationFailed = false;
   }
 </script>
@@ -186,7 +182,7 @@
       allCoffeeBeans={coffeeBeansItems}
       onSavedCoffeeBeans={handleSavedCoffeeBeans}
       validationFailed={uiCoffeeBeansValidationFailed}
-      bind:selectedCoffeeBeans
+      bind:selectedCoffeeBeansId
     />
   </div>
 
