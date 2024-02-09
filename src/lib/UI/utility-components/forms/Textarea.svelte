@@ -1,12 +1,15 @@
 <script lang="ts">
+  import Label from "./Label.svelte";
+
   // Props:
 
   export let id: string = "";
+  export let label: string = "";
   export let name: string = "";
-  export let value: string = "";
   export let placeholder: string = "";
-  export let _this: HTMLTextAreaElement | undefined = undefined;
   export let textLinesCount: number = 2;
+  export let this_: HTMLTextAreaElement | undefined = undefined;
+  export let value: string = "";
 
   // Reactivity:
 
@@ -15,11 +18,12 @@
   }
 </script>
 
+<Label for_={name}>{label}:</Label>
 <textarea
   {id}
   {name}
   {placeholder}
-  bind:this={_this}
+  bind:this={this_}
   bind:value
   on:keydown
   style:height="calc({textLinesCount}rlh + 1rem)"

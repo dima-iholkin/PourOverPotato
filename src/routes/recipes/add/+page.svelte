@@ -26,7 +26,6 @@
   import CoffeeBeansSelect from "$lib/UI/domain-components/forms/CoffeeBeansSelect.svelte";
   import TimestampPicker from "$lib/UI/domain-components/forms/TimestampPicker.svelte";
   import PageHeadline from "$lib/UI/layout/PageHeadline.svelte";
-  import Label from "$lib/UI/utility-components/forms/Label.svelte";
   import NumberInput from "$lib/UI/utility-components/forms/NumberInput.svelte";
   import Textarea from "$lib/UI/utility-components/forms/Textarea.svelte";
 
@@ -187,13 +186,23 @@
   </div>
 
   <div>
-    <Label _for={RECIPE_TARGET}>{naming.recipe.recipeTarget}:</Label>
-    <Textarea id={RECIPE_TARGET} name={RECIPE_TARGET} placeholder={RECIPE_TARGET_PH} bind:value={recipeTarget} />
+    <Textarea
+      id={RECIPE_TARGET}
+      label={naming.recipe.recipeTarget}
+      name={RECIPE_TARGET}
+      placeholder={RECIPE_TARGET_PH}
+      bind:value={recipeTarget}
+    />
   </div>
 
   <div>
-    <Label _for={RECIPE_RESULT}>{naming.recipe.recipeResult}:</Label>
-    <Textarea id={RECIPE_RESULT} name={RECIPE_RESULT} placeholder={RECIPE_RESULT_PH} bind:value={recipeResult} />
+    <Textarea
+      id={RECIPE_RESULT}
+      label={naming.recipe.recipeResult}
+      name={RECIPE_RESULT}
+      placeholder={RECIPE_RESULT_PH}
+      bind:value={recipeResult}
+    />
   </div>
 
   <div>
@@ -211,9 +220,9 @@
   </div>
 
   <div>
-    <Label _for={RECIPE_THOUGHTS}>{naming.recipe.recipeThoughts}:</Label>
     <Textarea
       id={RECIPE_THOUGHTS}
+      label={naming.recipe.recipeThoughts}
       name={RECIPE_THOUGHTS}
       placeholder={RECIPE_THOUGHTS_PH}
       textLinesCount={4}

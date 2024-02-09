@@ -84,7 +84,7 @@
 </script>
 
 <div class="container">
-  <Label _for={nameAttr}>{labelText}</Label>
+  <Label for_={nameAttr}>{labelText}</Label>
   <div class="input-container">
     <button id="decrement-button" class="minus-button" type="button" on:click={handleMinus}>
       <svg fill="none" viewBox="0 0 18 2" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">

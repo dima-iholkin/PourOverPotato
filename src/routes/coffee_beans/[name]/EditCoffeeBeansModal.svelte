@@ -157,7 +157,7 @@
 
     <form class="max-w-sm mx-auto" bind:this={formDom} on:submit|preventDefault={handleSubmit}>
       <div class="mb-5">
-        <Label _for="name" valid={!nameValidationFailed}>Coffee beans name:</Label>
+        <Label for_="name" valid={!nameValidationFailed}>Coffee beans name:</Label>
         <input
           id="name"
           class={nameValidationFailed ? "input-name-validation-failed" : "input-name"}
@@ -172,12 +172,12 @@
         <p class="mt-2 text-sm text-red-600 dark:text-red-500">{validationMessage}</p>
       </div>
       <div class="my-div mb-5">
-        <Label _for="description">Description:</Label>
+        <Label for_="description">Description:</Label>
         <Textarea
           id="description"
           name="description"
           placeholder={DESCRIPTION_PH}
-          bind:_this={textareaDom}
+          bind:this_={textareaDom}
           bind:value={description}
           on:keydown={handleCtrlEnterKey}
         />

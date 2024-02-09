@@ -143,14 +143,14 @@
     {/if}
 
     <div>
-      <Label _for={RECIPE_TARGET}>{naming.recipe.recipeTarget}:</Label>
+      <Label for_={RECIPE_TARGET}>{naming.recipe.recipeTarget}:</Label>
     </div>
     <div>
       <Textarea id={RECIPE_TARGET} name={RECIPE_TARGET} placeholder={RECIPE_TARGET_PH} bind:value={recipeTarget} />
     </div>
 
     <div>
-      <Label _for={RECIPE_RESULT}>{naming.recipe.recipeResult}:</Label>
+      <Label for_={RECIPE_RESULT}>{naming.recipe.recipeResult}:</Label>
     </div>
     <div>
       <Textarea id={RECIPE_RESULT} name={RECIPE_RESULT} placeholder={RECIPE_RESULT_PH} bind:value={recipeResult} />
@@ -171,7 +171,7 @@
     </div>
 
     <div>
-      <Label _for={RECIPE_THOUGHTS}>{naming.recipe.recipeThoughts}:</Label>
+      <Label for_={RECIPE_THOUGHTS}>{naming.recipe.recipeThoughts}:</Label>
     </div>
     <div>
       <Textarea

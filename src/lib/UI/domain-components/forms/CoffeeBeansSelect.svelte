@@ -46,7 +46,7 @@
 </script>
 
 <div class="container">
-  <Label _for={COFFEEBEANS_ID} valid={!validationFailed}>Coffee beans:</Label>
+  <Label for_={COFFEEBEANS_ID} valid={!validationFailed}>Coffee beans:</Label>
   <div class="select-container">
     <select
       id={COFFEEBEANS_ID}
