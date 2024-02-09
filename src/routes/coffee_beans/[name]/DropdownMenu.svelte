@@ -89,9 +89,6 @@
     @apply inline-flex items-center p-2 text-sm font-medium text-center text-gray-900 bg-white rounded-lg;
     @apply hover:bg-gray-100 focus:ring-4 focus:outline-none dark:text-white focus:ring-gray-50 dark:bg-gray-800;
     @apply dark:hover:bg-gray-700 dark:focus:ring-gray-600;
-
-    margin-top: 0.5rem;
-    margin-left: 0.5rem;
   }
 
   .dropdown-container {

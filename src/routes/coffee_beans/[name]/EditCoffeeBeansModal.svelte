@@ -10,7 +10,6 @@
   import MySidebar from "$lib/UI/layout/components/MySidebar.svelte";
   import Label from "$lib/UI/utility-components/forms/Label.svelte";
   import Textarea from "$lib/UI/utility-components/forms/Textarea.svelte";
-  import ModalHeader from "$lib/UI/utility-components/modals/ModalHeader.svelte";
 
   // Props:
 
@@ -213,11 +212,9 @@
 
   .edit-button {
     @apply text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4;
-    @apply focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800;
+    @apply focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-gray-800;
     @apply dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600;
     @apply dark:focus:ring-gray-700;
-
-    margin: 0.5rem 0 0 0;
   }
 
   .input-name {
