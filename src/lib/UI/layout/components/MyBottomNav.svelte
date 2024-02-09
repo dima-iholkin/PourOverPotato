@@ -5,12 +5,16 @@
   import { routes } from "$lib/domain/routes";
   import OtherIcon from "$lib/UI/icons/OtherIcon.svelte";
 
+  // Props:
+
+  export let asGap: boolean = false;
+
   // Reactivity:
 
   $: route = base + $page.route.id;
 </script>
 
-<div class="bottom-nav">
+<div class="bottom-nav" class:as-gap={asGap}>
   <div class="grid h-full max-w-lg grid-cols-3 mx-auto font-medium">
     <a href={routes.recipes}>
       <button type="button" class:active={route === routes.recipes}>
@@ -34,6 +38,18 @@
 </div>
 
 <style lang="postcss">
+  .as-gap {
+    position: static !important;
+    visibility: hidden;
+  }
+
+  .bottom-nav {
+    @apply fixed bottom-0 left-0 w-full h-16 bg-white border-t border-gray-200 dark:bg-gray-700;
+    @apply dark:border-gray-600;
+
+    z-index: 49;
+  }
+
   @media only screen and (min-width: 800px) {
     .bottom-nav {
       display: none;
@@ -70,13 +86,6 @@
     @apply inline-flex flex-col items-center justify-center px-5 dark:hover:bg-gray-800;
 
     width: 100%;
-  }
-
-  .bottom-nav {
-    @apply fixed bottom-0 left-0 w-full h-16 bg-white border-t border-gray-200 dark:bg-gray-700;
-    @apply dark:border-gray-600;
-
-    z-index: 49;
   }
 
   /* Combination of "active" and "hover" pseudo-classes to fix the touchscreen taps. */

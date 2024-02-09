@@ -6,6 +6,14 @@
   export let href: string | undefined;
 </script>
 
+<!--
+@component
+Please put this component as the last page-block on your page. It will create a nice gap at bottom for FAB to not
+obscure the page content.
+-->
+
+<div class="page-bottom-gap" />
+
 <div class="fab-container">
   <a {href}>
     <button class="my-button">
@@ -54,5 +62,9 @@
     justify-content: center;
     margin: 0;
     padding: 0;
+  }
+
+  .page-bottom-gap {
+    height: 4rem;
   }
 </style>

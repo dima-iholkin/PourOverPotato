@@ -6,7 +6,7 @@
   import { sortRecipesByTimestampDesc, sortCoffeeBeansByTimestampDesc } from "$lib/domain/helpers/sortRecipes";
   import { routes } from "$lib/domain/routes";
   import CoffeeBeansCard from "$lib/UI/domain-components/cards/CoffeeBeansCard.svelte";
-  import MyFab from "$lib/UI/domain-components/FABs/AddRecipeFab.svelte";
+  import AddRecipeFab from "$lib/UI/domain-components/FABs/AddRecipeFab.svelte";
   import AddDemoCoffeeBeans_PageBlock from "$lib/UI/domain-components/page-blocks/AddDemoCoffeeBeans_PageBlock.svelte";
   import PageHeadline from "$lib/UI/layout/PageHeadline.svelte";
 
@@ -53,7 +53,7 @@
   {/each}
 {/if}
 
-<MyFab href={routes.addRecipe()} />
+<AddRecipeFab href={routes.addRecipe()} />
 
 <style lang="postcss">
   h2 {

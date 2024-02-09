@@ -16,14 +16,14 @@
   import { Recipe } from "$lib/domain/entities/Recipe";
   import { naming } from "$lib/domain/naming";
   import { routes } from "$lib/domain/routes";
+  import { formatTimeForInput, parseDateFromInputString } from "$lib/helpers/dateHelpers";
+  import CoffeeBeansSelect from "$lib/UI/domain-components/forms/CoffeeBeansSelect.svelte";
+  import TimestampPicker from "$lib/UI/domain-components/forms/TimestampPicker.svelte";
   import PageHeadline from "$lib/UI/layout/PageHeadline.svelte";
   import FlexRow from "$lib/UI/utility-components/FlexRow.svelte";
   import Label from "$lib/UI/utility-components/forms/Label.svelte";
   import NumberInput from "$lib/UI/utility-components/forms/NumberInput.svelte";
   import Textarea from "$lib/UI/utility-components/forms/Textarea.svelte";
-  import CoffeeBeansSelect from "../add/CoffeeBeansSelect.svelte";
-  import { formatTimeForInput, parseDateFromInputString } from "../add/helpers";
-  import TimestampPicker from "../add/TimestampPicker.svelte";
   import type { PageData } from "./$types";
   import DropdownMenu from "./DropdownMenu.svelte";
 
