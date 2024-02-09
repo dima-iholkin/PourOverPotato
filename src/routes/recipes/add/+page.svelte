@@ -166,6 +166,12 @@
     // Refresh the page to see the updated data:
     window.location.replace(routes.coffeeBeansItem(selectedCoffeeBeans.name));
   }
+
+  function handleSavedCoffeeBeans(coffeeBeans: CoffeeBeans) {
+    coffeeBeansItems.push(coffeeBeans);
+    selectedCoffeeBeans = coffeeBeansItems.find((item) => item.id === coffeeBeans.id);
+    uiCoffeeBeansValidationFailed = false;
+  }
 </script>
 
 <svelte:head>
@@ -178,6 +184,7 @@
   <div>
     <CoffeeBeansSelect
       allCoffeeBeans={coffeeBeansItems}
+      onSavedCoffeeBeans={handleSavedCoffeeBeans}
       validationFailed={uiCoffeeBeansValidationFailed}
       bind:selectedCoffeeBeans
     />

@@ -7,6 +7,10 @@
   import NewCoffeeBeansModal from "$lib/UI/domain-components/modals/NewCoffeeBeansModal.svelte";
   import Label from "$lib/UI/utility-components/forms/Label.svelte";
 
+  // Events:
+
+  export let onSavedCoffeeBeans: (coffeeBeans: CoffeeBeans) => void;
+
   // Entity props:
 
   export let allCoffeeBeans: CoffeeBeans[] | undefined;
@@ -20,7 +24,6 @@
   // Entity state:
 
   let selectedCoffeeBeansId: number | undefined = selectedCoffeeBeans?.id;
-  let savedCoffeeBeans: CoffeeBeans | undefined;
 
   // UI state:
 
@@ -28,16 +31,6 @@
   let validationMessage: string = "";
 
   // Reactivity:
-
-  $: {
-    if (savedCoffeeBeans instanceof CoffeeBeans) {
-      if (allCoffeeBeans?.find((item) => item.id === savedCoffeeBeans?.id) === undefined) {
-        allCoffeeBeans?.push(savedCoffeeBeans);
-      }
-      selectedCoffeeBeans = savedCoffeeBeans; // Set the value in the Select.
-      validationFailed = false;
-    }
-  }
 
   $: {
     selectedCoffeeBeansId;
@@ -60,8 +53,6 @@
     if (validationFailed) {
       validationFailed = false;
     }
-
-    savedCoffeeBeans = undefined;
   }
 </script>
 
@@ -94,7 +85,7 @@
       >
         <span class="material-icons md-18"> add </span>
       </button>
-      <NewCoffeeBeansModal onClose={() => (openModal = false)} open={openModal} bind:savedCoffeeBeans />
+      <NewCoffeeBeansModal onClose={() => (openModal = false)} {onSavedCoffeeBeans} open={openModal} />
     {/if}
   </div>
 </div>

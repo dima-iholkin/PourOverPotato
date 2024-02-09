@@ -9,17 +9,14 @@
   import Textarea from "$lib/UI/utility-components/forms/Textarea.svelte";
   import Modal from "$lib/UI/utility-components/modals/Modal.svelte";
 
-  // Entity props:
+  // Events:
 
-  export let savedCoffeeBeans: CoffeeBeans | undefined = undefined;
+  export let onSavedCoffeeBeans: ((coffeeBeans: CoffeeBeans) => void) | undefined;
+  export let onClose: (() => void) | undefined;
 
   // UI props:
 
   export let open: boolean = false;
-
-  // Events:
-
-  export let onClose: (() => void) | undefined = undefined;
 
   // DOM state:
 
@@ -100,7 +97,9 @@
     // TODO: Inform user that the new coffee beans were saved successfully.
 
     // Return the new Coffee Beans entity to the "Add recipe" page:
-    savedCoffeeBeans = coffeeBeans;
+    if (onSavedCoffeeBeans !== undefined) {
+      onSavedCoffeeBeans(coffeeBeans);
+    }
 
     // Clear the modal state:
     handleClose();
