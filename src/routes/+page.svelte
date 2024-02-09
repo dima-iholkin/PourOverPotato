@@ -1,37 +1,40 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { getAllCoffeeBeans, getRecipesByCoffeeBeansId } from "$lib/database/v1/indexedDB";
-  import type { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
   import type { Recipe } from "$lib/domain/entities/Recipe";
-  import { sortRecipesByTimestampDesc, sortCoffeeBeansByTimestampDesc } from "$lib/domain/helpers/sortRecipes";
+  import {
+    sortRecipesByTimestampDesc as byTimestampDescR,
+    sortCoffeeBeansByTimestampDesc as byTimestampDescCB
+  } from "$lib/domain/helpers/sortRecipes";
   import { routes } from "$lib/domain/routes";
   import CoffeeBeansCard from "$lib/UI/domain-components/cards/CoffeeBeansCard.svelte";
   import AddRecipeFab from "$lib/UI/domain-components/FABs/AddRecipeFab.svelte";
   import AddDemoCoffeeBeans_PageBlock from "$lib/UI/domain-components/page-blocks/AddDemoCoffeeBeans_PageBlock.svelte";
+  import SortedByP from "$lib/UI/domain-components/SortedByP.svelte";
   import PageHeadline from "$lib/UI/layout/PageHeadline.svelte";
+  import type { EnhancedCoffeeBeans } from "./EnhancedCoffeeBeans";
 
-  // State:
+  // Entities state:
 
-  let coffeeBeans: (CoffeeBeans & { recipeCount: number; latestRecipeTimestamp: Date | undefined })[] | undefined;
+  let coffeeBeans: EnhancedCoffeeBeans[] | undefined;
 
-  // Lifecycle hooks:
+  // Lifecycle:
 
   onMount(() => {
-    getAllCoffeeBeans().then((items) => {
-      Promise.all(
+    getAllCoffeeBeans().then(async (items) => {
+      const enhancedCoffeeBeansItems: EnhancedCoffeeBeans[] = await Promise.all(
         items.map(async (item) => {
           const recipes: Recipe[] = await getRecipesByCoffeeBeansId(item.id);
-          const coffeeBeansItem: CoffeeBeans & { recipeCount: number; latestRecipeTimestamp: Date | undefined } = {
+          const coffeeBeansItem: EnhancedCoffeeBeans = {
             ...item,
             recipeCount: recipes.length,
-            latestRecipeTimestamp:
-              recipes.length > 0 ? recipes.sort(sortRecipesByTimestampDesc)[0].timestamp : undefined
+            latestRecipeTimestamp: recipes.length > 0 ? recipes.sort(byTimestampDescR)[0].timestamp : undefined
           };
           return coffeeBeansItem;
         })
-      ).then((items: (CoffeeBeans & { recipeCount: number; latestRecipeTimestamp: Date | undefined })[]) => {
-        coffeeBeans = items.sort(sortCoffeeBeansByTimestampDesc);
-      });
+      );
+
+      coffeeBeans = enhancedCoffeeBeansItems.sort(byTimestampDescCB);
     });
   });
 </script>
@@ -47,18 +50,11 @@
 {:else if coffeeBeans.length === 0}
   <AddDemoCoffeeBeans_PageBlock />
 {:else}
-  <h2>Sorted by latest recipe date</h2>
+  <SortedByP>Sorted by latest recipe date</SortedByP>
+
   {#each coffeeBeans as item (item.id)}
     <CoffeeBeansCard href={routes.coffeeBeansItem(item.name)} {item} recipeCount={item.recipeCount} />
   {/each}
 {/if}
 
 <AddRecipeFab href={routes.addRecipe()} />
-
-<style lang="postcss">
-  h2 {
-    @apply text-lg font-normal tracking-tight text-gray-900 dark:text-white;
-
-    margin-top: 1rem;
-  }
-</style>

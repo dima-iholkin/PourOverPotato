@@ -7,9 +7,10 @@
   import RecipeCard from "$lib/UI/domain-components/cards/RecipeCard.svelte";
   import MyFab from "$lib/UI/domain-components/FABs/AddRecipeFab.svelte";
   import AddDemoCoffeeBeans_PageBlock from "$lib/UI/domain-components/page-blocks/AddDemoCoffeeBeans_PageBlock.svelte";
+  import SortedByP from "$lib/UI/domain-components/SortedByP.svelte";
   import PageHeadline from "$lib/UI/layout/PageHeadline.svelte";
 
-  // State:
+  // Entities state:
 
   let recipes: Recipe[] | undefined;
 
@@ -33,18 +34,11 @@
 {:else if recipes.length === 0}
   <AddDemoCoffeeBeans_PageBlock />
 {:else}
-  <h2>Sorted by latest</h2>
+  <SortedByP>Sorted by latest</SortedByP>
+
   {#each recipes as recipe}
     <RecipeCard href={routes.recipeItem(recipe.id)} {recipe} showCoffeeBeansName />
   {/each}
 {/if}
 
 <MyFab href={routes.addRecipe()} />
-
-<style lang="postcss">
-  h2 {
-    @apply text-lg font-normal tracking-tight text-gray-900 dark:text-white;
-
-    margin-top: 1rem;
-  }
-</style>

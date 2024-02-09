@@ -8,6 +8,7 @@
   import RecipeCard from "$lib/UI/domain-components/cards/RecipeCard.svelte";
   import MyFab from "$lib/UI/domain-components/FABs/AddRecipeFab.svelte";
   import AddDemoCoffeeBeans_PageBlock from "$lib/UI/domain-components/page-blocks/AddDemoCoffeeBeans_PageBlock.svelte";
+  import SortedByP from "$lib/UI/domain-components/SortedByP.svelte";
   import PageHeadline from "$lib/UI/layout/PageHeadline.svelte";
   import FlexRow from "$lib/UI/utility-components/FlexRow.svelte";
   import type { PageData } from "./$types";
@@ -66,7 +67,7 @@
   <p class="coffee-beans-description">{coffeeBeans.description}</p>
 
   {#if recipes !== undefined && recipes.length > 0}
-    <h2>Sorted by latest</h2>
+    <SortedByP>Sorted by latest</SortedByP>
     {#each recipes as recipe}
       <RecipeCard href={routes.recipeItem(recipe.id)} {recipe} />
     {/each}
@@ -88,12 +89,6 @@
   .coffee-beans-description {
     margin-top: 0.25rem;
     margin-bottom: 1rem;
-  }
-
-  h2 {
-    @apply text-lg font-normal tracking-tight text-gray-900 dark:text-white;
-
-    margin-top: 1rem;
   }
 
   .menu-container {
