@@ -35,13 +35,13 @@ obscure the page content.
 
   @media only screen and (min-width: 800px) {
     .my-button {
-      bottom: 16px;
+      bottom: 1rem;
     }
   }
 
   @media only screen and (width < 800px) {
     .my-button {
-      bottom: 80px;
+      bottom: 5rem;
     }
   }
 
@@ -65,6 +65,6 @@ obscure the page content.
   }
 
   .page-bottom-gap {
-    height: 4rem;
+    height: 3rem;
   }
 </style>

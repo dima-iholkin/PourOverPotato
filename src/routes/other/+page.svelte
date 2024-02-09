@@ -9,7 +9,7 @@
 
 <!-- <PageHeadline>Other</PageHeadline> -->
 
-<h5 class="page-headline">About</h5>
+<h5 class="page-headline">About app</h5>
 
 <div class="about-section">
   <p>
@@ -20,7 +20,7 @@
     You can view the development process on the
     <a href="https://github.com/users/dima-iholkin/projects/5/views/1">Projects page</a>.
   </p>
-  <p>You can influence the work in project's GitHub and by contacting me.</p>
+  <p>You can influence the work at the project's GitHub or just contact me.</p>
 </div>
 
 <h5>About data</h5>
@@ -31,7 +31,7 @@
     import and export data to a file, and to sync data with Google Drive.
   </p>
   <p>
-    This is not a finilized version of the application yet. Things may change and data integrity is not guaranteed,
+    This is not a finilized version of the application. Things may change and data integrity is not guaranteed,
     however I'll try hard to not break you data.
   </p>
 </div>

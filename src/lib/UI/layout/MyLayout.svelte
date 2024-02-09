@@ -13,6 +13,7 @@
   <MySidebar asGap />
   <div class="page-container">
     <slot />
+    <div class="bottom-gap" />
   </div>
 </div>
 <MyBottomNav asGap />
@@ -35,5 +36,9 @@
     .page-container {
       width: 100%;
     }
+  }
+
+  .bottom-gap {
+    height: 1rem;
   }
 </style>
