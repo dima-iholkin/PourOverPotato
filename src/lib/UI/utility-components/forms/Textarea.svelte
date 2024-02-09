@@ -18,16 +18,18 @@
   }
 </script>
 
-<Label for_={name}>{label}:</Label>
-<textarea
-  {id}
-  {name}
-  {placeholder}
-  bind:this={this_}
-  bind:value
-  on:keydown
-  style:height="calc({textLinesCount}rlh + 1rem)"
-/>
+<div>
+  <Label for_={name}>{label}:</Label>
+  <textarea
+    {id}
+    {name}
+    {placeholder}
+    bind:this={this_}
+    bind:value
+    on:keydown
+    style:height="calc({textLinesCount}rlh + 1rem)"
+  />
+</div>
 
 <style lang="postcss">
   textarea {

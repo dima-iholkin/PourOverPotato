@@ -21,26 +21,23 @@
   import TimestampPicker from "$lib/UI/domain-components/forms/TimestampPicker.svelte";
   import PageHeadline from "$lib/UI/layout/PageHeadline.svelte";
   import FlexRow from "$lib/UI/utility-components/FlexRow.svelte";
-  import Label from "$lib/UI/utility-components/forms/Label.svelte";
   import NumberInput from "$lib/UI/utility-components/forms/NumberInput.svelte";
   import Textarea from "$lib/UI/utility-components/forms/Textarea.svelte";
   import type { PageData } from "./$types";
   import DropdownMenu from "./DropdownMenu.svelte";
 
-  // From load function:
+  // Load function:
 
   export let data: PageData;
 
-  // State entities:
+  // Entities state:
 
   let recipe: Recipe | undefined | null = null;
-
   let allCoffeeBeans: CoffeeBeans[] | undefined = undefined;
 
-  // State form:
+  // Form state:
 
-  let selectedCoffeeBeans: CoffeeBeans | undefined = undefined;
-
+  let selectedCoffeeBeansId: number | undefined = undefined;
   let recipeTarget: string;
   let recipeResult: string;
   let recipeThoughts: string;
@@ -48,7 +45,7 @@
   let rating: number;
   let timestampStr: string;
 
-  // Lifecycle hooks:
+  // Lifecycle:
 
   onMount(() => {
     getRecipeById(data.recipeId).then((item: Recipe | undefined) => {
@@ -60,46 +57,42 @@
 
       getAllCoffeeBeans().then((items: CoffeeBeans[]) => {
         allCoffeeBeans = items;
-        selectedCoffeeBeans = allCoffeeBeans?.find((_item) => _item.id === item.coffeeBeansId);
-      });
 
-      recipeTarget = item.recipeTarget;
-      recipeResult = item.recipeResult;
-      recipeThoughts = item.recipeThoughts;
-      outWeight = item.outWeight;
-      rating = item.rating;
-      timestampStr = formatTimeForInput(item.timestamp);
+        selectedCoffeeBeansId = item.coffeeBeansId;
+        recipeTarget = item.recipeTarget;
+        recipeResult = item.recipeResult;
+        recipeThoughts = item.recipeThoughts;
+        outWeight = item.outWeight;
+        rating = item.rating;
+        timestampStr = formatTimeForInput(item.timestamp);
+      });
     });
   });
 
   // Handler functions:
 
   async function handleSubmit() {
-    // Deal with the 3 textarea inputs:
-
+    // Validate and format the form values:
     recipeTarget = recipeTarget.trim();
     recipeResult = recipeResult.trim();
     recipeThoughts = recipeThoughts.trim();
-
-    // Deal with the timestamp:
-
     const timestamp: Date = parseDateFromInputString(timestampStr);
 
     // Null guards:
 
-    if (recipe === undefined || recipe === null) {
-      throw new Error("Recipe was undefined or null somehow.");
+    if (selectedCoffeeBeansId === undefined) {
+      throw new Error("Please select the coffee beans.");
     }
 
-    if (selectedCoffeeBeans === undefined) {
-      throw new Error("Please select the coffee beans.");
+    if (recipe === undefined || recipe === null) {
+      throw new Error("Recipe was undefined or null somehow.");
     }
 
     // Save the new recipe:
 
     const recipeSubmit: Recipe = new Recipe(
       {
-        coffeeBeansId: selectedCoffeeBeans.id,
+        coffeeBeansId: selectedCoffeeBeansId,
         recipeTarget: recipeTarget,
         recipeResult: recipeResult,
         recipeThoughts: recipeThoughts,
@@ -113,9 +106,14 @@
 
     // Refresh the page to see the updated data:
 
-    alert("We saved the recipe successfully.");
+    alert("Recipe saved.");
 
-    window.location.replace(routes.coffeeBeansItem(selectedCoffeeBeans.name));
+    const coffeeBeansItem: CoffeeBeans | undefined = allCoffeeBeans?.find((item) => item.id === selectedCoffeeBeansId);
+    if (coffeeBeansItem === undefined) {
+      window.location.replace(routes.home);
+      return;
+    }
+    window.location.replace(routes.coffeeBeansItem(coffeeBeansItem.name));
   }
 </script>
 
@@ -136,56 +134,44 @@
   <p>loading...</p>
 {:else if recipe instanceof Recipe}
   <form id="edit-recipe" on:submit|preventDefault={handleSubmit}>
-    {#if selectedCoffeeBeans !== undefined}
-      <div>
-        <CoffeeBeansSelect {allCoffeeBeans} showAddButton={false} bind:selectedCoffeeBeans />
-      </div>
-    {/if}
+    <CoffeeBeansSelect {allCoffeeBeans} showAddButton={false} bind:selectedCoffeeBeansId />
 
-    <div>
-      <Label for_={RECIPE_TARGET}>{naming.recipe.recipeTarget}:</Label>
-    </div>
-    <div>
-      <Textarea id={RECIPE_TARGET} name={RECIPE_TARGET} placeholder={RECIPE_TARGET_PH} bind:value={recipeTarget} />
-    </div>
+    <Textarea
+      id={RECIPE_TARGET}
+      label={naming.recipe.recipeTarget}
+      name={RECIPE_TARGET}
+      placeholder={RECIPE_TARGET_PH}
+      bind:value={recipeTarget}
+    />
 
-    <div>
-      <Label for_={RECIPE_RESULT}>{naming.recipe.recipeResult}:</Label>
-    </div>
-    <div>
-      <Textarea id={RECIPE_RESULT} name={RECIPE_RESULT} placeholder={RECIPE_RESULT_PH} bind:value={recipeResult} />
-    </div>
+    <Textarea
+      id={RECIPE_RESULT}
+      label={naming.recipe.recipeResult}
+      name={RECIPE_RESULT}
+      placeholder={RECIPE_RESULT_PH}
+      bind:value={recipeResult}
+    />
 
-    <div>
-      <NumberInput
-        labelText="{naming.recipe.outWeight} (g):"
-        min={0}
-        nameAttr={OUT_WEIGHT}
-        step={5}
-        bind:value={outWeight}
-      />
-    </div>
+    <NumberInput
+      labelText="{naming.recipe.outWeight} (g):"
+      min={0}
+      nameAttr={OUT_WEIGHT}
+      step={5}
+      bind:value={outWeight}
+    />
 
-    <div>
-      <NumberInput labelText="Rating:" max={5} min={0} nameAttr={RATING} step={0.5} bind:value={rating} />
-    </div>
+    <NumberInput labelText="Rating:" max={5} min={0} nameAttr={RATING} step={0.5} bind:value={rating} />
 
-    <div>
-      <Label for_={RECIPE_THOUGHTS}>{naming.recipe.recipeThoughts}:</Label>
-    </div>
-    <div>
-      <Textarea
-        id={RECIPE_THOUGHTS}
-        name={RECIPE_THOUGHTS}
-        placeholder={RECIPE_THOUGHTS_PH}
-        textLinesCount={4}
-        bind:value={recipeThoughts}
-      />
-    </div>
+    <Textarea
+      id={RECIPE_THOUGHTS}
+      label={naming.recipe.recipeThoughts}
+      name={RECIPE_THOUGHTS}
+      placeholder={RECIPE_THOUGHTS_PH}
+      textLinesCount={4}
+      bind:value={recipeThoughts}
+    />
 
-    <div>
-      <TimestampPicker bind:value={timestampStr} />
-    </div>
+    <TimestampPicker bind:value={timestampStr} />
 
     <button class="my-button" form="edit-recipe" type="submit"> Save changes </button>
   </form>
@@ -194,13 +180,14 @@
 {/if}
 
 <style lang="postcss">
-  div {
-    margin-bottom: 8px;
+  form {
+    display: flex;
+    flex-direction: column;
+    row-gap: 1rem;
   }
 
   button {
     width: 100%;
-    margin-top: 16px;
     margin-bottom: 16px;
   }
 

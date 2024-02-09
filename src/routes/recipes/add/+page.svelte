@@ -176,63 +176,49 @@
 <PageHeadline>Add recipe</PageHeadline>
 
 <form id="add-recipe" on:submit|preventDefault={handleFormSubmit}>
-  <div>
-    <CoffeeBeansSelect
-      allCoffeeBeans={coffeeBeansItems}
-      onSavedCoffeeBeans={handleSavedCoffeeBeans}
-      validationFailed={uiCoffeeBeansValidationFailed}
-      bind:selectedCoffeeBeansId
-    />
-  </div>
+  <CoffeeBeansSelect
+    allCoffeeBeans={coffeeBeansItems}
+    onSavedCoffeeBeans={handleSavedCoffeeBeans}
+    validationFailed={uiCoffeeBeansValidationFailed}
+    bind:selectedCoffeeBeansId
+  />
 
-  <div>
-    <Textarea
-      id={RECIPE_TARGET}
-      label={naming.recipe.recipeTarget}
-      name={RECIPE_TARGET}
-      placeholder={RECIPE_TARGET_PH}
-      bind:value={recipeTarget}
-    />
-  </div>
+  <Textarea
+    id={RECIPE_TARGET}
+    label={naming.recipe.recipeTarget}
+    name={RECIPE_TARGET}
+    placeholder={RECIPE_TARGET_PH}
+    bind:value={recipeTarget}
+  />
 
-  <div>
-    <Textarea
-      id={RECIPE_RESULT}
-      label={naming.recipe.recipeResult}
-      name={RECIPE_RESULT}
-      placeholder={RECIPE_RESULT_PH}
-      bind:value={recipeResult}
-    />
-  </div>
+  <Textarea
+    id={RECIPE_RESULT}
+    label={naming.recipe.recipeResult}
+    name={RECIPE_RESULT}
+    placeholder={RECIPE_RESULT_PH}
+    bind:value={recipeResult}
+  />
 
-  <div>
-    <NumberInput
-      labelText="{naming.recipe.outWeight} (g):"
-      min={0}
-      nameAttr={OUT_WEIGHT}
-      step={5}
-      bind:value={outWeight}
-    />
-  </div>
+  <NumberInput
+    labelText="{naming.recipe.outWeight} (g):"
+    min={0}
+    nameAttr={OUT_WEIGHT}
+    step={5}
+    bind:value={outWeight}
+  />
 
-  <div>
-    <NumberInput labelText="Rating:" max={5} min={0} nameAttr={RATING} step={0.5} bind:value={rating} />
-  </div>
+  <NumberInput labelText="Rating:" max={5} min={0} nameAttr={RATING} step={0.5} bind:value={rating} />
 
-  <div>
-    <Textarea
-      id={RECIPE_THOUGHTS}
-      label={naming.recipe.recipeThoughts}
-      name={RECIPE_THOUGHTS}
-      placeholder={RECIPE_THOUGHTS_PH}
-      textLinesCount={4}
-      bind:value={recipeThoughts}
-    />
-  </div>
+  <Textarea
+    id={RECIPE_THOUGHTS}
+    label={naming.recipe.recipeThoughts}
+    name={RECIPE_THOUGHTS}
+    placeholder={RECIPE_THOUGHTS_PH}
+    textLinesCount={4}
+    bind:value={recipeThoughts}
+  />
 
-  <div>
-    <TimestampPicker bind:value={timestampStr} />
-  </div>
+  <TimestampPicker bind:value={timestampStr} />
 
   <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" form="add-recipe" type="submit">
     Save
@@ -240,8 +226,10 @@
 </form>
 
 <style>
-  form > * + * {
-    margin-top: 1rem;
+  form {
+    display: flex;
+    flex-direction: column;
+    row-gap: 1rem;
   }
 
   button {

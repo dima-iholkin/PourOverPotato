@@ -9,7 +9,7 @@
 
   // Events:
 
-  export let onSavedCoffeeBeans: (coffeeBeans: CoffeeBeans) => void;
+  export let onSavedCoffeeBeans: ((coffeeBeans: CoffeeBeans) => void) | undefined = undefined;
 
   // Entity props:
 
@@ -45,40 +45,42 @@
   }
 </script>
 
-<div class="container">
-  <Label for_={COFFEEBEANS_ID} valid={!validationFailed}>Coffee beans:</Label>
-  <div class="select-container">
-    <select
-      id={COFFEEBEANS_ID}
-      class={validationFailed ? "invalid" : "valid"}
-      disabled={allCoffeeBeans === undefined}
-      name={COFFEEBEANS_ID}
-      bind:value={selectedCoffeeBeansId}
-      on:change={handleSelectChange}
-    >
-      {#if allCoffeeBeans !== undefined}
-        {#if selectedCoffeeBeansId === undefined && showAddButton === true}
-          <option disabled selected value></option>
-        {/if}
-        {#each allCoffeeBeans as item (item.id)}
-          <option selected={selectedCoffeeBeansId === item.id} value={item.id}>{item.name}</option>
-        {/each}
-      {:else}
-        <option disabled selected value>Loading coffee beans...</option>
-      {/if}
-    </select>
-    {#if showAddButton}
-      <button
-        class="button-add bg-green-500 text-white rounded-md px-4 py-2 hover:bg-green-700 transition"
-        on:click|preventDefault={() => (openModal = true)}
+<div>
+  <div class="container">
+    <Label for_={COFFEEBEANS_ID} valid={!validationFailed}>Coffee beans:</Label>
+    <div class="select-container">
+      <select
+        id={COFFEEBEANS_ID}
+        class={validationFailed ? "invalid" : "valid"}
+        disabled={allCoffeeBeans === undefined}
+        name={COFFEEBEANS_ID}
+        bind:value={selectedCoffeeBeansId}
+        on:change={handleSelectChange}
       >
-        <span class="material-icons md-18"> add </span>
-      </button>
-      <NewCoffeeBeansModal onClose={() => (openModal = false)} {onSavedCoffeeBeans} open={openModal} />
-    {/if}
+        {#if allCoffeeBeans !== undefined}
+          {#if selectedCoffeeBeansId === undefined && showAddButton === true}
+            <option disabled selected value></option>
+          {/if}
+          {#each allCoffeeBeans as item (item.id)}
+            <option selected={selectedCoffeeBeansId === item.id} value={item.id}>{item.name}</option>
+          {/each}
+        {:else}
+          <option disabled selected value>Loading coffee beans...</option>
+        {/if}
+      </select>
+      {#if showAddButton}
+        <button
+          class="button-add bg-green-500 text-white rounded-md px-4 py-2 hover:bg-green-700 transition"
+          on:click|preventDefault={() => (openModal = true)}
+        >
+          <span class="material-icons md-18"> add </span>
+        </button>
+        <NewCoffeeBeansModal onClose={() => (openModal = false)} {onSavedCoffeeBeans} open={openModal} />
+      {/if}
+    </div>
   </div>
+  <p class="text-sm text-red-600 dark:text-red-500" class:mt-2={validationMessage.length > 0}>{validationMessage}</p>
 </div>
-<p class="mt-2 text-sm text-red-600 dark:text-red-500">{validationMessage}</p>
 
 <style lang="postcss">
   .container {
