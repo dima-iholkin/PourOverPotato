@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { deleteRecipeById, getCoffeeBeansById } from "$lib/database/v1/indexedDB";
-  import { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
-  import type { Recipe } from "$lib/domain/entities/Recipe";
+  import { deleteCoffeeBeansById, deleteRecipesByCoffeeBeansId } from "$lib/database/v1/indexedDB";
+  import type { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
   import { routes } from "$lib/domain/routes";
   import MySidebar from "$lib/UI/layout/components/MySidebar.svelte";
+  import ModalHeader from "$lib/UI/utility-components/modals/ModalHeader.svelte";
 
   // Expose prop events:
 
@@ -11,7 +11,7 @@
 
   // Props:
 
-  export let recipeItem: Recipe;
+  export let coffeeBeansItem: CoffeeBeans;
 
   // State:
 
@@ -33,18 +33,16 @@
   }
 
   function handleDeleteClick() {
-    deleteRecipeById(recipeItem.id)
-      .then(() => {
-        return getCoffeeBeansById(recipeItem.coffeeBeansId);
+    let countDeletedRecipes: number;
+    deleteRecipesByCoffeeBeansId(coffeeBeansItem.id)
+      .then((count: number) => {
+        countDeletedRecipes = count;
+        return deleteCoffeeBeansById(coffeeBeansItem.id);
       })
-      .then((coffeeBeansItem: CoffeeBeans | undefined) => {
+      .then(() => {
         onClose();
-        if (coffeeBeansItem instanceof CoffeeBeans) {
-          window.location.replace(routes.coffeeBeansItem(coffeeBeansItem.name));
-        } else {
-          window.location.replace(routes.home);
-        }
-        alert("Deleted recipe.");
+        window.location.replace(routes.home);
+        alert(`Deleted coffee beans ${coffeeBeansItem.name} and ${countDeletedRecipes} recipes.`);
       });
   }
 
@@ -70,9 +68,10 @@
 <div class="modal-container">
   <MySidebar asGap />
   <div class="inner-container" bind:this={modalDom}>
-    <!-- <ModalHeader on:click={() => onClose()}>Deleting recipe...</ModalHeader> -->
+    <!-- <ModalHeader on:click={() => onClose()}>Deleting coffee beans...</ModalHeader> -->
     <div class="text-container">
-      <p>Please confirm you want to delete the recipe.</p>
+      <p>Please confirm you want to delete these coffee beans.</p>
+      <p>The dependent recipes will be deleted too.</p>
     </div>
     <div class="buttons-container">
       <button class="button-delete" type="button" on:click={handleDeleteClick}> Delete </button>

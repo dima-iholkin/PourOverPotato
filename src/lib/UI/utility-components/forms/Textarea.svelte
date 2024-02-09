@@ -19,7 +19,7 @@
 </script>
 
 <div>
-  <Label for_={name}>{label}:</Label>
+  <Label for_={name}>{label}</Label>
   <textarea
     {id}
     {name}

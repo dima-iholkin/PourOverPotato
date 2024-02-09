@@ -9,7 +9,7 @@
 
 <MySidebar />
 
-<div style="display: flex; flex-direction: row;">
+<div id="content" style="display: flex; flex-direction: row;">
   <MySidebar asGap />
   <div class="page-container">
     <slot />

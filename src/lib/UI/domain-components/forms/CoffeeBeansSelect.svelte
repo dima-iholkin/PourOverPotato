@@ -11,6 +11,10 @@
 
   export let onSavedCoffeeBeans: ((coffeeBeans: CoffeeBeans) => void) | undefined = undefined;
 
+  // Bound functions:
+
+  let setModalState: ((state: "open" | "closed") => void) | undefined;
+
   // Entity props:
 
   export let allCoffeeBeans: CoffeeBeans[] | undefined;
@@ -23,7 +27,6 @@
 
   // UI state:
 
-  let openModal: boolean = false;
   let validationMessage: string = "";
 
   // Reactivity:
@@ -71,11 +74,15 @@
       {#if showAddButton}
         <button
           class="button-add bg-green-500 text-white rounded-md px-4 py-2 hover:bg-green-700 transition"
-          on:click|preventDefault={() => (openModal = true)}
+          on:click|preventDefault={() => {
+            if (setModalState !== undefined) {
+              setModalState("open");
+            }
+          }}
         >
           <span class="material-icons md-18"> add </span>
         </button>
-        <NewCoffeeBeansModal onClose={() => (openModal = false)} {onSavedCoffeeBeans} open={openModal} />
+        <NewCoffeeBeansModal {onSavedCoffeeBeans} bind:setModalState />
       {/if}
     </div>
   </div>

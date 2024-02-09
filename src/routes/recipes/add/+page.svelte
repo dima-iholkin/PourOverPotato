@@ -185,7 +185,7 @@
 
   <Textarea
     id={RECIPE_TARGET}
-    label={naming.recipe.recipeTarget}
+    label={naming.recipe.recipeTarget + ":"}
     name={RECIPE_TARGET}
     placeholder={RECIPE_TARGET_PH}
     bind:value={recipeTarget}
@@ -193,7 +193,7 @@
 
   <Textarea
     id={RECIPE_RESULT}
-    label={naming.recipe.recipeResult}
+    label={naming.recipe.recipeResult + ":"}
     name={RECIPE_RESULT}
     placeholder={RECIPE_RESULT_PH}
     bind:value={recipeResult}
@@ -211,7 +211,7 @@
 
   <Textarea
     id={RECIPE_THOUGHTS}
-    label={naming.recipe.recipeThoughts}
+    label={naming.recipe.recipeThoughts + ":"}
     name={RECIPE_THOUGHTS}
     placeholder={RECIPE_THOUGHTS_PH}
     textLinesCount={4}

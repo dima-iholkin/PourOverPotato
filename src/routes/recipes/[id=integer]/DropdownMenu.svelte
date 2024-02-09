@@ -1,35 +1,35 @@
 <script lang="ts">
   import type { Recipe } from "$lib/domain/entities/Recipe";
-  import ConfirmationModal from "./ConfirmationModal.svelte";
+  import DeleteConfirmationModal from "./DeleteConfirmationModal.svelte";
 
-  // Entities state:
+  // Bind functions:
 
-  export let recipeItem: Recipe;
+  let setDeleteModalState: (state: "open" | "closed") => void;
 
   // UI state:
 
   let showDropdownMenu: boolean = false;
-  let showModal: boolean = false;
 
   // DOM state:
 
   let menuButtonDom: Element;
   let menuDom: Element;
 
+  // Entities state:
+
+  export let recipeItem: Recipe;
+
   // Handlers:
 
   function handleDocumentClick(event: MouseEvent & { currentTarget: EventTarget & Document }) {
-    if (showDropdownMenu === false) {
-      return;
-    }
-
-    if (clickOutsideBox(menuDom, event) && clickOutsideBox(menuButtonDom, event)) {
+    if (showDropdownMenu === true && clickOutsideBox(menuDom, event) && clickOutsideBox(menuButtonDom, event)) {
       showDropdownMenu = false;
     }
   }
 
   function handleDeleteButtonClick() {
-    showModal = true;
+    setDeleteModalState("open");
+
     showDropdownMenu = false;
   }
 
@@ -50,7 +50,7 @@
 
 <!-- eslint-disable max-len -->
 
-<svelte:document on:click={handleDocumentClick} />
+<svelte:document on:mousedown={handleDocumentClick} />
 
 <div class="container">
   <button
@@ -76,9 +76,7 @@
     </div>
   {/if}
 
-  {#if showModal}
-    <ConfirmationModal onClose={() => (showModal = false)} {recipeItem} />
-  {/if}
+  <DeleteConfirmationModal {recipeItem} bind:setState={setDeleteModalState} />
 </div>
 
 <style lang="postcss">

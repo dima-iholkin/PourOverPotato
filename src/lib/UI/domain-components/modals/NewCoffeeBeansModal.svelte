@@ -11,12 +11,18 @@
 
   // Events:
 
-  export let onSavedCoffeeBeans: ((coffeeBeans: CoffeeBeans) => void) | undefined;
-  export let onClose: (() => void) | undefined;
+  export let onModalStateChange: ((state: "open" | "closed") => void) | undefined = undefined;
+  export let onSavedCoffeeBeans: ((coffeeBeans: CoffeeBeans) => void) | undefined = undefined;
 
-  // UI props:
+  // Triggers:
 
-  export let open: boolean = false;
+  export const setModalState = (state: "open" | "closed") => {
+    setModalState_(state);
+  };
+
+  // Bind functions:
+
+  let setModalState_: (state: "open" | "closed") => void;
 
   // DOM state:
 
@@ -41,16 +47,6 @@
   }
 
   // Handlers:
-
-  function handleClose() {
-    nameValidationFailed = false;
-
-    open = false;
-
-    if (onClose !== undefined) {
-      onClose();
-    }
-  }
 
   function handleCtrlEnter(event: KeyboardEvent) {
     if (event.key === "Enter" && (event.metaKey || event.ctrlKey)) {
@@ -102,13 +98,19 @@
     }
 
     // Clear the modal state:
-    handleClose();
+    setModalState_("closed");
     name = "";
     description = "";
   }
+
+  function handleModalStateChange(state: "open" | "closed") {
+    if (onModalStateChange !== undefined) {
+      onModalStateChange(state);
+    }
+  }
 </script>
 
-<Modal onClose={handleClose} {open} title="Add new coffee beans">
+<Modal onStateChange={handleModalStateChange} title="Add new coffee beans" bind:setState={setModalState_}>
   <form class="mx-auto my-form" bind:this={formDom} on:submit|preventDefault={handleFormSubmit}>
     <div class="mb-5">
       <Label for_="name" valid={!nameValidationFailed}>Coffee beans name:</Label>
@@ -126,9 +128,9 @@
       <p class="mt-2 text-sm text-red-600 dark:text-red-500">{validationMessage}</p>
     </div>
     <div class="my-div mb-5">
-      <Label for_="description">Description:</Label>
       <Textarea
         id="description"
+        label="Description:"
         name="description"
         placeholder={DESCRIPTION_PH}
         bind:this_={textareaDom}

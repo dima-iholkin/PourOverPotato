@@ -3,26 +3,38 @@
   import MySidebar from "$lib/UI/layout/components/MySidebar.svelte";
   import ModalHeader from "./ModalHeader.svelte";
 
-  // Props:
-
-  export let open: boolean = false;
-  export let title: string = "";
-
   // Events:
 
-  export let onClose: (() => void) | undefined = undefined;
+  export let onStateChange: ((state: "open" | "closed") => void) | undefined = undefined;
 
-  // State:
+  // Triggers:
+
+  // prettier-ignore
+  export const setState = (state: "open" | "closed") => {
+    isOpen = state === "open"
+      ? true
+      : false;
+  };
+
+  // UI props:
+
+  export let title: string | undefined;
+
+  // UI state:
+
+  let isOpen: boolean = false;
+
+  // DOM state:
 
   let modalDom: Element;
 
   // Handlers:
 
   function handleClose() {
-    open = false;
+    isOpen = false;
 
-    if (onClose !== undefined) {
-      onClose();
+    if (onStateChange !== undefined) {
+      onStateChange("closed");
     }
   }
 
@@ -41,10 +53,14 @@
 </script>
 
 <svelte:head>
-  {#if open}
+  {#if isOpen}
     <style>
       body {
-        overflow-y: hidden visible;
+        overflow-y: hidden;
+      }
+
+      body > div > div#content {
+        overflow-y: scroll;
       }
     </style>
   {/if}
@@ -54,7 +70,7 @@
 
 <div
   class="modal-container fixed inset-0 bg-gray-900 bg-opacity-60 overflow-y-auto h-full w-full px-4"
-  class:my-hidden={open === false}
+  class:my-hidden={isOpen === false}
 >
   <MySidebar asGap />
   <div class="vertical-center mx-auto">

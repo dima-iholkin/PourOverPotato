@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
-  import ConfirmationModal from "./ConfirmationModal.svelte";
+  import DeleteConfirmationModal from "./DeleteConfirmationModal.svelte";
 
   // Props:
 
@@ -76,7 +76,7 @@
   {/if}
 
   {#if showModal}
-    <ConfirmationModal {coffeeBeansItem} onClose={() => (showModal = false)} />
+    <DeleteConfirmationModal {coffeeBeansItem} onClose={() => (showModal = false)} />
   {/if}
 </div>
 
