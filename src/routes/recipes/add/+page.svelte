@@ -25,9 +25,9 @@
   import { clearFormField, loadFormField, persistFormField } from "$lib/persistForms/localStorage";
   import CoffeeBeansSelect from "$lib/UI/domain-components/forms/CoffeeBeansSelect.svelte";
   import TimestampPicker from "$lib/UI/domain-components/forms/TimestampPicker.svelte";
+  import NumberInput from "$lib/UI/generic-components/forms/NumberInput.svelte";
+  import Textarea from "$lib/UI/generic-components/forms/Textarea.svelte";
   import PageHeadline from "$lib/UI/layout/PageHeadline.svelte";
-  import NumberInput from "$lib/UI/utility-components/forms/NumberInput.svelte";
-  import Textarea from "$lib/UI/utility-components/forms/Textarea.svelte";
 
   // Load function:
 

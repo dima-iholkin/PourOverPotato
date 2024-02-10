@@ -26,13 +26,13 @@
   import CoffeeBeansSelect from "$lib/UI/domain-components/forms/CoffeeBeansSelect.svelte";
   import TimestampPicker from "$lib/UI/domain-components/forms/TimestampPicker.svelte";
   import Loading from "$lib/UI/domain-components/lists/Loading.svelte";
+  import DropdownMenu from "$lib/UI/generic-components/dropdownMenu/DropdownMenu.svelte";
+  import DropdownMenuItem from "$lib/UI/generic-components/dropdownMenu/DropdownMenuItem.svelte";
+  import FlexRow from "$lib/UI/generic-components/FlexRow.svelte";
+  import NumberInput from "$lib/UI/generic-components/forms/NumberInput.svelte";
+  import Textarea from "$lib/UI/generic-components/forms/Textarea.svelte";
+  import DeleteConfirmationModal from "$lib/UI/generic-components/modals/DeleteConfirmationModal.svelte";
   import PageHeadline from "$lib/UI/layout/PageHeadline.svelte";
-  import DropdownMenu from "$lib/UI/utility-components/dropdownMenu/DropdownMenu.svelte";
-  import DropdownMenuItem from "$lib/UI/utility-components/dropdownMenu/DropdownMenuItem.svelte";
-  import FlexRow from "$lib/UI/utility-components/FlexRow.svelte";
-  import NumberInput from "$lib/UI/utility-components/forms/NumberInput.svelte";
-  import Textarea from "$lib/UI/utility-components/forms/Textarea.svelte";
-  import DeleteConfirmationModal from "$lib/UI/utility-components/modals/DeleteConfirmationModal.svelte";
   import type { PageData } from "./$types";
 
   // Load function:

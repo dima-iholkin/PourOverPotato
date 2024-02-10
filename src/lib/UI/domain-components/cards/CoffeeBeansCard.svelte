@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
-  import Card from "$lib/UI/utility-components/Card.svelte";
-  import FlexRow from "$lib/UI/utility-components/FlexRow.svelte";
+  import Card from "$lib/UI/generic-components/Card.svelte";
+  import FlexRow from "$lib/UI/generic-components/FlexRow.svelte";
 
   // Props:
 

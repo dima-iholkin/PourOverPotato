@@ -3,7 +3,7 @@
 </script>
 
 <script lang="ts">
-  import Label from "$lib/UI/utility-components/forms/Label.svelte";
+  import Label from "$lib/UI/generic-components/forms/Label.svelte";
 
   // Props:
 

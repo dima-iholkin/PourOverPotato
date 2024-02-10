@@ -10,8 +10,8 @@
   import Loading from "$lib/UI/domain-components/lists/Loading.svelte";
   import NoItemsYetP from "$lib/UI/domain-components/lists/NoItemsYetP.svelte";
   import SortedByP from "$lib/UI/domain-components/lists/SortedByP.svelte";
+  import FlexRow from "$lib/UI/generic-components/FlexRow.svelte";
   import PageHeadline from "$lib/UI/layout/PageHeadline.svelte";
-  import FlexRow from "$lib/UI/utility-components/FlexRow.svelte";
   import type { PageData } from "./$types";
   import DropdownMenu from "./DropdownMenu.svelte";
   import EditCoffeeBeansModal from "./EditCoffeeBeansModal.svelte";

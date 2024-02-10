@@ -1,6 +1,6 @@
 <script lang="ts">
   import { clickOutsideTheBox } from "$lib/UI/helpers/clickOutsideTheBox";
-  import HamburgerMenuIcon from "./components/HamburgerMenuIcon.svelte";
+  import HamburgerMenuIcon from "$lib/UI/icons/HamburgerMenuIcon.svelte";
 
   // Triggers:
 

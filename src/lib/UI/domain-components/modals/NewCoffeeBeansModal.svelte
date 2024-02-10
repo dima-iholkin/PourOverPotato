@@ -5,9 +5,9 @@
 <script lang="ts">
   import { addCoffeeBeans } from "$lib/database/v1/indexedDB";
   import { CoffeeBeans, CoffeeBeansCreateSubmit } from "$lib/domain/entities/CoffeeBeans";
-  import Label from "$lib/UI/utility-components/forms/Label.svelte";
-  import Textarea from "$lib/UI/utility-components/forms/Textarea.svelte";
-  import Modal from "$lib/UI/utility-components/modals/Modal.svelte";
+  import Label from "$lib/UI/generic-components/forms/Label.svelte";
+  import Textarea from "$lib/UI/generic-components/forms/Textarea.svelte";
+  import Modal from "$lib/UI/generic-components/modals/Modal.svelte";
 
   // Events:
 

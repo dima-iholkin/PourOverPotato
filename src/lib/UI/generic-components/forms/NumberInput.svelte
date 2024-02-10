@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Label from "$lib/UI/utility-components/forms/Label.svelte";
+  import Label from "./Label.svelte";
 
   // Props:
 

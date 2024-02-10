@@ -5,7 +5,7 @@
 <script lang="ts">
   import { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
   import NewCoffeeBeansModal from "$lib/UI/domain-components/modals/NewCoffeeBeansModal.svelte";
-  import Label from "$lib/UI/utility-components/forms/Label.svelte";
+  import Label from "$lib/UI/generic-components/forms/Label.svelte";
 
   // Events:
 

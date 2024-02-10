@@ -7,9 +7,9 @@
   import { editCoffeeBeans } from "$lib/database/v1/indexedDB";
   import { CoffeeBeans, CoffeeBeansEditSubmit } from "$lib/domain/entities/CoffeeBeans";
   import { routes } from "$lib/domain/routes";
+  import Label from "$lib/UI/generic-components/forms/Label.svelte";
+  import Textarea from "$lib/UI/generic-components/forms/Textarea.svelte";
   import MySidebar from "$lib/UI/layout/components/MySidebar.svelte";
-  import Label from "$lib/UI/utility-components/forms/Label.svelte";
-  import Textarea from "$lib/UI/utility-components/forms/Textarea.svelte";
 
   // Props:
 

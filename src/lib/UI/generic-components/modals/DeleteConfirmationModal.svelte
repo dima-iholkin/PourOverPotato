@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Modal from "$lib/UI/utility-components/modals/Modal.svelte";
+  import Modal from "$lib/UI/generic-components/modals/Modal.svelte";
 
   // Events:
 
