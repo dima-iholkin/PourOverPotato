@@ -89,7 +89,6 @@
     <div class="menu-container">
       <button class="edit-button" type="button" on:click={() => bind_setEditModalState("open")}> Edit </button>
       <EditCoffeeBeansModal item={coffeeBeans} bind:setModalState={bind_setEditModalState} />
-      <!-- <EditCoffeeBeansModal item={coffeeBeans} /> -->
       <DropdownMenu bind:setDropdownState={bind_setDropdownState}>
         <DropdownMenuItem
           slot="button"
