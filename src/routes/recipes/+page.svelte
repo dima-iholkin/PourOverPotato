@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { getAllRecipes } from "$lib/database/v1/indexedDB";
-  import type { Recipe } from "$lib/domain/entities/Recipe";
+  import { getAllCoffeeBeans, getAllRecipes } from "$lib/database/v1/indexedDB";
+  import type { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
   import { sortRecipesByTimestampDesc as byTimestampDesc } from "$lib/domain/helpers/sortRecipes";
   import { routes } from "$lib/domain/routes";
   import RecipeCard from "$lib/UI/domain-components/cards/RecipeCard.svelte";
@@ -10,17 +10,26 @@
   import SortedByP from "$lib/UI/domain-components/lists/SortedByP.svelte";
   import AddDemoCoffeeBeans_PageBlock from "$lib/UI/domain-components/page-blocks/AddDemoCoffeeBeans_PageBlock.svelte";
   import PageHeadline from "$lib/UI/layout/PageHeadline.svelte";
+  import type { EnhancedRecipe } from "./EnhancedRecipe";
 
   // Entities state:
 
-  let recipes: Recipe[] | undefined;
+  let recipes: EnhancedRecipe[] | undefined;
 
   // Lifecycle:
 
-  onMount(() => {
-    getAllRecipes().then((items: Recipe[]) => {
-      recipes = items.sort(byTimestampDesc);
+  async function loadEntities() {
+    const coffeeBeans: CoffeeBeans[] = await getAllCoffeeBeans();
+    const map = new Map<number, string>();
+    coffeeBeans.forEach((item) => map.set(item.id, item.name));
+    recipes = (await getAllRecipes()).sort(byTimestampDesc).map((item) => {
+      const coffeeBeansName = map.get(item.coffeeBeansId) ?? "";
+      return { ...item, coffeeBeansName };
     });
+  }
+
+  onMount(() => {
+    loadEntities();
   });
 </script>
 
@@ -35,9 +44,9 @@
 {:else if recipes.length === 0}
   <AddDemoCoffeeBeans_PageBlock />
 {:else}
-  <SortedByP>Sorted by latest</SortedByP>
+  <SortedByP>Sorted by latest recipe date</SortedByP>
   {#each recipes as recipe}
-    <RecipeCard href={routes.recipeItem(recipe.id)} {recipe} showCoffeeBeansName />
+    <RecipeCard coffeeBeansName={recipe.coffeeBeansName} href={routes.recipeItem(recipe.id)} {recipe} />
   {/each}
 {/if}
 

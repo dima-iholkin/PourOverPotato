@@ -1,83 +1,72 @@
-<script context="module" lang="ts">
-  const options: Intl.DateTimeFormatOptions = {
-    timeStyle: "short",
-    dateStyle: "long"
-  };
-</script>
-
 <script lang="ts">
-  import { onMount } from "svelte";
-  import { getCoffeeBeansById } from "$lib/database/v1/indexedDB";
-  import type { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
   import type { Recipe } from "$lib/domain/entities/Recipe";
   import { naming } from "$lib/domain/naming";
+  import { convertToTimeAgo } from "$lib/helpers/dateHelpers";
   import Card from "$lib/UI/generic-components/Card.svelte";
-  import FlexRow from "$lib/UI/generic-components/FlexRow.svelte";
 
-  // Props:
+  // Entities props:
 
   export let recipe: Recipe;
 
-  export let showCoffeeBeansName: boolean = false;
+  // UI props:
 
+  export let coffeeBeansName: string;
   export let href: string | undefined;
-
-  // State:
-
-  let coffeeBeans: CoffeeBeans | undefined;
-
-  // Lifecycle hooks:
-
-  onMount(() => {
-    if (showCoffeeBeansName === true) {
-      getCoffeeBeansById(recipe.coffeeBeansId).then((item) => {
-        coffeeBeans = item;
-      });
-    }
-  });
 </script>
 
 <Card {href}>
-  <FlexRow>
-    <p class="timestamp">{recipe.timestamp.toLocaleString(undefined, options)}</p>
-    <p>{recipe.rating}⭐</p>
-  </FlexRow>
-  {#if showCoffeeBeansName}
-    <h5>
-      {coffeeBeans ? coffeeBeans.name : "loading..."}
-    </h5>
-  {/if}
-  <div>
-    <p class="text-gray-400 inline">{naming.recipe.recipeTarget}:</p>
-    <p class="inline">{recipe.recipeTarget}</p>
-  </div>
-  <div>
-    <p class="text-gray-400 inline">{naming.recipe.recipeResult}:</p>
-    <p class="inline">{recipe.recipeResult}</p>
-  </div>
-  <div>
-    <p class="text-gray-400 inline">{naming.recipe.outWeight}:</p>
-    <p class="inline">{recipe.outWeight}g</p>
-  </div>
-  <div>
-    <p class="text-gray-400 inline">{naming.recipe.recipeThoughts}:</p>
-    <p class="inline">{recipe.recipeThoughts}</p>
+  <div class="card-content">
+    <div class="header">
+      <p>🕒 {convertToTimeAgo(recipe.timestamp)}</p>
+      <div class="fast-info-header-horizontal">
+        <p>{recipe.rating}⭐</p>
+        <p>{recipe.outWeight}g ☕</p>
+      </div>
+    </div>
+    <h5>{coffeeBeansName}</h5>
+    <div>
+      <p class="text-gray-400 inline">{naming.recipe.recipeTarget}:</p>
+      <p class="inline">{recipe.recipeTarget}</p>
+    </div>
+    <div>
+      <p class="text-gray-400 inline">{naming.recipe.recipeResult}:</p>
+      <p class="inline">{recipe.recipeResult}</p>
+    </div>
+    <div>
+      <p class="text-gray-400 inline">{naming.recipe.recipeThoughts}:</p>
+      <p class="inline">{recipe.recipeThoughts}</p>
+    </div>
   </div>
 </Card>
 
 <style lang="postcss">
+  .header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
   h5 {
     @apply text-2xl font-bold tracking-tight text-gray-900 dark:text-white;
+  }
 
-    margin-bottom: 0.5rem;
+  .fast-info-header-horizontal {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+
+    white-space: nowrap;
+  }
+
+  .card-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
   }
 
   p {
     @apply font-normal dark:text-gray-400;
-  }
-
-  .timestamp {
-    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-    font-size: 10pt;
   }
 </style>
