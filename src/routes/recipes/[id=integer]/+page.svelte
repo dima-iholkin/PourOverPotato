@@ -21,15 +21,21 @@
   import TimestampPicker from "$lib/UI/domain-components/forms/TimestampPicker.svelte";
   import Loading from "$lib/UI/domain-components/lists/Loading.svelte";
   import PageHeadline from "$lib/UI/layout/PageHeadline.svelte";
+  import DropdownMenu from "$lib/UI/utility-components/dropdownMenu/DropdownMenu.svelte";
+  import DropdownMenuItem from "$lib/UI/utility-components/dropdownMenu/DropdownMenuItem.svelte";
   import FlexRow from "$lib/UI/utility-components/FlexRow.svelte";
   import NumberInput from "$lib/UI/utility-components/forms/NumberInput.svelte";
   import Textarea from "$lib/UI/utility-components/forms/Textarea.svelte";
   import type { PageData } from "./$types";
-  import DropdownMenu from "./DropdownMenu.svelte";
+  import DeleteConfirmationModal from "./DeleteConfirmationModal.svelte";
 
   // Load function:
 
   export let data: PageData;
+
+  // Bind functions:
+
+  let bind_setDeleteModalState: (state: "open" | "closed") => void;
 
   // Entities state:
 
@@ -51,14 +57,11 @@
   onMount(() => {
     getRecipeById(data.recipeId).then((item: Recipe | undefined) => {
       recipe = item;
-
       if (item === undefined) {
         return;
       }
-
       getAllCoffeeBeans().then((items: CoffeeBeans[]) => {
         allCoffeeBeans = items;
-
         selectedCoffeeBeansId = item.coffeeBeansId;
         recipeTarget = item.recipeTarget;
         recipeResult = item.recipeResult;
@@ -126,7 +129,11 @@
   <PageHeadline>Edit recipe</PageHeadline>
   {#if recipe instanceof Recipe}
     <div class="menu-container">
-      <DropdownMenu recipeItem={recipe} />
+      <DropdownMenu>
+        <DropdownMenuItem buttonText="Delete" on:click={() => bind_setDeleteModalState("open")}>
+          <DeleteConfirmationModal recipeItem={recipe} bind:setState={bind_setDeleteModalState} />
+        </DropdownMenuItem>
+      </DropdownMenu>
     </div>
   {/if}
 </FlexRow>
@@ -188,13 +195,11 @@
     row-gap: 1rem;
   }
 
-  button {
-    width: 100%;
-    margin-bottom: 16px;
-  }
-
   .my-button {
     @apply bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded;
+
+    width: 100%;
+    margin-bottom: 16px;
   }
 
   .menu-container {

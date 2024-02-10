@@ -39,14 +39,13 @@
   }
 
   function handleDocumentClick(event: MouseEvent & { currentTarget: EventTarget & Document }) {
-    if (clickOutsideTheBox(modalDom, event)) {
+    if (isOpen && clickOutsideTheBox(modalDom, event)) {
       handleClose();
     }
   }
 
-  // Close the modal on Escape key press.
   function handleEscKey(event: KeyboardEvent) {
-    if (event.key === "Escape") {
+    if (isOpen && event.key === "Escape") {
       handleClose();
     }
   }

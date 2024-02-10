@@ -8,12 +8,12 @@
   // Triggers:
 
   export const setState = (state: "open" | "closed") => {
-    bindSetState_(state);
+    bind_setState(state);
   };
 
   // Bind functions:
 
-  let bindSetState_: (state: "open" | "closed") => void;
+  let bind_setState: (state: "open" | "closed") => void;
 
   // Entities props:
 
@@ -27,7 +27,7 @@
         return getCoffeeBeansById(recipeItem.coffeeBeansId);
       })
       .then((coffeeBeansItem: CoffeeBeans | undefined) => {
-        bindSetState_("closed");
+        bind_setState("closed");
         if (coffeeBeansItem instanceof CoffeeBeans) {
           window.location.replace(routes.coffeeBeansItem(coffeeBeansItem.name));
         } else {
@@ -38,13 +38,13 @@
   }
 </script>
 
-<Modal title="Confirmation" bind:setState={bindSetState_}>
+<Modal title="Confirmation" bind:setState={bind_setState}>
   <div class="text-container">
     <p>Please confirm you want to delete this recipe.</p>
   </div>
   <div class="buttons-container">
     <button class="button-delete" type="button" on:click={handleDeleteClick}> Delete </button>
-    <button class="button-cancel" type="button" on:click={() => bindSetState_("closed")}> Cancel </button>
+    <button class="button-cancel" type="button" on:click={() => bind_setState("closed")}> Cancel </button>
   </div>
 </Modal>
 
