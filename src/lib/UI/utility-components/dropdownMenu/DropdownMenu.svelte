@@ -2,18 +2,28 @@
   import { clickOutsideTheBox } from "$lib/UI/helpers/clickOutsideTheBox";
   import HamburgerMenuIcon from "./components/HamburgerMenuIcon.svelte";
 
+  // Triggers:
+
+  // prettier-ignore
+  export const setDropdownState = (state: "open" | "closed") => {
+    isOpen = state === "open"
+      ? true
+      : false;
+  };
+
   // UI state:
 
   let isOpen: boolean = false;
 
-  // DOM state:
+  // Bind DOM elements:
 
-  let menuDom: Element;
+  let bind_buttonDom: Element;
+  let bind_menuDom: Element;
 
   // Handlers:
 
   function handleDocumentClick(event: MouseEvent & { currentTarget: EventTarget & Document }) {
-    if (isOpen && clickOutsideTheBox(menuDom, event)) {
+    if (isOpen && clickOutsideTheBox(bind_menuDom, event) && clickOutsideTheBox(bind_buttonDom, event)) {
       isOpen = false;
     }
   }
@@ -28,15 +38,17 @@
 <svelte:document on:keydown={handleEscKey} on:mousedown={handleDocumentClick} />
 
 <div class="container">
-  <button class="button" type="button" on:click={() => (isOpen = !isOpen)}>
+  <button class="button" type="button" bind:this={bind_buttonDom} on:click={() => (isOpen = !isOpen)}>
     <HamburgerMenuIcon />
   </button>
 
-  <div class="dropdown-container" bind:this={menuDom} class:shown={isOpen}>
+  <div class="dropdown-container" bind:this={bind_menuDom} class:shown={isOpen}>
     <ul id="dropdown" class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownMenuIconButton">
-      <slot />
+      <slot name="li" />
     </ul>
   </div>
+
+  <slot name="modal" />
 </div>
 
 <style lang="postcss">

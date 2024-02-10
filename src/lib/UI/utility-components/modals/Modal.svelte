@@ -1,7 +1,7 @@
 <script lang="ts">
   import { clickOutsideTheBox } from "$lib/UI/helpers/clickOutsideTheBox";
   import MySidebar from "$lib/UI/layout/components/MySidebar.svelte";
-  import ModalHeader from "./ModalHeader.svelte";
+  import ModalHeader from "./components/ModalHeader.svelte";
 
   // Events:
 
@@ -69,7 +69,7 @@
 
 <div
   class="modal-container fixed inset-0 bg-gray-900 bg-opacity-60 overflow-y-auto h-full w-full px-4"
-  class:my-hidden={isOpen === false}
+  class:shown={isOpen}
 >
   <MySidebar asGap />
   <div class="vertical-center mx-auto">
@@ -83,14 +83,34 @@
 </div>
 
 <style>
+  /* Outer layour: */
+
   .modal-container {
-    display: flex;
+    display: none;
     flex-direction: row;
     justify-content: center;
     align-items: flex-start;
 
     z-index: 50;
   }
+
+  .shown {
+    display: flex !important;
+  }
+
+  .vertical-gap {
+    flex-grow: 1;
+    min-height: 1rem;
+  }
+
+  /* Inner layout: */
+
+  .inner-container {
+    width: 100%;
+    padding: 1rem 2rem 1.5rem 2rem;
+  }
+
+  /* Helpers: */
 
   .vertical-center {
     height: 100vh;
@@ -99,19 +119,5 @@
 
     display: flex;
     flex-direction: column;
-  }
-
-  .inner-container {
-    width: 100%;
-    padding: 1rem 2rem 1.5rem 2rem;
-  }
-
-  .vertical-gap {
-    flex-grow: 1;
-    min-height: 1rem;
-  }
-
-  .my-hidden {
-    display: none !important;
   }
 </style>

@@ -11,8 +11,14 @@
 
 <script lang="ts">
   import { onMount } from "svelte";
-  import { editRecipe, getAllCoffeeBeans, getRecipeById } from "$lib/database/v1/indexedDB";
-  import type { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
+  import {
+    deleteRecipeById,
+    editRecipe,
+    getAllCoffeeBeans,
+    getCoffeeBeansById,
+    getRecipeById
+  } from "$lib/database/v1/indexedDB";
+  import { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
   import { Recipe } from "$lib/domain/entities/Recipe";
   import { naming } from "$lib/domain/naming";
   import { routes } from "$lib/domain/routes";
@@ -26,8 +32,8 @@
   import FlexRow from "$lib/UI/utility-components/FlexRow.svelte";
   import NumberInput from "$lib/UI/utility-components/forms/NumberInput.svelte";
   import Textarea from "$lib/UI/utility-components/forms/Textarea.svelte";
+  import DeleteConfirmationModal from "$lib/UI/utility-components/modals/DeleteConfirmationModal.svelte";
   import type { PageData } from "./$types";
-  import DeleteConfirmationModal from "./DeleteConfirmationModal.svelte";
 
   // Load function:
 
@@ -36,6 +42,7 @@
   // Bind functions:
 
   let bind_setDeleteModalState: (state: "open" | "closed") => void;
+  let bind_setDropdownState: (state: "open" | "closed") => void;
 
   // Entities state:
 
@@ -74,6 +81,18 @@
   });
 
   // Handler functions:
+
+  async function handleDeleteClick() {
+    await deleteRecipeById(recipe!.id);
+    alert("Recipe deleted.");
+
+    const coffeeBeansItem: CoffeeBeans | undefined = await getCoffeeBeansById(recipe!.coffeeBeansId);
+    if (coffeeBeansItem === undefined) {
+      window.location.replace(routes.home);
+      return;
+    }
+    window.location.replace(routes.coffeeBeansItem(coffeeBeansItem.name));
+  }
 
   async function handleSubmit() {
     // Validate and format the form values:
@@ -129,10 +148,21 @@
   <PageHeadline>Edit recipe</PageHeadline>
   {#if recipe instanceof Recipe}
     <div class="menu-container">
-      <DropdownMenu>
-        <DropdownMenuItem buttonText="Delete" on:click={() => bind_setDeleteModalState("open")}>
-          <DeleteConfirmationModal recipeItem={recipe} bind:setState={bind_setDeleteModalState} />
-        </DropdownMenuItem>
+      <DropdownMenu bind:setDropdownState={bind_setDropdownState}>
+        <DropdownMenuItem
+          slot="li"
+          buttonText="Delete"
+          on:click={() => {
+            bind_setDropdownState("closed");
+            bind_setDeleteModalState("open");
+          }}
+        />
+        <DeleteConfirmationModal
+          slot="modal"
+          onDeleteClick={handleDeleteClick}
+          text="Please confirm you want to delete this recipe."
+          bind:setModalState={bind_setDeleteModalState}
+        />
       </DropdownMenu>
     </div>
   {/if}

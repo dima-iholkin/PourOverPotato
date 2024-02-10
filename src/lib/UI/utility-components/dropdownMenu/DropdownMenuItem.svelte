@@ -5,7 +5,6 @@
 
 <li>
   <button type="button" on:click>{buttonText}</button>
-  <slot />
 </li>
 
 <style lang="postcss">

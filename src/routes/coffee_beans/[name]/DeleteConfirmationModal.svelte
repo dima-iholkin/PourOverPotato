@@ -3,7 +3,6 @@
   import type { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
   import { routes } from "$lib/domain/routes";
   import MySidebar from "$lib/UI/layout/components/MySidebar.svelte";
-  import ModalHeader from "$lib/UI/utility-components/modals/ModalHeader.svelte";
 
   // Expose prop events:
 

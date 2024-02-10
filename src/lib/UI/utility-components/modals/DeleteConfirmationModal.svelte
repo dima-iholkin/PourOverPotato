@@ -1,50 +1,39 @@
 <script lang="ts">
-  import { deleteRecipeById, getCoffeeBeansById } from "$lib/database/v1/indexedDB";
-  import { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
-  import type { Recipe } from "$lib/domain/entities/Recipe";
-  import { routes } from "$lib/domain/routes";
   import Modal from "$lib/UI/utility-components/modals/Modal.svelte";
+
+  // Events:
+
+  export let onDeleteClick: () => void;
 
   // Triggers:
 
-  export const setState = (state: "open" | "closed") => {
-    bind_setState(state);
+  export const setModalState = (state: "open" | "closed") => {
+    bind_setModalState(state);
   };
+
+  // Props:
+
+  export let text: string;
 
   // Bind functions:
 
-  let bind_setState: (state: "open" | "closed") => void;
-
-  // Entities props:
-
-  export let recipeItem: Recipe;
+  let bind_setModalState: (state: "open" | "closed") => void;
 
   // Handlers:
 
   function handleDeleteClick() {
-    deleteRecipeById(recipeItem.id)
-      .then(() => {
-        return getCoffeeBeansById(recipeItem.coffeeBeansId);
-      })
-      .then((coffeeBeansItem: CoffeeBeans | undefined) => {
-        bind_setState("closed");
-        if (coffeeBeansItem instanceof CoffeeBeans) {
-          window.location.replace(routes.coffeeBeansItem(coffeeBeansItem.name));
-        } else {
-          window.location.replace(routes.home);
-        }
-        alert("Recipe deleted.");
-      });
+    bind_setModalState("closed");
+    onDeleteClick();
   }
 </script>
 
-<Modal title="Confirmation" bind:setState={bind_setState}>
+<Modal title="Confirmation" bind:setState={bind_setModalState}>
   <div class="text-container">
-    <p>Please confirm you want to delete this recipe.</p>
+    <p>{text}</p>
   </div>
   <div class="buttons-container">
     <button class="button-delete" type="button" on:click={handleDeleteClick}> Delete </button>
-    <button class="button-cancel" type="button" on:click={() => bind_setState("closed")}> Cancel </button>
+    <button class="button-cancel" type="button" on:click={() => bind_setModalState("closed")}> Cancel </button>
   </div>
 </Modal>
 
