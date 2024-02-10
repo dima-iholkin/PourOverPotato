@@ -1,37 +1,31 @@
 <script lang="ts">
   import { deleteAllData } from "$lib/database/v1/indexedDB";
   import { routes } from "$lib/domain/routes";
-  import DeleteAllDataConfirmationModal from "./DeleteAllDataConfirmationModal.svelte";
+  import DeleteConfirmationModal from "$lib/UI/generic-components/modals/DeleteConfirmationModal.svelte";
 
-  // UI state:
+  // Bind triggers:
 
-  let showConfirmationModal: boolean = false;
+  let bind_setDeleteModalState: (state: "open" | "closed") => void;
 
-  // Handler functions:
+  // Handlers:
 
-  function handleDeleteButtonClick() {
-    showConfirmationModal = true;
-  }
-
-  function handleDeleteConfirmation() {
-    deleteAllData().then(() => {
-      window.location.replace(routes.home);
-      alert("Deleted all data.");
-    });
+  async function handleDeleteButtonClick() {
+    await deleteAllData();
+    window.location.replace(routes.home);
+    alert("All data deleted.");
   }
 </script>
 
 <div class="container">
   <p>Delete all data:</p>
-  <button class="button-delete" on:click={handleDeleteButtonClick} type="button"> Delete all data </button>
+  <button class="button-delete" type="button" on:click={() => bind_setDeleteModalState("open")}>
+    Delete all data
+  </button>
 </div>
 
-{#if showConfirmationModal}
-  <DeleteAllDataConfirmationModal
-    onClose={() => (showConfirmationModal = false)}
-    onConfirmation={() => handleDeleteConfirmation()}
-  />
-{/if}
+<DeleteConfirmationModal onDeleteClick={handleDeleteButtonClick} bind:setModalState={bind_setDeleteModalState}>
+  Please confirm you want to delete all your data.
+</DeleteConfirmationModal>
 
 <style lang="postcss">
   .container {

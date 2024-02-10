@@ -3,6 +3,7 @@
   import { devFillDB } from "$lib/database/v1/devData/devFillDB";
   import { anyCoffeeBeansSaved, anyRecipesSaved } from "$lib/database/v1/indexedDB";
   import { routes } from "$lib/domain/routes";
+  import NoItemsYetP from "../lists/NoItemsYetP.svelte";
 
   // State:
 
@@ -26,7 +27,7 @@
   function handleAddDemoCoffeeBeans() {
     devFillDB().then(() => {
       location.replace(routes.home);
-      alert("Added demo coffee beans and recipes.");
+      alert("Demo coffee beans and recipes added.");
     });
   }
 </script>
@@ -34,13 +35,13 @@
 {#if anyCoffeeBeans === false && anyRecipes === false}
   <div class="empty-db-message-container">
     <p>You have no coffee beans or recipes added yet...</p>
-    <p>Would you like to add 3 demo coffee beans with their demo recipes?</p>
-    <button class="add-demo-coffee-beans" on:click={handleAddDemoCoffeeBeans} type="button">
+    <p>Would you like to add 3 demo coffee beans and recipes?</p>
+    <button class="add-demo-coffee-beans" type="button" on:click={handleAddDemoCoffeeBeans}>
       Add demo coffee beans and recipes
     </button>
   </div>
 {:else}
-  <p class="no-items-yet">No items added yet...</p>
+  <NoItemsYetP />
 {/if}
 
 <style lang="postcss">
@@ -55,9 +56,5 @@
     @apply dark:focus:ring-yellow-900;
 
     margin-top: 1rem;
-  }
-
-  .no-items-yet {
-    text-align: center;
   }
 </style>

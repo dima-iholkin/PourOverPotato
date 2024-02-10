@@ -7,7 +7,7 @@ module.exports = {
     "plugin:import/warnings",
     "plugin:@typescript-eslint/recommended",
     "plugin:svelte/recommended",
-    "prettier",
+    "prettier"
   ],
   parser: "@typescript-eslint/parser",
   plugins: [
@@ -69,7 +69,7 @@ module.exports = {
             "pattern": "$lib/**",
             "group": "internal",
             "position": "before"
-          },
+          }
         ],
         "pathGroupsExcludedImportTypes": [],
         "newlines-between": "never",
@@ -80,16 +80,6 @@ module.exports = {
       }
     ],
     "import/no-unresolved": "off", // Disable because it shows false errors for "$lib" paths.
-    // "sort-imports": [
-    //   "warn",
-    //   {
-    //     "ignoreCase": true,
-    //     "ignoreDeclarationSort": true,
-    //     "ignoreMemberSort": false,
-    //     "memberSyntaxSortOrder": ["none", "all", "multiple", "single"],
-    //     "allowSeparatedGroups": false
-    //   }
-    // ],
     //
     // Sort the HTML attributes:
     "perfectionist/sort-svelte-attributes": [
@@ -102,18 +92,24 @@ module.exports = {
           "id",
           "slot",
           ["multiline", "unknown", "shorthand", "svelte-shorthand"],
-          "aria"
+          ["aria", "a11y"],
+          "svelte-builtin"
         ],
         "custom-groups": {
           "id": "id",
           "slot": "slot",
-          "aria": "aria**",
+          "aria": "aria*",
+          "a11y": "alt",
+          "svelte-builtin": "*:*"
         }
       }
     ],
     "svelte/sort-attributes": "off",
     // Sort the object properties:
     // "sort-keys": ["warn", "asc", { "caseSensitive": false, "natural": true, "minKeys": 2 }],
+    //
+    // Trailing commas:
+    "comma-dangle": ["warn", "never"],
     //
     // Semi-colons:
     "semi": "warn",
@@ -131,6 +127,6 @@ module.exports = {
         "ignoreStrings": false,
         "ignoreTemplateLiterals": true
       }
-    ],
+    ]
   }
 };

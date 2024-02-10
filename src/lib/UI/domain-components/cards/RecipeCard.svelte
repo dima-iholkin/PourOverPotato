@@ -11,8 +11,8 @@
   import type { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
   import type { Recipe } from "$lib/domain/entities/Recipe";
   import { naming } from "$lib/domain/naming";
-  import FlexRow from "$lib/UI/FlexRow.svelte";
-  import Card from "./Card.svelte";
+  import Card from "$lib/UI/generic-components/Card.svelte";
+  import FlexRow from "$lib/UI/generic-components/FlexRow.svelte";
 
   // Props:
 
@@ -40,7 +40,7 @@
 <Card {href}>
   <FlexRow>
     <p class="timestamp">{recipe.timestamp.toLocaleString(undefined, options)}</p>
-    <p>{recipe.rating}/5</p>
+    <p>{recipe.rating}⭐</p>
   </FlexRow>
   {#if showCoffeeBeansName}
     <h5>

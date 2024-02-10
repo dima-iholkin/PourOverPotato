@@ -8,5 +8,5 @@ export const routes = {
   addRecipe: (coffeeBeansName: string | undefined = undefined) => coffeeBeansName ?
     base + `/recipes/add?coffee_beans_name=${coffeeBeansName}` :
     base + "/recipes/add",
-  other: base + "/other",
+  other: base + "/other"
 };

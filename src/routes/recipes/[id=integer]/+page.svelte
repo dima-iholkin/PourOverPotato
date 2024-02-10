@@ -11,36 +11,47 @@
 
 <script lang="ts">
   import { onMount } from "svelte";
-  import { editRecipe, getAllCoffeeBeans, getRecipeById } from "$lib/database/v1/indexedDB";
-  import type { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
+  import {
+    deleteRecipeById,
+    editRecipe,
+    getAllCoffeeBeans,
+    getCoffeeBeansById,
+    getRecipeById
+  } from "$lib/database/v1/indexedDB";
+  import { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
   import { Recipe } from "$lib/domain/entities/Recipe";
   import { naming } from "$lib/domain/naming";
   import { routes } from "$lib/domain/routes";
-  import FlexRow from "$lib/UI/FlexRow.svelte";
-  import Label from "$lib/UI/forms/Label.svelte";
-  import NumberInput from "$lib/UI/forms/NumberInput.svelte";
-  import Textarea from "$lib/UI/forms/Textarea.svelte";
+  import { formatTimeForInput, parseDateFromInputString } from "$lib/helpers/dateHelpers";
+  import CoffeeBeansSelect from "$lib/UI/domain-components/forms/CoffeeBeansSelect.svelte";
+  import TimestampPicker from "$lib/UI/domain-components/forms/TimestampPicker.svelte";
+  import Loading from "$lib/UI/domain-components/lists/Loading.svelte";
+  import DropdownMenu from "$lib/UI/generic-components/dropdownMenu/DropdownMenu.svelte";
+  import DropdownMenuItem from "$lib/UI/generic-components/dropdownMenu/DropdownMenuItem.svelte";
+  import FlexRow from "$lib/UI/generic-components/FlexRow.svelte";
+  import NumberInput from "$lib/UI/generic-components/forms/NumberInput.svelte";
+  import Textarea from "$lib/UI/generic-components/forms/Textarea.svelte";
+  import DeleteConfirmationModal from "$lib/UI/generic-components/modals/DeleteConfirmationModal.svelte";
   import PageHeadline from "$lib/UI/layout/PageHeadline.svelte";
-  import CoffeeBeansSelect from "../add/CoffeeBeansSelect.svelte";
-  import { formatTimeForInput, parseDateFromInputString } from "../add/helpers";
-  import TimestampPicker from "../add/TimestampPicker.svelte";
   import type { PageData } from "./$types";
-  import DropdownMenu from "./DropdownMenu.svelte";
 
-  // From load function:
+  // Load function:
 
   export let data: PageData;
 
-  // State entities:
+  // Bind functions:
+
+  let bind_setDeleteModalState: (state: "open" | "closed") => void;
+  let bind_setDropdownState: (state: "open" | "closed") => void;
+
+  // Entities state:
 
   let recipe: Recipe | undefined | null = null;
-
   let allCoffeeBeans: CoffeeBeans[] | undefined = undefined;
 
-  // State form:
+  // Form state:
 
-  let selectedCoffeeBeans: CoffeeBeans | undefined = undefined;
-
+  let selectedCoffeeBeansId: number | undefined = undefined;
   let recipeTarget: string;
   let recipeResult: string;
   let recipeThoughts: string;
@@ -48,58 +59,63 @@
   let rating: number;
   let timestampStr: string;
 
-  // Lifecycle hooks:
+  // Lifecycle:
 
   onMount(() => {
     getRecipeById(data.recipeId).then((item: Recipe | undefined) => {
       recipe = item;
-
       if (item === undefined) {
         return;
       }
-
       getAllCoffeeBeans().then((items: CoffeeBeans[]) => {
         allCoffeeBeans = items;
-        selectedCoffeeBeans = allCoffeeBeans?.find((_item) => _item.id === item.coffeeBeansId);
+        selectedCoffeeBeansId = item.coffeeBeansId;
+        recipeTarget = item.recipeTarget;
+        recipeResult = item.recipeResult;
+        recipeThoughts = item.recipeThoughts;
+        outWeight = item.outWeight;
+        rating = item.rating;
+        timestampStr = formatTimeForInput(item.timestamp);
       });
-
-      recipeTarget = item.recipeTarget;
-      recipeResult = item.recipeResult;
-      recipeThoughts = item.recipeThoughts;
-      outWeight = item.outWeight;
-      rating = item.rating;
-      timestampStr = formatTimeForInput(item.timestamp);
     });
   });
 
   // Handler functions:
 
-  async function handleSubmit() {
-    // Deal with the 3 textarea inputs:
+  async function handleDeleteClick() {
+    await deleteRecipeById(recipe!.id);
+    alert("Recipe deleted.");
 
+    const coffeeBeansItem: CoffeeBeans | undefined = await getCoffeeBeansById(recipe!.coffeeBeansId);
+    if (coffeeBeansItem === undefined) {
+      window.location.replace(routes.home);
+      return;
+    }
+    window.location.replace(routes.coffeeBeansItem(coffeeBeansItem.name));
+  }
+
+  async function handleSubmit() {
+    // Validate and format the form values:
     recipeTarget = recipeTarget.trim();
     recipeResult = recipeResult.trim();
     recipeThoughts = recipeThoughts.trim();
-
-    // Deal with the timestamp:
-
     const timestamp: Date = parseDateFromInputString(timestampStr);
 
     // Null guards:
 
-    if (recipe === undefined || recipe === null) {
-      throw new Error("Recipe was undefined or null somehow.");
+    if (selectedCoffeeBeansId === undefined) {
+      throw new Error("Please select the coffee beans.");
     }
 
-    if (selectedCoffeeBeans === undefined) {
-      throw new Error("Please select the coffee beans.");
+    if (recipe === undefined || recipe === null) {
+      throw new Error("Recipe was undefined or null somehow.");
     }
 
     // Save the new recipe:
 
     const recipeSubmit: Recipe = new Recipe(
       {
-        coffeeBeansId: selectedCoffeeBeans.id,
+        coffeeBeansId: selectedCoffeeBeansId,
         recipeTarget: recipeTarget,
         recipeResult: recipeResult,
         recipeThoughts: recipeThoughts,
@@ -113,9 +129,14 @@
 
     // Refresh the page to see the updated data:
 
-    alert("We saved the recipe successfully.");
+    alert("Recipe saved.");
 
-    window.location.replace(routes.coffeeBeansItem(selectedCoffeeBeans.name));
+    const coffeeBeansItem: CoffeeBeans | undefined = allCoffeeBeans?.find((item) => item.id === selectedCoffeeBeansId);
+    if (coffeeBeansItem === undefined) {
+      window.location.replace(routes.home);
+      return;
+    }
+    window.location.replace(routes.coffeeBeansItem(coffeeBeansItem.name));
   }
 </script>
 
@@ -127,85 +148,89 @@
   <PageHeadline>Edit recipe</PageHeadline>
   {#if recipe instanceof Recipe}
     <div class="menu-container">
-      <DropdownMenu recipeItem={recipe} />
+      <DropdownMenu bind:setDropdownState={bind_setDropdownState}>
+        <DropdownMenuItem
+          slot="button"
+          buttonText="Delete"
+          on:click={() => {
+            bind_setDropdownState("closed");
+            bind_setDeleteModalState("open");
+          }}
+        />
+        <DeleteConfirmationModal
+          slot="modal"
+          onDeleteClick={handleDeleteClick}
+          bind:setModalState={bind_setDeleteModalState}
+        >
+          Please confirm you want to delete this recipe
+        </DeleteConfirmationModal>
+      </DropdownMenu>
     </div>
   {/if}
 </FlexRow>
 
 {#if recipe === null}
-  <p>loading...</p>
+  <Loading />
 {:else if recipe instanceof Recipe}
   <form id="edit-recipe" on:submit|preventDefault={handleSubmit}>
-    {#if selectedCoffeeBeans !== undefined}
-      <div>
-        <CoffeeBeansSelect {allCoffeeBeans} bind:selectedCoffeeBeans showAddButton={false} />
-      </div>
-    {/if}
+    <CoffeeBeansSelect {allCoffeeBeans} showAddButton={false} bind:selectedCoffeeBeansId />
 
-    <div>
-      <Label _for={RECIPE_TARGET}>{naming.recipe.recipeTarget}:</Label>
-    </div>
-    <div>
-      <Textarea id={RECIPE_TARGET} bind:value={recipeTarget} name={RECIPE_TARGET} placeholder={RECIPE_TARGET_PH} />
-    </div>
+    <Textarea
+      id={RECIPE_TARGET}
+      label={naming.recipe.recipeTarget + ":"}
+      name={RECIPE_TARGET}
+      placeholder={RECIPE_TARGET_PH}
+      bind:value={recipeTarget}
+    />
 
-    <div>
-      <Label _for={RECIPE_RESULT}>{naming.recipe.recipeResult}:</Label>
-    </div>
-    <div>
-      <Textarea id={RECIPE_RESULT} bind:value={recipeResult} name={RECIPE_RESULT} placeholder={RECIPE_RESULT_PH} />
-    </div>
+    <Textarea
+      id={RECIPE_RESULT}
+      label={naming.recipe.recipeResult + ":"}
+      name={RECIPE_RESULT}
+      placeholder={RECIPE_RESULT_PH}
+      bind:value={recipeResult}
+    />
 
-    <div>
-      <NumberInput
-        bind:value={outWeight}
-        labelText="{naming.recipe.outWeight} (g):"
-        min={0}
-        nameAttr={OUT_WEIGHT}
-        step={5}
-      />
-    </div>
+    <NumberInput
+      labelText="{naming.recipe.outWeight} (g):"
+      min={0}
+      nameAttr={OUT_WEIGHT}
+      step={5}
+      bind:value={outWeight}
+    />
 
-    <div>
-      <NumberInput bind:value={rating} labelText="Rating:" max={5} min={0} nameAttr={RATING} step={0.5} />
-    </div>
+    <NumberInput labelText="Rating:" max={5} min={0} nameAttr={RATING} step={0.5} bind:value={rating} />
 
-    <div>
-      <Label _for={RECIPE_THOUGHTS}>{naming.recipe.recipeThoughts}:</Label>
-    </div>
-    <div>
-      <Textarea
-        id={RECIPE_THOUGHTS}
-        bind:value={recipeThoughts}
-        name={RECIPE_THOUGHTS}
-        placeholder={RECIPE_THOUGHTS_PH}
-        textLinesCount={4}
-      />
-    </div>
+    <Textarea
+      id={RECIPE_THOUGHTS}
+      label={naming.recipe.recipeThoughts + ":"}
+      name={RECIPE_THOUGHTS}
+      placeholder={RECIPE_THOUGHTS_PH}
+      textLinesCount={4}
+      bind:value={recipeThoughts}
+    />
 
-    <div>
-      <TimestampPicker bind:value={timestampStr} />
-    </div>
+    <TimestampPicker bind:value={timestampStr} />
 
     <button class="my-button" form="edit-recipe" type="submit"> Save changes </button>
   </form>
 {:else}
-  <p>404 Not Found</p>
+  <p>404</p>
+  <p>Not Found</p>
 {/if}
 
 <style lang="postcss">
-  div {
-    margin-bottom: 8px;
-  }
-
-  button {
-    width: 100%;
-    margin-top: 16px;
-    margin-bottom: 16px;
+  form {
+    display: flex;
+    flex-direction: column;
+    row-gap: 1rem;
   }
 
   .my-button {
     @apply bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded;
+
+    width: 100%;
+    margin-bottom: 16px;
   }
 
   .menu-container {

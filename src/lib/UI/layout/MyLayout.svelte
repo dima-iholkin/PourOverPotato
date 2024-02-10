@@ -9,13 +9,14 @@
 
 <MySidebar />
 
-<div style="display: flex; flex-direction: row;">
+<div id="content" style="display: flex; flex-direction: row;">
   <MySidebar asGap />
   <div class="page-container">
     <slot />
     <div class="bottom-gap" />
   </div>
 </div>
+<MyBottomNav asGap />
 
 <MyBottomNav />
 
@@ -31,17 +32,13 @@
     padding-right: 1rem;
   }
 
-  .bottom-gap {
-    height: 80px;
-  }
-
   @media only screen and (width < 800px) {
     .page-container {
       width: 100%;
     }
+  }
 
-    .bottom-gap {
-      height: 140px;
-    }
+  .bottom-gap {
+    height: 1rem;
   }
 </style>

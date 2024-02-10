@@ -3,6 +3,6 @@ export const naming = {
     recipeTarget: "Recipe target",
     recipeResult: "Recipe result",
     recipeThoughts: "My thoughts",
-    outWeight: "Out weight",
+    outWeight: "Out weight"
   }
 };

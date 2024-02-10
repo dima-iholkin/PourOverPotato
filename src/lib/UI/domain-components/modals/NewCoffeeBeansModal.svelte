@@ -3,12 +3,16 @@
 </script>
 
 <script lang="ts">
-  import { editCoffeeBeans } from "$lib/database/v1/indexedDB";
-  import { CoffeeBeans, CoffeeBeansEditSubmit } from "$lib/domain/entities/CoffeeBeans";
-  import { routes } from "$lib/domain/routes";
+  import { addCoffeeBeans } from "$lib/database/v1/indexedDB";
+  import { CoffeeBeans, CoffeeBeansCreateSubmit } from "$lib/domain/entities/CoffeeBeans";
   import Label from "$lib/UI/generic-components/forms/Label.svelte";
   import Textarea from "$lib/UI/generic-components/forms/Textarea.svelte";
   import Modal from "$lib/UI/generic-components/modals/Modal.svelte";
+
+  // Events:
+
+  export let onModalStateChange: ((state: "open" | "closed") => void) | undefined = undefined;
+  export let onSavedCoffeeBeans: ((coffeeBeans: CoffeeBeans) => void) | undefined = undefined;
 
   // Triggers:
 
@@ -16,29 +20,26 @@
     setModalState_(state);
   };
 
-  // Entities props:
-
-  export let item: CoffeeBeans;
-
   // Bind functions:
 
   let setModalState_: (state: "open" | "closed") => void;
 
-  // Bind DOM elements:
+  // DOM state:
 
   let inputDom: HTMLInputElement;
   let textareaDom: HTMLTextAreaElement;
   let formDom: HTMLFormElement;
 
-  // UI state:
+  // Form state:
 
-  let name: string = item.name ?? "";
-  let description: string = item.description ?? "";
+  let name: string = "";
+  let description: string = "";
+
+  let nameValidationFailed: boolean = false;
   let validationMessage: string = "";
 
   // Reactivity:
 
-  let nameValidationFailed: boolean = false;
   $: {
     if (nameValidationFailed === false) {
       validationMessage = "";
@@ -47,27 +48,32 @@
 
   // Handlers:
 
-  function handleEnterKey(event: KeyboardEvent & { currentTarget: EventTarget & HTMLInputElement }) {
-    if (event.key === "Enter") {
-      event.preventDefault();
-      textareaDom.focus();
-    }
-  }
-
-  function handleCtrlEnterKey(event: KeyboardEvent) {
+  function handleCtrlEnter(event: KeyboardEvent) {
     if (event.key === "Enter" && (event.metaKey || event.ctrlKey)) {
       event.preventDefault();
       formDom.requestSubmit();
     }
   }
 
-  async function handleSubmit() {
-    // Validate and save the edited coffee beans:
+  function handleEnter(event: KeyboardEvent & { currentTarget: EventTarget & HTMLInputElement }) {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      textareaDom.focus();
+    }
+  }
 
-    const editedCoffeeBeans: CoffeeBeans = new CoffeeBeans({ name, description }, item.id);
+  function handleInputChange() {
+    if (nameValidationFailed) {
+      nameValidationFailed = false;
+      validationMessage = "";
+    }
+  }
 
-    const coffeeBeansSubmit: CoffeeBeansEditSubmit | "ValidationFailed_NameMustBeAtLeast3CharsLong" =
-      CoffeeBeansEditSubmit.create(editedCoffeeBeans);
+  async function handleFormSubmit() {
+    // Validate and save the new coffee beans:
+
+    const coffeeBeansSubmit: CoffeeBeansCreateSubmit | "ValidationFailed_NameMustBeAtLeast3CharsLong" =
+      CoffeeBeansCreateSubmit.create({ name, description });
 
     if (coffeeBeansSubmit === "ValidationFailed_NameMustBeAtLeast3CharsLong") {
       nameValidationFailed = true;
@@ -75,7 +81,7 @@
       return;
     }
 
-    const coffeeBeans: CoffeeBeans | "Failure_NameAlreadyExist" = await editCoffeeBeans(coffeeBeansSubmit);
+    const coffeeBeans: CoffeeBeans | "Failure_NameAlreadyExist" = await addCoffeeBeans(coffeeBeansSubmit);
 
     if (coffeeBeans === "Failure_NameAlreadyExist") {
       nameValidationFailed = true;
@@ -87,25 +93,25 @@
     // TODO: Inform user that the new coffee beans were saved successfully.
 
     // Return the new Coffee Beans entity to the "Add recipe" page:
-    item = coffeeBeans;
+    if (onSavedCoffeeBeans !== undefined) {
+      onSavedCoffeeBeans(coffeeBeans);
+    }
 
     // Clear the modal state:
     setModalState_("closed");
-
-    // Reload the page with the new CoffeeBeans name, to avoid any stale state:
-    window.location.replace(routes.coffeeBeansItem(coffeeBeans.name));
+    name = "";
+    description = "";
   }
 
-  function handleInputChange() {
-    if (nameValidationFailed) {
-      nameValidationFailed = false;
-      validationMessage = "";
+  function handleModalStateChange(state: "open" | "closed") {
+    if (onModalStateChange !== undefined) {
+      onModalStateChange(state);
     }
   }
 </script>
 
-<Modal title="Edit coffee beans" bind:setState={setModalState_}>
-  <form class="mx-auto" bind:this={formDom} on:submit|preventDefault={handleSubmit}>
+<Modal onStateChange={handleModalStateChange} title="Add new coffee beans" bind:setState={setModalState_}>
+  <form class="mx-auto" bind:this={formDom} on:submit|preventDefault={handleFormSubmit}>
     <div class="mb-5">
       <Label for_="name" valid={!nameValidationFailed}>Coffee beans name:</Label>
       <input
@@ -117,7 +123,7 @@
         bind:this={inputDom}
         bind:value={name}
         on:input={handleInputChange}
-        on:keydown={handleEnterKey}
+        on:keydown={handleEnter}
       />
       <p class="mt-2 text-sm text-red-600 dark:text-red-500">{validationMessage}</p>
     </div>
@@ -129,7 +135,7 @@
         placeholder={DESCRIPTION_PH}
         bind:this_={textareaDom}
         bind:value={description}
-        on:keydown={handleCtrlEnterKey}
+        on:keydown={handleCtrlEnter}
       />
     </div>
     <button class="button-submit" type="submit">Save</button>
@@ -163,6 +169,5 @@
     width: 100%;
     margin-left: 0;
     margin-right: 0;
-    margin-bottom: 1.25rem;
   }
 </style>

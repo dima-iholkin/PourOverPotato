@@ -5,18 +5,21 @@
   import LeftArrowIcon from "$lib/UI/icons/LeftArrowIcon.svelte";
   import LoveIcon from "$lib/UI/icons/LoveIcon.svelte";
 
-  // Props:
+  // UI props:
 
   export let asGap: boolean = false;
 
-  // State:
+  // URL state:
 
-  $: pathname = routes.home;
+  let pathname: string = routes.home;
+
+  // URL reactivity:
+
   page.subscribe((pageInfo) => {
     pathname = pageInfo.url.pathname;
   });
 
-  // Handler functions:
+  // Handlers:
 
   function handleBackButtonClick() {
     if (history.length === 0) {
@@ -29,10 +32,10 @@
 
 <nav class:as-gap={asGap}>
   <div class="flex flex-wrap items-center justify-between mx-auto p-4">
-    <div style="display: flex; flex-direction: row; align-items: center;">
-      <div style="padding-right: 16px;">
+    <div class="left-nav-side vertical-center-children">
+      <div class="icon-button vertical-center-children">
         {#if pathname !== routes.home}
-          <button on:click={handleBackButtonClick}>
+          <button class="vertical-center-children" on:click={handleBackButtonClick}>
             <LeftArrowIcon />
           </button>
         {:else}
@@ -40,9 +43,9 @@
         {/if}
       </div>
       <a href={routes.home}>
-        <div class="logo-div">
+        <div class="logo-container">
           <span class="text-2xl font-semibold whitespace-nowrap dark:text-white">PourOverPotato</span>
-          <p class="subtitle">Save your best recipes for later use</p>
+          <p class="sublogo">Save your best recipes for later use</p>
         </div>
       </a>
     </div>
@@ -51,8 +54,11 @@
 </nav>
 
 <style lang="postcss">
+  /* Outer layout: */
+
   nav {
     @apply bg-white dark:bg-gray-900 fixed w-full z-20 top-0 start-0 border-b border-gray-200 dark:border-gray-600;
+    z-index: 10;
   }
 
   .as-gap {
@@ -60,20 +66,38 @@
     visibility: hidden;
   }
 
-  .logo-div {
+  /* Left nav side: */
+
+  .left-nav-side {
+    gap: 1rem;
+  }
+
+  .icon-button {
+    padding-bottom: 0.125rem;
+  }
+
+  .logo-container {
     @apply space-x-3 rtl:space-x-reverse;
 
     display: flex;
     flex-direction: column;
   }
 
-  .subtitle {
+  .sublogo {
     margin-left: 0 !important;
   }
 
   @media only screen and (width < 800px) {
-    .subtitle {
+    .sublogo {
       display: none;
     }
+  }
+
+  /* Helpers: */
+
+  .vertical-center-children {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
   }
 </style>
