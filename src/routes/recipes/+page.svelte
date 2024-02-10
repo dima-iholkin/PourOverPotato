@@ -23,8 +23,10 @@
     const map = new Map<number, string>();
     coffeeBeans.forEach((item) => map.set(item.id, item.name));
     recipes = (await getAllRecipes()).sort(byTimestampDesc).map((item) => {
-      const coffeeBeansName = map.get(item.coffeeBeansId) ?? "";
-      return { ...item, coffeeBeansName };
+      return {
+        ...item,
+        coffeeBeansName: map.get(item.coffeeBeansId) ?? ""
+      };
     });
   }
 
