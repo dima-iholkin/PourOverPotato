@@ -116,9 +116,9 @@
   {:else if recipes.length === 0}
     <NoItemsYetP />
   {:else}
-    <SortedByP>Sorted by latest</SortedByP>
+    <SortedByP>Sorted by latest recipe date</SortedByP>
     {#each recipes as recipe (recipe.id)}
-      <RecipeCard href={routes.recipeItem(recipe.id)} {recipe} />
+      <RecipeCard coffeeBeansName={coffeeBeans.name} href={routes.recipeItem(recipe.id)} {recipe} />
     {/each}
   {/if}
 
