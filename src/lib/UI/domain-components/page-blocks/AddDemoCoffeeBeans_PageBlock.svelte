@@ -27,7 +27,7 @@
   function handleAddDemoCoffeeBeans() {
     devFillDB().then(() => {
       location.replace(routes.home);
-      alert("Added demo coffee beans and recipes.");
+      alert("Demo coffee beans and recipes added.");
     });
   }
 </script>
@@ -35,7 +35,7 @@
 {#if anyCoffeeBeans === false && anyRecipes === false}
   <div class="empty-db-message-container">
     <p>You have no coffee beans or recipes added yet...</p>
-    <p>Would you like to add 3 demo coffee beans with their demo recipes?</p>
+    <p>Would you like to add 3 demo coffee beans and recipes?</p>
     <button class="add-demo-coffee-beans" type="button" on:click={handleAddDemoCoffeeBeans}>
       Add demo coffee beans and recipes
     </button>
