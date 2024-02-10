@@ -150,7 +150,7 @@
     <div class="menu-container">
       <DropdownMenu bind:setDropdownState={bind_setDropdownState}>
         <DropdownMenuItem
-          slot="li"
+          slot="button"
           buttonText="Delete"
           on:click={() => {
             bind_setDropdownState("closed");

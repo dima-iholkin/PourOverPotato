@@ -3,30 +3,40 @@
 </script>
 
 <script lang="ts">
-  import { tick } from "svelte";
   import { editCoffeeBeans } from "$lib/database/v1/indexedDB";
   import { CoffeeBeans, CoffeeBeansEditSubmit } from "$lib/domain/entities/CoffeeBeans";
   import { routes } from "$lib/domain/routes";
   import Label from "$lib/UI/generic-components/forms/Label.svelte";
   import Textarea from "$lib/UI/generic-components/forms/Textarea.svelte";
-  import MySidebar from "$lib/UI/layout/components/MySidebar.svelte";
+  import Modal from "$lib/UI/generic-components/modals/Modal.svelte";
 
-  // Props:
+  // Triggers:
 
-  export let coffeeBeansItem: CoffeeBeans;
+  export const setModalState = (state: "open" | "closed") => {
+    setModalState_(state);
+  };
 
-  // State:
+  // Entities props:
 
-  let showModal: boolean = false;
+  export let item: CoffeeBeans;
 
-  let modalDom: Element;
-  let menuButtonDom: Element;
+  // Bind functions:
+
+  let setModalState_: (state: "open" | "closed") => void;
+
+  // Bind DOM elements:
+
   let inputDom: HTMLInputElement;
   let textareaDom: HTMLTextAreaElement;
   let formDom: HTMLFormElement;
 
-  let name: string = coffeeBeansItem.name;
-  let description: string = coffeeBeansItem.description;
+  // UI state:
+
+  let name: string = item.name ?? "";
+  let description: string = item.description ?? "";
+  let validationMessage: string = "";
+
+  // Reactivity:
 
   let nameValidationFailed: boolean = false;
   $: {
@@ -35,32 +45,7 @@
     }
   }
 
-  let validationMessage: string = "";
-
-  // Handler functions:
-
-  function openModal() {
-    showModal = true;
-
-    tick().then(() => {
-      inputDom.focus();
-    });
-
-    // document.getElementsByTagName("body")[0].classList.add("overflow-y-hidden");
-  }
-
-  function closeModal() {
-    showModal = false;
-    nameValidationFailed = false;
-    // document.getElementsByTagName("body")[0].classList.remove("overflow-y-hidden");
-  }
-
-  // Close the modal on Escape key.
-  function handleEscKey(event: KeyboardEvent) {
-    if (showModal && event.key === "Escape") {
-      showModal = false;
-    }
-  }
+  // Handlers:
 
   function handleEnterKey(event: KeyboardEvent & { currentTarget: EventTarget & HTMLInputElement }) {
     if (event.key === "Enter") {
@@ -79,7 +64,7 @@
   async function handleSubmit() {
     // Validate and save the edited coffee beans:
 
-    const editedCoffeeBeans: CoffeeBeans = new CoffeeBeans({ name, description }, coffeeBeansItem.id);
+    const editedCoffeeBeans: CoffeeBeans = new CoffeeBeans({ name, description }, item.id);
 
     const coffeeBeansSubmit: CoffeeBeansEditSubmit | "ValidationFailed_NameMustBeAtLeast3CharsLong" =
       CoffeeBeansEditSubmit.create(editedCoffeeBeans);
@@ -98,14 +83,14 @@
       return;
     }
 
-    alert("We saved the edited coffee beans successfully.");
+    alert("Coffee beans saved.");
     // TODO: Inform user that the new coffee beans were saved successfully.
 
     // Return the new Coffee Beans entity to the "Add recipe" page:
-    coffeeBeansItem = coffeeBeans;
+    item = coffeeBeans;
 
     // Clear the modal state:
-    closeModal();
+    setModalState_("closed");
 
     // Reload the page with the new CoffeeBeans name, to avoid any stale state:
     window.location.replace(routes.coffeeBeansItem(coffeeBeans.name));
@@ -117,106 +102,41 @@
       validationMessage = "";
     }
   }
-
-  function handleDocumentClick(event: MouseEvent & { currentTarget: EventTarget & Document }) {
-    if (showModal === false) {
-      return;
-    }
-
-    if (clickOutsideBox(modalDom, event) && clickOutsideBox(menuButtonDom, event)) {
-      closeModal();
-    }
-  }
-
-  // Helper functions:
-
-  function clickOutsideBox(element: Element, click: MouseEvent) {
-    const box: DOMRect = element.getBoundingClientRect();
-    const x: number = click.clientX;
-    const y: number = click.clientY;
-
-    if (x < box.left || x > box.right || y < box.top || y > box.bottom) {
-      return true;
-    }
-
-    return false;
-  }
 </script>
 
-<svelte:window on:keydown={handleEscKey} />
-
-<svelte:document on:mousedown={handleDocumentClick} />
-
-<button class="edit-button" type="button" bind:this={menuButtonDom} on:click={() => openModal()}> Edit </button>
-
-<div class="modal-container" class:show-modal={showModal}>
-  <MySidebar asGap />
-  <div class="inner-container" bind:this={modalDom}>
-    <!-- <ModalHeader on:click={() => closeModal()}>Edit coffee beans</ModalHeader> -->
-
-    <form class="max-w-sm mx-auto" bind:this={formDom} on:submit|preventDefault={handleSubmit}>
-      <div class="mb-5">
-        <Label for_="name" valid={!nameValidationFailed}>Coffee beans name:</Label>
-        <input
-          id="name"
-          class={nameValidationFailed ? "input-name-validation-failed" : "input-name"}
-          name="name"
-          placeholder={nameValidationFailed ? "" : "Example: Rwanda Mabanza"}
-          type="text"
-          bind:this={inputDom}
-          bind:value={name}
-          on:input={handleInputChange}
-          on:keydown={handleEnterKey}
-        />
-        <p class="mt-2 text-sm text-red-600 dark:text-red-500">{validationMessage}</p>
-      </div>
-      <div class="my-div mb-5">
-        <Label for_="description">Description:</Label>
-        <Textarea
-          id="description"
-          name="description"
-          placeholder={DESCRIPTION_PH}
-          bind:this_={textareaDom}
-          bind:value={description}
-          on:keydown={handleCtrlEnterKey}
-        />
-      </div>
-      <button class="button-submit" type="submit">Save</button>
-    </form>
-  </div>
-</div>
+<Modal title="Edit coffee beans" bind:setState={setModalState_}>
+  <form class="mx-auto" bind:this={formDom} on:submit|preventDefault={handleSubmit}>
+    <div class="mb-5">
+      <Label for_="name" valid={!nameValidationFailed}>Coffee beans name:</Label>
+      <input
+        id="name"
+        class={nameValidationFailed ? "input-name-validation-failed" : "input-name"}
+        name="name"
+        placeholder={nameValidationFailed ? "" : "Example: Rwanda Mabanza"}
+        type="text"
+        bind:this={inputDom}
+        bind:value={name}
+        on:input={handleInputChange}
+        on:keydown={handleEnterKey}
+      />
+      <p class="mt-2 text-sm text-red-600 dark:text-red-500">{validationMessage}</p>
+    </div>
+    <div class="my-div mb-5">
+      <Textarea
+        id="description"
+        label="Description:"
+        name="description"
+        placeholder={DESCRIPTION_PH}
+        bind:this_={textareaDom}
+        bind:value={description}
+        on:keydown={handleCtrlEnterKey}
+      />
+    </div>
+    <button class="button-submit" type="submit">Save</button>
+  </form>
+</Modal>
 
 <style lang="postcss">
-  .modal-container {
-    @apply fixed hidden inset-0 bg-gray-900 bg-opacity-60 overflow-y-auto h-full w-full px-4;
-
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-
-    z-index: 50;
-  }
-
-  .show-modal {
-    display: flex;
-  }
-
-  .inner-container {
-    @apply relative mx-auto shadow-xl rounded-md bg-white max-w-md;
-
-    padding-left: 16px;
-    padding-right: 16px;
-
-    flex-grow: 1;
-  }
-
-  .edit-button {
-    @apply text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4;
-    @apply focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-gray-800;
-    @apply dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600;
-    @apply dark:focus:ring-gray-700;
-  }
-
   .input-name {
     @apply bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500;
     @apply block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white;

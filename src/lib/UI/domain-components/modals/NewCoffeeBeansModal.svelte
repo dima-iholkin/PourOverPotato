@@ -111,7 +111,7 @@
 </script>
 
 <Modal onStateChange={handleModalStateChange} title="Add new coffee beans" bind:setState={setModalState_}>
-  <form class="mx-auto my-form" bind:this={formDom} on:submit|preventDefault={handleFormSubmit}>
+  <form class="mx-auto" bind:this={formDom} on:submit|preventDefault={handleFormSubmit}>
     <div class="mb-5">
       <Label for_="name" valid={!nameValidationFailed}>Coffee beans name:</Label>
       <input
