@@ -23,11 +23,9 @@
   </button>
 </div>
 
-<DeleteConfirmationModal
-  onDeleteClick={handleDeleteButtonClick}
-  text="Please confirm you want to delete all your data."
-  bind:setModalState={bind_setDeleteModalState}
-/>
+<DeleteConfirmationModal onDeleteClick={handleDeleteButtonClick} bind:setModalState={bind_setDeleteModalState}>
+  Please confirm you want to delete all your data.
+</DeleteConfirmationModal>
 
 <style lang="postcss">
   .container {

@@ -11,10 +11,6 @@
     bind_setModalState(state);
   };
 
-  // Props:
-
-  export let text: string;
-
   // Bind functions:
 
   let bind_setModalState: (state: "open" | "closed") => void;
@@ -29,7 +25,9 @@
 
 <Modal title="Confirmation" bind:setState={bind_setModalState}>
   <div class="text-container">
-    <p>{text}</p>
+    <p>
+      <slot />
+    </p>
   </div>
   <div class="buttons-container">
     <button class="button-delete" type="button" on:click={handleDeleteClick}> Delete </button>

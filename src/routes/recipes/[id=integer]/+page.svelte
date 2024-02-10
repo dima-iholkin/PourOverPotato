@@ -160,9 +160,10 @@
         <DeleteConfirmationModal
           slot="modal"
           onDeleteClick={handleDeleteClick}
-          text="Please confirm you want to delete this recipe."
           bind:setModalState={bind_setDeleteModalState}
-        />
+        >
+          Please confirm you want to delete this recipe
+        </DeleteConfirmationModal>
       </DropdownMenu>
     </div>
   {/if}
