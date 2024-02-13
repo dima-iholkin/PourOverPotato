@@ -8,7 +8,7 @@ I use this app to brew my pour overs every day. This means I'm invested into mai
 
 ## Application
 
-[Deployed application](https://dima-iholkin.github.io/PourOverPotato/)
+[Open application](https://dima-iholkin.github.io/PourOverPotato/)
 
 ## Screenshots
 
