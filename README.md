@@ -15,6 +15,7 @@ I use this app to brew my pour overs every day. This means I'm invested into mai
 <div>
   <kbd>
     <img width="250" src="/_assets/screenshot-01.png" title="a screenshot showing a recipe in PourOverPotato app">
+    <p height="16"></p>
   </kbd>
   <span width="24" height="16">&nbsp;&nbsp;</span>
   <kbd>
