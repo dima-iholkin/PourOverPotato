@@ -10,7 +10,9 @@ I use this app to brew my pour overs every day. This means I'm invested into mai
 
 <div>
   <img width="250" src="/_assets/screenshot-01.png" title="a screenshot showing a recipe in PourOverPotato app">
+  &nbsp;
   <img width="250" src="/_assets/screenshot-02.png" title="a screenshot showing a recipe and coffee beans in PourOverPotato app">
+  &nbsp;
   <img width="250" src="/_assets/screenshot-03.png" title="a screenshot showing a coffee beans list in PourOverPotato app">
 </div>
 
