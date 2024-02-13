@@ -8,16 +8,15 @@ I use this app to brew my pour overs every day. This means I'm invested into mai
 
 ## Application
 
-[PourOverPotato app](https://dima-iholkin.github.io/PourOverPotato/)
+[Deployed application](https://dima-iholkin.github.io/PourOverPotato/)
 
 ## Screenshots
 
 <div>
   <kbd>
     <img width="250" src="/_assets/screenshot-01.png" title="a screenshot showing a recipe in PourOverPotato app">
-    <p height="16"></p>
   </kbd>
-  <span width="24" height="16">&nbsp;&nbsp;</span>
+  &nbsp;&nbsp;
   <kbd>
     <img width="250" src="/_assets/screenshot-02.png" title="a screenshot showing a recipe and coffee beans in PourOverPotato app">
   </kbd>
