@@ -6,6 +6,10 @@ How do you organize your records?
 This app is a way to organize the pour over recipes.  
 I use this app to brew my pour overs every day. This means I'm invested into maintaining and improving this app.
 
+## Application
+
+[PourOverPotato app](https://dima-iholkin.github.io/PourOverPotato/)
+
 ## Screenshots
 
 <div>
@@ -30,5 +34,4 @@ This is not a finilized version of the application. Things may change and data i
 
 ## License
 
-* TODO: All the code in this repository up to this point is under ... license
 * Copyright © 2024 <a href="https://github.com/dima-iholkin" target="_blank">Dima Iholkin</a>.
