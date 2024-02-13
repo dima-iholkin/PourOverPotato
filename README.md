@@ -1,16 +1,16 @@
 # PourOverPotato
 
-Do you brew pour overs? How do you organize your records?  
+Do you brew pour overs?  
+How do you organize your records?  
+
 This app is a way to organize the pour over recipes.  
 I use this app to brew my pour overs every day. This means I'm invested into maintaining and improving this app.
 
 ## Screenshots
 
-<div style="display:flex; flex-direction: row; flex-wrap: wrap; gap: 1rem;">
-  <img src="/_assets/screenshot-01.png">
-  <img src="/_assets/screenshot-02.png">
-  <img src="/_assets/screenshot-03.png">
-</div>
+<img width="250" src="/_assets/screenshot-01.png" title="a screenshot showing a recipe in PourOverPotato app">
+<img width="250" src="/_assets/screenshot-02.png" title="a screenshot showing a recipe and coffee beans in PourOverPotato app">
+<img width="250" src="/_assets/screenshot-03.png" title="a screenshot showing a coffee beans list in PourOverPotato app">
 
 ## About your data
 
