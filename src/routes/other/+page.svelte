@@ -20,12 +20,12 @@
   <p>You can influence the work at the project's GitHub or just contact me.</p>
 </div>
 
-<h5>About data</h5>
+<h5>About your data</h5>
 
 <div class="about-section">
   <p>
-    Currently all data is saved only in the user's browser and is not sent anywhere. Later I want to add ability to
-    import and export data to a file, and to sync data with Google Drive.
+    Currently all data is saved only in the user's browser and is not sent anywhere. Later I want to add an ability to
+    import and export data to a file, and sync data with Google Drive.
   </p>
   <p>
     This is not a finilized version of the application. Things may change and data integrity is not guaranteed, however

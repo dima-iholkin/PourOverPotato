@@ -1,38 +1,38 @@
-# create-svelte
+# PourOverPotato
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/main/packages/create-svelte).
+Do you brew pour overs?  
+How do you organize your records?  
 
-## Creating a project
+This app is a way to organize the pour over recipes.  
+I use this app to brew my pour overs every day. This means I'm invested into maintaining and improving this app.
 
-If you're seeing this, you've probably already done this step. Congrats!
+## Application
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
+[Open app](https://dima-iholkin.github.io/PourOverPotato/)
 
-# create a new project in my-app
-npm create svelte@latest my-app
-```
+## Screenshots
 
-## Developing
+<div>
+  <kbd>
+    <img width="250" src="/_assets/screenshot-01.png" title="a screenshot showing a recipe in PourOverPotato app">
+  </kbd>
+  &nbsp;&nbsp;
+  <kbd>
+    <img width="250" src="/_assets/screenshot-02.png" title="a screenshot showing a coffee beans description and a recipe in PourOverPotato app">
+  </kbd>
+  &nbsp;&nbsp;
+  <kbd>
+    <img width="250" src="/_assets/screenshot-03.png" title="a screenshot showing a coffee beans list in PourOverPotato app">
+  </kbd>
+</div>
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+## About your data
 
-```bash
-npm run dev
+Currently all data is saved only in the user's browser and is not sent anywhere. Later I want to add an ability to import and export data to a file, and sync data with Google Drive.  
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
+This is not a finilized version of the application. Things may change and data integrity is not guaranteed, however I'll try hard to not break you data.
 
-## Building
+## License
 
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+* TODO
+* Copyright © 2024 <a href="https://github.com/dima-iholkin" target="_blank">Dima Iholkin</a>.

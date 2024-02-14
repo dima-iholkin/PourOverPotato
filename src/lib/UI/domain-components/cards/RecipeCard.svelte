@@ -18,7 +18,7 @@
   <div class="card-content">
     <div class="header">
       <p>🕒 {convertToTimeAgo(recipe.timestamp)}</p>
-      <div class="fast-info-header-horizontal">
+      <div class="right-header-horizontal">
         <p>{recipe.rating}⭐</p>
         <p>{recipe.outWeight}g ☕</p>
       </div>
@@ -52,7 +52,7 @@
     @apply text-2xl font-bold tracking-tight text-gray-900 dark:text-white;
   }
 
-  .fast-info-header-horizontal {
+  .right-header-horizontal {
     display: flex;
     flex-direction: row;
     gap: 1rem;
