@@ -8,7 +8,7 @@ I use this app to brew my pour overs every day. This means I'm invested into mai
 
 ## Application
 
-[Open application](https://dima-iholkin.github.io/PourOverPotato/)
+[Open app](https://dima-iholkin.github.io/PourOverPotato/)
 
 ## Screenshots
 
@@ -18,7 +18,7 @@ I use this app to brew my pour overs every day. This means I'm invested into mai
   </kbd>
   &nbsp;&nbsp;
   <kbd>
-    <img width="250" src="/_assets/screenshot-02.png" title="a screenshot showing a recipe and coffee beans in PourOverPotato app">
+    <img width="250" src="/_assets/screenshot-02.png" title="a screenshot showing a coffee beans description and a recipe in PourOverPotato app">
   </kbd>
   &nbsp;&nbsp;
   <kbd>
@@ -34,4 +34,5 @@ This is not a finilized version of the application. Things may change and data i
 
 ## License
 
+* TODO
 * Copyright © 2024 <a href="https://github.com/dima-iholkin" target="_blank">Dima Iholkin</a>.
