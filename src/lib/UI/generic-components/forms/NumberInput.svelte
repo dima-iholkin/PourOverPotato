@@ -93,6 +93,7 @@
     </button>
     <input
       id={nameAttr}
+      autocomplete="off"
       name={nameAttr}
       type="text"
       bind:value
