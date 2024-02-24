@@ -19,8 +19,12 @@
     <div class="header">
       <p>🕒 {convertToTimeAgo(recipe.timestamp)}</p>
       <div class="right-header-horizontal">
-        <p>{recipe.rating}⭐</p>
-        <p>{recipe.outWeight}g ☕</p>
+        {#if recipe.rating > 0}
+          <p>{recipe.rating}⭐</p>
+        {/if}
+        {#if recipe.outWeight > 0}
+          <p>{recipe.outWeight}g ☕</p>
+        {/if}
       </div>
     </div>
     <h5>{coffeeBeansName}</h5>
