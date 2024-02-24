@@ -1,10 +1,10 @@
 # PourOverPotato
 
-Do you brew pour overs?  
-How do you organize your records?  
+Do you brew pour overs? How do you organize your records?  
 
-This app is a way to organize the pour over recipes.  
-I use this app to brew my pour overs every day. This means I'm invested into maintaining and improving this app.
+This app is a way to organize your pour over recipes.  
+
+I use this app to brew my coffees every day. I'm going to maintain and improve the app.
 
 ## Application
 
