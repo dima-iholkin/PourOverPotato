@@ -140,6 +140,8 @@
   .coffee-beans-description {
     margin-top: 0.25rem;
     margin-bottom: 1rem;
+
+    white-space: pre-line;
   }
 
   .edit-button {
