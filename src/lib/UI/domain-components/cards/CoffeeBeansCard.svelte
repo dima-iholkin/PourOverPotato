@@ -19,7 +19,7 @@
       <p class="recipes-count">{recipeCount} {recipeCount === 1 ? "recipe" : "recipes"}</p>
     </FlexRow>
   </div>
-  <p>{item.description}</p>
+  <p class="content">{item.description}</p>
 </Card>
 
 <style lang="postcss">
@@ -37,5 +37,9 @@
 
   .recipes-count {
     white-space: nowrap;
+  }
+
+  .content {
+    white-space: pre-line;
   }
 </style>

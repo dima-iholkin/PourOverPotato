@@ -19,22 +19,26 @@
     <div class="header">
       <p>🕒 {convertToTimeAgo(recipe.timestamp)}</p>
       <div class="right-header-horizontal">
-        <p>{recipe.rating}⭐</p>
-        <p>{recipe.outWeight}g ☕</p>
+        {#if recipe.rating > 0}
+          <p>{recipe.rating}⭐</p>
+        {/if}
+        {#if recipe.outWeight > 0}
+          <p>{recipe.outWeight}g ☕</p>
+        {/if}
       </div>
     </div>
     <h5>{coffeeBeansName}</h5>
     <div>
-      <p class="text-gray-400 inline">{naming.recipe.recipeTarget}:</p>
-      <p class="inline">{recipe.recipeTarget}</p>
+      <p class="label">{naming.recipe.recipeTarget}:</p>
+      <p class="content">{recipe.recipeTarget}</p>
     </div>
     <div>
-      <p class="text-gray-400 inline">{naming.recipe.recipeResult}:</p>
-      <p class="inline">{recipe.recipeResult}</p>
+      <p class="label">{naming.recipe.recipeResult}:</p>
+      <p class="content">{recipe.recipeResult}</p>
     </div>
     <div>
-      <p class="text-gray-400 inline">{naming.recipe.recipeThoughts}:</p>
-      <p class="inline">{recipe.recipeThoughts}</p>
+      <p class="label">{naming.recipe.recipeThoughts}:</p>
+      <p class="content">{recipe.recipeThoughts}</p>
     </div>
   </div>
 </Card>
@@ -66,7 +70,13 @@
     gap: 0.5rem;
   }
 
-  p {
-    @apply font-normal dark:text-gray-400;
+  .content {
+    @apply inline font-normal dark:text-gray-400;
+
+    white-space: pre-line;
+  }
+
+  .label {
+    @apply inline text-base font-normal text-gray-400;
   }
 </style>
