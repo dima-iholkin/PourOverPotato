@@ -1,10 +1,7 @@
 <script context="module" lang="ts">
   const RECIPE_TARGET = "recipe-target";
-  const RECIPE_TARGET_PH = "Example: 17 clicks, 15g + 260g. 5m boil.";
   const RECIPE_RESULT = "recipe-result";
-  const RECIPE_RESULT_PH = "Example: 2m15s + 15s drip. 250g out.";
   const RECIPE_THOUGHTS = "recipe-thoughts";
-  const RECIPE_THOUGHTS_PH = "Example: Perfect balance. Perfect concentration. Flowery notes.";
   const OUT_WEIGHT = "out-weight";
   const RATING = "rating";
 </script>
@@ -22,6 +19,7 @@
   import { Recipe } from "$lib/domain/entities/Recipe";
   import { naming } from "$lib/domain/naming";
   import { routes } from "$lib/domain/routes";
+  import { placeholders } from "$lib/domain/strings";
   import { formatTimeForInput, parseDateFromInputString } from "$lib/helpers/dateHelpers";
   import CoffeeBeansSelect from "$lib/UI/domain-components/forms/CoffeeBeansSelect.svelte";
   import TimestampPicker from "$lib/UI/domain-components/forms/TimestampPicker.svelte";
@@ -179,7 +177,7 @@
       id={RECIPE_TARGET}
       label={naming.recipe.recipeTarget + ":"}
       name={RECIPE_TARGET}
-      placeholder={RECIPE_TARGET_PH}
+      placeholder={placeholders.recipeTarget}
       bind:value={recipeTarget}
     />
 
@@ -187,7 +185,7 @@
       id={RECIPE_RESULT}
       label={naming.recipe.recipeResult + ":"}
       name={RECIPE_RESULT}
-      placeholder={RECIPE_RESULT_PH}
+      placeholder={placeholders.recipeResult}
       bind:value={recipeResult}
     />
 
@@ -205,7 +203,7 @@
       id={RECIPE_THOUGHTS}
       label={naming.recipe.recipeThoughts + ":"}
       name={RECIPE_THOUGHTS}
-      placeholder={RECIPE_THOUGHTS_PH}
+      placeholder={placeholders.recipeThoughts}
       textLinesCount={4}
       bind:value={recipeThoughts}
     />
