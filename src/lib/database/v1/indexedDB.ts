@@ -172,6 +172,18 @@ export async function editRecipe(submitItem: Recipe): Promise<Recipe> {
   return dbSubmitItem.toRecipe();
 }
 
+export async function exportAllData() {
+  const obj = {
+    dbVersion: dbVersion,
+    coffeeBeans: await getAllCoffeeBeans(),
+    recipes: await getAllRecipes()
+  };
+
+  const json = JSON.stringify(obj);
+  const blob = new Blob([json], { type: "application/json" });
+  return blob;
+}
+
 export async function getAllCoffeeBeans(): Promise<CoffeeBeans[]> {
   const db = await openEntitiesDB();
 
