@@ -1,5 +1,6 @@
 <script lang="ts">
   import DeleteAllDataBlock from "./DeleteAllDataBlock.svelte";
+  import PersistDataBlock from "./PersistDataBlock.svelte";
 </script>
 
 <svelte:head>
@@ -35,6 +36,7 @@
 
 <h5>Manage your data</h5>
 
+<PersistDataBlock />
 <DeleteAllDataBlock />
 
 <h5>Credits</h5>
