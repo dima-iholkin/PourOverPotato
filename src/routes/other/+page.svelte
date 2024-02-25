@@ -1,6 +1,7 @@
 <script lang="ts">
   import DeleteAllDataBlock from "./DeleteAllDataBlock.svelte";
   import ExportDataBlock from "./ExportDataBlock.svelte";
+  import ImportDataBlock from "./ImportDataBlock.svelte";
   import PersistDataBlock from "./PersistDataBlock.svelte";
 </script>
 
@@ -39,7 +40,7 @@
 
 <PersistDataBlock />
 <ExportDataBlock />
-<!-- <ImportDataBlock /> -->
+<ImportDataBlock />
 
 <h5>Delete your data</h5>
 

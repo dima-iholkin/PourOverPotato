@@ -1,8 +1,10 @@
 import { openDB } from "idb";
 import { CoffeeBeans, type CoffeeBeansCreateSubmit, CoffeeBeansEditSubmit } from "$lib/domain/entities/CoffeeBeans";
 import { Recipe, type RecipeSubmit } from "$lib/domain/entities/Recipe";
+import { parseDateFromInputString } from "$lib/helpers/dateHelpers";
 import { CoffeeBeansDB, CoffeeBeansDBSubmit, type ICoffeeBeansDB } from "./types/CoffeeBeansDB";
 import type { EntitiesDB } from "./types/EntitiesDB";
+import type { ExportJSON } from "./types/ExportJSON";
 import { type IRecipeDB, RecipeDB, RecipeDBSubmit } from "./types/RecipeDB";
 
 // Static data:
@@ -173,7 +175,7 @@ export async function editRecipe(submitItem: Recipe): Promise<Recipe> {
 }
 
 export async function exportAllData() {
-  const obj = {
+  const obj: ExportJSON = {
     dbVersion: dbVersion,
     coffeeBeans: await getAllCoffeeBeans(),
     recipes: await getAllRecipes()
@@ -255,4 +257,101 @@ export async function getRecipesCountByCoffeeBeansId(coffeeBeansid: number): Pro
   const items = await db.getAllFromIndex(recipesStoreName, "coffeeBeansId", coffeeBeansid);
 
   return items.length;
+}
+
+export async function importData(jsonFile: File) {
+  const obj: ExportJSON = JSON.parse(await jsonFile.text());
+
+  // Guard clauses:
+
+  if (obj.dbVersion === undefined) {
+    alert("dbVersion property not found in the file.");
+    return;
+  }
+
+  if (obj.dbVersion !== dbVersion) {
+    alert(`Expected dbVersion value: ${dbVersion}.`);
+    return;
+  }
+
+  if (obj.coffeeBeans === undefined || Array.isArray(obj.coffeeBeans) === false) {
+    alert("coffeeBeans array not found.");
+    return;
+  }
+
+  if (obj.recipes === undefined || Array.isArray(obj.recipes) === false) {
+    alert("recipes array not found.");
+    return;
+  }
+
+  // Merge CoffeeBeans:
+
+  const mapNewCoffeeBeansIdToOldId = new Map<number, number>();
+
+  const oldCoffeeBeans: CoffeeBeans[] = await getAllCoffeeBeans();
+
+  for (let newItem of obj.coffeeBeans) {
+    newItem = new CoffeeBeans(newItem, newItem.id);
+    // If we've found a matching CoffeeBeans name,
+    // remember the oldMatch's Id and use it in place of the newItem's Id for recipes import.
+    const oldMatch: CoffeeBeans | undefined = oldCoffeeBeans.find(oldItem =>
+      oldItem.name.toLowerCase() === newItem.name.toLowerCase()
+    );
+    if (oldMatch !== undefined && oldMatch.id === newItem.id) {
+      mapNewCoffeeBeansIdToOldId.set(newItem.id, oldMatch.id);
+      continue;
+    }
+    else if (oldMatch !== undefined) {
+      mapNewCoffeeBeansIdToOldId.set(newItem.id, oldMatch.id);
+      continue;
+    }
+
+    // If there is no match, save the new CoffeeBeans. But make sure to use the new Id for mapping recipes.
+    const result: CoffeeBeans | "Failure_NameAlreadyExist" = await addCoffeeBeans(newItem);
+
+    if (result === "Failure_NameAlreadyExist") {
+      alert("Failure_NameAlreadyExist error during importing CoffeeBeans. This shouldn't be possible, sorry. " +
+        "Contact the developer, I guess.");
+      throw new Error("Failure_NameAlreadyExist");
+    }
+
+    mapNewCoffeeBeansIdToOldId.set(newItem.id, result.id);
+  };
+
+  // Merge Recipes:
+
+  const oldRecipes: Recipe[] = await getAllRecipes();
+
+  for (let newItem of obj.recipes) {
+    newItem.timestamp = parseDateFromInputString(newItem.timestamp as unknown as string);
+    newItem = new Recipe(newItem, newItem.id);
+    if (mapNewCoffeeBeansIdToOldId.has(newItem.coffeeBeansId) === false) {
+      alert(`Could not find a correct CoffeeBeansId for imported recipe with Id ${newItem.id}. Sorry, something went wrong.`);
+      throw new Error("Could not find a correct CoffeeBeansId for imported recipe.");
+    }
+
+    newItem.coffeeBeansId = mapNewCoffeeBeansIdToOldId.get(newItem.coffeeBeansId)!;
+
+    const oldMatch: Recipe | undefined = oldRecipes.find(oldItem => oldItem.id === newItem.id);
+    if (oldMatch === undefined) {
+      await addRecipe(newItem);
+      continue;
+    }
+
+    if (
+      oldMatch.coffeeBeansId === newItem.coffeeBeansId &&
+      oldMatch.recipeTarget === newItem.recipeTarget &&
+      oldMatch.recipeResult === newItem.recipeResult &&
+      oldMatch.recipeThoughts === newItem.recipeThoughts &&
+      oldMatch.outWeight === newItem.outWeight &&
+      oldMatch.rating === newItem.rating &&
+      oldMatch.timestamp.getTime() === newItem.timestamp.getTime()
+    ) {
+      continue;
+    } else {
+      await addRecipe(newItem);
+    }
+  }
+
+  alert("CoffeeBeans and Recipes imported.");
 }

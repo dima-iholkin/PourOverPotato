@@ -25,7 +25,9 @@
     {#if storageIsPersistent === undefined}
       <p>loading...</p>
     {:else}
-      <p style="font-weight: bold;">{storageIsPersistent}</p>
+      <p class={storageIsPersistent ? "text-green-500" : "text-red-700"} style="font-weight: bold;">
+        {storageIsPersistent}
+      </p>
       {#if storageIsPersistent === false}
         <button type="button" on:click={handlePersistButtonClick}> Enable </button>
       {/if}
