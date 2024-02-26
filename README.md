@@ -4,11 +4,9 @@ Do you brew pour overs? How do you organize your records?
 
 This app is a way to organize your pour over recipes.  
 
-I use this app to brew my coffees every day. I'm going to maintain and improve the app.
+I use this app to brew my coffees every day. I'm going to maintain and improve this app.
 
-## Application
-
-[Open app](https://dima-iholkin.github.io/PourOverPotato/)
+[Open the app](https://dima-iholkin.github.io/PourOverPotato/)
 
 ## Screenshots
 
