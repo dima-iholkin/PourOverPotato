@@ -14,8 +14,17 @@
   // Handlers:
 
   async function handlePersistButtonClick() {
-    await navigator.storage.persist();
-    location.reload();
+    const result: boolean = await navigator.storage.persist();
+    if (result == false) {
+      alert(
+        "Sorry, your browser refused to enable persistent storage. " +
+          "It means your data is still at risk of being evicted at any moment by the browser. " +
+          "Try using Firefox browser, it seems the only browser to always allow enabling persistent storage."
+      );
+    } else {
+      alert("Persistent storage enabled.");
+      location.reload();
+    }
   }
 </script>
 
