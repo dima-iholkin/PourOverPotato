@@ -116,6 +116,7 @@
       <Label for_="name" valid={!nameValidationFailed}>Coffee beans name:</Label>
       <input
         id="name"
+        autocomplete="off"
         class={nameValidationFailed ? "input-name-validation-failed" : "input-name"}
         name="name"
         placeholder={nameValidationFailed ? "" : "Example: Rwanda Mabanza"}

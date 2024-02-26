@@ -19,7 +19,7 @@
       alert(
         "Sorry, your browser refused to enable persistent storage. " +
           "It means your data is still at risk of being evicted at any moment by the browser. " +
-          "Try using Firefox browser, it seems the only browser to always allow enabling persistent storage."
+          "Try using Firefox browser, it seems to be the only browser to always allow enabling persistent storage."
       );
     } else {
       alert("Persistent storage enabled.");
