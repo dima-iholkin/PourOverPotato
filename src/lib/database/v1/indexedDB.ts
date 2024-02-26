@@ -332,26 +332,19 @@ export async function importData(jsonFile: File) {
 
     newItem.coffeeBeansId = mapNewCoffeeBeansIdToOldId.get(newItem.coffeeBeansId)!;
 
-    const oldMatch: Recipe | undefined = oldRecipes.find(oldItem => oldItem.id === newItem.id);
-    if (oldMatch === undefined) {
-      await addRecipe(newItem);
-      continue;
-    }
+    const oldMatch: Recipe | undefined = oldRecipes.find(oldItem =>
+      oldItem.timestamp.getTime() === newItem.timestamp.getTime() &&
+      oldItem.outWeight === newItem.outWeight &&
+      oldItem.rating === newItem.rating &&
+      oldItem.recipeTarget === newItem.recipeTarget &&
+      oldItem.recipeResult === newItem.recipeResult &&
+      oldItem.recipeThoughts === newItem.recipeThoughts
+    );
 
-    if (
-      oldMatch.coffeeBeansId === newItem.coffeeBeansId &&
-      oldMatch.recipeTarget === newItem.recipeTarget &&
-      oldMatch.recipeResult === newItem.recipeResult &&
-      oldMatch.recipeThoughts === newItem.recipeThoughts &&
-      oldMatch.outWeight === newItem.outWeight &&
-      oldMatch.rating === newItem.rating &&
-      oldMatch.timestamp.getTime() === newItem.timestamp.getTime()
-    ) {
-      continue;
-    } else {
+    if (oldMatch === undefined) {
       await addRecipe(newItem);
     }
   }
 
-  alert("CoffeeBeans and Recipes imported.");
+  alert("CoffeeBeans and Recipes import finished.");
 }
