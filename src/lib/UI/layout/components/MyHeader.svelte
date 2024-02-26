@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onMount } from "svelte";
   import { goto } from "$app/navigation";
   import { page } from "$app/stores";
   import { routes } from "$lib/domain/routes";
@@ -9,6 +10,10 @@
 
   export let asGap: boolean = false;
 
+  // UI state:
+
+  let virtualKeyboardVisible: boolean = false;
+
   // URL state:
 
   let pathname: string = routes.home;
@@ -17,6 +22,26 @@
 
   page.subscribe((pageInfo) => {
     pathname = pageInfo.url.pathname;
+  });
+
+  // Lifecycle:
+
+  onMount(() => {
+    document.addEventListener("focusin", (event: FocusEvent) => {
+      if (event.target instanceof Element) {
+        if (event.target.tagName === "TEXTAREA" || event.target.tagName === "INPUT") {
+          virtualKeyboardVisible = true;
+        }
+      }
+    });
+
+    document.addEventListener("focusout", (event: FocusEvent) => {
+      if (event.target instanceof Element) {
+        if (event.target.tagName === "TEXTAREA" || event.target.tagName === "INPUT") {
+          virtualKeyboardVisible = false;
+        }
+      }
+    });
   });
 
   // Handlers:
@@ -30,7 +55,7 @@
   }
 </script>
 
-<nav class:as-gap={asGap}>
+<nav class:as-gap={asGap} class:nav-static={virtualKeyboardVisible}>
   <div class="flex flex-wrap items-center justify-between mx-auto p-4">
     <div class="left-nav-side vertical-center-children">
       <div class="icon-button vertical-center-children">
@@ -64,6 +89,16 @@
   .as-gap {
     position: static !important;
     visibility: hidden;
+  }
+
+  @media only screen and (width < 800px) {
+    .nav-static {
+      position: static !important;
+    }
+
+    .as-gap.nav-static {
+      display: none !important;
+    }
   }
 
   /* Left nav side: */
