@@ -140,13 +140,14 @@
 
 <style lang="postcss">
   .input-name {
-    @apply bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500;
-    @apply block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white;
+    @apply bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg block w-full p-2.5;
+    @apply focus:ring-blue-500 focus:border-blue-500;
+    @apply dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white;
     @apply dark:focus:ring-blue-500 dark:focus:border-blue-500;
   }
 
   .input-name-validation-failed {
-    @apply bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-sm rounded-lg focus:ring-red-500;
+    @apply border border-red-500 text-red-900 placeholder-red-700 text-base rounded-lg focus:ring-red-500;
     @apply focus:border-red-500 block w-full p-2.5 dark:bg-red-100 dark:border-red-400;
 
     background-color: #fef2f2;
