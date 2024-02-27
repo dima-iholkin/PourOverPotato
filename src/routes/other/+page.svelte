@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { dev } from "$app/environment";
   import DeleteAllDataBlock from "./DeleteAllDataBlock.svelte";
   import DevBlock from "./DevBlock.svelte";
   import ExportDataBlock from "./ExportDataBlock.svelte";
@@ -11,12 +10,7 @@
   <title>Other - PourOverPotato app</title>
 </svelte:head>
 
-{#if dev}
-  <DevBlock />
-{/if}
-
 <h5 class="page-headline">About app</h5>
-
 <div class="about-section">
   <p>
     It's an open-source application developed
@@ -30,7 +24,6 @@
 </div>
 
 <h5>About your data</h5>
-
 <div class="about-section">
   <p>
     Currently all data is saved only in the user's browser and is not sent anywhere. Later I want to add an ability to
@@ -43,21 +36,21 @@
 </div>
 
 <h5>Manage your data</h5>
-
 <PersistDataBlock />
 <ExportDataBlock />
 <ImportDataBlock />
 
 <h5>Delete your data</h5>
-
 <DeleteAllDataBlock />
 
 <h5>Credits</h5>
-
 <p>The coffee beans icon</p>
 <a href="https://www.flaticon.com/free-icons/coffee-beans" title="coffee beans icons">
   created by Freepik - Flaticon
 </a>
+
+<h5>Developer tools</h5>
+<DevBlock />
 
 <style lang="postcss">
   .page-headline {
