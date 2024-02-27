@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount } from "svelte";
+  import { browser } from "$app/environment";
   import {
     deleteCoffeeBeansById,
     deleteRecipesByCoffeeBeansId,
@@ -38,19 +38,14 @@
   let coffeeBeans: CoffeeBeans | undefined | "CoffeeBeansNotFound";
   let recipes: Recipe[] | undefined;
 
-  // Lifecycle:
+  // Reactivity:
 
-  onMount(() => {
-    getCoffeeBeansByName(data.coffeeBeansName).then(async (item: CoffeeBeans | undefined) => {
-      if (item === undefined) {
-        coffeeBeans = "CoffeeBeansNotFound";
-        return;
-      }
-      coffeeBeans = item;
-      const _recipes: Recipe[] = await getRecipesByCoffeeBeansId(coffeeBeans.id);
-      recipes = _recipes.sort(byTimestampDesc);
-    });
-  });
+  $: {
+    data;
+    if (browser && window.indexedDB) {
+      loadCoffeeBeans();
+    }
+  }
 
   // Handlers:
 
@@ -61,6 +56,19 @@
       window.location.replace(routes.home);
       alert(`Coffee beans and ${countDeletedRecipes} recipes deleted.`);
     }
+  }
+
+  // Helpers:
+
+  async function loadCoffeeBeans() {
+    const item: CoffeeBeans | undefined = await getCoffeeBeansByName(data.coffeeBeansName);
+    if (item === undefined) {
+      coffeeBeans = "CoffeeBeansNotFound";
+      return;
+    }
+    coffeeBeans = item;
+    const _recipes: Recipe[] = await getRecipesByCoffeeBeansId(coffeeBeans.id);
+    recipes = _recipes.sort(byTimestampDesc);
   }
 </script>
 

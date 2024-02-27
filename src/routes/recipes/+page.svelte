@@ -18,6 +18,12 @@
 
   // Lifecycle:
 
+  onMount(() => {
+    loadEntities();
+  });
+
+  // Helpers:
+
   async function loadEntities() {
     const coffeeBeans: CoffeeBeans[] = await getAllCoffeeBeans();
     const map = new Map<number, string>();
@@ -29,10 +35,6 @@
       };
     });
   }
-
-  onMount(() => {
-    loadEntities();
-  });
 </script>
 
 <svelte:head>
@@ -44,7 +46,7 @@
 {#if recipes === undefined}
   <Loading />
 {:else if recipes.length === 0}
-  <AddDemoCoffeeBeans_PageBlock />
+  <AddDemoCoffeeBeans_PageBlock onAddDemoEntities={() => loadEntities()} />
 {:else}
   <SortedByP>Sorted by latest recipe date</SortedByP>
   {#each recipes as recipe}

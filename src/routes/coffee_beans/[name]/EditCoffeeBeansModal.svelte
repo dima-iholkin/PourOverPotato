@@ -3,12 +3,14 @@
 </script>
 
 <script lang="ts">
+  import { goto } from "$app/navigation";
   import { editCoffeeBeans } from "$lib/database/v1/indexedDB";
   import { CoffeeBeans, CoffeeBeansEditSubmit } from "$lib/domain/entities/CoffeeBeans";
   import { routes } from "$lib/domain/routes";
   import Label from "$lib/UI/generic-components/forms/Label.svelte";
   import Textarea from "$lib/UI/generic-components/forms/Textarea.svelte";
   import Modal from "$lib/UI/generic-components/modals/Modal.svelte";
+  import { addToast } from "$lib/UI/generic-components/toasts/toastProvider";
 
   // Triggers:
 
@@ -83,8 +85,7 @@
       return;
     }
 
-    alert("Coffee beans saved.");
-    // TODO: Inform user that the new coffee beans were saved successfully.
+    addToast(`Coffee beans "${coffeeBeans.name}" saved.`);
 
     // Return the new Coffee Beans entity to the "Add recipe" page:
     item = coffeeBeans;
@@ -93,7 +94,7 @@
     setModalState_("closed");
 
     // Reload the page with the new CoffeeBeans name, to avoid any stale state:
-    window.location.replace(routes.coffeeBeansItem(coffeeBeans.name));
+    goto(routes.coffeeBeansItem(coffeeBeans.name));
   }
 
   function handleInputChange() {
@@ -110,6 +111,7 @@
       <Label for_="name" valid={!nameValidationFailed}>Coffee beans name:</Label>
       <input
         id="name"
+        autocomplete="off"
         class={nameValidationFailed ? "input-name-validation-failed" : "input-name"}
         name="name"
         placeholder={nameValidationFailed ? "" : "Example: Rwanda Mabanza"}

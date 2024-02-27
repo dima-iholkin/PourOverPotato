@@ -8,8 +8,8 @@
 
 <!--
 @component
-Please put this component as the last page-block on your page. It will create a nice gap at bottom for FAB to not
-obscure the page content.
+Put this component as the last page-block on your page. This way it will create a nice gap at bottom of the page and
+the FAB will not obscure the page content.
 -->
 
 <div class="page-bottom-gap" />

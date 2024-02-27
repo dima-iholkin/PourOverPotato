@@ -7,8 +7,7 @@
 <!-- eslint-disable max-len -->
 
 <div
-  id="toast-success"
-  class="flex items-center w-full max-w-xs p-4 bg-gray-100 rounded-lg shadow dark:text-gray-400 dark:bg-gray-800"
+  class="my-toast flex items-center max-w-xl p-4 bg-gray-100 rounded-lg shadow dark:text-gray-400 dark:bg-gray-800"
   role="alert"
 >
   <div
@@ -21,9 +20,9 @@
     </svg>
     <span class="sr-only">Check icon</span>
   </div>
-  <div id="toast-content" class="ms-3 me-3 text-sm font-normal">{message}</div>
+  <div id="toast-content" class="ms-3 me-3 text-base font-normal">{message}</div>
   <button
-    class="ms-auto -mx-1.5 -my-1.5 bg-gray-200 text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-300 inline-flex items-center justify-center h-8 w-8 dark:text-gray-500 dark:hover:text-white dark:bg-gray-800 dark:hover:bg-gray-700"
+    class="my-close-button ms-auto -mx-1.5 -my-1.5 bg-gray-200 text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-300 inline-flex items-center justify-center h-8 w-8 dark:text-gray-500 dark:hover:text-white dark:bg-gray-800 dark:hover:bg-gray-700"
     data-dismiss-target="#toast-success"
     type="button"
     aria-label="Close"
@@ -41,3 +40,19 @@
     </svg>
   </button>
 </div>
+
+<style>
+  @media only screen and (width < 800px) {
+    .my-toast {
+      max-width: min(36rem, 90vw);
+    }
+  }
+
+  .my-close-button {
+    flex-shrink: 0;
+  }
+
+  #toast-content {
+    overflow-wrap: anywhere;
+  }
+</style>

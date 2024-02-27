@@ -38,7 +38,7 @@
 
 <div id="toast-provider">
   {#each toasts as item (item.timestamp)}
-    <div animate:flip in:fly={{ y: 100 }} out:fly={{ x: 100 }}>
+    <div class="toast-wrapper" animate:flip in:fly={{ y: 100 }} out:fly={{ x: 100 }}>
       <Toast message={item.message} on:click={() => handleToastClose(item.timestamp)} />
     </div>
   {/each}
@@ -55,5 +55,6 @@
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    align-items: flex-end;
   }
 </style>

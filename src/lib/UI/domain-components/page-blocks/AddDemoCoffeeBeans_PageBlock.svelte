@@ -2,8 +2,12 @@
   import { onMount } from "svelte";
   import { devFillDB } from "$lib/database/v1/devData/devFillDB";
   import { anyCoffeeBeansSaved, anyRecipesSaved } from "$lib/database/v1/indexedDB";
-  import { routes } from "$lib/domain/routes";
+  import { addToast } from "$lib/UI/generic-components/toasts/toastProvider";
   import NoItemsYetP from "../lists/NoItemsYetP.svelte";
+
+  // Events:
+
+  export let onAddDemoEntities: () => void;
 
   // State:
 
@@ -24,10 +28,10 @@
 
   // Handler functions:
 
-  function handleAddDemoCoffeeBeans() {
+  function handleAddDemoEntities() {
     devFillDB().then(() => {
-      location.replace(routes.home);
-      alert("Demo coffee beans and recipes added.");
+      addToast("Demo coffee beans and recipes added.");
+      onAddDemoEntities();
     });
   }
 </script>
@@ -36,7 +40,7 @@
   <div class="empty-db-message-container">
     <p>You have no coffee beans or recipes added yet...</p>
     <p>Would you like to add 3 demo coffee beans and recipes?</p>
-    <button class="add-demo-coffee-beans" type="button" on:click={handleAddDemoCoffeeBeans}>
+    <button class="add-demo-coffee-beans" type="button" on:click={handleAddDemoEntities}>
       Add demo coffee beans and recipes
     </button>
   </div>
