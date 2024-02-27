@@ -1,5 +1,7 @@
 <script lang="ts">
+  import { dev } from "$app/environment";
   import DeleteAllDataBlock from "./DeleteAllDataBlock.svelte";
+  import DevBlock from "./DevBlock.svelte";
   import ExportDataBlock from "./ExportDataBlock.svelte";
   import ImportDataBlock from "./ImportDataBlock.svelte";
   import PersistDataBlock from "./PersistDataBlock.svelte";
@@ -8,6 +10,10 @@
 <svelte:head>
   <title>Other - PourOverPotato app</title>
 </svelte:head>
+
+{#if dev}
+  <DevBlock />
+{/if}
 
 <h5 class="page-headline">About app</h5>
 
@@ -55,7 +61,7 @@
 
 <style lang="postcss">
   .page-headline {
-    margin-top: 1rem !important;
+    margin-top: 0.5rem !important;
   }
 
   h5 {

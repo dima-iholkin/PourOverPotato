@@ -1,4 +1,5 @@
 <script lang="ts">
+  import ToastProvider from "$lib/UI/generic-components/toasts/ToastProvider.svelte";
   import MyBottomNav from "./components/MyBottomNav.svelte";
   import MyHeader from "./components/MyHeader.svelte";
   import MySidebar from "./components/MySidebar.svelte";
@@ -16,9 +17,11 @@
     <div class="bottom-gap" />
   </div>
 </div>
-<MyBottomNav asGap />
 
+<MyBottomNav asGap />
 <MyBottomNav />
+
+<ToastProvider />
 
 <style lang="postcss">
   .page-container {
