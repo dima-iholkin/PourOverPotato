@@ -4,7 +4,11 @@
 
 <div class="container">
   <button type="button" on:click={() => addToast("Ethiopia Gesha")}> Add toast </button>
-  <button type="button" on:click={() => addToast("Yirgacheffe Sidamo El Refugio Cafe De Mujeres Mabanza Aricha Kegwa")}>
+  <button
+    type="button"
+    on:click={() =>
+      addToast("Ethiopia Yirgacheffe Rwanda Mabanza Kenya Kegwa Colombia El Refugio Guatemala Cafe De Mujeres")}
+  >
     Add long toast
   </button>
 </div>
