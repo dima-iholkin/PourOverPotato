@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { onMount } from "svelte";
+  import { browser } from "$app/environment";
+  import { goto } from "$app/navigation";
   import {
     deleteCoffeeBeansById,
     deleteRecipesByCoffeeBeansId,
@@ -19,6 +20,7 @@
   import DropdownMenuItem from "$lib/UI/generic-components/dropdownMenu/DropdownMenuItem.svelte";
   import FlexRow from "$lib/UI/generic-components/FlexRow.svelte";
   import DeleteConfirmationModal from "$lib/UI/generic-components/modals/DeleteConfirmationModal.svelte";
+  import { addToast } from "$lib/UI/generic-components/toasts/toastProvider";
   import PageHeadline from "$lib/UI/layout/PageHeadline.svelte";
   import type { PageData } from "./$types";
   import EditCoffeeBeansModal from "./EditCoffeeBeansModal.svelte";
@@ -38,29 +40,39 @@
   let coffeeBeans: CoffeeBeans | undefined | "CoffeeBeansNotFound";
   let recipes: Recipe[] | undefined;
 
-  // Lifecycle:
+  // Reactivity:
 
-  onMount(() => {
-    getCoffeeBeansByName(data.coffeeBeansName).then(async (item: CoffeeBeans | undefined) => {
-      if (item === undefined) {
-        coffeeBeans = "CoffeeBeansNotFound";
-        return;
-      }
-      coffeeBeans = item;
-      const _recipes: Recipe[] = await getRecipesByCoffeeBeansId(coffeeBeans.id);
-      recipes = _recipes.sort(byTimestampDesc);
-    });
-  });
+  $: {
+    data;
+    if (browser && window.indexedDB) {
+      loadCoffeeBeans();
+    }
+  }
 
   // Handlers:
 
   async function handleDeleteClick() {
     if (coffeeBeans instanceof CoffeeBeans) {
-      const countDeletedRecipes: number = await deleteRecipesByCoffeeBeansId(coffeeBeans.id);
+      const countRecipesDeleted: number = await deleteRecipesByCoffeeBeansId(coffeeBeans.id);
       await deleteCoffeeBeansById(coffeeBeans.id);
-      window.location.replace(routes.home);
-      alert(`Coffee beans and ${countDeletedRecipes} recipes deleted.`);
+      goto(routes.home);
+      const recipes = countRecipesDeleted === 1 ? "recipe" : "recipes";
+      const recipesPart = countRecipesDeleted > 0 ? ` and ${countRecipesDeleted} ${recipes}` : "";
+      addToast(`Coffee beans "${coffeeBeans.name}"` + recipesPart + " deleted.");
     }
+  }
+
+  // Helpers:
+
+  async function loadCoffeeBeans() {
+    const item: CoffeeBeans | undefined = await getCoffeeBeansByName(data.coffeeBeansName);
+    if (item === undefined) {
+      coffeeBeans = "CoffeeBeansNotFound";
+      return;
+    }
+    coffeeBeans = item;
+    const _recipes: Recipe[] = await getRecipesByCoffeeBeansId(coffeeBeans.id);
+    recipes = _recipes.sort(byTimestampDesc);
   }
 </script>
 

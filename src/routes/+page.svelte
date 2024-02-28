@@ -22,22 +22,27 @@
   // Lifecycle:
 
   onMount(() => {
-    getAllCoffeeBeans().then(async (items) => {
-      const enhancedCoffeeBeansItems: EnhancedCoffeeBeans[] = await Promise.all(
-        items.map(async (item) => {
-          const recipes: Recipe[] = await getRecipesByCoffeeBeansId(item.id);
-          const coffeeBeansItem: EnhancedCoffeeBeans = {
-            ...item,
-            recipeCount: recipes.length,
-            latestRecipeTimestamp: recipes.length > 0 ? recipes.sort(byTimestampDescR)[0].timestamp : undefined
-          };
-          return coffeeBeansItem;
-        })
-      );
-
-      coffeeBeans = enhancedCoffeeBeansItems.sort(byTimestampDescCB);
-    });
+    loadAllCoffeeBeans();
   });
+
+  // Helpers:
+
+  async function loadAllCoffeeBeans() {
+    const items = await getAllCoffeeBeans();
+    const enhancedCoffeeBeansItems: EnhancedCoffeeBeans[] = await Promise.all(
+      items.map(async (item) => {
+        const recipes: Recipe[] = await getRecipesByCoffeeBeansId(item.id);
+        const coffeeBeansItem: EnhancedCoffeeBeans = {
+          ...item,
+          recipeCount: recipes.length,
+          latestRecipeTimestamp: recipes.length > 0 ? recipes.sort(byTimestampDescR)[0].timestamp : undefined
+        };
+        return coffeeBeansItem;
+      })
+    );
+
+    coffeeBeans = enhancedCoffeeBeansItems.sort(byTimestampDescCB);
+  }
 </script>
 
 <svelte:head>
@@ -49,7 +54,7 @@
 {#if coffeeBeans === undefined}
   <Loading />
 {:else if coffeeBeans.length === 0}
-  <AddDemoCoffeeBeans_PageBlock />
+  <AddDemoCoffeeBeans_PageBlock onAddDemoEntities={() => loadAllCoffeeBeans()} />
 {:else}
   <SortedByP>Sorted by latest recipe date</SortedByP>
   {#each coffeeBeans as item (item.id)}

@@ -8,6 +8,7 @@
 
 <script lang="ts">
   import { onMount } from "svelte";
+  import { goto } from "$app/navigation";
   import {
     deleteRecipeById,
     editRecipe,
@@ -30,6 +31,7 @@
   import NumberInput from "$lib/UI/generic-components/forms/NumberInput.svelte";
   import Textarea from "$lib/UI/generic-components/forms/Textarea.svelte";
   import DeleteConfirmationModal from "$lib/UI/generic-components/modals/DeleteConfirmationModal.svelte";
+  import { addToast } from "$lib/UI/generic-components/toasts/toastProvider";
   import PageHeadline from "$lib/UI/layout/PageHeadline.svelte";
   import type { PageData } from "./$types";
 
@@ -82,14 +84,14 @@
 
   async function handleDeleteClick() {
     await deleteRecipeById(recipe!.id);
-    alert("Recipe deleted.");
+    addToast("Recipe deleted.");
 
     const coffeeBeansItem: CoffeeBeans | undefined = await getCoffeeBeansById(recipe!.coffeeBeansId);
     if (coffeeBeansItem === undefined) {
-      window.location.replace(routes.home);
+      goto(routes.home);
       return;
     }
-    window.location.replace(routes.coffeeBeansItem(coffeeBeansItem.name));
+    goto(routes.coffeeBeansItem(coffeeBeansItem.name));
   }
 
   async function handleSubmit() {
@@ -127,14 +129,14 @@
 
     // Refresh the page to see the updated data:
 
-    alert("Recipe saved.");
+    addToast("Recipe changes saved.");
 
     const coffeeBeansItem: CoffeeBeans | undefined = allCoffeeBeans?.find((item) => item.id === selectedCoffeeBeansId);
     if (coffeeBeansItem === undefined) {
-      window.location.replace(routes.home);
+      goto(routes.home);
       return;
     }
-    window.location.replace(routes.coffeeBeansItem(coffeeBeansItem.name));
+    goto(routes.coffeeBeansItem(coffeeBeansItem.name));
   }
 </script>
 

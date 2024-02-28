@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { onMount } from "svelte";
   import { base } from "$app/paths";
   import { page } from "$app/stores";
   import coffeeBeansIcon from "$lib/assets/coffee-beans-icon.png";
@@ -10,36 +9,17 @@
 
   export let asGap: boolean = false;
 
-  // State:
-
-  let virtualKeyboardVisible: boolean = false;
-
   // Reactivity:
 
   $: route = base + $page.route.id;
-
-  // Lifecycle:
-
-  onMount(() => {
-    document.addEventListener("focusin", (event: FocusEvent) => {
-      if (event.target instanceof Element) {
-        if (event.target.tagName === "TEXTAREA" || event.target.tagName === "INPUT") {
-          virtualKeyboardVisible = true;
-        }
-      }
-    });
-
-    document.addEventListener("focusout", (event: FocusEvent) => {
-      if (event.target instanceof Element) {
-        if (event.target.tagName === "TEXTAREA" || event.target.tagName === "INPUT") {
-          virtualKeyboardVisible = false;
-        }
-      }
-    });
-  });
 </script>
 
-<div class="bottom-nav" class:as-gap={asGap} class:bottom-nav-static={virtualKeyboardVisible}>
+<div
+  class="bottom-nav"
+  class:as-gap={asGap}
+  class:bottom-nav-static={$page.url.pathname === base + routes.addRecipe() ||
+    $page.url.pathname.substring(0, $page.url.pathname.lastIndexOf("/") + 1) + 1 === base + routes.recipeItem(1)}
+>
   <div class="grid h-full max-w-lg grid-cols-3 mx-auto font-medium">
     <a href={routes.recipes}>
       <button type="button" class:active={route === routes.recipes}>

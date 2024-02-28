@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte";
+  import { addToast } from "$lib/UI/generic-components/toasts/toastProvider";
 
   // UI state:
 
@@ -19,11 +20,11 @@
       alert(
         "Sorry, your browser refused to enable persistent storage. " +
           "It means your data is still at risk of being evicted at any moment by the browser. " +
-          "Try using Firefox browser, it seems the only browser to always allow enabling persistent storage."
+          "Try using Firefox browser, it seems to be the only browser to allow enabling persistent storage always."
       );
     } else {
-      alert("Persistent storage enabled.");
-      location.reload();
+      addToast("Persistent storage enabled.");
+      storageIsPersistent = true;
     }
   }
 </script>
