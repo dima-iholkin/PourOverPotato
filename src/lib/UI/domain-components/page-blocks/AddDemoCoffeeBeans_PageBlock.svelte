@@ -30,7 +30,7 @@
 
   function handleAddDemoEntities() {
     devFillDB().then(() => {
-      addToast("Demo coffee beans and recipes added.");
+      addToast("Demo coffee beans and demo recipes added.");
       onAddDemoEntities();
     });
   }

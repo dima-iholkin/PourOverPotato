@@ -13,6 +13,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
   // import { page } from "$app/stores";
+  import { goto } from "$app/navigation";
   import { addRecipe, getAllCoffeeBeans } from "$lib/database/v1/indexedDB";
   import { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
   import type { RecipeSubmit } from "$lib/domain/entities/Recipe";
@@ -25,6 +26,7 @@
   import TimestampPicker from "$lib/UI/domain-components/forms/TimestampPicker.svelte";
   import NumberInput from "$lib/UI/generic-components/forms/NumberInput.svelte";
   import Textarea from "$lib/UI/generic-components/forms/Textarea.svelte";
+  import { addToast } from "$lib/UI/generic-components/toasts/toastProvider";
   import PageHeadline from "$lib/UI/layout/PageHeadline.svelte";
 
   // Load function:
@@ -148,16 +150,14 @@
     clearFormField(FORM_NAME, OUT_WEIGHT);
     clearFormField(FORM_NAME, RATING);
 
-    // Communicate with the user:
-    alert("Recipe saved.");
+    addToast("Recipe created.");
 
-    // Refresh the page to see the updated data:
     const item: CoffeeBeans | undefined = coffeeBeansItems.find((item) => item.id === selectedCoffeeBeansId);
     if (item === undefined) {
-      window.location.replace(routes.home);
+      goto(routes.home);
       return;
     }
-    window.location.replace(routes.coffeeBeansItem(item.name));
+    goto(routes.coffeeBeansItem(item.name));
   }
 
   function handleSavedCoffeeBeans(coffeeBeans: CoffeeBeans) {

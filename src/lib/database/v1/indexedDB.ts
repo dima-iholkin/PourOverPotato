@@ -2,6 +2,7 @@ import { openDB } from "idb";
 import { CoffeeBeans, type CoffeeBeansCreateSubmit, CoffeeBeansEditSubmit } from "$lib/domain/entities/CoffeeBeans";
 import { Recipe, type RecipeSubmit } from "$lib/domain/entities/Recipe";
 import { parseDateFromInputString } from "$lib/helpers/dateHelpers";
+import { addToast } from "$lib/UI/generic-components/toasts/toastProvider";
 import { CoffeeBeansDB, CoffeeBeansDBSubmit, type ICoffeeBeansDB } from "./types/CoffeeBeansDB";
 import type { EntitiesDB } from "./types/EntitiesDB";
 import type { ExportJSON } from "./types/ExportJSON";
@@ -290,6 +291,8 @@ export async function importData(jsonFile: File) {
 
   const oldCoffeeBeans: CoffeeBeans[] = await getAllCoffeeBeans();
 
+  let newCoffeeBeansCount: number = 0;
+
   for (let newItem of obj.coffeeBeans) {
     newItem = new CoffeeBeans(newItem, newItem.id);
     // If we've found a matching CoffeeBeans name,
@@ -316,18 +319,24 @@ export async function importData(jsonFile: File) {
     }
 
     mapNewCoffeeBeansIdToOldId.set(newItem.id, result.id);
+    newCoffeeBeansCount++;
   };
 
   // Merge Recipes:
 
   const oldRecipes: Recipe[] = await getAllRecipes();
 
+  let newRecipesCount: number = 0;
+
   for (let newItem of obj.recipes) {
+    // Prepare a Recipe object:
     newItem.timestamp = parseDateFromInputString(newItem.timestamp as unknown as string);
     newItem = new Recipe(newItem, newItem.id);
+
+    // Check the CoffeeBeans with Id exist:
     if (mapNewCoffeeBeansIdToOldId.has(newItem.coffeeBeansId) === false) {
       alert(`Could not find a correct CoffeeBeansId for imported recipe with Id ${newItem.id}. Sorry, something went wrong.`);
-      throw new Error("Could not find a correct CoffeeBeansId for imported recipe.");
+      throw new Error("Could not find a correct CoffeeBeansId for an imported recipe.");
     }
 
     newItem.coffeeBeansId = mapNewCoffeeBeansIdToOldId.get(newItem.coffeeBeansId)!;
@@ -338,13 +347,15 @@ export async function importData(jsonFile: File) {
       oldItem.rating === newItem.rating &&
       oldItem.recipeTarget === newItem.recipeTarget &&
       oldItem.recipeResult === newItem.recipeResult &&
-      oldItem.recipeThoughts === newItem.recipeThoughts
+      oldItem.recipeThoughts === newItem.recipeThoughts &&
+      oldItem.coffeeBeansId === newItem.coffeeBeansId
     );
 
     if (oldMatch === undefined) {
       await addRecipe(newItem);
+      newRecipesCount++;
     }
   }
 
-  alert("CoffeeBeans and Recipes import finished.");
+  addToast(`${newCoffeeBeansCount} new coffee beans and ${newRecipesCount} new recipes imported.`);
 }

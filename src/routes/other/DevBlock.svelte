@@ -3,8 +3,8 @@
 </script>
 
 <div class="container">
-  <button type="button" on:click={() => addToast("hello world")}> Add toast </button>
-  <button type="button" on:click={() => addToast("hello world lorem ipsum shmipsum whateveripsum nowayitssolongipsum")}>
+  <button type="button" on:click={() => addToast("Ethiopia Gesha")}> Add toast </button>
+  <button type="button" on:click={() => addToast("Yirgacheffe Sidamo El Refugio Cafe De Mujeres Mabanza Aricha Kegwa")}>
     Add long toast
   </button>
 </div>

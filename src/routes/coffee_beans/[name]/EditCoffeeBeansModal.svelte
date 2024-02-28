@@ -85,7 +85,7 @@
       return;
     }
 
-    addToast(`Coffee beans "${coffeeBeans.name}" saved.`);
+    addToast(`Coffee beans "${coffeeBeans.name}" changes saved.`);
 
     // Return the new Coffee Beans entity to the "Add recipe" page:
     item = coffeeBeans;
