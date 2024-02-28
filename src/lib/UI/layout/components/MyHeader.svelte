@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { onMount } from "svelte";
   import { goto } from "$app/navigation";
+  import { base } from "$app/paths";
   import { page } from "$app/stores";
   import { routes } from "$lib/domain/routes";
   import LeftArrowIcon from "$lib/UI/icons/LeftArrowIcon.svelte";
@@ -10,10 +10,6 @@
 
   export let asGap: boolean = false;
 
-  // UI state:
-
-  let virtualKeyboardVisible: boolean = false;
-
   // URL state:
 
   let pathname: string = routes.home;
@@ -22,26 +18,6 @@
 
   page.subscribe((pageInfo) => {
     pathname = pageInfo.url.pathname;
-  });
-
-  // Lifecycle:
-
-  onMount(() => {
-    document.addEventListener("focusin", (event: FocusEvent) => {
-      if (event.target instanceof Element) {
-        if (event.target.tagName === "TEXTAREA" || event.target.tagName === "INPUT") {
-          virtualKeyboardVisible = true;
-        }
-      }
-    });
-
-    document.addEventListener("focusout", (event: FocusEvent) => {
-      if (event.target instanceof Element) {
-        if (event.target.tagName === "TEXTAREA" || event.target.tagName === "INPUT") {
-          virtualKeyboardVisible = false;
-        }
-      }
-    });
   });
 
   // Handlers:
@@ -55,7 +31,11 @@
   }
 </script>
 
-<nav class:as-gap={asGap} class:nav-static={virtualKeyboardVisible}>
+<nav
+  class:as-gap={asGap}
+  class:nav-static={$page.url.pathname === base + routes.addRecipe() ||
+    $page.url.pathname.substring(0, $page.url.pathname.lastIndexOf("/") + 1) + 1 === base + routes.recipeItem(1)}
+>
   <div class="flex flex-wrap items-center justify-between mx-auto p-4">
     <div class="left-nav-side vertical-center-children">
       <div class="icon-button vertical-center-children">

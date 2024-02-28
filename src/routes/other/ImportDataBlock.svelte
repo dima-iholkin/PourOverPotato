@@ -8,10 +8,6 @@
     input.type = "file";
 
     input.onchange = async () => {
-      // you can use this method to get file and perform respective operations
-      // let files = Array.from(input.files);
-      console.log(input.files);
-
       if (input.files === null || input.files.item(0) === undefined || input.files.item(0) === null) {
         alert("Please provide a single file.");
         return;
