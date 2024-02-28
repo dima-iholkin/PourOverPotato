@@ -1,6 +1,5 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
-  import { base } from "$app/paths";
   import { page } from "$app/stores";
   import { routes } from "$lib/domain/routes";
   import LeftArrowIcon from "$lib/UI/icons/LeftArrowIcon.svelte";
