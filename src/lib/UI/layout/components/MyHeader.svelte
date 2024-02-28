@@ -33,8 +33,8 @@
 
 <nav
   class:as-gap={asGap}
-  class:nav-static={$page.url.pathname === base + routes.addRecipe() ||
-    $page.url.pathname.substring(0, $page.url.pathname.lastIndexOf("/") + 1) + 1 === base + routes.recipeItem(1)}
+  class:nav-static={$page.url.pathname === routes.addRecipe() ||
+    $page.url.pathname.substring(0, $page.url.pathname.lastIndexOf("/") + 1) + 1 === routes.recipeItem(1)}
 >
   <div class="flex flex-wrap items-center justify-between mx-auto p-4">
     <div class="left-nav-side vertical-center-children">

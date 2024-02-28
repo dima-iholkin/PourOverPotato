@@ -17,8 +17,8 @@
 <div
   class="bottom-nav"
   class:as-gap={asGap}
-  class:bottom-nav-static={$page.url.pathname === base + routes.addRecipe() ||
-    $page.url.pathname.substring(0, $page.url.pathname.lastIndexOf("/") + 1) + 1 === base + routes.recipeItem(1)}
+  class:bottom-nav-static={$page.url.pathname === routes.addRecipe() ||
+    $page.url.pathname.substring(0, $page.url.pathname.lastIndexOf("/") + 1) + 1 === routes.recipeItem(1)}
 >
   <div class="grid h-full max-w-lg grid-cols-3 mx-auto font-medium">
     <a href={routes.recipes}>
