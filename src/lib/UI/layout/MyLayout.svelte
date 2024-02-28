@@ -3,6 +3,7 @@
   import MyBottomNav from "./components/MyBottomNav.svelte";
   import MyHeader from "./components/MyHeader.svelte";
   import MySidebar from "./components/MySidebar.svelte";
+  import PersistentStorageCheckModal from "./components/PersistentStorageCheckModal.svelte";
 </script>
 
 <MyHeader />
@@ -22,6 +23,8 @@
 <MyBottomNav />
 
 <ToastProvider />
+
+<PersistentStorageCheckModal />
 
 <style lang="postcss">
   .page-container {
