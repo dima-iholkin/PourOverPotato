@@ -9,13 +9,14 @@
   } from "$lib/database/current/indexedDB";
   import { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
   import type { Recipe } from "$lib/domain/entities/Recipe";
-  import { sortRecipesByTimestampDesc as byTimestampDesc } from "$lib/domain/helpers/sortRecipes";
+  import { sortRecipesByTimestampDesc } from "$lib/domain/helpers/sortRecipes";
   import { routes } from "$lib/domain/routes";
   import RecipeCard from "$lib/UI/domain-components/cards/RecipeCard.svelte";
   import MyFab from "$lib/UI/domain-components/FABs/AddRecipeFab.svelte";
   import Loading from "$lib/UI/domain-components/lists/Loading.svelte";
   import NoItemsYetP from "$lib/UI/domain-components/lists/NoItemsYetP.svelte";
-  import SortedByP from "$lib/UI/domain-components/lists/SortedByP.svelte";
+  import { RecipesSortOrderEnum } from "$lib/UI/domain-components/lists/SortRecipesSelect/RecipesSortOrderEnum";
+  import SortRecipesSelect from "$lib/UI/domain-components/lists/SortRecipesSelect/SortRecipesSelect.svelte";
   import DropdownMenu from "$lib/UI/generic-components/dropdownMenu/DropdownMenu.svelte";
   import DropdownMenuItem from "$lib/UI/generic-components/dropdownMenu/DropdownMenuItem.svelte";
   import FlexRow from "$lib/UI/generic-components/FlexRow.svelte";
@@ -62,6 +63,13 @@
     }
   }
 
+  function handleSortOrderChange(
+    value: RecipesSortOrderEnum,
+    sortOrderFunc: (recipeA: Recipe, recipeB: Recipe) => number
+  ) {
+    recipes = recipes!.sort(sortOrderFunc);
+  }
+
   // Helpers:
 
   async function loadCoffeeBeans() {
@@ -72,7 +80,7 @@
     }
     coffeeBeans = item;
     const _recipes: Recipe[] = await getRecipesByCoffeeBeansId(coffeeBeans.id);
-    recipes = _recipes.sort(byTimestampDesc);
+    recipes = _recipes.sort(sortRecipesByTimestampDesc);
   }
 </script>
 
@@ -128,7 +136,7 @@
   {:else if recipes.length === 0}
     <NoItemsYetP />
   {:else}
-    <SortedByP>Sorted by latest recipe date</SortedByP>
+    <SortRecipesSelect onChange={handleSortOrderChange} />
     {#each recipes as recipe (recipe.id)}
       <RecipeCard coffeeBeansName={coffeeBeans.name} href={routes.recipeItem(recipe.id)} {recipe} />
     {/each}

@@ -22,3 +22,15 @@ export function sortRecipesByRatingDesc(recipeA: Recipe, recipeB: Recipe): numbe
 export function sortRecipesByTimestampDesc(recipeA: Recipe, recipeB: Recipe): number {
   return recipeB.timestamp.getTime() - recipeA.timestamp.getTime();
 }
+
+export function sortRecipesByTimestampAsc(recipeA: Recipe, recipeB: Recipe): number {
+  return recipeA.timestamp.getTime() - recipeB.timestamp.getTime();
+}
+
+export function sortRecipesByOutWeightDesc(recipeA: Recipe, recipeB: Recipe): number {
+  return recipeB.outWeight - recipeA.outWeight;
+}
+
+export function sortRecipesByOutWeightAsc(recipeA: Recipe, recipeB: Recipe): number {
+  return recipeA.outWeight - recipeB.outWeight;
+}
