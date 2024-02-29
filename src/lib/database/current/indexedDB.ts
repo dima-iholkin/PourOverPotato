@@ -1,4 +1,4 @@
-import { openDB, type IDBPDatabase } from "idb";
+import { openDB, type IDBPDatabase, type IDBPTransaction } from "idb";
 import { CoffeeBeans, type CoffeeBeansCreateSubmit, CoffeeBeansEditSubmit } from "$lib/domain/entities/CoffeeBeans";
 import { Recipe, type RecipeSubmit } from "$lib/domain/entities/Recipe";
 import { parseDateFromInputString } from "$lib/helpers/dateHelpers";
@@ -23,7 +23,7 @@ const recipesStore_Name = "recipes";
 
 export async function openEntitiesDB() {
   return await openDB<EntitiesDB>(dbName, dbVersion, {
-    async upgrade(db, oldVersion) {
+    async upgrade(db, oldVersion, newVersion, transaction) {
       switch (oldVersion) {
         case 0:
           // This case means no DB existed before.
@@ -32,7 +32,7 @@ export async function openEntitiesDB() {
         case 1: {
           // Run in case for some reason an object store is missing:
           createStores(db);
-          await migrateRecipeTimestampToV2(db);
+          await migrateRecipeTimestampToV2(db, transaction);
           break;
         }
         default:
@@ -60,17 +60,17 @@ function createStores(db: IDBPDatabase<EntitiesDB>) {
 /**
  * Converts each Recipe's "timestamp" field from Date to number:
  */
-async function migrateRecipeTimestampToV2(db: IDBPDatabase<EntitiesDB>) {
-  const tx = db.transaction(recipesStore_Name, "readwrite");
+async function migrateRecipeTimestampToV2(
+  db: IDBPDatabase<EntitiesDB>, transaction: IDBPTransaction<EntitiesDB, ("coffeeBeans" | "recipes")[], "versionchange">
+) {
   // @ts-ignore
-  const recipesOld: IRecipeDB_v1[] = await tx.store.getAll();
+  const recipesOld: IRecipeDB_v1[] = await transaction.objectStore(recipesStore_Name).getAll();
   for (const item of recipesOld) {
     const recipeNew: IRecipeDB = {
       ...item,
       timestamp: item.timestamp.getTime()
     };
-    await tx.store.put(recipeNew);
-    await tx.done;
+    await transaction.objectStore(recipesStore_Name).put(recipeNew);
   }
 }
 
