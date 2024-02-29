@@ -69,7 +69,8 @@ async function migrateRecipeTimestampToV2(db: IDBPDatabase<EntitiesDB>) {
       ...item,
       timestamp: item.timestamp.getTime()
     };
-    await tx.store.put(recipeNew, recipeNew.id);
+    await tx.store.put(recipeNew);
+    await tx.done;
   }
 }
 
