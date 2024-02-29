@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { devFillDB } from "$lib/database/v1/devData/devFillDB";
-  import { anyCoffeeBeansSaved, anyRecipesSaved } from "$lib/database/v1/indexedDB";
+  import { devFillDB } from "$lib/database/current/devData/devFillDB";
+  import { anyCoffeeBeansSaved, anyRecipesSaved } from "$lib/database/current/indexedDB";
   import { addToast } from "$lib/UI/generic-components/toasts/toastProvider";
   import NoItemsYetP from "../lists/NoItemsYetP.svelte";
 

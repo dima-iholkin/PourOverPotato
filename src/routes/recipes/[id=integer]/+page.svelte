@@ -15,7 +15,7 @@
     getAllCoffeeBeans,
     getCoffeeBeansById,
     getRecipeById
-  } from "$lib/database/v1/indexedDB";
+  } from "$lib/database/current/indexedDB";
   import { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
   import { Recipe } from "$lib/domain/entities/Recipe";
   import { naming } from "$lib/domain/naming";

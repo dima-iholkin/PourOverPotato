@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { getAllCoffeeBeans, getRecipesByCoffeeBeansId } from "$lib/database/v1/indexedDB";
+  import { getAllCoffeeBeans, getRecipesByCoffeeBeansId } from "$lib/database/current/indexedDB";
   import type { Recipe } from "$lib/domain/entities/Recipe";
   import {
     sortRecipesByTimestampDesc as byTimestampDescR,

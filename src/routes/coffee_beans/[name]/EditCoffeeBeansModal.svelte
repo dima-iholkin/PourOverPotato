@@ -4,7 +4,7 @@
 
 <script lang="ts">
   import { goto } from "$app/navigation";
-  import { editCoffeeBeans } from "$lib/database/v1/indexedDB";
+  import { editCoffeeBeans } from "$lib/database/current/indexedDB";
   import { CoffeeBeans, CoffeeBeansEditSubmit } from "$lib/domain/entities/CoffeeBeans";
   import { routes } from "$lib/domain/routes";
   import Label from "$lib/UI/generic-components/forms/Label.svelte";

@@ -6,7 +6,7 @@
     deleteRecipesByCoffeeBeansId,
     getCoffeeBeansByName,
     getRecipesByCoffeeBeansId
-  } from "$lib/database/v1/indexedDB";
+  } from "$lib/database/current/indexedDB";
   import { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
   import type { Recipe } from "$lib/domain/entities/Recipe";
   import { sortRecipesByTimestampDesc as byTimestampDesc } from "$lib/domain/helpers/sortRecipes";
