@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { exportAllData } from "$lib/database/v1/indexedDB";
+  import { exportAllData } from "$lib/database/current/indexedDB";
 
   // Handlers:
 

@@ -10,7 +10,7 @@
   <title>Other - PourOverPotato app</title>
 </svelte:head>
 
-<h5 class="page-headline">About app</h5>
+<h5 class="page-headline">About the app</h5>
 <div class="about-section">
   <p>
     It's an open-source application developed

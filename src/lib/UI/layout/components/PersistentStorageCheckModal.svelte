@@ -2,7 +2,7 @@
   import { onMount } from "svelte";
   import { goto } from "$app/navigation";
   import { page } from "$app/stores";
-  import { anyCoffeeBeansSaved } from "$lib/database/v1/indexedDB";
+  import { anyCoffeeBeansSaved } from "$lib/database/current/indexedDB";
   import { routes } from "$lib/domain/routes";
   import Modal from "$lib/UI/generic-components/modals/Modal.svelte";
   import { addToast } from "$lib/UI/generic-components/toasts/toastProvider";

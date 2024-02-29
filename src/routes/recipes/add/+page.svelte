@@ -14,7 +14,7 @@
   import { onMount } from "svelte";
   // import { page } from "$app/stores";
   import { goto } from "$app/navigation";
-  import { addRecipe, getAllCoffeeBeans } from "$lib/database/v1/indexedDB";
+  import { addRecipe, getAllCoffeeBeans } from "$lib/database/current/indexedDB";
   import { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
   import type { RecipeSubmit } from "$lib/domain/entities/Recipe";
   import { naming } from "$lib/domain/naming";

@@ -3,7 +3,7 @@
 </script>
 
 <script lang="ts">
-  import { addCoffeeBeans } from "$lib/database/v1/indexedDB";
+  import { addCoffeeBeans } from "$lib/database/current/indexedDB";
   import { CoffeeBeans, CoffeeBeansCreateSubmit } from "$lib/domain/entities/CoffeeBeans";
   import Label from "$lib/UI/generic-components/forms/Label.svelte";
   import Textarea from "$lib/UI/generic-components/forms/Textarea.svelte";

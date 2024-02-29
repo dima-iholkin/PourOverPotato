@@ -1,6 +1,6 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
-  import { deleteAllData } from "$lib/database/v1/indexedDB";
+  import { deleteAllData } from "$lib/database/current/indexedDB";
   import { routes } from "$lib/domain/routes";
   import DeleteConfirmationModal from "$lib/UI/generic-components/modals/DeleteConfirmationModal.svelte";
   import { addToast } from "$lib/UI/generic-components/toasts/toastProvider";
