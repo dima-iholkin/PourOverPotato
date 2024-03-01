@@ -136,7 +136,7 @@
   {:else if recipes.length === 0}
     <NoItemsYetP />
   {:else}
-    <SortRecipesSelect onChange={handleSortOrderChange} />
+    <SortRecipesSelect onChange={handleSortOrderChange} pageName="coffeebeans_recipes" />
     {#each recipes as recipe (recipe.id)}
       <RecipeCard coffeeBeansName={coffeeBeans.name} href={routes.recipeItem(recipe.id)} {recipe} />
     {/each}

@@ -59,7 +59,7 @@
 {:else if recipes.length === 0}
   <AddDemoCoffeeBeans_PageBlock onAddDemoEntities={() => loadEntities()} />
 {:else}
-  <SortRecipesSelect onChange={handleSortOrderChange} />
+  <SortRecipesSelect onChange={handleSortOrderChange} pageName="all_recipes" />
   {#each recipes as recipe}
     <RecipeCard coffeeBeansName={recipe.coffeeBeansName} href={routes.recipeItem(recipe.id)} {recipe} />
   {/each}
