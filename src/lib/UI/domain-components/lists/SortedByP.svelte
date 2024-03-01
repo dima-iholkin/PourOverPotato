@@ -8,7 +8,7 @@
     margin-top: 1rem;
 
     /* Typography: */
-    @apply text-lg font-normal tracking-tight;
+    @apply text-base font-normal tracking-tight;
 
     /* Colors: */
     @apply text-gray-900 dark:text-white;

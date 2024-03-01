@@ -5,7 +5,9 @@
     deleteCoffeeBeansById,
     deleteRecipesByCoffeeBeansId,
     getCoffeeBeansByName,
-    getRecipesByCoffeeBeansId
+    getRecipesByCoffeeBeansId,
+    undoDeleteCoffeeBeans,
+    undoDeleteRecipesByCoffeeBeansId
   } from "$lib/database/current/indexedDB";
   import { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
   import type { Recipe } from "$lib/domain/entities/Recipe";
@@ -21,7 +23,7 @@
   import DropdownMenuItem from "$lib/UI/generic-components/dropdownMenu/DropdownMenuItem.svelte";
   import FlexRow from "$lib/UI/generic-components/FlexRow.svelte";
   import DeleteConfirmationModal from "$lib/UI/generic-components/modals/DeleteConfirmationModal.svelte";
-  import { addToast } from "$lib/UI/generic-components/toasts/toastProvider";
+  import { addUndoToast } from "$lib/UI/generic-components/toasts/toastProvider";
   import PageHeadline from "$lib/UI/layout/PageHeadline.svelte";
   import type { PageData } from "./$types";
   import EditCoffeeBeansModal from "./EditCoffeeBeansModal.svelte";
@@ -53,14 +55,29 @@
   // Handlers:
 
   async function handleDeleteClick() {
-    if (coffeeBeans instanceof CoffeeBeans) {
-      const countRecipesDeleted: number = await deleteRecipesByCoffeeBeansId(coffeeBeans.id);
-      await deleteCoffeeBeansById(coffeeBeans.id);
-      goto(routes.home);
-      const recipes = countRecipesDeleted === 1 ? "recipe" : "recipes";
-      const recipesPart = countRecipesDeleted > 0 ? ` and ${countRecipesDeleted} ${recipes}` : "";
-      addToast(`Coffee beans "${coffeeBeans.name}"` + recipesPart + " deleted.");
+    if (coffeeBeans === undefined || coffeeBeans === "CoffeeBeansNotFound") {
+      return;
     }
+
+    const _coffeeBeans: CoffeeBeans = coffeeBeans;
+    const countRecipesDeleted: number = await deleteRecipesByCoffeeBeansId(_coffeeBeans.id, true);
+    await deleteCoffeeBeansById(_coffeeBeans.id, true, _coffeeBeans);
+    goto(routes.home);
+    const recipes = countRecipesDeleted === 1 ? "recipe" : "recipes";
+    const recipesString = countRecipesDeleted > 0 ? ` and ${countRecipesDeleted} ${recipes}` : "";
+    addUndoToast(
+      `Coffee beans "${_coffeeBeans.name}"` + recipesString + " deleted.",
+      async () => {
+        await undoDeleteCoffeeBeans(_coffeeBeans);
+        await undoDeleteRecipesByCoffeeBeansId(_coffeeBeans.id);
+        goto(routes.coffeeBeansItem(_coffeeBeans.name)).then(() => goto(routes.home));
+      },
+      async () => {
+        await deleteRecipesByCoffeeBeansId(_coffeeBeans.id);
+        await deleteCoffeeBeansById(_coffeeBeans.id);
+        goto(routes.coffeeBeansItem(_coffeeBeans.name)).then(() => goto(routes.home));
+      }
+    );
   }
 
   function handleSortOrderChange(
@@ -136,7 +153,7 @@
   {:else if recipes.length === 0}
     <NoItemsYetP />
   {:else}
-    <SortRecipesSelect onChange={handleSortOrderChange} />
+    <SortRecipesSelect onChange={handleSortOrderChange} pageName="coffeebeans_recipes" />
     {#each recipes as recipe (recipe.id)}
       <RecipeCard coffeeBeansName={coffeeBeans.name} href={routes.recipeItem(recipe.id)} {recipe} />
     {/each}

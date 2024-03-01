@@ -148,27 +148,63 @@ export async function deleteAllData() {
   await db.delete(recipesStore_Name, all);
 }
 
-export async function deleteCoffeeBeansById(id: number) {
+export async function deleteCoffeeBeansById(id: number, softDelete?: boolean, coffeeBeans?: CoffeeBeans) {
   const db = await openEntitiesDB();
+
+  if (softDelete && softDelete === true) {
+    if (coffeeBeans === undefined) {
+      throw new Error("If the argument softDelete: true, you must pass in the CoffeeBeans entity too.");
+    }
+
+    const obj: Omit<ICoffeeBeansDB, "id"> = {
+      ...coffeeBeans,
+      nameLowerCase: coffeeBeans.name.toLowerCase(),
+      softDeleted: true
+    };
+    const dbSubmitItem: CoffeeBeansDB = new CoffeeBeansDB(obj, coffeeBeans.id);
+    await db.put(coffeeBeansStore_Name, dbSubmitItem);
+    return;
+  }
 
   await db.delete(coffeeBeansStore_Name, id);
 }
 
-export async function deleteRecipeById(id: number) {
+export async function deleteRecipeById(id: number, softDelete?: boolean, recipe?: Recipe): Promise<void> {
   const db = await openEntitiesDB();
+
+  if (softDelete && softDelete === true) {
+    if (recipe === undefined) {
+      throw new Error("If the argument softDelete: true, you must pass in the Recipe entity too.");
+    }
+
+    const obj: Omit<IRecipeDB, "id"> = {
+      ...recipe,
+      timestamp: recipe.timestamp.getTime(),
+      softDeleted: true
+    };
+    const dbSubmitItem: RecipeDB = new RecipeDB(obj, recipe.id);
+    await db.put(recipesStore_Name, dbSubmitItem);
+    return;
+  }
 
   await db.delete(recipesStore_Name, id);
 }
 
-export async function deleteRecipesByCoffeeBeansId(coffeeBeansId: number): Promise<number> {
+export async function deleteRecipesByCoffeeBeansId(coffeeBeansId: number, softDelete?: boolean): Promise<number> {
   const db = await openEntitiesDB();
-
   const items: IRecipeDB[] = await db.getAllFromIndex(recipesStore_Name, "coffeeBeansId", coffeeBeansId);
 
-  await Promise.all(
-    items.map(async (item: IRecipeDB) => await db.delete(recipesStore_Name, item.id))
-  );
+  if (softDelete && softDelete === true) {
+    for (const item of items) {
+      item.softDeleted = true;
+      await db.put(recipesStore_Name, item);
+    }
+    return items.length;
+  }
 
+  for (const item of items) {
+    await db.delete(recipesStore_Name, item.id);
+  }
   return items.length;
 }
 
@@ -226,66 +262,68 @@ export async function exportAllData() {
 
 export async function getAllCoffeeBeans(): Promise<CoffeeBeans[]> {
   const db = await openEntitiesDB();
+  const itemsDB: ICoffeeBeansDB[] = await db.getAll(coffeeBeansStore_Name);
 
-  const itemsShape: ICoffeeBeansDB[] = await db.getAll(coffeeBeansStore_Name);
-
-  const items: CoffeeBeans[] = itemsShape.map(item => new CoffeeBeansDB(item, item.id).toCoffeeBeans());
+  const items: CoffeeBeans[] = itemsDB
+    .filter(item => item.softDeleted === undefined || item.softDeleted === false)
+    .map(item => new CoffeeBeansDB(item, item.id).toCoffeeBeans());
   return items;
 }
 
 export async function getAllRecipes(): Promise<Recipe[]> {
   const db = await openEntitiesDB();
+  const itemsDB: IRecipeDB[] = await db.getAll(recipesStore_Name);
 
-  const itemsShape: IRecipeDB[] = await db.getAll(recipesStore_Name);
-
-  const items: Recipe[] = itemsShape.map(item => new RecipeDB(item, item.id).toRecipe());
+  const items: Recipe[] = itemsDB
+    .filter(item => item.softDeleted === undefined || item.softDeleted === false)
+    .map(item => new RecipeDB(item, item.id).toRecipe());
   return items;
 }
 
 export async function getCoffeeBeansById(id: number): Promise<CoffeeBeans | undefined> {
   const db = await openEntitiesDB();
+  const item: ICoffeeBeansDB | undefined = await db.get(coffeeBeansStore_Name, id);
 
-  const itemShape: ICoffeeBeansDB | undefined = await db.get(coffeeBeansStore_Name, id);
-
-  if (itemShape === undefined) {
-    return itemShape;
+  if (item === undefined || (item.softDeleted && item.softDeleted === true)) {
+    return undefined;
   }
 
-  return new CoffeeBeansDB(itemShape, itemShape.id).toCoffeeBeans();
+  return new CoffeeBeansDB(item, item.id).toCoffeeBeans();
 }
 
 export async function getCoffeeBeansByName(name: string): Promise<CoffeeBeans | undefined> {
   const db = await openEntitiesDB();
-
-  const itemShape: ICoffeeBeansDB | undefined = await db.getFromIndex(
+  const item: ICoffeeBeansDB | undefined = await db.getFromIndex(
     coffeeBeansStore_Name, coffeeBeansIndex_Name, name.toLowerCase()
   );
 
-  if (itemShape === undefined) {
+  if (item === undefined || (item.softDeleted && item.softDeleted === true)) {
     return undefined;
   }
 
-  return new CoffeeBeansDB(itemShape, itemShape.id).toCoffeeBeans();
+  return new CoffeeBeansDB(item, item.id).toCoffeeBeans();
 }
 
 export async function getRecipeById(id: number): Promise<Recipe | undefined> {
   const db = await openEntitiesDB();
 
-  const itemShape: IRecipeDB | undefined = await db.get(recipesStore_Name, id);
+  const item: IRecipeDB | undefined = await db.get(recipesStore_Name, id);
 
-  if (itemShape === undefined) {
+  if (item === undefined || (item.softDeleted && item.softDeleted === true)) {
     return undefined;
   }
 
-  return new RecipeDB(itemShape, itemShape.id).toRecipe();
+  return new RecipeDB(item, item.id).toRecipe();
 }
 
 export async function getRecipesByCoffeeBeansId(id: number): Promise<Recipe[]> {
   const db = await openEntitiesDB();
 
-  const itemsShape: IRecipeDB[] = await db.getAllFromIndex(recipesStore_Name, "coffeeBeansId", id);
+  const itemsDB: IRecipeDB[] = await db.getAllFromIndex(recipesStore_Name, "coffeeBeansId", id);
 
-  const items: Recipe[] = itemsShape.map(item => new RecipeDB(item, item.id).toRecipe());
+  const items: Recipe[] = itemsDB
+    .filter(item => item.softDeleted === undefined || item.softDeleted === false)
+    .map(item => new RecipeDB(item, item.id).toRecipe());
   return items;
 }
 
@@ -294,7 +332,9 @@ export async function getRecipesCountByCoffeeBeansId(coffeeBeansid: number): Pro
 
   const items = await db.getAllFromIndex(recipesStore_Name, "coffeeBeansId", coffeeBeansid);
 
-  return items.length;
+  return items
+    .filter(item => item.softDeleted === undefined || item.softDeleted === false)
+    .length;
 }
 
 export async function importData(jsonFile: File) {
@@ -403,4 +443,42 @@ export async function importData(jsonFile: File) {
   }
 
   addToast(`${newCoffeeBeansCount} new coffee beans and ${newRecipesCount} new recipes imported.`);
+}
+
+export async function undoDeleteCoffeeBeans(item: CoffeeBeans): Promise<void> {
+  const db = await openEntitiesDB();
+
+  const obj: Omit<ICoffeeBeansDB, "id"> = {
+    ...item,
+    nameLowerCase: item.name.toLowerCase(),
+    softDeleted: false
+  };
+  const dbSubmitItem: CoffeeBeansDB = new CoffeeBeansDB(obj, item.id);
+  await db.put(coffeeBeansStore_Name, dbSubmitItem);
+}
+
+export async function undoDeleteRecipe(recipe: Recipe): Promise<void> {
+  const db = await openEntitiesDB();
+
+  const obj: Omit<IRecipeDB, "id"> = {
+    ...recipe,
+    timestamp: recipe.timestamp.getTime(),
+    softDeleted: false
+  };
+  const dbSubmitItem: RecipeDB = new RecipeDB(obj, recipe.id);
+  await db.put(recipesStore_Name, dbSubmitItem);
+}
+
+export async function undoDeleteRecipesByCoffeeBeansId(coffeeBeansId: number): Promise<void> {
+  const db = await openEntitiesDB();
+  const items: IRecipeDB[] = await db.getAllFromIndex(recipesStore_Name, "coffeeBeansId", coffeeBeansId);
+
+  for (const item of items) {
+    const obj: Omit<IRecipeDB, "id"> = {
+      ...item,
+      softDeleted: false
+    };
+    const dbSubmitItem: RecipeDB = new RecipeDB(obj, item.id);
+    await db.put(recipesStore_Name, dbSubmitItem);
+  }
 }
