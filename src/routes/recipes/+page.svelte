@@ -3,7 +3,10 @@
   import { getAllCoffeeBeans, getAllRecipes } from "$lib/database/current/indexedDB";
   import type { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
   import type { Recipe } from "$lib/domain/entities/Recipe";
-  import { sortRecipesByTimestampDesc as byTimestampDesc } from "$lib/domain/helpers/sortRecipes";
+  import {
+    sortRecipesByTimestampDesc as byTimestampDesc,
+    sortRecipesByTimestampDesc
+  } from "$lib/domain/helpers/sortRecipes";
   import { routes } from "$lib/domain/routes";
   import RecipeCard from "$lib/UI/domain-components/cards/RecipeCard.svelte";
   import MyFab from "$lib/UI/domain-components/FABs/AddRecipeFab.svelte";
@@ -18,19 +21,25 @@
 
   let recipes: EnhancedRecipe[] | undefined;
 
+  // UI state:
+
+  let sortOrderValue: {
+    value: RecipesSortOrderEnum;
+    sortOrderFunc: (recipeA: Recipe, recipeB: Recipe) => number;
+  };
+
   // Lifecycle:
 
   onMount(() => {
     loadEntities();
   });
 
-  // Handlers:
+  // Reactivity:
 
-  function handleSortOrderChange(
-    value: RecipesSortOrderEnum,
-    sortOrderFunc: (recipeA: Recipe, recipeB: Recipe) => number
-  ) {
-    recipes = recipes!.sort(sortOrderFunc);
+  $: {
+    if (recipes) {
+      recipes = recipes.sort(sortOrderValue?.sortOrderFunc ?? sortRecipesByTimestampDesc);
+    }
   }
 
   // Helpers:
@@ -59,7 +68,7 @@
 {:else if recipes.length === 0}
   <AddDemoCoffeeBeans_PageBlock onAddDemoEntities={() => loadEntities()} />
 {:else}
-  <SortRecipesSelect onChange={handleSortOrderChange} pageName="all_recipes" />
+  <SortRecipesSelect pageName="all_recipes" bind:sortOrderValue />
   {#each recipes as recipe}
     <RecipeCard coffeeBeansName={recipe.coffeeBeansName} href={routes.recipeItem(recipe.id)} {recipe} />
   {/each}

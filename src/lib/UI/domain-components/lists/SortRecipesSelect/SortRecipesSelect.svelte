@@ -27,35 +27,37 @@
 <script lang="ts">
   import { RecipesSortOrderEnum } from "./RecipesSortOrderEnum";
 
-  // Events:
-
-  export let onChange: (
-    selected: RecipesSortOrderEnum,
-    sortOrderFunc: (recipeA: Recipe, recipeB: Recipe) => number
-  ) => void;
-
   // Props:
 
   export let pageName: string;
   const selectId = SORT_RECIPES_ID + pageName;
 
+  export let sortOrderValue: {
+    value: RecipesSortOrderEnum;
+    sortOrderFunc: (recipeA: Recipe, recipeB: Recipe) => number;
+  };
+
   // UI state:
 
-  let selected: RecipesSortOrderEnum = loadSortOrder(selectId);
+  let value: RecipesSortOrderEnum = loadSortOrder(selectId);
 
-  // Handlers:
+  // Reactivity:
 
-  function handleSelectChange() {
+  $: {
+    value;
     const sortOrderFunc =
-      sortOrderEnumEntriesForUI.find((item) => item.value === selected)?.sortOrderFunc ?? sortRecipesByTimestampDesc;
-    onChange(selected, sortOrderFunc);
-    saveSortOrder(selectId, selected);
+      sortOrderEnumEntriesForUI.find((item) => item.value === value)?.sortOrderFunc ?? sortRecipesByTimestampDesc;
+    sortOrderValue = {
+      value,
+      sortOrderFunc
+    };
+    saveSortOrder(selectId, value);
   }
 </script>
 
 <div class="select-container">
   <p>Sorted by</p>
-  <select id={selectId} class="valid" name={selectId} bind:value={selected} on:change={handleSelectChange}>
+  <select id={selectId} name={selectId} bind:value>
     {#each sortOrderEnumEntriesForUI as item (item.value)}
       <option value={item.value}>{item.key}</option>
     {/each}
@@ -81,16 +83,8 @@
     @apply text-gray-900 dark:text-white;
   }
 
-  p {
-  }
-
   select {
-    /* flex-grow: 1;
-    width: 100%; */
-  }
-
-  .valid {
-    @apply border border-gray-300 text-gray-900 rounded-lg;
+    @apply bg-white text-gray-900 border border-gray-300 rounded-lg;
     @apply focus:ring-blue-500 focus:border-blue-500;
     @apply dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white;
     @apply dark:focus:ring-blue-500 dark:focus:border-blue-500;
