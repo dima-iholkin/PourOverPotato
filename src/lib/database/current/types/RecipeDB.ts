@@ -9,6 +9,7 @@ export interface IRecipeDB {
   rating: number;
   outWeight: number;
   timestamp: number;
+  softDeleted?: boolean;
 }
 
 export class RecipeDB implements IRecipeDB {
@@ -20,6 +21,7 @@ export class RecipeDB implements IRecipeDB {
   rating: number;
   outWeight: number;
   timestamp: number;
+  softDeleted?: boolean;
 
   constructor(item: Omit<IRecipeDB, "id">, id: number) {
     this.id = id;
@@ -30,6 +32,7 @@ export class RecipeDB implements IRecipeDB {
     this.rating = item.rating;
     this.outWeight = item.outWeight;
     this.timestamp = item.timestamp;
+    this.softDeleted = item.softDeleted;
   }
 
   toRecipe() {
@@ -55,6 +58,7 @@ export class RecipeDBSubmit implements Omit<RecipeDB, "id" | "toRecipe"> {
   rating: number;
   outWeight: number;
   timestamp: number;
+  softDeleted?: boolean;
 
   constructor(recipe: RecipeSubmit) {
     this.coffeeBeansId = recipe.coffeeBeansId;
@@ -64,5 +68,6 @@ export class RecipeDBSubmit implements Omit<RecipeDB, "id" | "toRecipe"> {
     this.rating = recipe.rating;
     this.outWeight = recipe.outWeight;
     this.timestamp = recipe.timestamp.getTime();
+    this.softDeleted = false;
   }
 }
