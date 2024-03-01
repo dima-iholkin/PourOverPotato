@@ -43,7 +43,20 @@
   let coffeeBeans: CoffeeBeans | undefined | "CoffeeBeansNotFound";
   let recipes: Recipe[] | undefined;
 
+  // UI state:
+
+  let sortOrderValue: {
+    value: RecipesSortOrderEnum;
+    sortOrderFunc: (recipeA: Recipe, recipeB: Recipe) => number;
+  };
+
   // Reactivity:
+
+  $: {
+    if (recipes) {
+      recipes = recipes.sort(sortOrderValue?.sortOrderFunc ?? sortRecipesByTimestampDesc);
+    }
+  }
 
   $: {
     data;
@@ -78,13 +91,6 @@
         goto(routes.coffeeBeansItem(_coffeeBeans.name)).then(() => goto(routes.home));
       }
     );
-  }
-
-  function handleSortOrderChange(
-    value: RecipesSortOrderEnum,
-    sortOrderFunc: (recipeA: Recipe, recipeB: Recipe) => number
-  ) {
-    recipes = recipes!.sort(sortOrderFunc);
   }
 
   // Helpers:
@@ -153,7 +159,7 @@
   {:else if recipes.length === 0}
     <NoItemsYetP />
   {:else}
-    <SortRecipesSelect onChange={handleSortOrderChange} pageName="coffeebeans_recipes" />
+    <SortRecipesSelect pageName="coffeebeans_recipes" bind:sortOrderValue />
     {#each recipes as recipe (recipe.id)}
       <RecipeCard coffeeBeansName={coffeeBeans.name} href={routes.recipeItem(recipe.id)} {recipe} />
     {/each}
