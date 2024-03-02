@@ -23,9 +23,10 @@
 
   export let item: CoffeeBeans;
 
-  // Bind functions:
+  // Bind triggers:
 
   let setModalState_: (state: "open" | "closed") => void;
+  let bindResizeTextarea: () => void;
 
   // Bind DOM elements:
 
@@ -100,16 +101,12 @@
 
   function handleModalStateChange(state: "open" | "closed") {
     if (state === "open") {
-      tick().then(() => {
-        textareaDom.focus();
-        textareaDom.blur();
-      });
-    }
-
-    if (state === "closed") {
       name = item.name ?? "";
       description = item.description ?? "";
       validationMessage = "";
+      tick().then(() => {
+        bindResizeTextarea();
+      });
     }
   }
 
@@ -145,6 +142,7 @@
         label="Description:"
         name="description"
         placeholder={DESCRIPTION_PH}
+        bind:resizeTextarea={bindResizeTextarea}
         bind:this_={textareaDom}
         bind:value={description}
         on:keydown={handleCtrlEnterKey}

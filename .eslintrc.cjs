@@ -92,7 +92,7 @@ module.exports = {
           "id",
           "slot",
           ["multiline", "unknown", "shorthand", "svelte-shorthand"],
-          ["aria", "a11y"],
+          ["aria", "a11y", "role"],
           "svelte-builtin"
         ],
         "custom-groups": {
@@ -100,6 +100,7 @@ module.exports = {
           "slot": "slot",
           "aria": "aria*",
           "a11y": "alt",
+          "role": "role",
           "svelte-builtin": "*:*"
         }
       }
