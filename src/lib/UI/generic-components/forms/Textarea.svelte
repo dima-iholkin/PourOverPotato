@@ -23,9 +23,7 @@
 
   function resizeOnInput(currentTarget: EventTarget & HTMLTextAreaElement) {
     currentTarget.style.height = "";
-    // console.log("scrollHeight before resize: " + currentTarget.scrollHeight);
     currentTarget.style.height = currentTarget.scrollHeight + "px";
-    // console.log("scrollHeight after resize: " + currentTarget.scrollHeight);
   }
 </script>
 
@@ -55,9 +53,5 @@
     padding-bottom: 2rem;
     resize: none;
     overflow-y: hidden;
-
-    /* box-sizing: content-box; */
-
-    /* min-height: 90px; */
   }
 </style>
