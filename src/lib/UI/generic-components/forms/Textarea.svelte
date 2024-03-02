@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onMount } from "svelte";
   import Label from "./Label.svelte";
 
   // Props:
@@ -7,14 +8,24 @@
   export let label: string = "";
   export let name: string = "";
   export let placeholder: string = "";
-  export let textLinesCount: number = 3;
   export let this_: HTMLTextAreaElement | undefined = undefined;
   export let value: string = "";
 
-  // Reactivity:
+  // Lifecycle:
 
-  if (textLinesCount === 1) {
-    textLinesCount = 1.2;
+  onMount(() => {
+    if (this_) {
+      resizeOnInput(this_);
+    }
+  });
+
+  // Helpers:
+
+  function resizeOnInput(currentTarget: EventTarget & HTMLTextAreaElement) {
+    currentTarget.style.height = "";
+    // console.log("scrollHeight before resize: " + currentTarget.scrollHeight);
+    currentTarget.style.height = currentTarget.scrollHeight + "px";
+    // console.log("scrollHeight after resize: " + currentTarget.scrollHeight);
   }
 </script>
 
@@ -26,8 +37,9 @@
     {placeholder}
     bind:this={this_}
     bind:value
+    on:focus={(event) => resizeOnInput(event.currentTarget)}
+    on:input={(event) => resizeOnInput(event.currentTarget)}
     on:keydown
-    style:height="calc({textLinesCount}rlh + 1.5rem)"
   />
 </div>
 
@@ -39,5 +51,13 @@
     @apply dark:focus:ring-blue-500 dark:focus:border-blue-500;
 
     width: 100%;
+
+    padding-bottom: 2rem;
+    resize: none;
+    overflow-y: hidden;
+
+    /* box-sizing: content-box; */
+
+    /* min-height: 90px; */
   }
 </style>

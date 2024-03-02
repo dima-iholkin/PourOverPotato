@@ -212,7 +212,6 @@
     label={naming.recipe.recipeThoughts + ":"}
     name={RECIPE_THOUGHTS}
     placeholder={placeholders.recipeThoughts}
-    textLinesCount={4}
     bind:value={recipeThoughts}
   />
 

@@ -3,6 +3,7 @@
 </script>
 
 <script lang="ts">
+  import { tick } from "svelte";
   import { goto } from "$app/navigation";
   import { editCoffeeBeans } from "$lib/database/current/indexedDB";
   import { CoffeeBeans, CoffeeBeansEditSubmit } from "$lib/domain/entities/CoffeeBeans";
@@ -94,7 +95,22 @@
     setModalState_("closed");
 
     // Reload the page with the new CoffeeBeans name, to avoid any stale state:
-    goto(routes.coffeeBeansItem(coffeeBeans.name));
+    goto(routes.home).then(() => goto(routes.coffeeBeansItem(coffeeBeans.name)));
+  }
+
+  function handleModalStateChange(state: "open" | "closed") {
+    if (state === "open") {
+      tick().then(() => {
+        textareaDom.focus();
+        textareaDom.blur();
+      });
+    }
+
+    if (state === "closed") {
+      name = item.name ?? "";
+      description = item.description ?? "";
+      validationMessage = "";
+    }
   }
 
   function handleInputChange() {
@@ -105,7 +121,7 @@
   }
 </script>
 
-<Modal title="Edit coffee beans" bind:setState={setModalState_}>
+<Modal onStateChange={handleModalStateChange} title="Edit coffee beans" bind:setState={setModalState_}>
   <form class="mx-auto" bind:this={formDom} on:submit|preventDefault={handleSubmit}>
     <div class="mb-5">
       <Label for_="name" valid={!nameValidationFailed}>Coffee beans name:</Label>
