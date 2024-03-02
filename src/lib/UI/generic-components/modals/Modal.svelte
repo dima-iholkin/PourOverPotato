@@ -14,6 +14,10 @@
     isOpen = state === "open"
       ? true
       : false;
+
+    if (isOpen && onStateChange) {
+      onStateChange("open");
+    }
   };
 
   // UI props:

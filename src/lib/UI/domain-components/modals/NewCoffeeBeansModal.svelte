@@ -3,6 +3,7 @@
 </script>
 
 <script lang="ts">
+  import { tick } from "svelte";
   import { addCoffeeBeans } from "$lib/database/current/indexedDB";
   import { CoffeeBeans, CoffeeBeansCreateSubmit } from "$lib/domain/entities/CoffeeBeans";
   import Label from "$lib/UI/generic-components/forms/Label.svelte";
@@ -104,6 +105,19 @@
   }
 
   function handleModalStateChange(state: "open" | "closed") {
+    if (state === "open") {
+      tick().then(() => {
+        textareaDom.focus();
+        textareaDom.blur();
+      });
+    }
+
+    if (state === "closed") {
+      name = "";
+      description = "";
+      validationMessage = "";
+    }
+
     if (onModalStateChange !== undefined) {
       onModalStateChange(state);
     }
