@@ -114,6 +114,7 @@
       validationMessage = "";
       tick().then(() => {
         bindResizeTextarea();
+        inputDom.focus();
       });
     }
 
