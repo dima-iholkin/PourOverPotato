@@ -29,15 +29,7 @@ Much later I would like to add an ability to sync data with Google Drive.
 
 The application is in active development. Things may change and data integrity is not guaranteed. However I'll try hard to not break your data.
 
-## Donate, make me happy
-
-<script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="dimich1993" data-color="#00b000" data-emoji="☕"  data-font="Cookie" data-text="Buy me a coffee" data-outline-color="#ffffff" data-font-color="#ffffff" data-coffee-color="#FFDD00" ></script>
-
-<a href="https://www.buymeacoffee.com/dimich1993" target="_blank">
-  <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" height="41" width="174">
-</a>
-
-<a href="https://www.buymeacoffee.com/dimich1993" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
+## Donate
 
 <a href="https://www.buymeacoffee.com/dimich1993" target="_blank">
   <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" height="60" width="217">
