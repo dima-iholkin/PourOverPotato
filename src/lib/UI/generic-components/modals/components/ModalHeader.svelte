@@ -4,16 +4,27 @@
   // Events:
 
   export let onClose: () => void;
+  export let onFocusReverse: (() => void) | undefined = undefined;
+
+  // Triggers:
+
+  export const setFocus = () => {
+    setFocusToCloseModalButton();
+  };
 
   // UI props:
 
   export let title: string | undefined;
+
+  // Bind triggers:
+
+  let setFocusToCloseModalButton: () => void;
 </script>
 
 <div>
   <CloseModalButton asGap={true} />
   <h1 class:hidden={title === undefined || title.length === 0}>{title}</h1>
-  <CloseModalButton on:click={() => onClose()} />
+  <CloseModalButton {onFocusReverse} bind:setFocus={setFocusToCloseModalButton} on:click={() => onClose()} />
 </div>
 
 <style lang="postcss">

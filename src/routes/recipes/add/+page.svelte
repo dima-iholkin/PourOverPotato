@@ -33,6 +33,10 @@
 
   // const coffeeBeansName = $page.data.coffeeBeansName;
 
+  // Bind DOM elements:
+
+  let bindSelectDOM: HTMLSelectElement | undefined;
+
   // UI state:
 
   let uiCoffeeBeansValidationFailed: boolean = false;
@@ -178,6 +182,7 @@
     allCoffeeBeans={coffeeBeansItems}
     onSavedCoffeeBeans={handleSavedCoffeeBeans}
     validationFailed={uiCoffeeBeansValidationFailed}
+    bind:selectDOM={bindSelectDOM}
     bind:selectedCoffeeBeansId
   />
 

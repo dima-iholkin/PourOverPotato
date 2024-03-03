@@ -15,7 +15,7 @@ the FAB will not obscure the page content.
 <div class="page-bottom-gap" />
 
 <div class="fab-container">
-  <a {href}>
+  <a {href} tabindex="-1">
     <button class="my-button">
       <div>
         <PlusIcon />
