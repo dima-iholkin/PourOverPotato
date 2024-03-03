@@ -3,6 +3,7 @@
 </script>
 
 <script lang="ts">
+  // import { tick } from "svelte";
   import { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
   import NewCoffeeBeansModal from "$lib/UI/domain-components/modals/NewCoffeeBeansModal.svelte";
   import Label from "$lib/UI/generic-components/forms/Label.svelte";
@@ -10,10 +11,6 @@
   // Events:
 
   export let onSavedCoffeeBeans: ((coffeeBeans: CoffeeBeans) => void) | undefined = undefined;
-
-  // Bound functions:
-
-  let setModalState: ((state: "open" | "closed") => void) | undefined;
 
   // Entity props:
 
@@ -24,6 +21,11 @@
 
   export let validationFailed: boolean = false;
   export let showAddButton: boolean = true;
+  export let selectDOM: HTMLSelectElement | undefined;
+
+  // Bind triggers:
+
+  let setModalState: ((state: "open" | "closed") => void) | undefined;
 
   // UI state:
 
@@ -38,6 +40,17 @@
       validationMessage = "";
     }
   }
+
+  // let selectDidFocusOnInit: boolean = false;
+  // $: {
+  //   allCoffeeBeans;
+  //   if (allCoffeeBeans && selectDidFocusOnInit === false) {
+  //     selectDidFocusOnInit = true;
+  //     tick().then(() => {
+  //       selectDOM?.focus();
+  //     });
+  //   }
+  // }
 
   // Handlers:
 
@@ -57,6 +70,8 @@
         class={validationFailed ? "invalid" : "valid"}
         disabled={allCoffeeBeans === undefined}
         name={COFFEEBEANS_ID}
+        tabindex="0"
+        bind:this={selectDOM}
         bind:value={selectedCoffeeBeansId}
         on:change={handleSelectChange}
       >

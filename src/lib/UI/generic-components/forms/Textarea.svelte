@@ -56,7 +56,6 @@
     {placeholder}
     bind:this={this_}
     bind:value
-    on:focus={(event) => resizeOnInput(event.currentTarget)}
     on:input={(event) => resizeOnInput(event.currentTarget)}
     on:keydown
   />

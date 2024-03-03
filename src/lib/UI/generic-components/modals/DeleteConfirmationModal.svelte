@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { tick } from "svelte";
   import Modal from "$lib/UI/generic-components/modals/Modal.svelte";
 
   // Events:
@@ -8,22 +9,48 @@
   // Triggers:
 
   export const setModalState = (state: "open" | "closed") => {
-    bind_setModalState(state);
+    bindSetModalState(state);
   };
 
-  // Bind functions:
+  // Bind triggers:
 
-  let bind_setModalState: (state: "open" | "closed") => void;
+  let bindSetModalState: (state: "open" | "closed") => void;
+  let setFocusToModal: () => void;
+
+  // Bind DOM elements:
+
+  let cancelButtonDOM: HTMLButtonElement;
 
   // Handlers:
 
   function handleDeleteClick() {
-    bind_setModalState("closed");
+    bindSetModalState("closed");
     onDeleteClick();
+  }
+
+  function handleStateChange(state: "open" | "closed") {
+    if (state === "open") {
+      tick().then(() => {
+        setFocusToModal();
+      });
+    }
+  }
+
+  function handleKeydown(event: KeyboardEvent) {
+    if (event.key === "Tab" && event.shiftKey === false) {
+      event.preventDefault();
+      setFocusToModal();
+    }
   }
 </script>
 
-<Modal title="Confirmation" bind:setState={bind_setModalState}>
+<Modal
+  onFocusReverse={() => cancelButtonDOM.focus()}
+  onStateChange={handleStateChange}
+  title="Confirmation"
+  bind:setFocus={setFocusToModal}
+  bind:setState={bindSetModalState}
+>
   <div class="text-container">
     <p>
       <slot />
@@ -31,7 +58,15 @@
   </div>
   <div class="buttons-container">
     <button class="button-delete" type="button" on:click={handleDeleteClick}> Delete </button>
-    <button class="button-cancel" type="button" on:click={() => bind_setModalState("closed")}> Cancel </button>
+    <button
+      class="button-cancel"
+      type="button"
+      bind:this={cancelButtonDOM}
+      on:click={() => bindSetModalState("closed")}
+      on:keydown={handleKeydown}
+    >
+      Cancel
+    </button>
   </div>
 </Modal>
 

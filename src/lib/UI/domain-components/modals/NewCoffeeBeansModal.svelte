@@ -24,14 +24,16 @@
 
   // Bind triggers:
 
-  let setModalState_: (state: "open" | "closed") => void;
   let bindResizeTextarea: () => void;
+  let setFocusToModal: () => void;
+  let setModalState_: (state: "open" | "closed") => void;
 
-  // DOM state:
+  // Bind DOM elements:
 
-  let inputDom: HTMLInputElement;
-  let textareaDom: HTMLTextAreaElement;
   let formDom: HTMLFormElement;
+  let inputDom: HTMLInputElement;
+  let saveButtonDOM: HTMLButtonElement;
+  let textareaDom: HTMLTextAreaElement;
 
   // Form state:
 
@@ -119,9 +121,27 @@
       onModalStateChange(state);
     }
   }
+
+  function handleSaveButtonTabKeydown(event: KeyboardEvent) {
+    if (event.key === "Tab" && event.shiftKey === false) {
+      event.preventDefault();
+      setFocusToModal();
+    }
+  }
+
+  function handleInputFocusIn(event: FocusEvent & { currentTarget: EventTarget & HTMLInputElement }) {
+    const textLength = event.currentTarget.value.length;
+    inputDom.setSelectionRange(textLength, textLength);
+  }
 </script>
 
-<Modal onStateChange={handleModalStateChange} title="Add new coffee beans" bind:setState={setModalState_}>
+<Modal
+  onFocusReverse={() => saveButtonDOM.focus()}
+  onStateChange={handleModalStateChange}
+  title="Add new coffee beans"
+  bind:setFocus={setFocusToModal}
+  bind:setState={setModalState_}
+>
   <form class="mx-auto" bind:this={formDom} on:submit|preventDefault={handleFormSubmit}>
     <div class="mb-5">
       <Label for_="name" valid={!nameValidationFailed}>Coffee beans name:</Label>
@@ -134,6 +154,7 @@
         type="text"
         bind:this={inputDom}
         bind:value={name}
+        on:focusin={handleInputFocusIn}
         on:input={handleInputChange}
         on:keydown={handleEnter}
       />
@@ -151,7 +172,9 @@
         on:keydown={handleCtrlEnter}
       />
     </div>
-    <button class="button-submit" type="submit">Save</button>
+    <button class="button-submit" type="submit" bind:this={saveButtonDOM} on:keydown={handleSaveButtonTabKeydown}>
+      Save
+    </button>
   </form>
 </Modal>
 

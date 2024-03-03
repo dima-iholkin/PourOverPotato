@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount } from "svelte";
+  import { onMount, tick } from "svelte";
   import { goto } from "$app/navigation";
   import { page } from "$app/stores";
   import { anyCoffeeBeansSaved } from "$lib/database/current/indexedDB";
@@ -14,6 +14,12 @@
   // Bind triggers:
 
   let bindSetModalState: (state: "open" | "closed") => void;
+  let setFocusToModal: () => void;
+
+  // Bind DOM elements:
+
+  let cancelButtonDOM: HTMLButtonElement;
+  let enableButtonDOM: HTMLButtonElement;
 
   // Lifecycle:
 
@@ -29,7 +35,7 @@
     }
   });
 
-  // Handlers:
+  // Entity handlers:
 
   async function handlePersistButtonClick() {
     const result: boolean = await navigator.storage.persist();
@@ -46,9 +52,32 @@
       goto(routes.home).then(() => goto(route));
     }
   }
+
+  // UI handlers:
+
+  function handleStateChange(state: "open" | "closed") {
+    if (state === "open") {
+      tick().then(() => {
+        enableButtonDOM.focus();
+      });
+    }
+  }
+
+  function handleKeydown(event: KeyboardEvent) {
+    if (event.key === "Tab" && event.shiftKey === false) {
+      event.preventDefault();
+      setFocusToModal();
+    }
+  }
 </script>
 
-<Modal title="Persistent storage not enabled" bind:setState={bindSetModalState}>
+<Modal
+  onFocusReverse={() => cancelButtonDOM.focus()}
+  onStateChange={handleStateChange}
+  title="Persistent storage not enabled"
+  bind:setFocus={setFocusToModal}
+  bind:setState={bindSetModalState}
+>
   <div class="text-container">
     <p>
       Please try turning persistent storage ON in your browser, it will make your data relatively safe from a browser
@@ -56,8 +85,18 @@
     </p>
   </div>
   <div class="buttons-container">
-    <button class="enable" type="button" on:click={handlePersistButtonClick}> Enable persistent storage </button>
-    <button class="cancel" type="button" on:click={() => bindSetModalState("closed")}> Cancel </button>
+    <button class="enable" type="button" bind:this={enableButtonDOM} on:click={handlePersistButtonClick}>
+      Enable persistent storage
+    </button>
+    <button
+      class="cancel"
+      type="button"
+      bind:this={cancelButtonDOM}
+      on:click={() => bindSetModalState("closed")}
+      on:keydown={handleKeydown}
+    >
+      Cancel
+    </button>
   </div>
 </Modal>
 
@@ -84,7 +123,7 @@
     @apply hover:text-white hover:bg-green-400 focus:ring-green-300 focus:ring-4 focus:outline-none;
   }
 
-  button.cancel{
+  button.cancel {
     @apply text-gray-500 border border-gray-500 font-medium rounded-lg text-sm px-5 py-2.5 text-center;
     @apply hover:text-white hover:bg-gray-400 focus:ring-gray-300 focus:ring-4 focus:outline-none;
   }

@@ -6,6 +6,7 @@
   // Events:
 
   export let onStateChange: ((state: "open" | "closed") => void) | undefined = undefined;
+  export let onFocusReverse: (() => void) | undefined = undefined;
 
   // Triggers:
 
@@ -15,22 +16,30 @@
       ? true
       : false;
 
-    if (isOpen && onStateChange) {
-      onStateChange("open");
+    if (onStateChange) {
+      onStateChange(state);
     }
+  };
+
+  export const setFocus = () => {
+    setFocusToModalHeader();
   };
 
   // UI props:
 
   export let title: string | undefined;
 
+  // Bind triggers:
+
+  let setFocusToModalHeader: () => void;
+
+  // Bind DOM elements:
+
+  let modalDom: Element;
+
   // UI state:
 
   let isOpen: boolean = false;
-
-  // DOM state:
-
-  let modalDom: Element;
 
   // Handlers:
 
@@ -79,7 +88,7 @@
   <div class="vertical-center mx-auto">
     <div class="vertical-gap" />
     <div class="inner-container relative shadow-xl rounded-md bg-white" bind:this={modalDom}>
-      <ModalHeader onClose={handleClose} {title} />
+      <ModalHeader onClose={handleClose} {onFocusReverse} {title} bind:setFocus={setFocusToModalHeader} />
       <slot />
     </div>
     <div class="vertical-gap" />
