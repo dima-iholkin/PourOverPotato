@@ -1,6 +1,6 @@
 # PourOverPotato app
 
-How do you keep notes on your pour overs?  
+How do you keep notes on your pour over recipes?  
 This app makes it easy to organize your records.  
 I'm using this app daily and actively improving and maintaining it.
 
