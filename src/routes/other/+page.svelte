@@ -18,8 +18,7 @@
   </p>
   <p>
     You can view the development workitems
-    <a href="https://github.com/users/dima-iholkin/projects/5/views/1">on the Projects page</a>
-    .
+    <a href="https://github.com/users/dima-iholkin/projects/5/views/1">on the Projects page</a>.
   </p>
   <p>
     You can influence the project using
@@ -32,13 +31,13 @@
 <h5>About your data</h5>
 <div class="about-section">
   <p>
-    By design all your data is saved only in your browser on your device, it's not sent anywhere, there is not server.
-    You can import and export your data to and from a file.
+    By design all your data is saved in your browser only and on your device only, it's not sent anywhere, there is not
+    server. You can import and export your data to and from a file.
   </p>
   <p style="padding-bottom: 1rem;">Much later I would like to add an ability to sync data with Google Drive.</p>
   <p>
     The application is in active development. Things may change and data integrity is not guaranteed. However I'll try
-    hard to not break you data.
+    hard to not break your data.
   </p>
 </div>
 
