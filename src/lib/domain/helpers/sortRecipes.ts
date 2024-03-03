@@ -11,12 +11,15 @@ export function sortCoffeeBeansByTimestampDesc(
   if (itemB.latestRecipeTimestamp === undefined) {
     return -1;
   }
-
   return itemB.latestRecipeTimestamp.getTime() - itemA.latestRecipeTimestamp.getTime();
 }
 
 export function sortRecipesByRatingDesc(recipeA: Recipe, recipeB: Recipe): number {
   return recipeB.rating - recipeA.rating;
+}
+
+export function sortRecipesByRatingAsc(recipeA: Recipe, recipeB: Recipe): number {
+  return recipeA.rating - recipeB.rating;
 }
 
 export function sortRecipesByTimestampDesc(recipeA: Recipe, recipeB: Recipe): number {
