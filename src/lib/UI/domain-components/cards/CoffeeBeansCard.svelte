@@ -46,6 +46,7 @@
 
   .recipes-count {
     white-space: nowrap;
+    margin-top: 0.35rem;
   }
 
   .content {
