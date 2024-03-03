@@ -29,7 +29,7 @@ Much later I would like to add an ability to sync data with Google Drive.
 
 The application is in active development. Things may change and data integrity is not guaranteed. However I'll try hard to not break your data.
 
-## Donate
+## Support me
 
 <a href="https://www.buymeacoffee.com/dimich1993" target="_blank">
   <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" height="60" width="217">
