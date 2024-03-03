@@ -39,6 +39,11 @@
     }
   }
 
+  function handleFocusIn(event: Event & { currentTarget: EventTarget & HTMLInputElement }) {
+    const textLength = event.currentTarget.value.length;
+    event.currentTarget.setSelectionRange(0, textLength);
+  }
+
   function handleFocusOut(event: Event & { currentTarget: EventTarget & HTMLInputElement }) {
     parseValue(event.currentTarget.value);
   }
@@ -102,6 +107,7 @@
       name={nameAttr}
       type="text"
       bind:value
+      on:focusin={handleFocusIn}
       on:focusout={handleFocusOut}
       on:keydown={handleKeydown}
     />

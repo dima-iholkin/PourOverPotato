@@ -13,25 +13,32 @@
 <h5 class="page-headline">About the app</h5>
 <div class="about-section">
   <p>
-    It's an open-source application developed
+    This is on an open-source application developed
     <a href="https://github.com/dima-iholkin/PourOverPotato">on GitHub</a>.
   </p>
   <p>
-    You can view the development process on the
-    <a href="https://github.com/users/dima-iholkin/projects/5/views/1">Projects page</a>.
+    You can view the development workitems
+    <a href="https://github.com/users/dima-iholkin/projects/5/views/1">on the Projects page</a>
+    .
   </p>
-  <p>You can influence the work at the project's GitHub or just contact me.</p>
+  <p>
+    You can influence the project using
+    <a href="https://github.com/dima-iholkin/PourOverPotato/discussions">the Discussions</a> and
+    <a href="https://github.com/dima-iholkin/PourOverPotato/issues">the Issues</a>
+    pages.
+  </p>
 </div>
 
 <h5>About your data</h5>
 <div class="about-section">
   <p>
-    Currently all data is saved only in the user's browser and is not sent anywhere. Later I want to add an ability to
-    import and export data to a file, and sync data with Google Drive.
+    By design all your data is saved only in your browser on your device, it's not sent anywhere, there is not server.
+    You can import and export your data to and from a file.
   </p>
+  <p style="padding-bottom: 1rem;">Much later I would like to add an ability to sync data with Google Drive.</p>
   <p>
-    This is not a finilized version of the application. Things may change and data integrity is not guaranteed, however
-    I'll try hard to not break you data.
+    The application is in active development. Things may change and data integrity is not guaranteed. However I'll try
+    hard to not break you data.
   </p>
 </div>
 

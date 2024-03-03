@@ -70,7 +70,7 @@
 
     width: 100%;
 
-    padding-bottom: 2rem;
+    padding-bottom: 1rem;
     resize: none;
     overflow-y: hidden;
   }
