@@ -1,23 +1,23 @@
 <script lang="ts">
   import type { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
   import Card from "$lib/UI/generic-components/Card.svelte";
-  import FlexRow from "$lib/UI/generic-components/FlexRow.svelte";
 
-  // Props:
+  // Entity props:
 
   export let item: CoffeeBeans;
-
   export let recipeCount: number = 0;
+
+  // UI props:
 
   export let href: string;
 </script>
 
 <Card {href}>
   <div class="flex-row">
-    <FlexRow>
+    <div class="flex-card-row">
       <h5>{item.name}</h5>
       <p class="recipes-count">{recipeCount} {recipeCount === 1 ? "recipe" : "recipes"}</p>
-    </FlexRow>
+    </div>
   </div>
   <p class="content">{item.description}</p>
 </Card>
@@ -25,6 +25,14 @@
 <style lang="postcss">
   .flex-row {
     margin-bottom: 0.5rem;
+  }
+
+  .flex-card-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
   }
 
   h5 {
