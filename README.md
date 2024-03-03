@@ -24,15 +24,15 @@ I'm using this app every day and actively improving and maintaining it.
 
 ## About your data
 
-Currently all data is saved only in the user's browser and is not sent anywhere. Later I want to add an ability to import and export data to a file, and sync data with Google Drive.  
+By design all your data is saved only in your browser on your device, it's not sent anywhere, there is not server. You can import and export your data to and from a file. Much later I would like to add an ability to sync data with Google Drive.  
 
-This is not a finilized version of the application. Things may change and data integrity is not guaranteed, however I'll try hard to not break you data.
+The application is in active development. Things may change and data integrity is not guaranteed. However I'll try hard to not break you data.
 
 ## License
 
 * This work is licensed under <a href="https://creativecommons.org/licenses/by/4.0/">
   CC BY 4.0 
-  <img width="20" height="20" src="/img/cc-logo.f0ab4ebe.svg" /> 
-  <img width="20" height="20" src="/img/cc-by.21b728bb.svg" />
+  <img width="20" height="20" src="/_assets/cc/cc-logo.svg" /> 
+  <img width="20" height="20" src="/_assets/cc/cc-by.svg" />
   </a>
 * Copyright © 2024 <a href="https://github.com/dima-iholkin" target="_blank">Dima Iholkin</a>.
