@@ -19,8 +19,8 @@ export class CoffeeBeansCreateSubmit implements Omit<CoffeeBeans, "id"> {
     this.description = item.description;
   }
 
-  static create(item: Omit<CoffeeBeans, "id">)
-    : CoffeeBeansCreateSubmit | "ValidationFailed_NameMustBeAtLeast3CharsLong" {
+  // eslint-disable-next-line max-len
+  static create(item: Omit<CoffeeBeans, "id">): CoffeeBeansCreateSubmit | "ValidationFailed_NameMustBeAtLeast3CharsLong" {
     const _name = item.name.trim();
     const _description = item.description.trim();
 

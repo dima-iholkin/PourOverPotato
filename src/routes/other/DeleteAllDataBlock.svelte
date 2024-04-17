@@ -13,8 +13,7 @@
 
   async function handleDeleteButtonClick() {
     await deleteAllData();
-    addToast("All data deleted.");
-    goto(routes.home);
+    addToast("Deleted all data.");
   }
 </script>
 

@@ -442,7 +442,7 @@ export async function importData(jsonFile: File) {
     }
   }
 
-  addToast(`${newCoffeeBeansCount} new coffee beans and ${newRecipesCount} new recipes imported.`);
+  addToast(`Imported ${newCoffeeBeansCount} coffee beans and ${newRecipesCount} recipes.`);
 }
 
 export async function undoDeleteCoffeeBeans(item: CoffeeBeans): Promise<void> {
