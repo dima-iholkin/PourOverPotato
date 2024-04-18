@@ -6,6 +6,7 @@ export interface IRecipeDB {
   recipeTarget: string;
   recipeResult: string;
   recipeThoughts: string;
+  favorite: boolean | undefined;
   rating: number;
   outWeight: number;
   timestamp: number;
@@ -18,6 +19,7 @@ export class RecipeDB implements IRecipeDB {
   recipeTarget: string;
   recipeResult: string;
   recipeThoughts: string;
+  favorite: boolean | undefined;
   rating: number;
   outWeight: number;
   timestamp: number;
@@ -29,6 +31,7 @@ export class RecipeDB implements IRecipeDB {
     this.recipeTarget = item.recipeTarget;
     this.recipeResult = item.recipeResult;
     this.recipeThoughts = item.recipeThoughts;
+    this.favorite = item.favorite;
     this.rating = item.rating;
     this.outWeight = item.outWeight;
     this.timestamp = item.timestamp;
@@ -41,6 +44,7 @@ export class RecipeDB implements IRecipeDB {
       recipeTarget: this.recipeTarget,
       recipeResult: this.recipeResult,
       recipeThoughts: this.recipeThoughts,
+      favorite: this.favorite,
       rating: this.rating,
       outWeight: this.outWeight,
       timestamp: new Date(this.timestamp)
@@ -55,6 +59,7 @@ export class RecipeDBSubmit implements Omit<RecipeDB, "id" | "toRecipe"> {
   recipeTarget: string;
   recipeResult: string;
   recipeThoughts: string;
+  favorite: boolean | undefined;
   rating: number;
   outWeight: number;
   timestamp: number;
@@ -65,6 +70,7 @@ export class RecipeDBSubmit implements Omit<RecipeDB, "id" | "toRecipe"> {
     this.recipeTarget = recipe.recipeTarget;
     this.recipeResult = recipe.recipeResult;
     this.recipeThoughts = recipe.recipeThoughts;
+    this.favorite = recipe.favorite;
     this.rating = recipe.rating;
     this.outWeight = recipe.outWeight;
     this.timestamp = recipe.timestamp.getTime();

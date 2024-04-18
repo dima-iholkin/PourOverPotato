@@ -6,7 +6,8 @@
     sortRecipesByOutWeightDesc,
     sortRecipesByOutWeightAsc,
     sortRecipesByRatingDesc,
-    sortRecipesByRatingAsc
+    sortRecipesByRatingAsc,
+    sortRecipesByFavorite
   } from "$lib/domain/helpers/sortRecipes";
   import { loadSortOrder, saveSortOrder } from "$lib/persistForms/persistSortOrder";
 
@@ -19,6 +20,7 @@
   }[] = [
     { value: RecipesSortOrderEnum.Latest, key: "latest", sortOrderFunc: sortRecipesByTimestampDesc },
     { value: RecipesSortOrderEnum.Earliest, key: "earliest", sortOrderFunc: sortRecipesByTimestampAsc },
+    { value: RecipesSortOrderEnum.Favorite, key: "favorite", sortOrderFunc: sortRecipesByFavorite },
     { value: RecipesSortOrderEnum.BestRating, key: "best rating", sortOrderFunc: sortRecipesByRatingDesc },
     { value: RecipesSortOrderEnum.WorstRating, key: "worst rating", sortOrderFunc: sortRecipesByRatingAsc },
     { value: RecipesSortOrderEnum.BiggerWeight, key: "more coffee", sortOrderFunc: sortRecipesByOutWeightDesc },
@@ -68,9 +70,6 @@
 
 <style lang="postcss">
   .select-container {
-    /* Outer layout: */
-    /* margin-top: 1rem; */
-
     /* Inner layout: */
     display: flex;
     flex-direction: row;

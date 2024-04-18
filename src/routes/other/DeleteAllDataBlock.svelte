@@ -1,7 +1,5 @@
 <script lang="ts">
-  import { goto } from "$app/navigation";
   import { deleteAllData } from "$lib/database/current/indexedDB";
-  import { routes } from "$lib/domain/routes";
   import DeleteConfirmationModal from "$lib/UI/generic-components/modals/DeleteConfirmationModal.svelte";
   import { addToast } from "$lib/UI/generic-components/toasts/toastProvider";
 
@@ -13,8 +11,7 @@
 
   async function handleDeleteButtonClick() {
     await deleteAllData();
-    addToast("All data deleted.");
-    goto(routes.home);
+    addToast("Deleted all data.");
   }
 </script>
 

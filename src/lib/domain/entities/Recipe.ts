@@ -4,6 +4,7 @@ export class Recipe {
   recipeTarget: string;
   recipeResult: string;
   recipeThoughts: string;
+  favorite: boolean | undefined;
   rating: number;
   outWeight: number;
   timestamp: Date;
@@ -14,6 +15,7 @@ export class Recipe {
     this.recipeTarget = item.recipeTarget;
     this.recipeResult = item.recipeResult;
     this.recipeThoughts = item.recipeThoughts;
+    this.favorite = item.favorite;
     this.rating = item.rating;
     this.outWeight = item.outWeight;
     this.timestamp = item.timestamp;
@@ -25,6 +27,7 @@ export class RecipeSubmit implements Omit<Recipe, "id"> {
   recipeTarget: string;
   recipeResult: string;
   recipeThoughts: string;
+  favorite: boolean | undefined;
   rating: number;
   outWeight: number;
   timestamp: Date;
@@ -34,6 +37,7 @@ export class RecipeSubmit implements Omit<Recipe, "id"> {
     this.recipeTarget = item.recipeTarget;
     this.recipeResult = item.recipeResult;
     this.recipeThoughts = item.recipeThoughts;
+    this.favorite = item.favorite;
     this.rating = item.rating;
     this.outWeight = item.outWeight;
     this.timestamp = item.timestamp;

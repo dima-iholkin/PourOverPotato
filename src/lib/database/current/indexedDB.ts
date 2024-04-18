@@ -68,6 +68,7 @@ async function migrateRecipeTimestampToV2(
   for (const item of recipesOld) {
     const recipeNew: IRecipeDB = {
       ...item,
+      favorite: false,
       timestamp: item.timestamp.getTime()
     };
     await transaction.objectStore(recipesStore_Name).put(recipeNew);
@@ -442,7 +443,7 @@ export async function importData(jsonFile: File) {
     }
   }
 
-  addToast(`${newCoffeeBeansCount} new coffee beans and ${newRecipesCount} new recipes imported.`);
+  addToast(`Imported ${newCoffeeBeansCount} coffee beans and ${newRecipesCount} recipes.`);
 }
 
 export async function undoDeleteCoffeeBeans(item: CoffeeBeans): Promise<void> {
