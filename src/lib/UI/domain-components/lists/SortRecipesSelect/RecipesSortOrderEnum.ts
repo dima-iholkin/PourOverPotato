@@ -4,5 +4,6 @@ export enum RecipesSortOrderEnum {
   BestRating,
   WorstRating,
   BiggerWeight,
-  SmallerWeight
+  SmallerWeight,
+  Favorite
 };
