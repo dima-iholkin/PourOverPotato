@@ -20,11 +20,11 @@
   }[] = [
     { value: RecipesSortOrderEnum.Latest, key: "latest", sortOrderFunc: sortRecipesByTimestampDesc },
     { value: RecipesSortOrderEnum.Earliest, key: "earliest", sortOrderFunc: sortRecipesByTimestampAsc },
+    { value: RecipesSortOrderEnum.Favorite, key: "favorite", sortOrderFunc: sortRecipesByFavorite },
     { value: RecipesSortOrderEnum.BestRating, key: "best rating", sortOrderFunc: sortRecipesByRatingDesc },
     { value: RecipesSortOrderEnum.WorstRating, key: "worst rating", sortOrderFunc: sortRecipesByRatingAsc },
     { value: RecipesSortOrderEnum.BiggerWeight, key: "more coffee", sortOrderFunc: sortRecipesByOutWeightDesc },
-    { value: RecipesSortOrderEnum.SmallerWeight, key: "less coffee", sortOrderFunc: sortRecipesByOutWeightAsc },
-    { value: RecipesSortOrderEnum.Favorite, key: "favorite", sortOrderFunc: sortRecipesByFavorite }
+    { value: RecipesSortOrderEnum.SmallerWeight, key: "less coffee", sortOrderFunc: sortRecipesByOutWeightAsc }
   ];
 </script>
 
@@ -70,9 +70,6 @@
 
 <style lang="postcss">
   .select-container {
-    /* Outer layout: */
-    /* margin-top: 1rem; */
-
     /* Inner layout: */
     display: flex;
     flex-direction: row;

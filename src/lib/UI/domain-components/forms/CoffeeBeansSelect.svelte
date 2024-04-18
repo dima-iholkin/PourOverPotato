@@ -3,7 +3,6 @@
 </script>
 
 <script lang="ts">
-  // import { tick } from "svelte";
   import { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
   import NewCoffeeBeansModal from "$lib/UI/domain-components/modals/NewCoffeeBeansModal.svelte";
   import Label from "$lib/UI/generic-components/forms/Label.svelte";
@@ -21,7 +20,7 @@
 
   export let validationFailed: boolean = false;
   export let showAddButton: boolean = true;
-  export let selectDOM: HTMLSelectElement | undefined;
+  export let selectDOM: HTMLSelectElement | undefined = undefined;
 
   // Bind triggers:
 
@@ -40,17 +39,6 @@
       validationMessage = "";
     }
   }
-
-  // let selectDidFocusOnInit: boolean = false;
-  // $: {
-  //   allCoffeeBeans;
-  //   if (allCoffeeBeans && selectDidFocusOnInit === false) {
-  //     selectDidFocusOnInit = true;
-  //     tick().then(() => {
-  //       selectDOM?.focus();
-  //     });
-  //   }
-  // }
 
   // Handlers:
 
