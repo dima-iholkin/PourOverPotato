@@ -56,7 +56,7 @@
 {:else if coffeeBeans.length === 0}
   <AddDemoCoffeeBeans_PageBlock onAddDemoEntities={() => loadAllCoffeeBeans()} />
 {:else}
-  <SortedByP>Sorted by latest recipe date</SortedByP>
+  <SortedByP>Sorted by latest recipe</SortedByP>
   {#each coffeeBeans as item (item.id)}
     <CoffeeBeansCard href={routes.coffeeBeansItem(item.name)} {item} recipeCount={item.recipeCount} />
   {/each}

@@ -20,10 +20,10 @@
       <p>🕒 {convertToTimeAgo(recipe.timestamp)}</p>
       <div class="right-header-horizontal">
         {#if recipe.rating > 0}
-        <p>{recipe.rating}⭐</p>
+          <p>{recipe.rating}⭐</p>
         {/if}
         {#if recipe.outWeight > 0}
-        <p>{recipe.outWeight}g ☕</p>
+          <p>{recipe.outWeight}g ☕</p>
         {/if}
         {#if recipe.favorite === true}
           <p>❤</p>
