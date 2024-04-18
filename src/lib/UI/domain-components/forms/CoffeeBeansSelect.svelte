@@ -4,6 +4,7 @@
 
 <script lang="ts">
   import { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
+  import { sortCoffeeBeansByName } from "$lib/domain/helpers/sortRecipes";
   import NewCoffeeBeansModal from "$lib/UI/domain-components/modals/NewCoffeeBeansModal.svelte";
   import Label from "$lib/UI/generic-components/forms/Label.svelte";
 
@@ -67,7 +68,7 @@
           {#if selectedCoffeeBeansId === undefined && showAddButton === true}
             <option disabled selected value></option>
           {/if}
-          {#each allCoffeeBeans as item (item.id)}
+          {#each allCoffeeBeans.sort(sortCoffeeBeansByName) as item (item.id)}
             <option selected={selectedCoffeeBeansId === item.id} value={item.id}>{item.name}</option>
           {/each}
         {:else}

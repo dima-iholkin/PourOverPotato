@@ -13,8 +13,8 @@
 
 <script lang="ts">
   import { onMount } from "svelte";
-  // import { page } from "$app/stores";
   import { goto } from "$app/navigation";
+  import { page } from "$app/stores";
   import { addRecipe, getAllCoffeeBeans } from "$lib/database/current/indexedDB";
   import { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
   import type { RecipeSubmit } from "$lib/domain/entities/Recipe";
@@ -33,7 +33,7 @@
 
   // Load function:
 
-  // const coffeeBeansName = $page.data.coffeeBeansName;
+  const coffeeBeansName: string | null = $page.data.coffeeBeansName;
 
   // Bind DOM elements:
 
@@ -63,6 +63,10 @@
 
   $: if (selectedCoffeeBeansId !== undefined && initFinished) {
     persistFormField(FORM_NAME, COFFEEBEANS_ID, selectedCoffeeBeansId);
+    const _coffeeBeansName: string | undefined = coffeeBeansItems.find(
+      (item) => item.id === selectedCoffeeBeansId
+    )?.name;
+    goto(routes.addRecipe(_coffeeBeansName));
   }
 
   $: {
@@ -114,8 +118,16 @@
       // Load all CoffeeBeans from IndexedDB:
       coffeeBeansItems = items;
 
+      if (coffeeBeansName) {
+        selectedCoffeeBeansId = coffeeBeansItems.find(
+          (item) => item.name.toLowerCase() === coffeeBeansName.toLowerCase()
+        )?.id;
+      } else {
+        // Load the persisted form values from LocalStorage:
+        selectedCoffeeBeansId = <number | undefined>loadFormField(FORM_NAME, COFFEEBEANS_ID, "number") ?? undefined;
+      }
+
       // Load the persisted form values from LocalStorage:
-      selectedCoffeeBeansId = <number | undefined>loadFormField(FORM_NAME, COFFEEBEANS_ID, "number") ?? undefined;
       recipeTarget = <string>loadFormField(FORM_NAME, RECIPE_TARGET, "string") ?? "";
       recipeResult = <string>loadFormField(FORM_NAME, RECIPE_RESULT, "string") ?? "";
       recipeThoughts = <string>loadFormField(FORM_NAME, RECIPE_THOUGHTS, "string") ?? "";
