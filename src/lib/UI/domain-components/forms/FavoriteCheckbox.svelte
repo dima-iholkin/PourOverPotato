@@ -2,25 +2,16 @@
   import Label from "../../generic-components/forms/Label.svelte";
 
   // Props:
-
   export let value: boolean = false;
-
-  // Handlers:
-
-  function handleClick() {
-    if (value === true) {
-      value = false;
-    } else {
-      value = true;
-    }
-  }
 </script>
 
 <div class="container">
   <Label for_="favorite">Favorite:</Label>
   <div class="input-container">
-    <input id="favorite" name="favorite" type="checkbox" />
-    <label id="favorite-checkbox" for="favorite" on:click={handleClick}>{value ? "❤" : "🤍"}</label>
+    <label for="favorite">
+      <input id="favorite" name="favorite" type="checkbox" bind:checked={value} />
+      {value ? "❤" : "🤍"}
+    </label>
   </div>
 </div>
 
@@ -41,10 +32,6 @@
     left: -100vw;
   }
 
-  #favorite-checkbox {
-    cursor: pointer;
-  }
-
   input {
     @apply bg-gray-50 border-x-0 border-gray-300 h-11 text-center text-gray-900 text-base block w-full py-2.5;
     @apply focus:ring-blue-500 focus:border-blue-500;
@@ -57,5 +44,15 @@
     border-bottom-color: rgb(209, 213, 219);
     border-bottom-style: solid;
     border-bottom-width: 0.8px;
+  }
+
+  label {
+    border: 2px solid #00000000;
+    cursor: pointer;
+  }
+
+  label:focus-within {
+    border: 2px solid black;
+    border-radius: 4px;
   }
 </style>

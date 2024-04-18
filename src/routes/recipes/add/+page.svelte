@@ -4,6 +4,7 @@
   const RECIPE_THOUGHTS = "recipe-thoughts";
   const OUT_WEIGHT = "out-weight";
   const RATING = "rating";
+  const FAVORITE = "favorite";
 
   const FORM_NAME = "addRecipe";
 
@@ -99,6 +100,13 @@
     }
   }
 
+  $: {
+    favorite;
+    if (initFinished) {
+      persistFormField(FORM_NAME, FAVORITE, favorite ? 1 : 0);
+    }
+  }
+
   // Lifecycle:
 
   onMount(() => {
@@ -113,6 +121,7 @@
       recipeThoughts = <string>loadFormField(FORM_NAME, RECIPE_THOUGHTS, "string") ?? "";
       outWeight = <number>(loadFormField(FORM_NAME, OUT_WEIGHT, "number") ?? 0);
       rating = <number>(loadFormField(FORM_NAME, RATING, "number") ?? 0);
+      favorite = <boolean>(loadFormField(FORM_NAME, FAVORITE, "number") === 1 ? true : false);
 
       // Finish init:
       initFinished = true;
@@ -156,6 +165,7 @@
     clearFormField(FORM_NAME, RECIPE_THOUGHTS);
     clearFormField(FORM_NAME, OUT_WEIGHT);
     clearFormField(FORM_NAME, RATING);
+    clearFormField(FORM_NAME, FAVORITE);
 
     addToast("Recipe created.");
 
