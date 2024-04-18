@@ -24,6 +24,7 @@
   import { placeholders } from "$lib/domain/strings";
   import { formatTimeForInput, parseDateFromInputString } from "$lib/helpers/dateHelpers";
   import CoffeeBeansSelect from "$lib/UI/domain-components/forms/CoffeeBeansSelect.svelte";
+  import FavoriteCheckbox from "$lib/UI/domain-components/forms/FavoriteCheckbox.svelte";
   import TimestampPicker from "$lib/UI/domain-components/forms/TimestampPicker.svelte";
   import Loading from "$lib/UI/domain-components/lists/Loading.svelte";
   import DropdownMenu from "$lib/UI/generic-components/dropdownMenu/DropdownMenu.svelte";
@@ -58,6 +59,7 @@
   let recipeThoughts: string;
   let outWeight: number;
   let rating: number;
+  let favorite: boolean | undefined;
   let timestampStr: string;
 
   // Lifecycle:
@@ -76,6 +78,7 @@
         recipeThoughts = item.recipeThoughts;
         outWeight = item.outWeight;
         rating = item.rating;
+        favorite = item.favorite;
         timestampStr = formatTimeForInput(item.timestamp);
       });
     });
@@ -134,6 +137,7 @@
         recipeThoughts: recipeThoughts,
         outWeight: outWeight,
         rating: rating,
+        favorite: favorite,
         timestamp: timestamp
       },
       recipe.id
@@ -211,6 +215,8 @@
     />
 
     <NumberInput labelText="Rating:" max={5} min={0} nameAttr={RATING} step={0.5} bind:value={rating} />
+
+    <FavoriteCheckbox bind:value={favorite} />
 
     <Textarea
       id={RECIPE_THOUGHTS}

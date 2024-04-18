@@ -23,6 +23,7 @@
   import { formatTimeForInput, parseDateFromInputString } from "$lib/helpers/dateHelpers";
   import { clearFormField, loadFormField, persistFormField } from "$lib/persistForms/localStorage";
   import CoffeeBeansSelect from "$lib/UI/domain-components/forms/CoffeeBeansSelect.svelte";
+  import FavoriteCheckbox from "$lib/UI/domain-components/forms/FavoriteCheckbox.svelte";
   import TimestampPicker from "$lib/UI/domain-components/forms/TimestampPicker.svelte";
   import NumberInput from "$lib/UI/generic-components/forms/NumberInput.svelte";
   import Textarea from "$lib/UI/generic-components/forms/Textarea.svelte";
@@ -54,6 +55,7 @@
   let recipeThoughts: string = "";
   let outWeight: number = 0;
   let rating: number = 0;
+  let favorite: boolean = false;
   let timestampStr: string = formatTimeForInput(new Date());
 
   // Reactivity, to persist the form values:
@@ -142,6 +144,7 @@
       recipeThoughts: recipeThoughts,
       outWeight: outWeight,
       rating: rating,
+      favorite: favorite,
       timestamp: timestamp
     };
     await addRecipe(recipeSubmit);
@@ -211,6 +214,8 @@
   />
 
   <NumberInput labelText="Rating:" max={5} min={0} nameAttr={RATING} step={0.5} bind:value={rating} />
+
+  <FavoriteCheckbox bind:value={favorite} />
 
   <Textarea
     id={RECIPE_THOUGHTS}
