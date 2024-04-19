@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { version } from "$app/environment";
   import DeleteAllDataBlock from "./DeleteAllDataBlock.svelte";
   import DevBlock from "./DevBlock.svelte";
   import ExportDataBlock from "./ExportDataBlock.svelte";
@@ -57,6 +58,9 @@
 
 <h5>Developer tools</h5>
 <DevBlock />
+
+<h5>About app</h5>
+<p>Version: {version}</p>
 
 <style lang="postcss">
   .page-headline {

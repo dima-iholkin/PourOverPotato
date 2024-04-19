@@ -15,6 +15,9 @@ const config = {
     }),
     paths: {
       base: process.argv.includes("dev") ? "" : "/PourOverPotato"
+    },
+    version: {
+      name: process.env.npm_package_version
     }
   }
 };
