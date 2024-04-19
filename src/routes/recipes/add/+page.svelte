@@ -35,13 +35,16 @@
 
   const coffeeBeansName: string | null = $page.data.coffeeBeansName;
 
+  // Bind triggers:
+
+  let bindSetValidationFailed: ((state: boolean) => void) | undefined;
+
   // Bind DOM elements:
 
   let bindSelectDOM: HTMLSelectElement | undefined;
 
   // UI state:
 
-  let uiCoffeeBeansValidationFailed: boolean = false;
   let initFinished: boolean = false;
 
   // Entities state:
@@ -146,7 +149,7 @@
     // Validate and format the form values:
 
     if (selectedCoffeeBeansId === undefined) {
-      uiCoffeeBeansValidationFailed = true;
+      bindSetValidationFailed ? bindSetValidationFailed(true) : undefined;
       return;
     }
 
@@ -192,7 +195,7 @@
   function handleSavedCoffeeBeans(coffeeBeans: CoffeeBeans) {
     coffeeBeansItems.push(coffeeBeans);
     selectedCoffeeBeansId = coffeeBeans.id;
-    uiCoffeeBeansValidationFailed = false;
+    bindSetValidationFailed ? bindSetValidationFailed(false) : undefined;
   }
 </script>
 
@@ -206,9 +209,9 @@
   <CoffeeBeansSelect
     allCoffeeBeans={coffeeBeansItems}
     onSavedCoffeeBeans={handleSavedCoffeeBeans}
-    validationFailed={uiCoffeeBeansValidationFailed}
     bind:selectDOM={bindSelectDOM}
     bind:selectedCoffeeBeansId
+    bind:setValidationFailed={bindSetValidationFailed}
   />
 
   <Textarea

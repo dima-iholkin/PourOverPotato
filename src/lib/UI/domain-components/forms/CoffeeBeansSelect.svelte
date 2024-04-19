@@ -12,6 +12,18 @@
 
   export let onSavedCoffeeBeans: ((coffeeBeans: CoffeeBeans) => void) | undefined = undefined;
 
+  // Triggers:
+
+  export const setValidationFailed = (state: boolean) => {
+    validationFailed = state;
+
+    if (validationFailed) {
+      validationMessage = "Please select coffee beans.";
+    } else {
+      validationMessage = "";
+    }
+  };
+
   // Entity props:
 
   export let allCoffeeBeans: CoffeeBeans[] | undefined;
@@ -19,7 +31,6 @@
 
   // UI props:
 
-  export let validationFailed: boolean = false;
   export let showAddButton: boolean = true;
   export let selectDOM: HTMLSelectElement | undefined = undefined;
 
@@ -29,23 +40,14 @@
 
   // UI state:
 
+  let validationFailed: boolean = false;
   let validationMessage: string = "";
-
-  // Reactivity:
-
-  $: {
-    if (validationFailed) {
-      validationMessage = "Please select coffee beans.";
-    } else {
-      validationMessage = "";
-    }
-  }
 
   // Handlers:
 
   function handleSelectChange() {
     if (validationFailed) {
-      validationFailed = false;
+      setValidationFailed(false);
     }
   }
 </script>
