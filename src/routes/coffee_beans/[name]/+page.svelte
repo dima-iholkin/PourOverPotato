@@ -23,7 +23,7 @@
   import DropdownMenuItem from "$lib/UI/generic-components/dropdownMenu/DropdownMenuItem.svelte";
   import FlexRow from "$lib/UI/generic-components/FlexRow.svelte";
   import DeleteConfirmationModal from "$lib/UI/generic-components/modals/DeleteConfirmationModal.svelte";
-  import { addUndoToast } from "$lib/UI/generic-components/toasts/toastProvider";
+  import { addToastWithUndo } from "$lib/UI/generic-components/toasts/toastProvider";
   import PageHeadline from "$lib/UI/layout/PageHeadline.svelte";
   import type { PageData } from "./$types";
   import EditCoffeeBeansModal from "./EditCoffeeBeansModal.svelte";
@@ -78,7 +78,7 @@
     goto(routes.home);
     const recipes = countRecipesDeleted === 1 ? "recipe" : "recipes";
     const recipesString = countRecipesDeleted > 0 ? ` and ${countRecipesDeleted} ${recipes}` : "";
-    addUndoToast(
+    addToastWithUndo(
       `Coffee beans "${_coffeeBeans.name}"` + recipesString + " deleted.",
       async () => {
         await undoDeleteCoffeeBeans(_coffeeBeans);

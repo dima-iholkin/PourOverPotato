@@ -6,7 +6,7 @@ export function addToast(message: string) {
   document.dispatchEvent(event);
 }
 
-export function addUndoToast(message: string, onClickUndo: () => void, onUndoIgnored: () => void) {
+export function addToastWithUndo(message: string, onClickUndo: () => void, onUndoIgnored: () => void) {
   const event = new CustomEvent<{
     message: string,
     timeout: number,
