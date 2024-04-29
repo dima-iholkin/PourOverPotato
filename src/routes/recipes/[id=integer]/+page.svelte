@@ -33,7 +33,7 @@
   import NumberInput from "$lib/UI/generic-components/forms/NumberInput.svelte";
   import Textarea from "$lib/UI/generic-components/forms/Textarea.svelte";
   import DeleteConfirmationModal from "$lib/UI/generic-components/modals/DeleteConfirmationModal.svelte";
-  import { addToast, addUndoToast } from "$lib/UI/generic-components/toasts/toastProvider";
+  import { addToast, addToastWithUndo } from "$lib/UI/generic-components/toasts/toastProvider";
   import PageHeadline from "$lib/UI/layout/PageHeadline.svelte";
   import type { PageData } from "./$types";
 
@@ -94,7 +94,7 @@
     const _recipe: Recipe = recipe;
     await deleteRecipeById(_recipe.id, true, _recipe);
     const coffeeBeansItem: CoffeeBeans | undefined = await getCoffeeBeansById(_recipe.coffeeBeansId);
-    addUndoToast(
+    addToastWithUndo(
       "Recipe deleted.",
       async () => {
         await undoDeleteRecipe(_recipe);

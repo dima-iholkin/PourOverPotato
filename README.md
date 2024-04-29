@@ -1,10 +1,10 @@
 # <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Flag_of_Ukraine.svg/1920px-Flag_of_Ukraine.svg.png" width="32" alt="Ukrainian flag"> PourOverPotato app
 
-How do you keep notes on your pour over recipes?  
-This app makes it easy to organize your recipes.  
-I'm using this app daily and actively improving and maintaining it.
+How do you keep notes on your pour over recipes?
 
 [Open the app](https://dima-iholkin.github.io/PourOverPotato/)
+
+This app is used daily. I'm maintaining and improving it when I can.
 
 ## Screenshots
 
