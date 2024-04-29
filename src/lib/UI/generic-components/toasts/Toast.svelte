@@ -51,6 +51,7 @@
 
   .my-toast {
     column-gap: 0.5rem;
+    pointer-events: auto;
   }
 
   .my-close-button {

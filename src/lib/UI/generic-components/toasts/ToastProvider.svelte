@@ -103,5 +103,6 @@
     flex-direction: column;
     gap: 1rem;
     align-items: flex-end;
+    pointer-events: none;
   }
 </style>
