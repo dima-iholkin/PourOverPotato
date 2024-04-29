@@ -104,7 +104,7 @@
     justify-content: center;
     align-items: flex-start;
 
-    z-index: 50;
+    z-index: 1050;
   }
 
   .shown {
