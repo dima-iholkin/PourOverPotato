@@ -63,7 +63,7 @@
   }
 
   .dropdown-container {
-    @apply z-10 bg-white rounded-lg shadow w-44 dark:bg-gray-700;
+    @apply bg-white rounded-lg shadow w-44 dark:bg-gray-700;
 
     display: none;
     position: absolute;
