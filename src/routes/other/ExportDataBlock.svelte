@@ -7,7 +7,12 @@
     const a = document.createElement("a");
     const data: Blob = await exportAllData();
     a.href = URL.createObjectURL(data);
-    a.setAttribute("download", "PourOverPotato.json");
+
+    const date = new Date();
+    const monthNumber = date.getMonth() + 1;
+    const monthString = monthNumber.toString().padStart(2, "0");
+    a.setAttribute("download", `PourOverPotato-${date.getFullYear()}_${monthString}_${date.getDate()}.json`);
+
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
