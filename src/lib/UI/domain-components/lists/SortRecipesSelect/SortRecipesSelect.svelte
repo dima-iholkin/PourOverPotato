@@ -11,7 +11,7 @@
   } from "$lib/domain/helpers/sortRecipes";
   import { loadSortOrder, saveSortOrder } from "$lib/persistForms/persistSortOrder";
 
-  const SORT_RECIPES_ID = "sort-recipes-";
+  const SELECT_ID = "recipes_sort_order";
 
   const sortOrderEnumEntriesForUI: {
     key: string;
@@ -32,21 +32,15 @@
   import { RecipesSortOrderEnum } from "./RecipesSortOrderEnum";
 
   // Props:
-
-  export let pageName: string;
-  const selectId = SORT_RECIPES_ID + pageName;
-
   export let sortOrderValue: {
     value: RecipesSortOrderEnum;
     sortOrderFunc: (recipeA: Recipe, recipeB: Recipe) => number;
   };
 
   // UI state:
-
-  let value: RecipesSortOrderEnum = loadSortOrder(selectId);
+  let value: RecipesSortOrderEnum = loadSortOrder();
 
   // Reactivity:
-
   $: {
     value;
     const sortOrderFunc =
@@ -55,13 +49,13 @@
       value,
       sortOrderFunc
     };
-    saveSortOrder(selectId, value);
+    saveSortOrder(value);
   }
 </script>
 
 <div class="select-container">
   <p>Sorted by</p>
-  <select id={selectId} name={selectId} bind:value>
+  <select id={SELECT_ID} name={SELECT_ID} bind:value>
     {#each sortOrderEnumEntriesForUI as item (item.value)}
       <option value={item.value}>{item.key}</option>
     {/each}

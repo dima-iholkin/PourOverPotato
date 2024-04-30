@@ -11,7 +11,7 @@
   <title>Other - PourOverPotato app</title>
 </svelte:head>
 
-<h5 class="page-headline">About the app</h5>
+<h5 class="page-headline">About the project</h5>
 <div class="about-section">
   <p>
     This is on an open-source application developed
@@ -59,7 +59,7 @@
 <h5>Developer tools</h5>
 <DevBlock />
 
-<h5>About app</h5>
+<h5>About the app</h5>
 <p>Version: {version}</p>
 
 <style lang="postcss">

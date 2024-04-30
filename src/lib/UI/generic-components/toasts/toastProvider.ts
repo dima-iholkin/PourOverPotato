@@ -12,6 +12,6 @@ export function addToastWithUndo(message: string, onClickUndo: () => void, onUnd
     timeout: number,
     onClickUndo: () => void,
     onUndoIgnored: () => void
-  }>("addToast", { detail: { message, timeout: 15000, onClickUndo, onUndoIgnored } });
+  }>("addToast", { detail: { message, timeout: 10000, onClickUndo, onUndoIgnored } });
   document.dispatchEvent(event);
 }

@@ -6,8 +6,8 @@
   import Label from "$lib/UI/generic-components/forms/Label.svelte";
 
   // Props:
-
   export let value: string;
+  export let initialValue: string | undefined = undefined;
 </script>
 
 <!-- eslint-disable max-len -->
@@ -20,6 +20,7 @@
     name={TIMESTAMP}
     type="datetime-local"
     bind:value
+    class:unsaved-changes={initialValue !== undefined && initialValue !== value}
   />
 </div>
 
@@ -27,5 +28,10 @@
   .container {
     display: flex;
     align-items: baseline;
+  }
+
+  .unsaved-changes {
+    border-color: yellowgreen;
+    outline-color: yellowgreen;
   }
 </style>

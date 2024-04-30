@@ -18,24 +18,20 @@
   import type { EnhancedRecipe } from "./EnhancedRecipe";
 
   // Entities state:
-
   let recipes: EnhancedRecipe[] | undefined;
 
   // UI state:
-
   let sortOrderValue: {
     value: RecipesSortOrderEnum;
     sortOrderFunc: (recipeA: Recipe, recipeB: Recipe) => number;
   };
 
   // Lifecycle:
-
   onMount(() => {
     loadEntities();
   });
 
   // Reactivity:
-
   $: {
     if (recipes) {
       recipes = recipes.sort(sortOrderValue?.sortOrderFunc ?? sortRecipesByTimestampDesc);
@@ -43,7 +39,6 @@
   }
 
   // Helpers:
-
   async function loadEntities() {
     const coffeeBeans: CoffeeBeans[] = await getAllCoffeeBeans();
     const map = new Map<number, string>();
@@ -68,7 +63,7 @@
 {:else if recipes.length === 0}
   <AddDemoCoffeeBeans_PageBlock onAddDemoEntities={() => loadEntities()} />
 {:else}
-  <SortRecipesSelect pageName="all_recipes" bind:sortOrderValue />
+  <SortRecipesSelect bind:sortOrderValue />
   {#each recipes as recipe}
     <RecipeCard coffeeBeansName={recipe.coffeeBeansName} href={routes.recipeItem(recipe.id)} {recipe} />
   {/each}

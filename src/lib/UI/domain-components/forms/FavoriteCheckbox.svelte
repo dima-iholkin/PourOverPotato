@@ -3,12 +3,13 @@
 
   // Props:
   export let value: boolean = false;
+  export let initialValue: boolean | undefined = undefined;
 </script>
 
 <div class="container">
   <Label for_="favorite">Favorite:</Label>
   <div class="input-container">
-    <label for="favorite">
+    <label for="favorite" class:unsaved-changes={initialValue !== undefined && initialValue !== value}>
       <input id="favorite" name="favorite" type="checkbox" bind:checked={value} />
       {value ? "❤" : "🤍"}
     </label>
@@ -53,6 +54,19 @@
 
   label:focus-within {
     border: 2px solid black;
+    border-radius: 4px;
+  }
+
+  .unsaved-changes {
+    border-width: 1px;
+    margin: 1px;
+    border-color: yellowgreen;
+    border-radius: 4px;
+  }
+
+  .unsaved-changes:focus-within {
+    margin: 0;
+    border-color: yellowgreen;
     border-radius: 4px;
   }
 </style>

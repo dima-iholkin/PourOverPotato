@@ -29,22 +29,18 @@
   import EditCoffeeBeansModal from "./EditCoffeeBeansModal.svelte";
 
   // Load function:
-
   export let data: PageData;
 
   // Bind triggers:
-
   let bind_setDeleteModalState: (state: "open" | "closed") => void;
   let bind_setDropdownState: (state: "open" | "closed") => void;
   let bind_setEditModalState: (state: "open" | "closed") => void;
 
   // Entities state:
-
   let coffeeBeans: CoffeeBeans | undefined | "CoffeeBeansNotFound";
   let recipes: Recipe[] | undefined;
 
   // UI state:
-
   let sortOrderValue: {
     value: RecipesSortOrderEnum;
     sortOrderFunc: (recipeA: Recipe, recipeB: Recipe) => number;
@@ -66,7 +62,6 @@
   }
 
   // Handlers:
-
   async function handleDeleteClick() {
     if (coffeeBeans === undefined || coffeeBeans === "CoffeeBeansNotFound") {
       return;
@@ -94,7 +89,6 @@
   }
 
   // Helpers:
-
   async function loadCoffeeBeans() {
     const item: CoffeeBeans | undefined = await getCoffeeBeansByName(data.coffeeBeansName);
     if (item === undefined) {
@@ -159,7 +153,7 @@
   {:else if recipes.length === 0}
     <NoItemsYetP />
   {:else}
-    <SortRecipesSelect pageName="coffeebeans_recipes" bind:sortOrderValue />
+    <SortRecipesSelect bind:sortOrderValue />
     {#each recipes as recipe (recipe.id)}
       <RecipeCard coffeeBeansName={coffeeBeans.name} href={routes.recipeItem(recipe.id)} {recipe} />
     {/each}

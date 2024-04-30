@@ -4,6 +4,7 @@
   import MyHeader from "./components/MyHeader.svelte";
   import MySidebar from "./components/MySidebar.svelte";
   import PersistentStorageCheckModal from "./components/PersistentStorageCheckModal.svelte";
+  import VacuumComponent from "./components/VacuumComponent.svelte";
 </script>
 
 <MyHeader />
@@ -25,6 +26,7 @@
 <ToastProvider />
 
 <PersistentStorageCheckModal />
+<VacuumComponent />
 
 <style lang="postcss">
   .page-container {
