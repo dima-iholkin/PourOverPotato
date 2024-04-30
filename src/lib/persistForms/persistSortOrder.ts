@@ -3,43 +3,37 @@ import { RecipesSortOrderEnum } from "$lib/UI/domain-components/lists/SortRecipe
 
 // Public API:
 
-export function loadSortOrder(id: string): RecipesSortOrderEnum {
+export function loadSortOrder(): RecipesSortOrderEnum {
+  // Guard clause:
   if (browser === false) {
     return RecipesSortOrderEnum.Latest;
   }
 
-  const key = generateKey(id);
-  const valueStr: string | null = localStorage.getItem(key);
-
+  // Load logic:
+  const valueStr: string | null = localStorage.getItem("sortOrder_recipes");
+  // Guard clause:
   if (valueStr === null) {
     return RecipesSortOrderEnum.Latest;
   }
 
+  // Parse value from string:
   const valueNum: number = Number.parseInt(valueStr);
-
-  if (Number.isNaN(valueNum)) {
+  // Guard clause:
+  if (Number.isNaN(valueNum) || (valueNum in RecipesSortOrderEnum) === false) {
+    console.warn("loadSortOrder function read value from LocalStorage not present in RecipesSortOrderEnum.");
     return RecipesSortOrderEnum.Latest;
   }
 
-  if (valueNum in RecipesSortOrderEnum) {
-    return valueNum;
-  }
-
-  console.warn("loadSortOrder function read value from LocalStorage not present in RecipesSortOrderEnum.");
-  return RecipesSortOrderEnum.Latest;
+  // Happy path return:
+  return valueNum;
 }
 
-export function saveSortOrder(id: string, value: RecipesSortOrderEnum) {
+export function saveSortOrder(value: RecipesSortOrderEnum) {
+  // Guard clause:
   if (browser === false) {
     return;
   }
 
-  const key = generateKey(id);
-  localStorage.setItem(key, value as unknown as string);
-}
-
-// Helper functions:
-
-function generateKey(id: string) {
-  return `sortOrder_${id}`;
+  // Save logic:
+  localStorage.setItem("sortOrder_recipes", value as unknown as string);
 }
