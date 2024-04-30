@@ -17,6 +17,7 @@
   export let name: string = "";
   export let placeholder: string = "";
   export let this_: HTMLTextAreaElement | undefined = undefined;
+  export let initialValue: string | undefined = undefined;
   export let value: string = "";
 
   // Reactivity:
@@ -56,6 +57,7 @@
     {placeholder}
     bind:this={this_}
     bind:value
+    class:unsaved-changes={initialValue !== undefined && initialValue !== value}
     on:input={(event) => resizeOnInput(event.currentTarget)}
     on:keydown
   />
@@ -73,5 +75,10 @@
     padding-bottom: 1rem;
     resize: none;
     overflow-y: hidden;
+  }
+
+  .unsaved-changes {
+    border-color: yellowgreen;
+    outline-color: yellowgreen;
   }
 </style>

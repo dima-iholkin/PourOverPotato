@@ -7,6 +7,7 @@
 
   export let labelText: string = "";
   export let nameAttr: string = "";
+  export let initialValue: number | undefined = undefined;
 
   export let min: number = 0;
   export let max: number = Number.MAX_SAFE_INTEGER;
@@ -21,11 +22,9 @@
 
   function handleKeydown(event: KeyboardEvent & { currentTarget: EventTarget & HTMLInputElement }) {
     const key = event.key;
-
     if (key === "Tab") {
       return;
     }
-
     if (
       (key < "0" || key > "9") &&
       key !== "." &&
@@ -50,7 +49,6 @@
 
   function handleMinus() {
     parseValue(value);
-
     if (value >= min + step) {
       value -= step;
     }
@@ -58,7 +56,6 @@
 
   function handlePlus() {
     parseValue(value);
-
     if (value <= max - step) {
       value += step;
     }
@@ -68,27 +65,22 @@
 
   function parseValue(num: number | string) {
     const parsedNum: number = Number(num);
-
     if (isNaN(parsedNum)) {
       value = min;
       return;
     }
-
     if (parsedNum > max) {
       value = max;
       return;
     }
-
     if (parsedNum < min) {
       value = min;
       return;
     }
-
     if (parsedNum % step !== 0) {
       value = Math.floor(parsedNum / step) * step;
       return;
     }
-
     value = parsedNum;
   }
 </script>
@@ -96,7 +88,14 @@
 <div class="container">
   <Label for_={nameAttr}>{labelText}</Label>
   <div class="input-container">
-    <button id="decrement-button" class="minus-button" tabindex="-1" type="button" on:click={handleMinus}>
+    <button
+      id="decrement-button"
+      class="minus-button"
+      tabindex="-1"
+      type="button"
+      class:unsaved-changes={initialValue !== undefined && initialValue !== value}
+      on:click={handleMinus}
+    >
       <svg fill="none" viewBox="0 0 18 2" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <path d="M1 1h16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
       </svg>
@@ -107,11 +106,19 @@
       name={nameAttr}
       type="text"
       bind:value
+      class:unsaved-changes={initialValue !== undefined && initialValue !== value}
       on:focusin={handleFocusIn}
       on:focusout={handleFocusOut}
       on:keydown={handleKeydown}
     />
-    <button id="increment-button" class="plus-button" tabindex="-1" type="button" on:click={handlePlus}>
+    <button
+      id="increment-button"
+      class="plus-button"
+      tabindex="-1"
+      type="button"
+      class:unsaved-changes={initialValue !== undefined && initialValue !== value}
+      on:click={handlePlus}
+    >
       <svg fill="none" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <path
           d="M9 1v16M1 9h16"
@@ -159,6 +166,11 @@
     @apply bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border;
     @apply border-gray-300 rounded-e-lg p-3 h-11 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2;
     @apply focus:outline-none;
+  }
+
+  .unsaved-changes {
+    border-color: yellowgreen;
+    outline-color: yellowgreen;
   }
 
   svg {

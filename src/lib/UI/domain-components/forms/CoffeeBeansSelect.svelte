@@ -33,6 +33,7 @@
 
   export let showAddButton: boolean = true;
   export let selectDOM: HTMLSelectElement | undefined = undefined;
+  export let initialCoffeeBeansId: number | undefined = undefined;
 
   // Bind triggers:
 
@@ -64,6 +65,7 @@
         tabindex="0"
         bind:this={selectDOM}
         bind:value={selectedCoffeeBeansId}
+        class:unsaved-changes={initialCoffeeBeansId !== undefined && initialCoffeeBeansId !== selectedCoffeeBeansId}
         on:change={handleSelectChange}
       >
         {#if allCoffeeBeans !== undefined}
@@ -126,6 +128,11 @@
     @apply focus:border-red-500 block w-full p-2.5 dark:bg-red-100 dark:border-red-400;
 
     background-color: #fef2f2;
+  }
+
+  .unsaved-changes {
+    border-color: yellowgreen;
+    outline-color: yellowgreen;
   }
 
   .button-add {

@@ -8,7 +8,7 @@
 
 <script lang="ts">
   import { onMount } from "svelte";
-  import { goto } from "$app/navigation";
+  import { goto, beforeNavigate } from "$app/navigation";
   import {
     deleteRecipeById,
     editRecipe,
@@ -50,6 +50,7 @@
 
   let recipe: Recipe | undefined | null = null;
   let allCoffeeBeans: CoffeeBeans[] | undefined = undefined;
+  let ignoreUnsavedChanges: boolean = false;
 
   // Form state:
 
@@ -63,6 +64,15 @@
   let timestampStr: string;
 
   // Lifecycle:
+
+  beforeNavigate((navigation) => {
+    if (navigation.willUnload === false && ignoreUnsavedChanges === false && checkIfUnsavedChanges()) {
+      const navigate = confirm("Do you want to navigate away and lose unsaved changes?");
+      if (navigate === false) {
+        navigation.cancel();
+      }
+    }
+  });
 
   onMount(() => {
     getRecipeById(data.recipeId).then((item: Recipe | undefined) => {
@@ -84,16 +94,26 @@
     });
   });
 
-  // Handler functions:
+  // Handlers:
+
+  function handleBeforeUnload(event: BeforeUnloadEvent) {
+    if (ignoreUnsavedChanges === false && checkIfUnsavedChanges()) {
+      event.preventDefault(); // the modern way
+      event.returnValue = ""; // the old browser way
+      return "Are you sure you want to navigate away?"; // even more compatible way
+    }
+  }
 
   async function handleDeleteClick() {
+    // Guard clause:
     if (recipe === undefined || recipe === null) {
       return;
     }
-
+    // Database logic:
     const _recipe: Recipe = recipe;
     await deleteRecipeById(_recipe.id, true, _recipe);
     const coffeeBeansItem: CoffeeBeans | undefined = await getCoffeeBeansById(_recipe.coffeeBeansId);
+    // Show toast:
     addToastWithUndo(
       "Recipe deleted.",
       async () => {
@@ -106,7 +126,8 @@
         await deleteRecipeById(_recipe.id);
       }
     );
-
+    // Navigation logic:
+    ignoreUnsavedChanges = true;
     coffeeBeansItem ? goto(routes.coffeeBeansItem(coffeeBeansItem.name)) : goto(routes.home);
   }
 
@@ -116,19 +137,14 @@
     recipeResult = recipeResult.trim();
     recipeThoughts = recipeThoughts.trim();
     const timestamp: Date = parseDateFromInputString(timestampStr);
-
     // Null guards:
-
     if (selectedCoffeeBeansId === undefined) {
       throw new Error("Please select the coffee beans.");
     }
-
     if (recipe === undefined || recipe === null) {
       throw new Error("Recipe was undefined or null somehow.");
     }
-
-    // Save the new recipe:
-
+    // Database logic:
     const recipeSubmit: Recipe = new Recipe(
       {
         coffeeBeansId: selectedCoffeeBeansId,
@@ -143,9 +159,10 @@
       recipe.id
     );
     await editRecipe(recipeSubmit);
-
+    // Show toast:
     addToast("Recipe changes saved.");
-
+    // Navigation logic:
+    ignoreUnsavedChanges = true;
     const coffeeBeansItem: CoffeeBeans | undefined = allCoffeeBeans?.find((item) => item.id === selectedCoffeeBeansId);
     if (coffeeBeansItem === undefined) {
       goto(routes.home);
@@ -153,11 +170,31 @@
     }
     goto(routes.coffeeBeansItem(coffeeBeansItem.name));
   }
+
+  // Helpers:
+
+  function checkIfUnsavedChanges(): boolean {
+    if (
+      recipe!.coffeeBeansId !== selectedCoffeeBeansId ||
+      recipe!.recipeTarget !== recipeTarget ||
+      recipe!.recipeResult !== recipeResult ||
+      recipe!.recipeThoughts !== recipeThoughts ||
+      recipe!.outWeight !== outWeight ||
+      recipe!.rating !== rating ||
+      recipe!.favorite !== favorite ||
+      recipe!.timestamp.getTime() !== parseDateFromInputString(timestampStr).getTime()
+    ) {
+      return true;
+    }
+    return false;
+  }
 </script>
 
 <svelte:head>
   <title>Edit recipe - PourOverPotato app</title>
 </svelte:head>
+
+<svelte:window on:beforeunload={handleBeforeUnload} />
 
 <FlexRow>
   <PageHeadline>Edit recipe</PageHeadline>
@@ -188,10 +225,16 @@
   <Loading />
 {:else if recipe instanceof Recipe}
   <form id="edit-recipe" on:submit|preventDefault={handleSubmit}>
-    <CoffeeBeansSelect {allCoffeeBeans} showAddButton={false} bind:selectedCoffeeBeansId />
+    <CoffeeBeansSelect
+      {allCoffeeBeans}
+      initialCoffeeBeansId={recipe.coffeeBeansId}
+      showAddButton={false}
+      bind:selectedCoffeeBeansId
+    />
 
     <Textarea
       id={RECIPE_TARGET}
+      initialValue={recipe.recipeTarget}
       label={naming.recipe.recipeTarget + ":"}
       name={RECIPE_TARGET}
       placeholder={placeholders.recipeTarget}
@@ -200,6 +243,7 @@
 
     <Textarea
       id={RECIPE_RESULT}
+      initialValue={recipe.recipeResult}
       label={naming.recipe.recipeResult + ":"}
       name={RECIPE_RESULT}
       placeholder={placeholders.recipeResult}
@@ -207,6 +251,7 @@
     />
 
     <NumberInput
+      initialValue={recipe.outWeight}
       labelText="{naming.recipe.outWeight} (g):"
       min={0}
       nameAttr={OUT_WEIGHT}
@@ -214,19 +259,28 @@
       bind:value={outWeight}
     />
 
-    <NumberInput labelText="Rating:" max={5} min={0} nameAttr={RATING} step={0.5} bind:value={rating} />
+    <NumberInput
+      initialValue={recipe.rating}
+      labelText="Rating:"
+      max={5}
+      min={0}
+      nameAttr={RATING}
+      step={0.5}
+      bind:value={rating}
+    />
 
-    <FavoriteCheckbox bind:value={favorite} />
+    <FavoriteCheckbox initialValue={recipe.favorite} bind:value={favorite} />
 
     <Textarea
       id={RECIPE_THOUGHTS}
+      initialValue={recipe.recipeThoughts}
       label={naming.recipe.recipeThoughts + ":"}
       name={RECIPE_THOUGHTS}
       placeholder={placeholders.recipeThoughts}
       bind:value={recipeThoughts}
     />
 
-    <TimestampPicker bind:value={timestampStr} />
+    <TimestampPicker initialValue={formatTimeForInput(recipe.timestamp)} bind:value={timestampStr} />
 
     <button class="my-button" form="edit-recipe" type="submit"> Save changes </button>
   </form>
