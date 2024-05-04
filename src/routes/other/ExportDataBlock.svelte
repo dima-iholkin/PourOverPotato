@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { exportAllData } from "$lib/database/current/indexedDB";
+  import { exportAllData } from "$lib/database/current/indexedDB_ExportImport";
 
   // Handlers:
 
@@ -11,7 +11,9 @@
     const date = new Date();
     const monthNumber = date.getMonth() + 1;
     const monthString = monthNumber.toString().padStart(2, "0");
-    a.setAttribute("download", `PourOverPotato-${date.getFullYear()}_${monthString}_${date.getDate()}.json`);
+    const dateNumber = date.getDate();
+    const dateString = dateNumber.toString().padStart(2, "0");
+    a.setAttribute("download", `PourOverPotato-${date.getFullYear()}_${monthString}_${dateString}.json`);
 
     document.body.appendChild(a);
     a.click();

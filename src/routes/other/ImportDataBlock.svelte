@@ -1,32 +1,43 @@
 <script lang="ts">
-  import { importData } from "$lib/database/current/indexedDB";
+  import { importData } from "$lib/database/current/indexedDB_ExportImport";
+  import { isNullOrUndefined, isPresent } from "$lib/helpers/undefinedHelpers";
+  import { addToast } from "$lib/UI/generic-components/toasts/toastProvider";
 
-  // Handlers:
-
+  // Handler:
   async function handleImportButtonClick() {
+    // Create a DOM element for file import:
     const input = document.createElement("input");
     input.type = "file";
-
+    // Register a file import handler:
     input.onchange = async () => {
-      if (input.files === null || input.files.item(0) === undefined || input.files.item(0) === null) {
+      // Guard clauses:
+      if (isNullOrUndefined(input.files) || isNullOrUndefined(input.files!.item(0))) {
+        alert("Please provide a file.");
+        return;
+      }
+      if (input.files!.length > 1) {
         alert("Please provide a single file.");
         return;
       }
-
-      if (input.files.length > 1) {
-        alert("Please provide a single file.");
-        return;
-      }
-
-      const file: File = input.files.item(0)!;
+      // Select the first file, to be safe:
+      const file: File = input.files!.item(0)!;
+      // Guard clause:
       if (file.type !== "application/json") {
         alert("Please provide a JSON file.");
         return;
       }
-
-      await importData(file);
+      // Import the file's data to the DB:
+      const result = await importData(file);
+      // Guard clause:
+      if (result === "ImportFailed") {
+        return;
+      }
+      if (isPresent(result.addedCoffeeBeansCount) && isPresent(result.addedRecipesCount)) {
+        // Show a toast to the user:
+        addToast(`Imported ${result.addedCoffeeBeansCount} coffee beans and ${result.addedRecipesCount} recipes.`);
+      }
     };
-
+    // Start the file import dialog:
     input.click();
   }
 </script>
