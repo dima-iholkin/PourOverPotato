@@ -31,6 +31,7 @@ export async function exportAllData(): Promise<Blob> {
   // Load the CoffeeBeans items and Recipes:
   const coffeeBeansDbItems: ICoffeeBeansDB[] = await tx.objectStore(COFFEEBEANS_STORE_NAME).getAll();
   const recipeDbItems: IRecipeDB[] = await tx.objectStore(RECIPES_STORE_NAME).getAll();
+  const _dbVersion: number = tx.db.version;
   await tx.done;
   // Prepare the CoffeeBeans items and Recipes:
   const coffeeBeansItems: CoffeeBeans[] = coffeeBeansDbItems
@@ -41,7 +42,7 @@ export async function exportAllData(): Promise<Blob> {
     .map(itemDb => new RecipeDB(itemDb).toRecipe());
   // Prepare the export data object:
   const exported: ExportJSON = {
-    dbVersion: tx.db.version,
+    dbVersion: _dbVersion,
     coffeeBeans: coffeeBeansItems,
     recipes: recipes
   };
