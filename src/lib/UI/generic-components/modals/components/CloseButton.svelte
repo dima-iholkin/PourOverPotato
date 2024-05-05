@@ -1,24 +1,19 @@
 <script lang="ts">
   // Events:
-
   export let onFocusReverse: (() => void) | undefined = undefined;
 
   // Triggers:
-
   export const setFocus = () => {
     buttonDOM?.focus();
   };
 
   // UI props:
-
   export let asGap: boolean = false;
 
   // Bind DOM elements:
-
   let buttonDOM: HTMLButtonElement | undefined;
 
-  // Handlers:
-
+  // Handler:
   function handleKeydown(event: KeyboardEvent) {
     if (event.key === "Tab" && event.shiftKey && onFocusReverse) {
       event.preventDefault();
@@ -28,7 +23,6 @@
 </script>
 
 <!-- eslint-disable max-len -->
-
 <button
   class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 inline-flex items-center"
   type="button"

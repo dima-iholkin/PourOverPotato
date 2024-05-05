@@ -1,11 +1,9 @@
 <script lang="ts">
   // UI props:
-
   export let message: string;
 </script>
 
 <!-- eslint-disable max-len -->
-
 <div
   class="my-toast flex items-center max-w-xl p-4 bg-gray-100 rounded-lg shadow dark:text-gray-400 dark:bg-gray-800"
   role="alert"

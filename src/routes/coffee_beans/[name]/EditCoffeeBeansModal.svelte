@@ -5,45 +5,39 @@
 <script lang="ts">
   import { tick } from "svelte";
   import { goto } from "$app/navigation";
-  import { editCoffeeBeans } from "$lib/database/current/indexedDB";
+  import { editCoffeeBeans } from "$lib/database/current/manageCoffeeBeans";
+  import { routes } from "$lib/domain/constants/routes";
   import { CoffeeBeans, CoffeeBeansEditSubmit } from "$lib/domain/entities/CoffeeBeans";
-  import { routes } from "$lib/domain/routes";
   import Label from "$lib/UI/generic-components/forms/Label.svelte";
   import Textarea from "$lib/UI/generic-components/forms/Textarea.svelte";
   import Modal from "$lib/UI/generic-components/modals/Modal.svelte";
   import { addToast } from "$lib/UI/generic-components/toasts/toastProvider";
 
-  // Triggers:
-
+  // Trigger:
   export const setModalState = (state: "open" | "closed") => {
     setModalState_(state);
   };
 
-  // Entities props:
-
+  // Entity props:
   export let item: CoffeeBeans;
 
   // Bind triggers:
-
   let bindResizeTextarea: () => void;
   let setFocusToModal: () => void;
   let setModalState_: (state: "open" | "closed") => void;
 
   // Bind DOM elements:
-
   let formDom: HTMLFormElement;
   let inputDom: HTMLInputElement;
   let saveButtonDOM: HTMLButtonElement;
   let textareaDom: HTMLTextAreaElement;
 
   // UI state:
-
   let name: string = item.name ?? "";
   let description: string = item.description ?? "";
   let validationMessage: string = "";
 
   // Reactivity:
-
   let nameValidationFailed: boolean = false;
   $: {
     if (nameValidationFailed === false) {
@@ -69,34 +63,35 @@
 
   async function handleSubmit() {
     // Validate and save the edited coffee beans:
-
-    const editedCoffeeBeans: CoffeeBeans = new CoffeeBeans({ name, description }, item.id);
-
+    const editedCoffeeBeans: CoffeeBeans = new CoffeeBeans({ id: item.id, name, description });
     const coffeeBeansSubmit: CoffeeBeansEditSubmit | "ValidationFailed_NameMustBeAtLeast3CharsLong" =
       CoffeeBeansEditSubmit.create(editedCoffeeBeans);
-
+    // Guard clause:
     if (coffeeBeansSubmit === "ValidationFailed_NameMustBeAtLeast3CharsLong") {
       nameValidationFailed = true;
       validationMessage = "Name must be at least 3 characters long.";
       return;
     }
-
-    const coffeeBeans: CoffeeBeans | "Failure_NameAlreadyExist" = await editCoffeeBeans(coffeeBeansSubmit);
-
+    // The happy path:
+    const coffeeBeans: CoffeeBeans | "Failure_NameAlreadyExist" | "CoffeeBeansNotFound" =
+      await editCoffeeBeans(coffeeBeansSubmit);
+    // Guard clauses:
     if (coffeeBeans === "Failure_NameAlreadyExist") {
       nameValidationFailed = true;
       validationMessage = "Coffee beans with this name exist already.";
       return;
     }
-
+    if (coffeeBeans === "CoffeeBeansNotFound") {
+      nameValidationFailed = false;
+      addToast("CoffeeBeans not found in the database. Operation aborted.");
+      return;
+    }
+    // Show a toast:
     addToast(`Coffee beans "${coffeeBeans.name}" changes saved.`);
-
     // Return the new Coffee Beans entity to the "Add recipe" page:
     item = coffeeBeans;
-
     // Clear the modal state:
     setModalState_("closed");
-
     // Reload the page with the new CoffeeBeans name, to avoid any stale state:
     goto(routes.home).then(() => goto(routes.coffeeBeansItem(coffeeBeans.name)));
   }

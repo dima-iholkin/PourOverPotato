@@ -2,7 +2,6 @@
   import PlusIcon from "$lib/UI/icons/PlusIcon.svelte";
 
   // Props:
-
   export let href: string | undefined;
 </script>
 
@@ -11,9 +10,7 @@
 Put this component as the last page-block on your page. This way it will create a nice gap at bottom of the page and
 the FAB will not obscure the page content.
 -->
-
 <div class="page-bottom-gap" />
-
 <div class="fab-container">
   <a {href} tabindex="-1">
     <button class="my-button">

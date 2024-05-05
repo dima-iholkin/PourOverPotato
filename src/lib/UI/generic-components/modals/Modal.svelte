@@ -4,7 +4,6 @@
   import ModalHeader from "./components/ModalHeader.svelte";
 
   // Events:
-
   export let onStateChange: ((state: "open" | "closed") => void) | undefined = undefined;
   export let onFocusReverse: (() => void) | undefined = undefined;
 
@@ -12,10 +11,7 @@
 
   // prettier-ignore
   export const setState = (state: "open" | "closed") => {
-    isOpen = state === "open"
-      ? true
-      : false;
-
+    isOpen = (state === "open") ? true : false;
     if (onStateChange) {
       onStateChange(state);
     }
@@ -26,26 +22,21 @@
   };
 
   // UI props:
-
   export let title: string | undefined;
 
   // Bind triggers:
-
   let setFocusToModalHeader: () => void;
 
   // Bind DOM elements:
-
   let modalDom: Element;
 
   // UI state:
-
   let isOpen: boolean = false;
 
   // Handlers:
 
   function handleClose() {
     isOpen = false;
-
     if (onStateChange !== undefined) {
       onStateChange("closed");
     }
@@ -117,14 +108,12 @@
   }
 
   /* Inner layout: */
-
   .inner-container {
     width: 100%;
     padding: 1rem 2rem 1.5rem 2rem;
   }
 
-  /* Helpers: */
-
+  /* Helper: */
   .vertical-center {
     height: 100vh;
     flex-grow: 1;

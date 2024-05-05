@@ -1,6 +1,6 @@
 import type { Recipe, RecipeSubmit } from "$lib/domain/entities/Recipe";
-import { openEntitiesDB, RECIPES_INDEX_COFFEEBEANSID_NAME, RECIPES_STORE_NAME } from "../indexedDB_Core";
-import { RecipeDB, type IRecipeDB, RecipeDBSubmit } from "../types/RecipeDB";
+import { openEntitiesDB, RECIPES_INDEX_COFFEEBEANSID_NAME, RECIPES_STORE_NAME } from "./core/indexedDB_Core";
+import { RecipeDB, type IRecipeDB, RecipeDBSubmit } from "./types/RecipeDB";
 
 // Public functions:
 
@@ -101,7 +101,7 @@ export async function softDeleteRecipeById(recipeId: number): Promise<"Success" 
   return "Success";
 }
 
-export async function undoDeleteRecipeById(recipeId: number): Promise<"Success" | "RecipeNotFound"> {
+export async function undoSoftDeleteRecipeById(recipeId: number): Promise<"Success" | "RecipeNotFound"> {
   // Start a transaction:
   const db = await openEntitiesDB();
   const tx = db.transaction(RECIPES_STORE_NAME, "readwrite").objectStore(RECIPES_STORE_NAME);

@@ -1,14 +1,13 @@
 <script lang="ts">
-  import { routes } from "$lib/domain/routes";
+  import { routes } from "$lib/domain/constants/routes";
+  import { clickOutsideTheBox } from "$lib/UI/helpers/clickOutsideTheBox";
 
   // State:
-
   let menuOpen: boolean = false;
-
   let menuDom: Element;
   let menuButtonDom: Element;
 
-  // Handler functions:
+  // Handlers:
 
   function toggleMenu() {
     menuOpen = !menuOpen;
@@ -18,28 +17,13 @@
     if (menuOpen === false) {
       return;
     }
-
-    if (clickOutsideBox(menuDom, event) && clickOutsideBox(menuButtonDom, event)) {
+    if (clickOutsideTheBox(menuDom, event) && clickOutsideTheBox(menuButtonDom, event)) {
       menuOpen = false;
     }
   }
 
   function handleMenuItemClick() {
     menuOpen = false;
-  }
-
-  // Helper functions:
-
-  function clickOutsideBox(element: Element, click: MouseEvent) {
-    const box: DOMRect = element.getBoundingClientRect();
-    const x: number = click.clientX;
-    const y: number = click.clientY;
-
-    if (x < box.left || x > box.right || y < box.top || y > box.bottom) {
-      return true;
-    }
-
-    return false;
   }
 </script>
 

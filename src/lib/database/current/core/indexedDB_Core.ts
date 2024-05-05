@@ -1,7 +1,7 @@
 import { openDB, type IDBPDatabase, type IDBPTransaction } from "idb";
-import { type IRecipeDB as IRecipeDB_v1 } from "../v1/types/RecipeDB";
-import type { EntitiesDB } from "./types/EntitiesDB";
-import { type IRecipeDB } from "./types/RecipeDB";
+import { type IRecipeDB as IRecipeDB_v1 } from "../../v1/types/RecipeDB";
+import type { EntitiesDB } from "../types/EntitiesDB";
+import { type IRecipeDB } from "../types/RecipeDB";
 
 // Internal constants:
 const DB_NAME = "entities";

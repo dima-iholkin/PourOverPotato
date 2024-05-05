@@ -1,13 +1,14 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { getAllCoffeeBeans, getAllRecipes } from "$lib/database/current/indexedDB";
+  import { getAllCoffeeBeans } from "$lib/database/current/manageCoffeeBeans";
+  import { getAllRecipes } from "$lib/database/current/manageRecipes";
+  import { routes } from "$lib/domain/constants/routes";
   import type { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
   import type { Recipe } from "$lib/domain/entities/Recipe";
   import {
     sortRecipesByTimestampDesc as byTimestampDesc,
     sortRecipesByTimestampDesc
   } from "$lib/domain/helpers/sortRecipes";
-  import { routes } from "$lib/domain/routes";
   import RecipeCard from "$lib/UI/domain-components/cards/RecipeCard.svelte";
   import MyFab from "$lib/UI/domain-components/FABs/AddRecipeFab.svelte";
   import Loading from "$lib/UI/domain-components/lists/Loading.svelte";
@@ -17,7 +18,7 @@
   import PageHeadline from "$lib/UI/layout/PageHeadline.svelte";
   import type { EnhancedRecipe } from "./EnhancedRecipe";
 
-  // Entities state:
+  // Entity state:
   let recipes: EnhancedRecipe[] | undefined;
 
   // UI state:
@@ -38,7 +39,7 @@
     }
   }
 
-  // Helpers:
+  // Helper:
   async function loadEntities() {
     const coffeeBeans: CoffeeBeans[] = await getAllCoffeeBeans();
     const map = new Map<number, string>();

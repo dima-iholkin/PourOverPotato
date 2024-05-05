@@ -3,20 +3,15 @@
   import HamburgerMenuIcon from "$lib/UI/icons/HamburgerMenuIcon.svelte";
 
   // Triggers:
-
   // prettier-ignore
   export const setDropdownState = (state: "open" | "closed") => {
-    isOpen = state === "open"
-      ? true
-      : false;
+    isOpen = (state === "open") ? true : false;
   };
 
   // UI state:
-
   let isOpen: boolean = false;
 
   // Bind DOM elements:
-
   let bind_buttonDom: Element;
   let bind_menuDom: Element;
 
@@ -41,13 +36,11 @@
   <button class="button" type="button" bind:this={bind_buttonDom} on:click={() => (isOpen = !isOpen)}>
     <HamburgerMenuIcon />
   </button>
-
   <div class="dropdown-container" bind:this={bind_menuDom} class:shown={isOpen}>
     <ul id="dropdown" class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownMenuIconButton">
       <slot name="button" />
     </ul>
   </div>
-
   <slot name="modal" />
 </div>
 

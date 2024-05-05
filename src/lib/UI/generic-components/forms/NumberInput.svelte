@@ -2,23 +2,19 @@
   import Label from "./Label.svelte";
 
   // Props:
-
   export let value: number = 0;
-
   export let labelText: string = "";
   export let nameAttr: string = "";
   export let initialValue: number | undefined = undefined;
-
   export let min: number = 0;
   export let max: number = Number.MAX_SAFE_INTEGER;
-
   /**
    * Step starting from the min value.
    * Therefore if min = 0 and step = 0.5, the possible values are integers and .5 values.
    */
   export let step: number = 1;
 
-  // Handler functions:
+  // Handlers:
 
   function handleKeydown(event: KeyboardEvent & { currentTarget: EventTarget & HTMLInputElement }) {
     const key = event.key;

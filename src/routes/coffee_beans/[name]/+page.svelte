@@ -2,17 +2,17 @@
   import { browser } from "$app/environment";
   import { goto } from "$app/navigation";
   import {
-    deleteCoffeeBeansById,
-    deleteRecipesByCoffeeBeansId,
     getCoffeeBeansByName,
-    getRecipesByCoffeeBeansId,
-    undoDeleteCoffeeBeans,
-    undoDeleteRecipesByCoffeeBeansId
-  } from "$lib/database/current/indexedDB";
+    hardDeleteCoffeeBeansAndRecipesById,
+    softDeleteCoffeeBeansAndRecipesById,
+    undoSoftDeleteCoffeeBeansAndRecipesById
+  } from "$lib/database/current/manageCoffeeBeans";
+  import { getRecipesByCoffeeBeansId } from "$lib/database/current/manageRecipes";
+  import type { Count } from "$lib/database/current/types/Count";
+  import { routes } from "$lib/domain/constants/routes";
   import { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
   import type { Recipe } from "$lib/domain/entities/Recipe";
   import { sortRecipesByTimestampDesc } from "$lib/domain/helpers/sortRecipes";
-  import { routes } from "$lib/domain/routes";
   import RecipeCard from "$lib/UI/domain-components/cards/RecipeCard.svelte";
   import MyFab from "$lib/UI/domain-components/FABs/AddRecipeFab.svelte";
   import Loading from "$lib/UI/domain-components/lists/Loading.svelte";
@@ -23,7 +23,7 @@
   import DropdownMenuItem from "$lib/UI/generic-components/dropdownMenu/DropdownMenuItem.svelte";
   import FlexRow from "$lib/UI/generic-components/FlexRow.svelte";
   import DeleteConfirmationModal from "$lib/UI/generic-components/modals/DeleteConfirmationModal.svelte";
-  import { addToastWithUndo } from "$lib/UI/generic-components/toasts/toastProvider";
+  import { addToast, addToastWithUndo } from "$lib/UI/generic-components/toasts/toastProvider";
   import PageHeadline from "$lib/UI/layout/PageHeadline.svelte";
   import type { PageData } from "./$types";
   import EditCoffeeBeansModal from "./EditCoffeeBeansModal.svelte";
@@ -61,34 +61,39 @@
     }
   }
 
-  // Handlers:
+  // Handler:
   async function handleDeleteClick() {
+    // Guard clause:
     if (coffeeBeans === undefined || coffeeBeans === "CoffeeBeansNotFound") {
       return;
     }
-
+    // The happy path:
     const _coffeeBeans: CoffeeBeans = coffeeBeans;
-    const countRecipesDeleted: number = await deleteRecipesByCoffeeBeansId(_coffeeBeans.id, true);
-    await deleteCoffeeBeansById(_coffeeBeans.id, true, _coffeeBeans);
+    const countSoftDeleted: Count | "CoffeeBeansNotFound" = await softDeleteCoffeeBeansAndRecipesById(_coffeeBeans.id);
+    // Guard clause:
+    if (countSoftDeleted === "CoffeeBeansNotFound") {
+      addToast("CoffeeBeans not found in the database. Operation aborted.");
+      return;
+    }
+    // The happy path:
     goto(routes.home);
-    const recipes = countRecipesDeleted === 1 ? "recipe" : "recipes";
-    const recipesString = countRecipesDeleted > 0 ? ` and ${countRecipesDeleted} ${recipes}` : "";
+    const recipesWord = countSoftDeleted.recipesCount === 1 ? "recipe" : "recipes";
+    const recipesString =
+      countSoftDeleted.recipesCount > 0 ? ` and ${countSoftDeleted.recipesCount} ${recipesWord}` : "";
     addToastWithUndo(
       `Coffee beans "${_coffeeBeans.name}"` + recipesString + " deleted.",
       async () => {
-        await undoDeleteCoffeeBeans(_coffeeBeans);
-        await undoDeleteRecipesByCoffeeBeansId(_coffeeBeans.id);
+        await undoSoftDeleteCoffeeBeansAndRecipesById(_coffeeBeans.id);
         goto(routes.coffeeBeansItem(_coffeeBeans.name)).then(() => goto(routes.home));
       },
       async () => {
-        await deleteRecipesByCoffeeBeansId(_coffeeBeans.id);
-        await deleteCoffeeBeansById(_coffeeBeans.id);
+        await hardDeleteCoffeeBeansAndRecipesById(_coffeeBeans.id);
         goto(routes.coffeeBeansItem(_coffeeBeans.name)).then(() => goto(routes.home));
       }
     );
   }
 
-  // Helpers:
+  // Helper:
   async function loadCoffeeBeans() {
     const item: CoffeeBeans | undefined = await getCoffeeBeansByName(data.coffeeBeansName);
     if (item === undefined) {
@@ -147,7 +152,6 @@
     </div>
   </FlexRow>
   <p class="coffee-beans-description">{coffeeBeans.description}</p>
-
   {#if recipes === undefined}
     <Loading />
   {:else if recipes.length === 0}
@@ -158,7 +162,6 @@
       <RecipeCard coffeeBeansName={coffeeBeans.name} href={routes.recipeItem(recipe.id)} {recipe} />
     {/each}
   {/if}
-
   <MyFab href={routes.addRecipe(coffeeBeans.name)} />
 {/if}
 

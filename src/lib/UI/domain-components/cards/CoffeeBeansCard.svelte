@@ -3,12 +3,10 @@
   import Card from "$lib/UI/generic-components/Card.svelte";
 
   // Entity props:
-
   export let item: CoffeeBeans;
   export let recipeCount: number = 0;
 
   // UI props:
-
   export let href: string;
 </script>
 

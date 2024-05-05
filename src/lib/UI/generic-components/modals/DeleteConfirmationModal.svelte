@@ -3,22 +3,18 @@
   import Modal from "$lib/UI/generic-components/modals/Modal.svelte";
 
   // Events:
-
   export let onDeleteClick: () => void;
 
   // Triggers:
-
   export const setModalState = (state: "open" | "closed") => {
     bindSetModalState(state);
   };
 
   // Bind triggers:
-
   let bindSetModalState: (state: "open" | "closed") => void;
   let setFocusToModal: () => void;
 
   // Bind DOM elements:
-
   let cancelButtonDOM: HTMLButtonElement;
 
   // Handlers:

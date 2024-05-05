@@ -9,7 +9,7 @@
     sortRecipesByRatingAsc,
     sortRecipesByFavorite
   } from "$lib/domain/helpers/sortRecipes";
-  import { loadSortOrder, saveSortOrder } from "$lib/persistForms/persistSortOrder";
+  import { loadSortOrder, saveSortOrder } from "$lib/localStorage/persistSortOrder";
 
   const SELECT_ID = "recipes_sort_order";
 

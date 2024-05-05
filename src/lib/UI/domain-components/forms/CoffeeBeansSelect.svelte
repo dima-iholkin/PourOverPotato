@@ -3,20 +3,17 @@
 </script>
 
 <script lang="ts">
-  import { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
-  import { sortCoffeeBeansByName } from "$lib/domain/helpers/sortRecipes";
+  import type { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
+  import { sortCoffeeBeansByName } from "$lib/domain/helpers/sortCoffeeBeans";
   import NewCoffeeBeansModal from "$lib/UI/domain-components/modals/NewCoffeeBeansModal.svelte";
   import Label from "$lib/UI/generic-components/forms/Label.svelte";
 
   // Events:
-
   export let onSavedCoffeeBeans: ((coffeeBeans: CoffeeBeans) => void) | undefined = undefined;
 
   // Triggers:
-
   export const setValidationFailed = (state: boolean) => {
     validationFailed = state;
-
     if (validationFailed) {
       validationMessage = "Please select coffee beans.";
     } else {
@@ -25,27 +22,22 @@
   };
 
   // Entity props:
-
   export let allCoffeeBeans: CoffeeBeans[] | undefined;
   export let selectedCoffeeBeansId: number | undefined;
 
   // UI props:
-
   export let showAddButton: boolean = true;
   export let selectDOM: HTMLSelectElement | undefined = undefined;
   export let initialCoffeeBeansId: number | undefined = undefined;
 
   // Bind triggers:
-
   let setModalState: ((state: "open" | "closed") => void) | undefined;
 
   // UI state:
-
   let validationFailed: boolean = false;
   let validationMessage: string = "";
 
   // Handlers:
-
   function handleSelectChange() {
     if (validationFailed) {
       setValidationFailed(false);

@@ -11,7 +11,6 @@
 </script>
 
 <!-- eslint-disable max-len -->
-
 <div class="container">
   <Label for_={TIMESTAMP}>Timestamp:</Label>
   <input

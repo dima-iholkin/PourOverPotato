@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { importData } from "$lib/database/current/indexedDB_ExportImport";
+  import { importDataFromJson } from "$lib/database/current/manageData";
   import { isNullOrUndefined, isPresent } from "$lib/helpers/undefinedHelpers";
   import { addToast } from "$lib/UI/generic-components/toasts/toastProvider";
 
@@ -27,14 +27,15 @@
         return;
       }
       // Import the file's data to the DB:
-      const result = await importData(file);
+      const result = await importDataFromJson(file);
       // Guard clause:
       if (result === "ImportFailed") {
         return;
       }
-      if (isPresent(result.addedCoffeeBeansCount) && isPresent(result.addedRecipesCount)) {
+      // The happy path:
+      if (isPresent(result.coffeeBeansCount) && isPresent(result.recipesCount)) {
         // Show a toast to the user:
-        addToast(`Imported ${result.addedCoffeeBeansCount} coffee beans and ${result.addedRecipesCount} recipes.`);
+        addToast(`Imported ${result.coffeeBeansCount} coffee beans and ${result.recipesCount} recipes.`);
       }
     };
     // Start the file import dialog:

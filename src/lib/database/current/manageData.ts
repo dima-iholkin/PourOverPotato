@@ -1,16 +1,19 @@
 import type { IDBPDatabase } from "idb";
 import { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
-import { Recipe } from "$lib/domain/entities/Recipe";
-import { COFFEEBEANS_STORE_NAME, RECIPES_STORE_NAME, openEntitiesDB } from "../indexedDB_Core";
-import { CoffeeBeansDB, CoffeeBeansDBSubmit, type ICoffeeBeansDB } from "../types/CoffeeBeansDB";
-import type { Count } from "../types/Count";
-import type { EntitiesDB } from "../types/EntitiesDB";
-import type { ExportJSON } from "../types/ExportJSON";
-import type { ImportJSON } from "../types/ImportJSON";
-import { RecipeDB, RecipeDBSubmit, type IRecipeDB } from "../types/RecipeDB";
-import { matchUniqueCoffeeBeansToAdd, matchUniqueRecipesToAdd } from "./match/arrays";
-import { parseCoffeeBeansArray, parseRecipesArray } from "./parse/arrays";
-import { parseDbVersion } from "./parse/primitives";
+import { Recipe, RecipeSubmit } from "$lib/domain/entities/Recipe";
+import { COFFEEBEANS_STORE_NAME, RECIPES_STORE_NAME, openEntitiesDB } from "./core/indexedDB_Core";
+import { DemoCoffeeBeans } from "./data/demo/demoCoffeeBeans";
+import { generateDemoRecipes } from "./data/demo/demoRecipes";
+import { matchUniqueCoffeeBeansToAdd, matchUniqueRecipesToAdd } from "./data/import/match/arrays";
+import { parseCoffeeBeansArray, parseRecipesArray } from "./data/import/parse/arrays";
+import { parseDbVersion } from "./data/import/parse/primitives";
+import { vacuumSoftDeletedCoffeeBeans, vacuumSoftDeletedRecipes } from "./data/vacuum";
+import { CoffeeBeansDB, CoffeeBeansDBSubmit, type ICoffeeBeansDB } from "./types/CoffeeBeansDB";
+import type { Count } from "./types/Count";
+import type { EntitiesDB } from "./types/EntitiesDB";
+import type { ExportJSON } from "./types/ExportJSON";
+import type { ImportJSON } from "./types/ImportJSON";
+import { RecipeDB, RecipeDBSubmit, type IRecipeDB } from "./types/RecipeDB";
 
 // Public functions:
 
@@ -49,6 +52,38 @@ export async function exportAllData(): Promise<Blob> {
   // Serialize all data:
   const json = JSON.stringify(exported);
   return new Blob([json], { type: "application/json" });
+}
+
+export async function fillDbWithDemoData(): Promise<void | "TransactionAborted"> {
+  // Open a transaction:
+  const db = await openEntitiesDB();
+  const tx = await db.transaction([COFFEEBEANS_STORE_NAME, RECIPES_STORE_NAME], "readwrite");
+  // Iterate over demo CoffeeBeans items:
+  for (const item of DemoCoffeeBeans) {
+    // Prepare the CoffeeBeans item entity:
+    const coffeeBeansItemDb = new CoffeeBeansDBSubmit(item);
+    // Save the CoffeeBeans entity:
+    let coffeeBeansId: number;
+    try {
+      coffeeBeansId = await tx.objectStore(COFFEEBEANS_STORE_NAME).add(coffeeBeansItemDb as ICoffeeBeansDB);
+    }
+    catch (error) {
+      // Protect against an unlikely CoffeeBeans name collision:
+      tx.abort();
+      console.error(error);
+      return "TransactionAborted";
+    }
+    // Generate the Recipes for this CoffeeBeansId:
+    const recipes: RecipeSubmit[] = generateDemoRecipes(coffeeBeansId);
+    // Iterate over demo Recipe items:
+    for (const recipe of recipes) {
+      // Prepare the Recipe entity:
+      const recipeItemDb = new RecipeDBSubmit(recipe);
+      // Save the Recipe entity:
+      await tx.objectStore(RECIPES_STORE_NAME).add(recipeItemDb as unknown as IRecipeDB);
+    }
+  }
+  await tx.done;
 }
 
 /**
@@ -113,4 +148,9 @@ export async function importDataFromJson(jsonFile: File): Promise<Count | "Impor
   await tx.done;
   // Return the new CoffeeBeans and Recipes counts:
   return { coffeeBeansCount: addedCoffeeBeansCount, recipesCount: addedRecipesCount };
+}
+
+export async function vacuumSoftDeletedEntities(): Promise<void> {
+  await vacuumSoftDeletedRecipes();
+  await vacuumSoftDeletedCoffeeBeans();
 }

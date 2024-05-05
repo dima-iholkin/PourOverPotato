@@ -1,14 +1,12 @@
 <script lang="ts">
-  import { deleteAllData } from "$lib/database/current/indexedDB";
+  import { deleteAllData } from "$lib/database/current/manageData";
   import DeleteConfirmationModal from "$lib/UI/generic-components/modals/DeleteConfirmationModal.svelte";
   import { addToast } from "$lib/UI/generic-components/toasts/toastProvider";
 
   // Bind triggers:
-
   let bind_setDeleteModalState: (state: "open" | "closed") => void;
 
-  // Handlers:
-
+  // Handler:
   async function handleDeleteButtonClick() {
     await deleteAllData();
     addToast("Deleted all data.");

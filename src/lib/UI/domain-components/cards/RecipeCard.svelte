@@ -1,15 +1,13 @@
 <script lang="ts">
+  import { naming } from "$lib/domain/constants/naming";
   import type { Recipe } from "$lib/domain/entities/Recipe";
-  import { naming } from "$lib/domain/naming";
   import { convertToTimeAgo } from "$lib/helpers/dateHelpers";
   import Card from "$lib/UI/generic-components/Card.svelte";
 
   // Entities props:
-
   export let recipe: Recipe;
 
   // UI props:
-
   export let coffeeBeansName: string;
   export let href: string | undefined;
 </script>

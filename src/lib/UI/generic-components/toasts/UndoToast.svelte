@@ -2,11 +2,9 @@
   import Toast from "./Toast.svelte";
 
   // Events:
-
   export let onClickUndo: () => void;
 
   // UI props:
-
   export let message: string;
 </script>
 

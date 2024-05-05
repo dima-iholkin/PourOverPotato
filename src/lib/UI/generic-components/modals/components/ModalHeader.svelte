@@ -2,22 +2,18 @@
   import CloseModalButton from "./CloseButton.svelte";
 
   // Events:
-
   export let onClose: () => void;
   export let onFocusReverse: (() => void) | undefined = undefined;
 
   // Triggers:
-
   export const setFocus = () => {
     setFocusToCloseModalButton();
   };
 
   // UI props:
-
   export let title: string | undefined;
 
   // Bind triggers:
-
   let setFocusToCloseModalButton: () => void;
 </script>
 
@@ -31,8 +27,6 @@
   div {
     display: flex;
     justify-content: space-between;
-
-    /* @apply p-2; */
   }
 
   h1 {

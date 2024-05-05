@@ -5,9 +5,7 @@
   const OUT_WEIGHT = "out-weight";
   const RATING = "rating";
   const FAVORITE = "favorite";
-
   const FORM_NAME = "addRecipe";
-
   const COFFEEBEANS_ID = "coffee-beans";
 </script>
 
@@ -15,14 +13,15 @@
   import { onMount } from "svelte";
   import { goto } from "$app/navigation";
   import { page } from "$app/stores";
-  import { addRecipe, getAllCoffeeBeans } from "$lib/database/current/indexedDB";
+  import { getAllCoffeeBeans } from "$lib/database/current/manageCoffeeBeans";
+  import { addRecipe } from "$lib/database/current/manageRecipes";
+  import { naming } from "$lib/domain/constants/naming";
+  import { routes } from "$lib/domain/constants/routes";
+  import { placeholders } from "$lib/domain/constants/strings";
   import { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
   import type { RecipeSubmit } from "$lib/domain/entities/Recipe";
-  import { naming } from "$lib/domain/naming";
-  import { routes } from "$lib/domain/routes";
-  import { placeholders } from "$lib/domain/strings";
   import { formatTimeForInput, parseDateFromInputString } from "$lib/helpers/dateHelpers";
-  import { clearFormField, loadFormField, persistFormField } from "$lib/persistForms/localStorage";
+  import { clearFormField, loadFormField, persistFormField } from "$lib/localStorage/persistForms";
   import CoffeeBeansSelect from "$lib/UI/domain-components/forms/CoffeeBeansSelect.svelte";
   import FavoriteCheckbox from "$lib/UI/domain-components/forms/FavoriteCheckbox.svelte";
   import TimestampPicker from "$lib/UI/domain-components/forms/TimestampPicker.svelte";
@@ -32,27 +31,21 @@
   import PageHeadline from "$lib/UI/layout/PageHeadline.svelte";
 
   // Load function:
-
   const coffeeBeansName: string | null = $page.data.coffeeBeansName;
 
   // Bind triggers:
-
   let bindSetValidationFailed: ((state: boolean) => void) | undefined;
 
   // Bind DOM elements:
-
   let bindSelectDOM: HTMLSelectElement | undefined;
 
   // UI state:
-
   let initFinished: boolean = false;
 
   // Entities state:
-
   let coffeeBeansItems: CoffeeBeans[];
 
   // Form state:
-
   let selectedCoffeeBeansId: number | undefined = undefined;
   let recipeTarget: string = "";
   let recipeResult: string = "";
@@ -115,12 +108,10 @@
   }
 
   // Lifecycle:
-
   onMount(() => {
     getAllCoffeeBeans().then((items: CoffeeBeans[]) => {
       // Load all CoffeeBeans from IndexedDB:
       coffeeBeansItems = items;
-
       if (coffeeBeansName) {
         selectedCoffeeBeansId = coffeeBeansItems.find(
           (item) => item.name.toLowerCase() === coffeeBeansName.toLowerCase()
@@ -129,7 +120,6 @@
         // Load the persisted form values from LocalStorage:
         selectedCoffeeBeansId = <number | undefined>loadFormField(FORM_NAME, COFFEEBEANS_ID, "number") ?? undefined;
       }
-
       // Load the persisted form values from LocalStorage:
       recipeTarget = <string>loadFormField(FORM_NAME, RECIPE_TARGET, "string") ?? "";
       recipeResult = <string>loadFormField(FORM_NAME, RECIPE_RESULT, "string") ?? "";
@@ -137,7 +127,6 @@
       outWeight = <number>(loadFormField(FORM_NAME, OUT_WEIGHT, "number") ?? 0);
       rating = <number>(loadFormField(FORM_NAME, RATING, "number") ?? 0);
       favorite = <boolean>(loadFormField(FORM_NAME, FAVORITE, "number") === 1 ? true : false);
-
       // Finish init:
       initFinished = true;
     });
@@ -147,20 +136,15 @@
 
   async function handleFormSubmit() {
     // Validate and format the form values:
-
     if (selectedCoffeeBeansId === undefined) {
       bindSetValidationFailed ? bindSetValidationFailed(true) : undefined;
       return;
     }
-
     recipeTarget = recipeTarget.trim();
     recipeResult = recipeResult.trim();
     recipeThoughts = recipeThoughts.trim();
-
     const timestamp: Date = parseDateFromInputString(timestampStr);
-
     // Save the new recipe:
-
     const recipeSubmit: RecipeSubmit = {
       coffeeBeansId: selectedCoffeeBeansId,
       recipeTarget: recipeTarget,
@@ -171,8 +155,8 @@
       favorite: favorite,
       timestamp: timestamp
     };
+    // Save the new Recipe:
     await addRecipe(recipeSubmit);
-
     // Clear the persisted form values from LocalStorage:
     clearFormField(FORM_NAME, COFFEEBEANS_ID);
     clearFormField(FORM_NAME, RECIPE_TARGET);
@@ -181,9 +165,9 @@
     clearFormField(FORM_NAME, OUT_WEIGHT);
     clearFormField(FORM_NAME, RATING);
     clearFormField(FORM_NAME, FAVORITE);
-
+    // Show a toast:
     addToast("Recipe created.");
-
+    // Redirect to another page:
     const item: CoffeeBeans | undefined = coffeeBeansItems.find((item) => item.id === selectedCoffeeBeansId);
     if (item === undefined) {
       goto(routes.home);
@@ -213,7 +197,6 @@
     bind:selectedCoffeeBeansId
     bind:setValidationFailed={bindSetValidationFailed}
   />
-
   <Textarea
     id={RECIPE_TARGET}
     label={naming.recipe.recipeTarget + ":"}
@@ -221,7 +204,6 @@
     placeholder={placeholders.recipeTarget}
     bind:value={recipeTarget}
   />
-
   <Textarea
     id={RECIPE_RESULT}
     label={naming.recipe.recipeResult + ":"}
@@ -229,7 +211,6 @@
     placeholder={placeholders.recipeResult}
     bind:value={recipeResult}
   />
-
   <NumberInput
     labelText="{naming.recipe.outWeight} (g):"
     min={0}
@@ -237,11 +218,8 @@
     step={5}
     bind:value={outWeight}
   />
-
   <NumberInput labelText="Rating:" max={5} min={0} nameAttr={RATING} step={0.5} bind:value={rating} />
-
   <FavoriteCheckbox bind:value={favorite} />
-
   <Textarea
     id={RECIPE_THOUGHTS}
     label={naming.recipe.recipeThoughts + ":"}
@@ -249,9 +227,7 @@
     placeholder={placeholders.recipeThoughts}
     bind:value={recipeThoughts}
   />
-
   <TimestampPicker bind:value={timestampStr} />
-
   <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" form="add-recipe" type="submit">
     Save
   </button>

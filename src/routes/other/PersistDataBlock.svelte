@@ -3,17 +3,14 @@
   import { addToast } from "$lib/UI/generic-components/toasts/toastProvider";
 
   // UI state:
-
   let storageIsPersistent: boolean | undefined = undefined;
 
   // Lifecycle:
-
   onMount(async () => {
     storageIsPersistent = await navigator.storage.persisted();
   });
 
-  // Handlers:
-
+  // Handler:
   async function handlePersistButtonClick() {
     const result: boolean = await navigator.storage.persist();
     if (result == false) {

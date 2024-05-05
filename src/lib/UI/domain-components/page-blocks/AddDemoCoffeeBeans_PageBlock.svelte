@@ -1,42 +1,38 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { devFillDB } from "$lib/database/current/devData/devFillDB";
-  import { anyCoffeeBeansSaved, anyRecipesSaved } from "$lib/database/current/indexedDB";
+  import { anyCoffeeBeans } from "$lib/database/current/manageCoffeeBeans";
+  import { fillDbWithDemoData } from "$lib/database/current/manageData";
+  import { anyRecipes } from "$lib/database/current/manageRecipes";
   import { addToast } from "$lib/UI/generic-components/toasts/toastProvider";
   import NoItemsYetP from "../lists/NoItemsYetP.svelte";
 
   // Events:
-
   export let onAddDemoEntities: () => void;
 
   // State:
-
-  let anyCoffeeBeans: boolean = true;
-  let anyRecipes: boolean = true;
+  let _anyCoffeeBeans: boolean = true;
+  let _anyRecipes: boolean = true;
 
   // Lifecycle:
-
   onMount(() => {
-    anyCoffeeBeansSaved().then((value: boolean) => {
-      anyCoffeeBeans = value;
+    anyCoffeeBeans().then((value: boolean) => {
+      _anyCoffeeBeans = value;
     });
-
-    anyRecipesSaved().then((value: boolean) => {
-      anyRecipes = value;
+    anyRecipes().then((value: boolean) => {
+      _anyRecipes = value;
     });
   });
 
-  // Handler functions:
-
+  // Handler:
   function handleAddDemoEntities() {
-    devFillDB().then(() => {
+    fillDbWithDemoData().then(() => {
       addToast("Demo coffee beans and recipes added.");
       onAddDemoEntities();
     });
   }
 </script>
 
-{#if anyCoffeeBeans === false && anyRecipes === false}
+{#if _anyCoffeeBeans === false && _anyRecipes === false}
   <div class="empty-db-message-container">
     <p>You have no coffee beans or recipes added yet...</p>
     <p>Would you like to add 3 demo coffee beans and recipes?</p>

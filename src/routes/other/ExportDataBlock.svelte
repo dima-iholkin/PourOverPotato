@@ -1,20 +1,20 @@
 <script lang="ts">
-  import { exportAllData } from "$lib/database/current/indexedDB_ExportImport";
+  import { exportAllData } from "$lib/database/current/manageData";
 
-  // Handlers:
-
+  // Handler:
   async function handleExportButtonClick() {
+    // Create the DOM element:
     const a = document.createElement("a");
     const data: Blob = await exportAllData();
     a.href = URL.createObjectURL(data);
-
+    // Generate a file name:
     const date = new Date();
     const monthNumber = date.getMonth() + 1;
     const monthString = monthNumber.toString().padStart(2, "0");
     const dateNumber = date.getDate();
     const dateString = dateNumber.toString().padStart(2, "0");
     a.setAttribute("download", `PourOverPotato-${date.getFullYear()}_${monthString}_${dateString}.json`);
-
+    // Click the DOM element:
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);

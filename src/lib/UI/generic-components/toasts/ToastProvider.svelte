@@ -14,11 +14,9 @@
   }
 
   // UI state:
-
   let toasts: ToastData[] = [];
 
   // Lifecycle:
-
   onMount(() => {
     // @ts-ignore
     document.addEventListener(
@@ -41,7 +39,6 @@
         };
         toasts.push(item);
         toasts = toasts;
-
         setTimeout(() => {
           handleClickClose(item);
         }, item.timeout);

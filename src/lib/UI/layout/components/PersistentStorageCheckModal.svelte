@@ -2,41 +2,36 @@
   import { onMount, tick } from "svelte";
   import { goto } from "$app/navigation";
   import { page } from "$app/stores";
-  import { anyCoffeeBeansSaved } from "$lib/database/current/indexedDB";
-  import { routes } from "$lib/domain/routes";
+  import { anyCoffeeBeans } from "$lib/database/current/manageCoffeeBeans";
+  import { routes } from "$lib/domain/constants/routes";
   import Modal from "$lib/UI/generic-components/modals/Modal.svelte";
   import { addToast } from "$lib/UI/generic-components/toasts/toastProvider";
 
   // Constants:
-
   const PERSISTENT_STORAGE_KEY = "persistentStorageCheckDate";
 
   // Bind triggers:
-
   let bindSetModalState: (state: "open" | "closed") => void;
   let setFocusToModal: () => void;
 
   // Bind DOM elements:
-
   let cancelButtonDOM: HTMLButtonElement;
   let enableButtonDOM: HTMLButtonElement;
 
   // Lifecycle:
-
   onMount(async () => {
     if (
       (await navigator.storage.persisted()) === false &&
       (localStorage.getItem(PERSISTENT_STORAGE_KEY) === null ||
         localStorage.getItem(PERSISTENT_STORAGE_KEY) !== new Date().toDateString()) &&
-      (await anyCoffeeBeansSaved())
+      (await anyCoffeeBeans())
     ) {
       localStorage.setItem(PERSISTENT_STORAGE_KEY, new Date().toDateString());
       bindSetModalState("open");
     }
   });
 
-  // Entity handlers:
-
+  // Entity handler:
   async function handlePersistButtonClick() {
     const result: boolean = await navigator.storage.persist();
     if (result == false) {

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { vacuumSoftDeletedCoffeeBeans, vacuumSoftDeletedRecipes } from "$lib/database/current/manageData/vacuum";
-  import { vacuumDeprecatedRecipeSortOrderSaves } from "$lib/persistForms/vacuum";
+  import { vacuumSoftDeletedEntities } from "$lib/database/current/manageData";
+  import { vacuumDeprecatedLocalStorageKeys } from "$lib/localStorage/vacuum";
 
   // Constants:
   const VACUUM_KEY = "vacuum_last_date";
@@ -11,7 +11,7 @@
     vacuum(); // Intentionally don't wait on Promise to speed up the page load.
   });
 
-  // Helpers:
+  // Helper:
   async function vacuum() {
     // Load the date logic:
     const lastVacuumDateStr: string | null = localStorage.getItem(VACUUM_KEY);
@@ -30,9 +30,8 @@
       return;
     }
     // Happy path vacuum:
-    vacuumDeprecatedRecipeSortOrderSaves();
-    await vacuumSoftDeletedRecipes();
-    await vacuumSoftDeletedCoffeeBeans();
+    vacuumDeprecatedLocalStorageKeys();
+    await vacuumSoftDeletedEntities();
     localStorage.setItem(VACUUM_KEY, new Date().toDateString());
     console.log("Vacuum finished.");
   }

@@ -1,6 +1,6 @@
 import type { CoffeeBeansCreateSubmit } from "$lib/domain/entities/CoffeeBeans";
 
-export const devCoffeeBeans: CoffeeBeansCreateSubmit[] = [
+export const DemoCoffeeBeans: CoffeeBeansCreateSubmit[] = [
   {
     name: "Rwanda Mabanza",
     description: "Washed process. Dark plum, dark cherry notes. (demo)"

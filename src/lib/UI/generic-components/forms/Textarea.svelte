@@ -3,7 +3,6 @@
   import Label from "./Label.svelte";
 
   // Triggers:
-
   export const resizeTextarea = () => {
     if (this_) {
       resizeOnInput(this_);
@@ -11,7 +10,6 @@
   };
 
   // Props:
-
   export let id: string = "";
   export let label: string = "";
   export let name: string = "";
@@ -21,7 +19,6 @@
   export let value: string = "";
 
   // Reactivity:
-
   $: {
     value;
     if (this_) {
@@ -33,7 +30,6 @@
   }
 
   // Lifecycle:
-
   onMount(() => {
     if (this_) {
       const elem = this_;
@@ -41,8 +37,7 @@
     }
   });
 
-  // Helpers:
-
+  // Helper:
   function resizeOnInput(currentTarget: EventTarget & HTMLTextAreaElement) {
     currentTarget.style.height = "";
     currentTarget.style.height = currentTarget.scrollHeight + "px";

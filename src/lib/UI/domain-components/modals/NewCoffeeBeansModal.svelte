@@ -4,7 +4,7 @@
 
 <script lang="ts">
   import { tick } from "svelte";
-  import { addCoffeeBeans } from "$lib/database/current/indexedDB";
+  import { addCoffeeBeans } from "$lib/database/current/manageCoffeeBeans";
   import { CoffeeBeans, CoffeeBeansCreateSubmit } from "$lib/domain/entities/CoffeeBeans";
   import Label from "$lib/UI/generic-components/forms/Label.svelte";
   import Textarea from "$lib/UI/generic-components/forms/Textarea.svelte";
@@ -12,39 +12,32 @@
   import { addToast } from "$lib/UI/generic-components/toasts/toastProvider";
 
   // Events:
-
   export let onModalStateChange: ((state: "open" | "closed") => void) | undefined = undefined;
   export let onSavedCoffeeBeans: ((coffeeBeans: CoffeeBeans) => void) | undefined = undefined;
 
   // Triggers:
-
   export const setModalState = (state: "open" | "closed") => {
     setModalState_(state);
   };
 
   // Bind triggers:
-
   let bindResizeTextarea: () => void;
   let setFocusToModal: () => void;
   let setModalState_: (state: "open" | "closed") => void;
 
   // Bind DOM elements:
-
   let formDom: HTMLFormElement;
   let inputDom: HTMLInputElement;
   let saveButtonDOM: HTMLButtonElement;
   let textareaDom: HTMLTextAreaElement;
 
   // Form state:
-
   let name: string = "";
   let description: string = "";
-
   let nameValidationFailed: boolean = false;
   let validationMessage: string = "";
 
   // Reactivity:
-
   $: {
     if (nameValidationFailed === false) {
       validationMessage = "";
@@ -76,31 +69,34 @@
 
   async function handleFormSubmit() {
     // Validate and save the new coffee beans:
-
     const coffeeBeansSubmit: CoffeeBeansCreateSubmit | "ValidationFailed_NameMustBeAtLeast3CharsLong" =
       CoffeeBeansCreateSubmit.create({ name, description });
-
+    // Guard clause:
     if (coffeeBeansSubmit === "ValidationFailed_NameMustBeAtLeast3CharsLong") {
       nameValidationFailed = true;
       validationMessage = "Name must be at least 3 characters long.";
       return;
     }
-
-    const coffeeBeans: CoffeeBeans | "Failure_NameAlreadyExist" = await addCoffeeBeans(coffeeBeansSubmit);
-
+    // Save the new CoffeeBeans item:
+    const coffeeBeans: CoffeeBeans | "Failure_NameAlreadyExist" | "DatabaseError" =
+      await addCoffeeBeans(coffeeBeansSubmit);
+    // Guard clauses:
     if (coffeeBeans === "Failure_NameAlreadyExist") {
       nameValidationFailed = true;
       validationMessage = "Coffee beans with this name exist already.";
       return;
     }
-
+    if (coffeeBeans === "DatabaseError") {
+      nameValidationFailed = false;
+      addToast("CoffeeBeans not saved because of a database error.");
+      return;
+    }
+    // Show a toast:
     addToast(`Coffee beans "${coffeeBeans.name}" created.`);
-
     // Return the new Coffee Beans entity to the "Add recipe" page:
     if (onSavedCoffeeBeans !== undefined) {
       onSavedCoffeeBeans(coffeeBeans);
     }
-
     // Clear the modal state:
     setModalState_("closed");
     name = "";
@@ -117,7 +113,6 @@
         inputDom.focus();
       });
     }
-
     if (onModalStateChange !== undefined) {
       onModalStateChange(state);
     }
