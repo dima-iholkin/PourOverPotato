@@ -1,7 +1,7 @@
+import type { ImportedJsonCoffeeBeans, ImportedJsonRecipe } from "$lib/database/current/types/ImportJSON";
 import { CoffeeBeans, type ICoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
 import { Recipe, type IRecipe } from "$lib/domain/entities/Recipe";
 import { isNullOrUndefined } from "$lib/helpers/undefinedHelpers";
-import type { ImportedJsonCoffeeBeans, ImportedJsonRecipe } from "../../types/ImportJSON";
 import { checkIsValidId, parseBooleanField, parseNumberField, parseTextField, parseTimestampField } from "./primitives";
 
 export function parseCoffeeBeansItem(importedItem: unknown | ImportedJsonCoffeeBeans): CoffeeBeans | "ImportFailed" {

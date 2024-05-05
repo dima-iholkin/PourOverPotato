@@ -1,6 +1,6 @@
+import type { IRecipeDB } from "$lib/database/current/types/RecipeDB";
 import type { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
 import type { Recipe } from "$lib/domain/entities/Recipe";
-import type { IRecipeDB } from "../../types/RecipeDB";
 
 export function matchUniqueCoffeeBeansToAdd(
   parsedCoffeeBeans: CoffeeBeans[], dbCoffeeBeans: CoffeeBeans[], matchCoffeeBeansIds: Map<number, number>
