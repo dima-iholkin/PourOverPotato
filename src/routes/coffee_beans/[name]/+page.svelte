@@ -57,7 +57,7 @@
   $: {
     data;
     if (browser && window.indexedDB) {
-      loadCoffeeBeans();
+      loadCoffeeBeansAndRecipes();
     }
   }
 
@@ -67,7 +67,7 @@
     if (coffeeBeans === undefined || coffeeBeans === "CoffeeBeansNotFound") {
       return;
     }
-    // The happy path:
+    // Soft delete the CoffeeBeans item and the Recipes:
     const _coffeeBeans: CoffeeBeans = coffeeBeans;
     const countSoftDeleted: Count | "CoffeeBeansNotFound" = await softDeleteCoffeeBeansAndRecipesById(_coffeeBeans.id);
     // Guard clause:
@@ -75,8 +75,7 @@
       addToast("CoffeeBeans not found in the database. Operation aborted.");
       return;
     }
-    // The happy path:
-    goto(routes.home);
+    // Show a toast:
     const recipesWord = countSoftDeleted.recipesCount === 1 ? "recipe" : "recipes";
     const recipesString =
       countSoftDeleted.recipesCount > 0 ? ` and ${countSoftDeleted.recipesCount} ${recipesWord}` : "";
@@ -88,20 +87,26 @@
       },
       async () => {
         await hardDeleteCoffeeBeansAndRecipesById(_coffeeBeans.id);
-        goto(routes.coffeeBeansItem(_coffeeBeans.name)).then(() => goto(routes.home));
       }
     );
+    // Navigate to the CoffeeBeans page:
+    goto(routes.home);
   }
 
   // Helper:
-  async function loadCoffeeBeans() {
+  async function loadCoffeeBeansAndRecipes() {
+    // Load CoffeeBeans item from the DB:
     const item: CoffeeBeans | undefined = await getCoffeeBeansByName(data.coffeeBeansName);
+    // Guard clause:
     if (item === undefined) {
       coffeeBeans = "CoffeeBeansNotFound";
       return;
     }
+    // Set the CoffeeBeans item state entity:
     coffeeBeans = item;
+    // Load Recipes for the CoffeeBeansId from the DB:
     const _recipes: Recipe[] = await getRecipesByCoffeeBeansId(coffeeBeans.id);
+    // Set the Recipes state entity:
     recipes = _recipes.sort(sortRecipesByTimestampDesc);
   }
 </script>

@@ -9,11 +9,19 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { goto, beforeNavigate } from "$app/navigation";
-  import { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
-  import { Recipe } from "$lib/domain/entities/Recipe";
+  import { getAllCoffeeBeans, getCoffeeBeansById } from "$lib/database/current/manageCoffeeBeans";
+  import {
+    editRecipe,
+    getRecipeById,
+    hardDeleteRecipeById,
+    softDeleteRecipeById,
+    undoSoftDeleteRecipeById
+  } from "$lib/database/current/manageRecipes";
   import { naming } from "$lib/domain/constants/naming";
   import { routes } from "$lib/domain/constants/routes";
   import { placeholders } from "$lib/domain/constants/strings";
+  import { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
+  import { Recipe } from "$lib/domain/entities/Recipe";
   import { formatTimeForInput, parseDateFromInputString } from "$lib/helpers/dateHelpers";
   import CoffeeBeansSelect from "$lib/UI/domain-components/forms/CoffeeBeansSelect.svelte";
   import FavoriteCheckbox from "$lib/UI/domain-components/forms/FavoriteCheckbox.svelte";
@@ -28,14 +36,6 @@
   import { addToast, addToastWithUndo } from "$lib/UI/generic-components/toasts/toastProvider";
   import PageHeadline from "$lib/UI/layout/PageHeadline.svelte";
   import type { PageData } from "./$types";
-  import {
-    editRecipe,
-    getRecipeById,
-    hardDeleteRecipeById,
-    softDeleteRecipeById,
-    undoSoftDeleteRecipeById
-  } from "$lib/database/current/manageRecipes";
-  import { getAllCoffeeBeans, getCoffeeBeansById } from "$lib/database/current/manageCoffeeBeans";
 
   // Load function:
   export let data: PageData;

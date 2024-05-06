@@ -87,7 +87,7 @@
       return;
     }
     // Show a toast:
-    addToast(`Coffee beans "${coffeeBeans.name}" changes saved.`);
+    addToast("Coffee beans modified.");
     // Return the new Coffee Beans entity to the "Add recipe" page:
     item = coffeeBeans;
     // Clear the modal state:
@@ -147,6 +147,7 @@
         type="text"
         bind:this={inputDom}
         bind:value={name}
+        class:unsaved-changes={item.name !== undefined && item.name !== name}
         on:focusin={handleInputFocusIn}
         on:input={handleInputChange}
         on:keydown={handleEnterKey}
@@ -156,6 +157,7 @@
     <div class="my-div mb-5">
       <Textarea
         id="description"
+        initialValue={item.description}
         label="Description:"
         name="description"
         placeholder={DESCRIPTION_PH}
@@ -166,7 +168,7 @@
       />
     </div>
     <button class="button-submit" type="submit" bind:this={saveButtonDOM} on:keydown={handleSaveButtonTabKeydown}>
-      Save
+      Save changes
     </button>
   </form>
 </Modal>
@@ -200,5 +202,10 @@
     margin-left: 0;
     margin-right: 0;
     margin-bottom: 1.25rem;
+  }
+
+  .unsaved-changes {
+    border-color: yellowgreen;
+    outline-color: yellowgreen;
   }
 </style>

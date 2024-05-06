@@ -15,16 +15,16 @@
 <div class="about-section">
   <p>
     This is on an open-source application developed
-    <a href="https://github.com/dima-iholkin/PourOverPotato">on GitHub</a>.
+    <a href="https://github.com/dima-iholkin/PourOverPotato" target="_blank">on GitHub</a>.
   </p>
   <p>
     You can view the development workitems
-    <a href="https://github.com/users/dima-iholkin/projects/5/views/1">on the Projects page</a>.
+    <a href="https://github.com/users/dima-iholkin/projects/5/views/1" target="_blank">on the Projects page</a>.
   </p>
   <p>
     You can influence the project using
-    <a href="https://github.com/dima-iholkin/PourOverPotato/discussions">the Discussions</a> and
-    <a href="https://github.com/dima-iholkin/PourOverPotato/issues">the Issues</a>
+    <a href="https://github.com/dima-iholkin/PourOverPotato/discussions" target="_blank">the Discussions</a> and
+    <a href="https://github.com/dima-iholkin/PourOverPotato/issues" target="_blank">the Issues</a>
     pages.
   </p>
 </div>

@@ -134,7 +134,7 @@
 <Modal
   onFocusReverse={() => saveButtonDOM.focus()}
   onStateChange={handleModalStateChange}
-  title="Add new coffee beans"
+  title="Add coffee beans"
   bind:setFocus={setFocusToModal}
   bind:setState={setModalState_}
 >
