@@ -1,4 +1,4 @@
-import type { ImportedJsonCoffeeBeans, ImportedJsonRecipe } from "$lib/database/current/types/ImportJSON";
+import type { ImportedJsonCoffeeBeans, ImportedJsonRecipe } from "$lib/database/types/ImportJSON";
 import { CoffeeBeans, type ICoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
 import { Recipe, type IRecipe } from "$lib/domain/entities/Recipe";
 import { isNullOrUndefined } from "$lib/helpers/undefinedHelpers";

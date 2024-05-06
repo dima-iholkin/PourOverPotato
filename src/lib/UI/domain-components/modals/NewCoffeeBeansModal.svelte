@@ -4,7 +4,7 @@
 
 <script lang="ts">
   import { tick } from "svelte";
-  import { addCoffeeBeans } from "$lib/database/current/manageCoffeeBeans";
+  import { addCoffeeBeans } from "$lib/database/manageCoffeeBeans";
   import { CoffeeBeans, CoffeeBeansCreateSubmit } from "$lib/domain/entities/CoffeeBeans";
   import Label from "$lib/UI/generic-components/forms/Label.svelte";
   import Textarea from "$lib/UI/generic-components/forms/Textarea.svelte";

@@ -6,8 +6,8 @@
     hardDeleteCoffeeBeansAndRecipesById,
     softDeleteCoffeeBeansAndRecipesById,
     undoSoftDeleteCoffeeBeansAndRecipesById
-  } from "$lib/database/current/manageCoffeeBeans";
-  import { getRecipesByCoffeeBeansId } from "$lib/database/current/manageRecipes";
+  } from "$lib/database/manageCoffeeBeans";
+  import { getRecipesByCoffeeBeansId } from "$lib/database/manageRecipes";
   import { routes } from "$lib/domain/constants/routes";
   import { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
   import type { Recipe } from "$lib/domain/entities/Recipe";

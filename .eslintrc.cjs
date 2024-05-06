@@ -42,6 +42,16 @@ module.exports = {
     "@typescript-eslint/ban-ts-comment": "off",
     "no-empty": "warn",
     //
+    // Disallow imports going outside:
+    "no-restricted-imports": [
+      "warn", {
+        "patterns": [{
+          "group": ["..*"],
+          "message": "Use an absolute path with '$lib' instead."
+        }]
+      }
+    ],
+    //
     // Sort everything:
     //
     // Sort imports:

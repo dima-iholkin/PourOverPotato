@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { importDataFromJson } from "$lib/database/current/manageData";
+  import { importDataFromJson } from "$lib/database/manageData";
   import { isNullOrUndefined, isPresent } from "$lib/helpers/undefinedHelpers";
   import { addToast } from "$lib/UI/generic-components/toasts/toastProvider";
 

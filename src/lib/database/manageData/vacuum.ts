@@ -1,8 +1,8 @@
 import {
   COFFEEBEANS_STORE_NAME, RECIPES_INDEX_COFFEEBEANSID_NAME, RECIPES_STORE_NAME, openEntitiesDB
-} from "../core/indexedDbCore";
-import type { ICoffeeBeansDB } from "../types/CoffeeBeansDB";
-import type { IRecipeDB } from "../types/RecipeDB";
+} from "$lib/database/core/indexedDbCore";
+import type { ICoffeeBeansDB } from "$lib/database/types/CoffeeBeansDB";
+import type { IRecipeDB } from "$lib/database/types/RecipeDB";
 
 export async function vacuumSoftDeletedCoffeeBeans(): Promise<void> {
   // Open a transaction:

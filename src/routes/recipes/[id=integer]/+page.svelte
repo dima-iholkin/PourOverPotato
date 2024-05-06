@@ -9,14 +9,14 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { goto, beforeNavigate } from "$app/navigation";
-  import { getAllCoffeeBeans, getCoffeeBeansById } from "$lib/database/current/manageCoffeeBeans";
+  import { getAllCoffeeBeans, getCoffeeBeansById } from "$lib/database/manageCoffeeBeans";
   import {
     editRecipe,
     getRecipeById,
     hardDeleteRecipeById,
     softDeleteRecipeById,
     undoSoftDeleteRecipeById
-  } from "$lib/database/current/manageRecipes";
+  } from "$lib/database/manageRecipes";
   import { naming } from "$lib/domain/constants/naming";
   import { routes } from "$lib/domain/constants/routes";
   import { placeholders } from "$lib/domain/constants/strings";

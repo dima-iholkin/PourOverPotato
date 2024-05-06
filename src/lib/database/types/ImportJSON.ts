@@ -1,10 +1,7 @@
-import type { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
-import type { Recipe } from "$lib/domain/entities/Recipe";
-
 export interface ImportJSON {
   dbVersion: unknown | number;
   coffeeBeans: unknown | ImportedJsonCoffeeBeans[];
-  recipes: unknown | Recipe[];
+  recipes: unknown | ImportedJsonRecipe[];
 }
 
 export interface ImportedJsonCoffeeBeans {

@@ -1,10 +1,10 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { anyCoffeeBeans } from "$lib/database/current/manageCoffeeBeans";
-  import { fillDbWithDemoData } from "$lib/database/current/manageData";
-  import { anyRecipes } from "$lib/database/current/manageRecipes";
+  import { anyCoffeeBeans } from "$lib/database/manageCoffeeBeans";
+  import { fillDbWithDemoData } from "$lib/database/manageData";
+  import { anyRecipes } from "$lib/database/manageRecipes";
+  import NoItemsYetP from "$lib/UI/domain-components/lists/NoItemsYetP.svelte";
   import { addToast } from "$lib/UI/generic-components/toasts/toastProvider";
-  import NoItemsYetP from "../lists/NoItemsYetP.svelte";
 
   // Events:
   export let onAddDemoEntities: () => void;

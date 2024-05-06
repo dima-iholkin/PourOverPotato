@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { exportAllData } from "$lib/database/current/manageData";
+  import { exportAllData } from "$lib/database/manageData";
 
   // Handler:
   async function handleExportButtonClick() {

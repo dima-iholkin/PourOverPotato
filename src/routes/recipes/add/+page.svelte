@@ -13,8 +13,8 @@
   import { onMount } from "svelte";
   import { goto } from "$app/navigation";
   import { page } from "$app/stores";
-  import { getAllCoffeeBeans } from "$lib/database/current/manageCoffeeBeans";
-  import { addRecipe } from "$lib/database/current/manageRecipes";
+  import { getAllCoffeeBeans } from "$lib/database/manageCoffeeBeans";
+  import { addRecipe } from "$lib/database/manageRecipes";
   import { naming } from "$lib/domain/constants/naming";
   import { routes } from "$lib/domain/constants/routes";
   import { placeholders } from "$lib/domain/constants/strings";
