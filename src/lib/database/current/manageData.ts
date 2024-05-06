@@ -1,7 +1,8 @@
 import type { IDBPDatabase } from "idb";
 import { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
 import { Recipe, RecipeSubmit } from "$lib/domain/entities/Recipe";
-import { COFFEEBEANS_STORE_NAME, RECIPES_STORE_NAME, openEntitiesDB } from "./core/indexedDB_Core";
+import type { Count } from "$lib/types/Count";
+import { COFFEEBEANS_STORE_NAME, RECIPES_STORE_NAME, openEntitiesDB } from "./core/indexedDbCore";
 import { DemoCoffeeBeans } from "./data/demo/demoCoffeeBeans";
 import { generateDemoRecipes } from "./data/demo/demoRecipes";
 import { matchUniqueCoffeeBeansToAdd, matchUniqueRecipesToAdd } from "./data/import/match/arrays";
@@ -9,7 +10,6 @@ import { parseCoffeeBeansArray, parseRecipesArray } from "./data/import/parse/ar
 import { parseDbVersion } from "./data/import/parse/primitives";
 import { vacuumSoftDeletedCoffeeBeans, vacuumSoftDeletedRecipes } from "./data/vacuum";
 import { CoffeeBeansDB, CoffeeBeansDBSubmit, type ICoffeeBeansDB } from "./types/CoffeeBeansDB";
-import type { Count } from "./types/Count";
 import type { EntitiesDB } from "./types/EntitiesDB";
 import type { ExportJSON } from "./types/ExportJSON";
 import type { ImportJSON } from "./types/ImportJSON";

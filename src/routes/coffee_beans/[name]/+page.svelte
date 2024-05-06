@@ -8,11 +8,11 @@
     undoSoftDeleteCoffeeBeansAndRecipesById
   } from "$lib/database/current/manageCoffeeBeans";
   import { getRecipesByCoffeeBeansId } from "$lib/database/current/manageRecipes";
-  import type { Count } from "$lib/database/current/types/Count";
   import { routes } from "$lib/domain/constants/routes";
   import { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
   import type { Recipe } from "$lib/domain/entities/Recipe";
   import { sortRecipesByTimestampDesc } from "$lib/domain/helpers/sortRecipes";
+  import type { Count } from "$lib/types/Count";
   import RecipeCard from "$lib/UI/domain-components/cards/RecipeCard.svelte";
   import MyFab from "$lib/UI/domain-components/FABs/AddRecipeFab.svelte";
   import Loading from "$lib/UI/domain-components/lists/Loading.svelte";

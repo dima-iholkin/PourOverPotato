@@ -1,6 +1,6 @@
 import {
   COFFEEBEANS_STORE_NAME, RECIPES_INDEX_COFFEEBEANSID_NAME, RECIPES_STORE_NAME, openEntitiesDB
-} from "../core/indexedDB_Core";
+} from "../core/indexedDbCore";
 import type { ICoffeeBeansDB } from "../types/CoffeeBeansDB";
 import type { IRecipeDB } from "../types/RecipeDB";
 

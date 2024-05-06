@@ -1,11 +1,11 @@
 import {
   CoffeeBeans, type CoffeeBeansCreateSubmit, type CoffeeBeansEditSubmit
 } from "$lib/domain/entities/CoffeeBeans";
+import type { Count } from "$lib/types/Count";
 import {
   COFFEEBEANS_INDEX_NAME, COFFEEBEANS_STORE_NAME, RECIPES_INDEX_COFFEEBEANSID_NAME, RECIPES_STORE_NAME, openEntitiesDB
-} from "./core/indexedDB_Core";
+} from "./core/indexedDbCore";
 import { CoffeeBeansDB, CoffeeBeansDBSubmit, type ICoffeeBeansDB } from "./types/CoffeeBeansDB";
-import type { Count } from "./types/Count";
 import type { IRecipeDB } from "./types/RecipeDB";
 
 // Public functions:

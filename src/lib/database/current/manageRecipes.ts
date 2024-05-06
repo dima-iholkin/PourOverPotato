@@ -1,5 +1,5 @@
 import type { Recipe, RecipeSubmit } from "$lib/domain/entities/Recipe";
-import { openEntitiesDB, RECIPES_INDEX_COFFEEBEANSID_NAME, RECIPES_STORE_NAME } from "./core/indexedDB_Core";
+import { openEntitiesDB, RECIPES_INDEX_COFFEEBEANSID_NAME, RECIPES_STORE_NAME } from "./core/indexedDbCore";
 import { RecipeDB, type IRecipeDB, RecipeDBSubmit } from "./types/RecipeDB";
 
 // Public functions:
