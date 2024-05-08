@@ -4,7 +4,7 @@ import { Recipe, RecipeSubmit } from "$lib/domain/entities/Recipe";
 import type { Count } from "$lib/types/Count";
 import { COFFEEBEANS_STORE_NAME, RECIPES_STORE_NAME, openEntitiesDB } from "./core/indexedDbCore";
 import { DemoCoffeeBeans } from "./manageData/demo/demoCoffeeBeans";
-import { generateDemoRecipes } from "./manageData/demo/demoRecipes";
+import { generateDemoRecipesForCoffeeBeansId } from "./manageData/demo/demoRecipes";
 import { matchUniqueCoffeeBeansToAdd, matchUniqueRecipesToAdd } from "./manageData/import/match/arrays";
 import { parseCoffeeBeansArray, parseRecipesArray } from "./manageData/import/parse/arrays";
 import { parseDbVersion } from "./manageData/import/parse/primitives";
@@ -74,7 +74,7 @@ export async function fillDbWithDemoData(): Promise<void | "TransactionAborted">
       return "TransactionAborted";
     }
     // Generate the Recipes for this CoffeeBeansId:
-    const recipes: RecipeSubmit[] = generateDemoRecipes(coffeeBeansId);
+    const recipes: RecipeSubmit[] = generateDemoRecipesForCoffeeBeansId(coffeeBeansId);
     // Iterate over demo Recipe items:
     for (const recipe of recipes) {
       // Prepare the Recipe entity:

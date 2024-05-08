@@ -1,6 +1,6 @@
 import type { RecipeSubmit } from "$lib/domain/entities/Recipe";
 
-export function generateDemoRecipes(coffeeBeansId: number): RecipeSubmit[] {
+export function generateDemoRecipesForCoffeeBeansId(coffeeBeansId: number): RecipeSubmit[] {
   return [
     {
       coffeeBeansId: coffeeBeansId,
