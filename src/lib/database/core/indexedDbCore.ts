@@ -1,5 +1,7 @@
 import { openDB, type IDBPDatabase, type IDBPTransaction } from "idb";
-import { type IRecipeDB_v1 } from "$lib/database/manageData/prevVersions/v1/database/RecipeDB";
+import type { ICoffeeBeansDB_v1 } from "$lib/database/manageData/prevVersions/v1/database/CoffeeBeansDBv1";
+import { type IRecipeDB_v1 } from "$lib/database/manageData/prevVersions/v1/database/RecipeDBv1";
+import type { ICoffeeBeansDB } from "$lib/database/types/CoffeeBeansDB";
 import type { EntitiesDB } from "$lib/database/types/EntitiesDB";
 import { type IRecipeDB } from "$lib/database/types/RecipeDB";
 
@@ -24,7 +26,8 @@ export async function openEntitiesDB(): Promise<IDBPDatabase<EntitiesDB>> {
           break;
         case 1: {
           createStores(db); // Run in case for some reason the object store is missing.
-          await migrateRecipeTimestampFromV1ToV2(db, transaction);
+          await migrateRecipesFromV1ToV2(db, transaction);
+          await migrateCoffeeBeansFromV1ToV2(db, transaction);
           break;
         }
         default:
@@ -53,30 +56,43 @@ function createStores(db: IDBPDatabase<EntitiesDB>): void {
 }
 
 /**
- * Converts each Recipe's "timestamp" field from Date to number.
+ * Initializes "softDeleted" field to `false`.
  */
-async function migrateRecipeTimestampFromV1ToV2(
-  db: IDBPDatabase<EntitiesDB>,
-  transaction: IDBPTransaction<EntitiesDB, ("coffeeBeans" | "recipes")[], "versionchange">
+async function migrateCoffeeBeansFromV1ToV2(
+  db: IDBPDatabase<EntitiesDB>, transaction: IDBPTransaction<EntitiesDB, ("coffeeBeans" | "recipes")[], "versionchange">
+) {
+  // Load all CoffeeBeans:
+  const coffeeBeansFromV1 =
+    await transaction.objectStore(COFFEEBEANS_STORE_NAME).getAll() as unknown as ICoffeeBeansDB_v1[];
+  // Prepare all CoffeeBeans:
+  for (const itemV1 of coffeeBeansFromV1) {
+    const itemV2: ICoffeeBeansDB = {
+      ...itemV1,
+      softDeleted: false
+    };
+    // Save all modified Recipes:
+    await transaction.objectStore(COFFEEBEANS_STORE_NAME).put(itemV2);
+  }
+}
+
+/**
+ * Converts each Recipe's "timestamp" field from `Date` to `number`.
+ * Initializes "favorite" and "softDeleted" fields to `false`.
+ */
+async function migrateRecipesFromV1ToV2(
+  db: IDBPDatabase<EntitiesDB>, transaction: IDBPTransaction<EntitiesDB, ("coffeeBeans" | "recipes")[], "versionchange">
 ): Promise<void> {
   // Load all Recipes:
-  // @ts-ignore
-  const recipesFromV1: IRecipeDB_v1[] = await transaction.objectStore(RECIPES_STORE_NAME).getAll();
+  const recipesFromV1 = await transaction.objectStore(RECIPES_STORE_NAME).getAll() as unknown as IRecipeDB_v1[];
   // Prepare all Recipes:
   for (const itemV1 of recipesFromV1) {
-    const recipeNew: IRecipeDB = {
+    const itemV2: IRecipeDB = {
       ...itemV1,
       favorite: false,
       timestamp: itemV1.timestamp.getTime(),
       softDeleted: false
     };
     // Save all modified Recipes:
-    await transaction.objectStore(RECIPES_STORE_NAME).put(recipeNew);
+    await transaction.objectStore(RECIPES_STORE_NAME).put(itemV2);
   }
 }
-
-// TODO:
-// async function migrateCoffeeBeansSoftDeletedFromV2ToV3() {}
-
-// TODO:
-// async function migrateRecipesSoftDeletedAndFavoriteFromV2ToV3() {}

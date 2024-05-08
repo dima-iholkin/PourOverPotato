@@ -6,8 +6,9 @@ import { COFFEEBEANS_STORE_NAME, RECIPES_STORE_NAME, openEntitiesDB } from "./co
 import { DemoCoffeeBeans } from "./manageData/demo/demoCoffeeBeans";
 import { generateDemoRecipesForCoffeeBeansId } from "./manageData/demo/demoRecipes";
 import { matchUniqueCoffeeBeansToAdd, matchUniqueRecipesToAdd } from "./manageData/import/match/arrays";
-import { parseCoffeeBeansArray, parseRecipesArray } from "./manageData/import/parse/arrays";
+import { parseCoffeeBeansArray } from "./manageData/import/parse/coffeeBeans";
 import { parseDbVersion } from "./manageData/import/parse/primitives";
+import { parseRecipesArray } from "./manageData/import/parse/recipes";
 import { vacuumSoftDeletedCoffeeBeans, vacuumSoftDeletedRecipes } from "./manageData/vacuum";
 import { CoffeeBeansDB, CoffeeBeansDBSubmit, type ICoffeeBeansDB } from "./types/CoffeeBeansDB";
 import type { EntitiesDB } from "./types/EntitiesDB";
@@ -104,14 +105,17 @@ export async function importDataFromJson(jsonFile: File): Promise<Count | "Impor
   }
   // Use a Map to keep track of the correct Id's for imported CoffeeBeans:
   const matchCoffeeBeansIds = new Map<number, number>();
-  // Load the CoffeeBeans items from DB:
-  const dbCoffeeBeans: CoffeeBeans[] = await tx.objectStore(COFFEEBEANS_STORE_NAME).getAll();
-  // Parse the CoffeeBeans array:
-  const parsedCoffeeBeansArray: CoffeeBeans[] | "ImportFailed" = parseCoffeeBeansArray(imported.coffeeBeans);
+  // Parse the imported CoffeeBeans array:
+  const parsedCoffeeBeansArray: CoffeeBeans[] | "ImportFailed" = parseCoffeeBeansArray(
+    imported.coffeeBeans, parsedDbVersion
+  );
   if (parsedCoffeeBeansArray === "ImportFailed") {
     await tx.abort();
     return "ImportFailed";
   }
+  // Load the CoffeeBeans items from DB:
+  const dbCoffeeBeans: CoffeeBeans[] = await tx.objectStore(COFFEEBEANS_STORE_NAME).getAll();
+  // Find the unique CoffeeBeans items to add to the DB:
   const uniqueCoffeeBeans: CoffeeBeans[] = matchUniqueCoffeeBeansToAdd(
     parsedCoffeeBeansArray, dbCoffeeBeans, matchCoffeeBeansIds
   );
@@ -131,7 +135,9 @@ export async function importDataFromJson(jsonFile: File): Promise<Count | "Impor
   // Load the DB's Recipes:
   const dbRecipes: IRecipeDB[] = await tx.objectStore(RECIPES_STORE_NAME).getAll();
   // Parse the imported Recipes array:
-  const parsedRecipesArray: Recipe[] | "ImportFailed" = parseRecipesArray(imported.recipes, matchCoffeeBeansIds);
+  const parsedRecipesArray: Recipe[] | "ImportFailed" = parseRecipesArray(
+    imported.recipes, matchCoffeeBeansIds, parsedDbVersion
+  );
   // Guard clause:
   if (parsedRecipesArray === "ImportFailed") {
     await tx.abort();

@@ -1,6 +1,6 @@
 import type { DBSchema } from "idb";
-import type { ICoffeeBeansDB_v1 } from "./CoffeeBeansDB";
-import type { IRecipeDB_v1 } from "./RecipeDB";
+import type { ICoffeeBeansDB_v1 } from "./CoffeeBeansDBv1";
+import type { IRecipeDB_v1 } from "./RecipeDBv1";
 
 export interface EntitiesDB_v1 extends DBSchema {
   coffeeBeans: {

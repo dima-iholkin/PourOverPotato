@@ -14,6 +14,13 @@ export class CoffeeBeans implements ICoffeeBeans {
     this.name = item.name;
     this.description = item.description;
   }
+
+  static hasValidName(item: { name: string }): true | "ValidationFailed_NameMustBeAtLeast3CharsLong" {
+    if (item.name.trim().length < 3) {
+      return "ValidationFailed_NameMustBeAtLeast3CharsLong";
+    }
+    return true;
+  }
 }
 
 export class CoffeeBeansCreateSubmit implements Omit<ICoffeeBeans, "id"> {
@@ -27,19 +34,18 @@ export class CoffeeBeansCreateSubmit implements Omit<ICoffeeBeans, "id"> {
 
   // eslint-disable-next-line max-len
   static create(item: Omit<ICoffeeBeans, "id">): CoffeeBeansCreateSubmit | "ValidationFailed_NameMustBeAtLeast3CharsLong" {
-    // Prepare the entity:
-    const _name = item.name.trim();
-    const _description = item.description.trim();
-    // Guard clause:
-    if (_name.length < 3) {
+    // Validation:
+    if (CoffeeBeans.hasValidName(item) === "ValidationFailed_NameMustBeAtLeast3CharsLong") {
       return "ValidationFailed_NameMustBeAtLeast3CharsLong";
     }
     // Prepare the entity:
+    const _name = item.name.trim();
+    const _description = item.description.trim();
     const obj: Omit<ICoffeeBeans, "id"> = {
       name: _name,
       description: _description
     };
-    // Result:
+    // Return correct type:
     return new CoffeeBeansCreateSubmit(obj);
   }
 }
@@ -56,20 +62,19 @@ export class CoffeeBeansEditSubmit implements ICoffeeBeans {
   }
 
   static create(item: ICoffeeBeans): CoffeeBeansEditSubmit | "ValidationFailed_NameMustBeAtLeast3CharsLong" {
-    // Prepare the entity:
-    const _name = item.name.trim();
-    const _description = item.description.trim();
-    // Guard clause:
-    if (_name.length < 3) {
+    // Validation:
+    if (CoffeeBeans.hasValidName(item) === "ValidationFailed_NameMustBeAtLeast3CharsLong") {
       return "ValidationFailed_NameMustBeAtLeast3CharsLong";
     }
     // Prepare the entity:
+    const _name = item.name.trim();
+    const _description = item.description.trim();
     const obj: CoffeeBeans = {
       id: item.id,
       name: _name,
       description: _description
     };
-    // Result:
+    // Return correct type:
     return new CoffeeBeansEditSubmit(obj);
   }
 }

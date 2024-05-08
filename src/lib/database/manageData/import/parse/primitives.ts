@@ -1,7 +1,7 @@
 import { parseDateFromInputString } from "$lib/helpers/dateHelpers";
 import { isNullOrUndefined } from "$lib/helpers/undefinedHelpers";
 
-export function checkIsValidId(id: unknown | number): boolean {
+export function checkIsValidEntityId(id: unknown | number): boolean {
   if (isNullOrUndefined(id) || Number.isInteger(id) === false || id as number < 0) {
     return false;
   }
@@ -25,7 +25,7 @@ export function parseDbVersion(importedDbVersion: unknown | number, txDbVersion:
     alert("\"dbVersion\" property must be an integer. Import aborted.");
     return "ImportFailed";
   }
-  // At this point we've proven the DbVersion is a number;
+  // At this point we've proven the DbVersion is a number:
   const parsedDbVersion = importedDbVersion as number;
   if (parsedDbVersion <= 0) {
     alert("The file's \"dbVersion\" must be higher than 0. Import aborted.");
