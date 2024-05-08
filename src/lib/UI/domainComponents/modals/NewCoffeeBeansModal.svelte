@@ -6,10 +6,10 @@
   import { tick } from "svelte";
   import { addCoffeeBeans } from "$lib/database/manageCoffeeBeans";
   import { CoffeeBeans, CoffeeBeansCreateSubmit } from "$lib/domain/entities/CoffeeBeans";
-  import Label from "$lib/UI/generic-components/forms/Label.svelte";
-  import Textarea from "$lib/UI/generic-components/forms/Textarea.svelte";
-  import Modal from "$lib/UI/generic-components/modals/Modal.svelte";
-  import { addToast } from "$lib/UI/generic-components/toasts/toastProvider";
+  import Label from "$lib/UI/genericComponents/forms/Label.svelte";
+  import Textarea from "$lib/UI/genericComponents/forms/Textarea.svelte";
+  import Modal from "$lib/UI/genericComponents/modals/Modal.svelte";
+  import { addToast } from "$lib/UI/genericComponents/toasts/toastProvider";
 
   // Events:
   export let onModalStateChange: ((state: "open" | "closed") => void) | undefined = undefined;

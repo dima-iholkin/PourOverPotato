@@ -22,12 +22,12 @@
   import type { RecipeSubmit } from "$lib/domain/entities/Recipe";
   import { formatTimeForInput, parseDateFromInputString } from "$lib/helpers/dateHelpers";
   import { clearFormField, loadFormField, persistFormField } from "$lib/localStorage/persistForms";
-  import CoffeeBeansSelect from "$lib/UI/domain-components/forms/CoffeeBeansSelect.svelte";
-  import FavoriteCheckbox from "$lib/UI/domain-components/forms/FavoriteCheckbox.svelte";
-  import TimestampPicker from "$lib/UI/domain-components/forms/TimestampPicker.svelte";
-  import NumberInput from "$lib/UI/generic-components/forms/NumberInput.svelte";
-  import Textarea from "$lib/UI/generic-components/forms/Textarea.svelte";
-  import { addToast } from "$lib/UI/generic-components/toasts/toastProvider";
+  import CoffeeBeansSelect from "$lib/UI/domainComponents/forms/CoffeeBeansSelect.svelte";
+  import FavoriteCheckbox from "$lib/UI/domainComponents/forms/FavoriteCheckbox.svelte";
+  import TimestampPicker from "$lib/UI/domainComponents/forms/TimestampPicker.svelte";
+  import NumberInput from "$lib/UI/genericComponents/forms/NumberInput.svelte";
+  import Textarea from "$lib/UI/genericComponents/forms/Textarea.svelte";
+  import { addToast } from "$lib/UI/genericComponents/toasts/toastProvider";
   import PageHeadline from "$lib/UI/layout/PageHeadline.svelte";
 
   // Load function:

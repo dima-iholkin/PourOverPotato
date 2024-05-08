@@ -1,7 +1,7 @@
 <script lang="ts">
   import { deleteAllData } from "$lib/database/manageData";
-  import DeleteConfirmationModal from "$lib/UI/generic-components/modals/DeleteConfirmationModal.svelte";
-  import { addToast } from "$lib/UI/generic-components/toasts/toastProvider";
+  import DeleteConfirmationModal from "$lib/UI/genericComponents/modals/DeleteConfirmationModal.svelte";
+  import { addToast } from "$lib/UI/genericComponents/toasts/toastProvider";
 
   // Bind triggers:
   let bind_setDeleteModalState: (state: "open" | "closed") => void;

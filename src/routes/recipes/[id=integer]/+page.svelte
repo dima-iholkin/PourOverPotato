@@ -23,17 +23,17 @@
   import { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
   import { Recipe } from "$lib/domain/entities/Recipe";
   import { formatTimeForInput, parseDateFromInputString } from "$lib/helpers/dateHelpers";
-  import CoffeeBeansSelect from "$lib/UI/domain-components/forms/CoffeeBeansSelect.svelte";
-  import FavoriteCheckbox from "$lib/UI/domain-components/forms/FavoriteCheckbox.svelte";
-  import TimestampPicker from "$lib/UI/domain-components/forms/TimestampPicker.svelte";
-  import Loading from "$lib/UI/domain-components/lists/Loading.svelte";
-  import DropdownMenu from "$lib/UI/generic-components/dropdownMenu/DropdownMenu.svelte";
-  import DropdownMenuItem from "$lib/UI/generic-components/dropdownMenu/DropdownMenuItem.svelte";
-  import FlexRow from "$lib/UI/generic-components/FlexRow.svelte";
-  import NumberInput from "$lib/UI/generic-components/forms/NumberInput.svelte";
-  import Textarea from "$lib/UI/generic-components/forms/Textarea.svelte";
-  import DeleteConfirmationModal from "$lib/UI/generic-components/modals/DeleteConfirmationModal.svelte";
-  import { addToast, addToastWithUndo } from "$lib/UI/generic-components/toasts/toastProvider";
+  import CoffeeBeansSelect from "$lib/UI/domainComponents/forms/CoffeeBeansSelect.svelte";
+  import FavoriteCheckbox from "$lib/UI/domainComponents/forms/FavoriteCheckbox.svelte";
+  import TimestampPicker from "$lib/UI/domainComponents/forms/TimestampPicker.svelte";
+  import Loading from "$lib/UI/domainComponents/lists/Loading.svelte";
+  import DropdownMenu from "$lib/UI/genericComponents/dropdownMenu/DropdownMenu.svelte";
+  import DropdownMenuItem from "$lib/UI/genericComponents/dropdownMenu/DropdownMenuItem.svelte";
+  import FlexRow from "$lib/UI/genericComponents/FlexRow.svelte";
+  import NumberInput from "$lib/UI/genericComponents/forms/NumberInput.svelte";
+  import Textarea from "$lib/UI/genericComponents/forms/Textarea.svelte";
+  import DeleteConfirmationModal from "$lib/UI/genericComponents/modals/DeleteConfirmationModal.svelte";
+  import { addToast, addToastWithUndo } from "$lib/UI/genericComponents/toasts/toastProvider";
   import PageHeadline from "$lib/UI/layout/PageHeadline.svelte";
   import type { PageData } from "./$types";
 

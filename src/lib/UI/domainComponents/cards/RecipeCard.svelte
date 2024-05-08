@@ -2,7 +2,7 @@
   import { naming } from "$lib/domain/constants/naming";
   import type { Recipe } from "$lib/domain/entities/Recipe";
   import { convertToTimeAgo } from "$lib/helpers/dateHelpers";
-  import Card from "$lib/UI/generic-components/Card.svelte";
+  import Card from "$lib/UI/genericComponents/Card.svelte";
 
   // Entities props:
   export let recipe: Recipe;

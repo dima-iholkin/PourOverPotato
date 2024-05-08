@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { addToast } from "$lib/UI/generic-components/toasts/toastProvider";
+  import { addToast } from "$lib/UI/genericComponents/toasts/toastProvider";
 
   // UI state:
   let storageIsPersistent: boolean | undefined = undefined;

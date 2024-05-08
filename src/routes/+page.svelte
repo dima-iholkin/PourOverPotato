@@ -6,11 +6,11 @@
   import type { Recipe } from "$lib/domain/entities/Recipe";
   import { sortCoffeeBeansByTimestampDesc as byTimestampDescCB } from "$lib/domain/helpers/sortCoffeeBeans";
   import { sortRecipesByTimestampDesc as byTimestampDescR } from "$lib/domain/helpers/sortRecipes";
-  import CoffeeBeansCard from "$lib/UI/domain-components/cards/CoffeeBeansCard.svelte";
-  import AddRecipeFab from "$lib/UI/domain-components/FABs/AddRecipeFab.svelte";
-  import Loading from "$lib/UI/domain-components/lists/Loading.svelte";
-  import SortedByP from "$lib/UI/domain-components/lists/SortedByP.svelte";
-  import AddDemoCoffeeBeans_PageBlock from "$lib/UI/domain-components/page-blocks/AddDemoCoffeeBeans_PageBlock.svelte";
+  import CoffeeBeansCard from "$lib/UI/domainComponents/cards/CoffeeBeansCard.svelte";
+  import AddRecipeFab from "$lib/UI/domainComponents/FABs/AddRecipeFab.svelte";
+  import Loading from "$lib/UI/domainComponents/lists/Loading.svelte";
+  import SortedByP from "$lib/UI/domainComponents/lists/SortedByP.svelte";
+  import AddDemoCoffeeBeans_PageBlock from "$lib/UI/domainComponents/pageBlocks/AddDemoCoffeeBeans_PageBlock.svelte";
   import PageHeadline from "$lib/UI/layout/PageHeadline.svelte";
   import type { EnhancedCoffeeBeans } from "./EnhancedCoffeeBeans";
 

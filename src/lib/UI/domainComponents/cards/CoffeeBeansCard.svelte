@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
-  import Card from "$lib/UI/generic-components/Card.svelte";
+  import Card from "$lib/UI/genericComponents/Card.svelte";
 
   // Entity props:
   export let item: CoffeeBeans;

@@ -3,8 +3,8 @@
   import { anyCoffeeBeans } from "$lib/database/manageCoffeeBeans";
   import { fillDbWithDemoData } from "$lib/database/manageData";
   import { anyRecipes } from "$lib/database/manageRecipes";
-  import NoItemsYetP from "$lib/UI/domain-components/lists/NoItemsYetP.svelte";
-  import { addToast } from "$lib/UI/generic-components/toasts/toastProvider";
+  import NoItemsYetP from "$lib/UI/domainComponents/lists/NoItemsYetP.svelte";
+  import { addToast } from "$lib/UI/genericComponents/toasts/toastProvider";
 
   // Events:
   export let onAddDemoEntities: () => void;

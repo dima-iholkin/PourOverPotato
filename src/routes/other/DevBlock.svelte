@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { addToast } from "$lib/UI/generic-components/toasts/toastProvider";
+  import { addToast } from "$lib/UI/genericComponents/toasts/toastProvider";
 </script>
 
 <div class="container">

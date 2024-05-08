@@ -1,7 +1,7 @@
 <script lang="ts">
   import { importDataFromJson } from "$lib/database/manageData";
   import { isNullOrUndefined, isPresent } from "$lib/helpers/undefinedHelpers";
-  import { addToast } from "$lib/UI/generic-components/toasts/toastProvider";
+  import { addToast } from "$lib/UI/genericComponents/toasts/toastProvider";
 
   // Handler:
   async function handleImportButtonClick() {

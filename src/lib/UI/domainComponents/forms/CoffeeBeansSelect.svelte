@@ -5,8 +5,8 @@
 <script lang="ts">
   import type { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
   import { sortCoffeeBeansByName } from "$lib/domain/helpers/sortCoffeeBeans";
-  import NewCoffeeBeansModal from "$lib/UI/domain-components/modals/NewCoffeeBeansModal.svelte";
-  import Label from "$lib/UI/generic-components/forms/Label.svelte";
+  import NewCoffeeBeansModal from "$lib/UI/domainComponents/modals/NewCoffeeBeansModal.svelte";
+  import Label from "$lib/UI/genericComponents/forms/Label.svelte";
 
   // Events:
   export let onSavedCoffeeBeans: ((coffeeBeans: CoffeeBeans) => void) | undefined = undefined;

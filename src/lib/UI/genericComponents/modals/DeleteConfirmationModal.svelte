@@ -1,6 +1,6 @@
 <script lang="ts">
   import { tick } from "svelte";
-  import Modal from "$lib/UI/generic-components/modals/Modal.svelte";
+  import Modal from "$lib/UI/genericComponents/modals/Modal.svelte";
 
   // Events:
   export let onDeleteClick: () => void;

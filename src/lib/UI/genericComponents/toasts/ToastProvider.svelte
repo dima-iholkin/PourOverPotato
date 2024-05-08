@@ -2,7 +2,7 @@
   import { onMount } from "svelte";
   import { flip } from "svelte/animate";
   import { fly } from "svelte/transition";
-  import Toast from "$lib/UI/generic-components/toasts/Toast.svelte";
+  import Toast from "$lib/UI/genericComponents/toasts/Toast.svelte";
   import UndoToast from "./UndoToast.svelte";
 
   interface ToastData {

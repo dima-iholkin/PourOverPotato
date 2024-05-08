@@ -1,5 +1,5 @@
 import { browser } from "$app/environment";
-import { RecipesSortOrderEnum } from "$lib/UI/domain-components/lists/SortRecipesSelect/RecipesSortOrderEnum";
+import { RecipesSortOrderEnum } from "$lib/UI/domainComponents/lists/SortRecipesSelect/RecipesSortOrderEnum";
 
 // Public functions:
 

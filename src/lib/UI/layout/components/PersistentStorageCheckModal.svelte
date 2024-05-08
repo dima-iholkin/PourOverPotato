@@ -4,8 +4,8 @@
   import { page } from "$app/stores";
   import { anyCoffeeBeans } from "$lib/database/manageCoffeeBeans";
   import { routes } from "$lib/domain/constants/routes";
-  import Modal from "$lib/UI/generic-components/modals/Modal.svelte";
-  import { addToast } from "$lib/UI/generic-components/toasts/toastProvider";
+  import Modal from "$lib/UI/genericComponents/modals/Modal.svelte";
+  import { addToast } from "$lib/UI/genericComponents/toasts/toastProvider";
 
   // Constants:
   const PERSISTENT_STORAGE_KEY = "persistentStorageCheckDate";
