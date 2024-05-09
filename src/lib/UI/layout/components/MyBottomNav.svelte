@@ -2,15 +2,13 @@
   import { base } from "$app/paths";
   import { page } from "$app/stores";
   import coffeeBeansIcon from "$lib/assets/coffee-beans-icon.png";
-  import { routes } from "$lib/domain/routes";
+  import { routes } from "$lib/domain/constants/routes";
   import OtherIcon from "$lib/UI/icons/OtherIcon.svelte";
 
   // Props:
-
   export let asGap: boolean = false;
 
   // Reactivity:
-
   $: route = base + $page.route.id;
 </script>
 

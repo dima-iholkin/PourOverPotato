@@ -1,5 +1,5 @@
 <script lang="ts">
-  import ToastProvider from "$lib/UI/generic-components/toasts/ToastProvider.svelte";
+  import ToastProvider from "$lib/UI/genericComponents/toasts/ToastProvider.svelte";
   import MyBottomNav from "./components/MyBottomNav.svelte";
   import MyHeader from "./components/MyHeader.svelte";
   import MySidebar from "./components/MySidebar.svelte";

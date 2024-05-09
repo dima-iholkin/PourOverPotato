@@ -1,14 +1,12 @@
 <script lang="ts">
   import { base } from "$app/paths";
   import { page } from "$app/stores";
-  import { routes } from "$lib/domain/routes";
+  import { routes } from "$lib/domain/constants/routes";
 
   // Props:
-
   export let asGap: boolean = false;
 
-  // State:
-
+  // Reactivity:
   $: selected = base + $page.route.id ?? "";
 </script>
 

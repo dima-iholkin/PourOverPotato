@@ -1,67 +1,80 @@
-export class CoffeeBeans {
+export interface ICoffeeBeans {
+  id: number;
+  name: string;
+  description: string;
+}
+
+export class CoffeeBeans implements ICoffeeBeans {
   id: number;
   name: string;
   description: string;
 
-  constructor(item: Omit<CoffeeBeans, "id">, id: number) {
-    this.id = id;
-    this.name = item.name;
-    this.description = item.description;
-  }
-}
-
-export class CoffeeBeansCreateSubmit implements Omit<CoffeeBeans, "id"> {
-  name: string;
-  description: string;
-
-  private constructor(item: Omit<CoffeeBeans, "id">) {
-    this.name = item.name;
-    this.description = item.description;
-  }
-
-  // eslint-disable-next-line max-len
-  static create(item: Omit<CoffeeBeans, "id">): CoffeeBeansCreateSubmit | "ValidationFailed_NameMustBeAtLeast3CharsLong" {
-    const _name = item.name.trim();
-    const _description = item.description.trim();
-
-    if (_name.length < 3) {
-      return "ValidationFailed_NameMustBeAtLeast3CharsLong";
-    }
-
-    const obj: Omit<CoffeeBeans, "id"> = {
-      name: _name,
-      description: _description
-    };
-
-    return new CoffeeBeansCreateSubmit(obj);
-  }
-}
-
-export class CoffeeBeansEditSubmit implements CoffeeBeans {
-  id: number;
-  name: string;
-  description: string;
-
-  private constructor(item: CoffeeBeans) {
+  constructor(item: ICoffeeBeans) {
     this.id = item.id;
     this.name = item.name;
     this.description = item.description;
   }
 
-  static create(item: CoffeeBeans): CoffeeBeansEditSubmit | "ValidationFailed_NameMustBeAtLeast3CharsLong" {
-    const _name = item.name.trim();
-    const _description = item.description.trim();
-
-    if (_name.length < 3) {
+  static hasValidName(item: { name: string }): true | "ValidationFailed_NameMustBeAtLeast3CharsLong" {
+    if (item.name.trim().length < 3) {
       return "ValidationFailed_NameMustBeAtLeast3CharsLong";
     }
+    return true;
+  }
+}
 
+export class CoffeeBeansCreateSubmit implements Omit<ICoffeeBeans, "id"> {
+  name: string;
+  description: string;
+
+  private constructor(item: Omit<ICoffeeBeans, "id">) {
+    this.name = item.name;
+    this.description = item.description;
+  }
+
+  // eslint-disable-next-line max-len
+  static create(item: Omit<ICoffeeBeans, "id">): CoffeeBeansCreateSubmit | "ValidationFailed_NameMustBeAtLeast3CharsLong" {
+    // Validation:
+    if (CoffeeBeans.hasValidName(item) === "ValidationFailed_NameMustBeAtLeast3CharsLong") {
+      return "ValidationFailed_NameMustBeAtLeast3CharsLong";
+    }
+    // Prepare the entity:
+    const _name = item.name.trim();
+    const _description = item.description.trim();
+    const obj: Omit<ICoffeeBeans, "id"> = {
+      name: _name,
+      description: _description
+    };
+    // Return correct type:
+    return new CoffeeBeansCreateSubmit(obj);
+  }
+}
+
+export class CoffeeBeansEditSubmit implements ICoffeeBeans {
+  id: number;
+  name: string;
+  description: string;
+
+  private constructor(item: ICoffeeBeans) {
+    this.id = item.id;
+    this.name = item.name;
+    this.description = item.description;
+  }
+
+  static create(item: ICoffeeBeans): CoffeeBeansEditSubmit | "ValidationFailed_NameMustBeAtLeast3CharsLong" {
+    // Validation:
+    if (CoffeeBeans.hasValidName(item) === "ValidationFailed_NameMustBeAtLeast3CharsLong") {
+      return "ValidationFailed_NameMustBeAtLeast3CharsLong";
+    }
+    // Prepare the entity:
+    const _name = item.name.trim();
+    const _description = item.description.trim();
     const obj: CoffeeBeans = {
       id: item.id,
       name: _name,
       description: _description
     };
-
+    // Return correct type:
     return new CoffeeBeansEditSubmit(obj);
   }
 }

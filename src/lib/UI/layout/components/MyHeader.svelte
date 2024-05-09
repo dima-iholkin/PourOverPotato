@@ -1,26 +1,22 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
   import { page } from "$app/stores";
-  import { routes } from "$lib/domain/routes";
+  import { routes } from "$lib/domain/constants/routes";
   import LeftArrowIcon from "$lib/UI/icons/LeftArrowIcon.svelte";
   import LoveIcon from "$lib/UI/icons/LoveIcon.svelte";
 
   // UI props:
-
   export let asGap: boolean = false;
 
   // URL state:
-
   let pathname: string = routes.home;
 
   // URL reactivity:
-
   page.subscribe((pageInfo) => {
     pathname = pageInfo.url.pathname;
   });
 
   // Handlers:
-
   function handleBackButtonClick() {
     if (history.length === 0) {
       goto(routes.home, { replaceState: true });
@@ -107,8 +103,7 @@
     }
   }
 
-  /* Helpers: */
-
+  /* Helper: */
   .vertical-center-children {
     display: flex;
     flex-direction: row;

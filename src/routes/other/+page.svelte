@@ -1,10 +1,10 @@
 <script lang="ts">
   import { version } from "$app/environment";
-  import DeleteAllDataBlock from "./DeleteAllDataBlock.svelte";
-  import DevBlock from "./DevBlock.svelte";
-  import ExportDataBlock from "./ExportDataBlock.svelte";
-  import ImportDataBlock from "./ImportDataBlock.svelte";
-  import PersistDataBlock from "./PersistDataBlock.svelte";
+  import DeleteAllDataBlock from "./components/DeleteAllDataBlock.svelte";
+  import DevBlock from "./components/DevBlock.svelte";
+  import ExportDataBlock from "./components/ExportDataBlock.svelte";
+  import ImportDataBlock from "./components/ImportDataBlock.svelte";
+  import PersistentStorageBlock from "./components/PersistentStorageBlock.svelte";
 </script>
 
 <svelte:head>
@@ -15,16 +15,16 @@
 <div class="about-section">
   <p>
     This is on an open-source application developed
-    <a href="https://github.com/dima-iholkin/PourOverPotato">on GitHub</a>.
+    <a href="https://github.com/dima-iholkin/PourOverPotato" target="_blank">on GitHub</a>.
   </p>
   <p>
     You can view the development workitems
-    <a href="https://github.com/users/dima-iholkin/projects/5/views/1">on the Projects page</a>.
+    <a href="https://github.com/users/dima-iholkin/projects/5/views/1" target="_blank">on the Projects page</a>.
   </p>
   <p>
     You can influence the project using
-    <a href="https://github.com/dima-iholkin/PourOverPotato/discussions">the Discussions</a> and
-    <a href="https://github.com/dima-iholkin/PourOverPotato/issues">the Issues</a>
+    <a href="https://github.com/dima-iholkin/PourOverPotato/discussions" target="_blank">the Discussions</a> and
+    <a href="https://github.com/dima-iholkin/PourOverPotato/issues" target="_blank">the Issues</a>
     pages.
   </p>
 </div>
@@ -43,7 +43,7 @@
 </div>
 
 <h5>Manage your data</h5>
-<PersistDataBlock />
+<PersistentStorageBlock />
 <ExportDataBlock />
 <ImportDataBlock />
 
