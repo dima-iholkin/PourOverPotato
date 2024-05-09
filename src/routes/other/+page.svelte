@@ -1,10 +1,10 @@
 <script lang="ts">
   import { version } from "$app/environment";
-  import DeleteAllDataBlock from "./DeleteAllDataBlock.svelte";
-  import DevBlock from "./DevBlock.svelte";
-  import ExportDataBlock from "./ExportDataBlock.svelte";
-  import ImportDataBlock from "./ImportDataBlock.svelte";
-  import PersistDataBlock from "./PersistDataBlock.svelte";
+  import DeleteAllDataBlock from "./components/DeleteAllDataBlock.svelte";
+  import DevBlock from "./components/DevBlock.svelte";
+  import ExportDataBlock from "./components/ExportDataBlock.svelte";
+  import ImportDataBlock from "./components/ImportDataBlock.svelte";
+  import PersistDataBlock from "./components/PersistDataBlock.svelte";
 </script>
 
 <svelte:head>
