@@ -19,12 +19,12 @@
     { value: CoffeeBeansSortOrderEnum.NameReverse, key: "name reverse", sortOrderFunc: sortCoffeeBeansByNameReverse },
     {
       value: CoffeeBeansSortOrderEnum.LatestRecipe,
-      key: "recipe latest",
+      key: "latest recipe",
       sortOrderFunc: sortCoffeeBeansByLatestRecipe
     },
     {
       value: CoffeeBeansSortOrderEnum.EarliestRecipe,
-      key: "recipe earliest",
+      key: "earliest recipe",
       sortOrderFunc: sortCoffeeBeansByEarliestRecipe
     }
   ];
