@@ -40,20 +40,20 @@
   let coffeeBeans: CoffeeBeans | undefined | "CoffeeBeansNotFound";
   let recipes: Recipe[] | undefined;
 
-  // UI state:
+  // Sorting state:
   let sortOrderValue: {
     value: RecipesSortOrderEnum;
     sortOrderFunc: (recipeA: Recipe, recipeB: Recipe) => number;
   };
 
-  // Reactivity:
-
+  // Sorting reactivity:
   $: {
     if (recipes) {
       recipes = recipes.sort(sortOrderValue?.sortOrderFunc ?? sortRecipesByTimestampDesc);
     }
   }
 
+  // Entities reactivity:
   $: {
     data;
     if (browser && window.indexedDB) {

@@ -9,6 +9,7 @@
     sortRecipesByTimestampDesc as byTimestampDesc,
     sortRecipesByTimestampDesc
   } from "$lib/domain/helpers/sortRecipes";
+  import type { EnhancedRecipe } from "$lib/types/EnhancedRecipe";
   import RecipeCard from "$lib/UI/domainComponents/cards/RecipeCard.svelte";
   import MyFab from "$lib/UI/domainComponents/FABs/AddRecipeFab.svelte";
   import Loading from "$lib/UI/domainComponents/lists/Loading.svelte";
@@ -16,12 +17,11 @@
   import SortRecipesSelect from "$lib/UI/domainComponents/lists/SortRecipesSelect/SortRecipesSelect.svelte";
   import AddDemoCoffeeBeans_PageBlock from "$lib/UI/domainComponents/pageBlocks/AddDemoCoffeeBeans_PageBlock.svelte";
   import PageHeadline from "$lib/UI/layout/PageHeadline.svelte";
-  import type { EnhancedRecipe } from "./EnhancedRecipe";
 
-  // Entity state:
+  // Entities state:
   let recipes: EnhancedRecipe[] | undefined;
 
-  // UI state:
+  // Sorting state:
   let sortOrderValue: {
     value: RecipesSortOrderEnum;
     sortOrderFunc: (recipeA: Recipe, recipeB: Recipe) => number;
@@ -32,7 +32,7 @@
     loadEntities();
   });
 
-  // Reactivity:
+  // Sorting reactivity:
   $: {
     if (recipes) {
       recipes = recipes.sort(sortOrderValue?.sortOrderFunc ?? sortRecipesByTimestampDesc);

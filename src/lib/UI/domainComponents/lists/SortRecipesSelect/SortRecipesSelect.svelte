@@ -11,7 +11,7 @@
   } from "$lib/domain/helpers/sortRecipes";
   import { loadSortOrder, saveSortOrder } from "$lib/localStorage/persistSortOrder";
 
-  const SELECT_ID = "recipes_sort_order";
+  const SELECT_ID = "recipes-sort-order";
 
   const sortOrderEnumEntriesForUI: {
     key: string;
@@ -38,7 +38,7 @@
   };
 
   // UI state:
-  let value: RecipesSortOrderEnum = loadSortOrder();
+  let value: RecipesSortOrderEnum = loadSortOrder("recipes");
 
   // Reactivity:
   $: {
@@ -49,7 +49,7 @@
       value,
       sortOrderFunc
     };
-    saveSortOrder(value);
+    saveSortOrder("recipes", value);
   }
 </script>
 
