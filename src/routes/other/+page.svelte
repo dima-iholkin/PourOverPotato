@@ -4,7 +4,7 @@
   import DevBlock from "./components/DevBlock.svelte";
   import ExportDataBlock from "./components/ExportDataBlock.svelte";
   import ImportDataBlock from "./components/ImportDataBlock.svelte";
-  import PersistDataBlock from "./components/PersistDataBlock.svelte";
+  import PersistentStorageBlock from "./components/PersistentStorageBlock.svelte";
 </script>
 
 <svelte:head>
@@ -43,7 +43,7 @@
 </div>
 
 <h5>Manage your data</h5>
-<PersistDataBlock />
+<PersistentStorageBlock />
 <ExportDataBlock />
 <ImportDataBlock />
 
