@@ -1,4 +1,4 @@
-export function convertToTimeAgo(date: Date) {
+export function convertToTimeAgo(date: Date): string {
   const seconds = Math.floor((Date.now() - date.getTime()) / 1000);
   const daysAgo = Math.floor(seconds / 86400);
   if (daysAgo >= 1) {

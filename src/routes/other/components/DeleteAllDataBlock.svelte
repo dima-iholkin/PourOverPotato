@@ -9,7 +9,7 @@
   // Handler:
   async function handleDeleteButtonClick() {
     await deleteAllData();
-    addToast("Deleted all data.");
+    addToast("All data deleted.");
   }
 </script>
 

@@ -137,7 +137,12 @@
   async function handleFormSubmit() {
     // Validate and format the form values:
     if (selectedCoffeeBeansId === undefined) {
-      bindSetValidationFailed ? bindSetValidationFailed(true) : undefined;
+      if (bindSetValidationFailed) {
+        bindSetValidationFailed(true);
+      }
+      if (bindSelectDOM) {
+        bindSelectDOM.focus();
+      }
       return;
     }
     recipeTarget = recipeTarget.trim();

@@ -45,6 +45,16 @@
     }
   }
 
+  // Unsaved changes state:
+  let hasUnsavedChanges: boolean = false;
+
+  // Unsaved changes reactivity:
+  $: if (item && name === item.name && description === item.description) {
+    hasUnsavedChanges = false;
+  } else {
+    hasUnsavedChanges = true;
+  }
+
   // Handlers:
 
   function handleEnterKey(event: KeyboardEvent & { currentTarget: EventTarget & HTMLInputElement }) {
@@ -167,7 +177,13 @@
         on:keydown={handleCtrlEnterKey}
       />
     </div>
-    <button class="button-submit" type="submit" bind:this={saveButtonDOM} on:keydown={handleSaveButtonTabKeydown}>
+    <button
+      class="button-submit"
+      disabled={hasUnsavedChanges === false || CoffeeBeans.hasValidName({ name }) !== true}
+      type="submit"
+      bind:this={saveButtonDOM}
+      on:keydown={handleSaveButtonTabKeydown}
+    >
       Save changes
     </button>
   </form>
@@ -202,6 +218,10 @@
     margin-left: 0;
     margin-right: 0;
     margin-bottom: 1.25rem;
+  }
+
+  .button-submit:disabled {
+    @apply bg-gray-300;
   }
 
   .unsaved-changes {

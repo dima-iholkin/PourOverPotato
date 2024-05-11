@@ -1,4 +1,5 @@
 import type { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
+import type { EnhancedCoffeeBeans } from "$lib/types/EnhancedCoffeeBeans";
 
 export function sortCoffeeBeansByName(itemA: CoffeeBeans, itemB: CoffeeBeans): number {
   if (itemA.name < itemB.name) {
@@ -10,10 +11,11 @@ export function sortCoffeeBeansByName(itemA: CoffeeBeans, itemB: CoffeeBeans): n
   return 0;
 }
 
-export function sortCoffeeBeansByTimestampDesc(
-  itemA: CoffeeBeans & { latestRecipeTimestamp: Date | undefined; },
-  itemB: CoffeeBeans & { latestRecipeTimestamp: Date | undefined; }
-): number {
+export function sortCoffeeBeansByNameReverse(itemA: CoffeeBeans, itemB: CoffeeBeans) {
+  return -sortCoffeeBeansByName(itemA, itemB);
+}
+
+export function sortCoffeeBeansByLatestRecipe(itemA: EnhancedCoffeeBeans, itemB: EnhancedCoffeeBeans): number {
   if (itemA.latestRecipeTimestamp === undefined) {
     return 1;
   }
@@ -21,4 +23,14 @@ export function sortCoffeeBeansByTimestampDesc(
     return -1;
   }
   return itemB.latestRecipeTimestamp.getTime() - itemA.latestRecipeTimestamp.getTime();
+}
+
+export function sortCoffeeBeansByEarliestRecipe(itemA: EnhancedCoffeeBeans, itemB: EnhancedCoffeeBeans): number {
+  if (itemA.earliestRecipeTimestamp === undefined) {
+    return 1;
+  }
+  if (itemB.earliestRecipeTimestamp === undefined) {
+    return -1;
+  }
+  return itemA.earliestRecipeTimestamp.getTime() - itemB.earliestRecipeTimestamp.getTime();
 }
