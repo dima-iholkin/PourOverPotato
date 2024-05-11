@@ -59,10 +59,10 @@
   let favorite: boolean | undefined;
   let timestampStr: string;
 
-  // Button "Save changes" state:
+  // Unsaved changes state:
   let hasUnsavedChanges: boolean = false;
 
-  // Reactivity for "Save changes" button:
+  // Unsaved changes reactivity:
   $: if (
     recipe &&
     selectedCoffeeBeansId === recipe.coffeeBeansId &&
@@ -295,10 +295,7 @@
   }
 
   .my-button:disabled {
-    @apply bg-gray-300 text-white font-bold py-2 px-4 rounded;
-
-    width: 100%;
-    margin-bottom: 16px;
+    @apply bg-gray-300;
   }
 
   .menu-container {

@@ -168,7 +168,13 @@
         on:keydown={handleCtrlEnter}
       />
     </div>
-    <button class="button-submit" type="submit" bind:this={saveButtonDOM} on:keydown={handleSaveButtonTabKeydown}>
+    <button
+      class="button-submit"
+      disabled={CoffeeBeans.hasValidName({ name }) !== true}
+      type="submit"
+      bind:this={saveButtonDOM}
+      on:keydown={handleSaveButtonTabKeydown}
+    >
       Save
     </button>
   </form>
@@ -203,5 +209,9 @@
     width: 100%;
     margin-left: 0;
     margin-right: 0;
+  }
+
+  .button-submit:disabled {
+    @apply bg-gray-300;
   }
 </style>
