@@ -59,10 +59,30 @@
   let favorite: boolean | undefined;
   let timestampStr: string;
 
+  // Button "Save changes" state:
+  let hasUnsavedChanges: boolean = false;
+
+  // Reactivity for "Save changes" button:
+  $: if (
+    recipe &&
+    selectedCoffeeBeansId === recipe.coffeeBeansId &&
+    recipeTarget === recipe.recipeTarget &&
+    recipeResult === recipe.recipeResult &&
+    recipeThoughts === recipe.recipeThoughts &&
+    outWeight === recipe.outWeight &&
+    rating === recipe.rating &&
+    favorite === recipe.favorite &&
+    timestampStr === formatTimeForInput(recipe.timestamp)
+  ) {
+    hasUnsavedChanges = false;
+  } else {
+    hasUnsavedChanges = true;
+  }
+
   // Lifecycle:
 
   beforeNavigate((navigation) => {
-    if (navigation.willUnload === false && ignoreUnsavedChanges === false && checkIfUnsavedChanges()) {
+    if (navigation.willUnload === false && ignoreUnsavedChanges === false && hasUnsavedChanges) {
       const navigate = confirm("Do you want to navigate away and lose unsaved changes?");
       if (navigate === false) {
         navigation.cancel();
@@ -93,7 +113,7 @@
   // Handlers:
 
   function handleBeforeUnload(event: BeforeUnloadEvent) {
-    if (ignoreUnsavedChanges === false && checkIfUnsavedChanges()) {
+    if (ignoreUnsavedChanges === false && hasUnsavedChanges) {
       event.preventDefault(); // the modern way
       event.returnValue = ""; // the old browser way
       return "Are you sure you want to navigate away?"; // even more compatible way
@@ -164,23 +184,6 @@
       return;
     }
     goto(routes.coffeeBeansItem(coffeeBeansItem.name));
-  }
-
-  // Helper:
-  function checkIfUnsavedChanges(): boolean {
-    if (
-      recipe!.coffeeBeansId !== selectedCoffeeBeansId ||
-      recipe!.recipeTarget !== recipeTarget ||
-      recipe!.recipeResult !== recipeResult ||
-      recipe!.recipeThoughts !== recipeThoughts ||
-      recipe!.outWeight !== outWeight ||
-      recipe!.rating !== rating ||
-      recipe!.favorite !== favorite ||
-      recipe!.timestamp.getTime() !== parseDateFromInputString(timestampStr).getTime()
-    ) {
-      return true;
-    }
-    return false;
   }
 </script>
 
@@ -268,7 +271,9 @@
       bind:value={recipeThoughts}
     />
     <TimestampPicker initialValue={formatTimeForInput(recipe.timestamp)} bind:value={timestampStr} />
-    <button class="my-button" form="edit-recipe" type="submit"> Save changes </button>
+    <button class="my-button" disabled={hasUnsavedChanges === false} form="edit-recipe" type="submit">
+      Save changes
+    </button>
   </form>
 {:else}
   <p>404</p>
@@ -284,6 +289,13 @@
 
   .my-button {
     @apply bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded;
+
+    width: 100%;
+    margin-bottom: 16px;
+  }
+
+  .my-button:disabled {
+    @apply bg-gray-300 text-white font-bold py-2 px-4 rounded;
 
     width: 100%;
     margin-bottom: 16px;
