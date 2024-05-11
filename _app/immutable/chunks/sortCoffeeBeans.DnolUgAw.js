@@ -1,1 +1,0 @@
-function a(e,t){return e.name<t.name?-1:e.name>t.name?1:0}function s(e,t){return e.latestRecipeTimestamp===void 0?1:t.latestRecipeTimestamp===void 0?-1:t.latestRecipeTimestamp.getTime()-e.latestRecipeTimestamp.getTime()}export{a,s};
