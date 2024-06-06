@@ -70,7 +70,12 @@
 {:else}
   <SortCoffeeBeansSelect bind:sortOrderValue />
   {#each coffeeBeans as item (item.id)}
-    <CoffeeBeansCard href={routes.coffeeBeansItem(item.name)} {item} recipeCount={item.recipeCount} />
+    <CoffeeBeansCard
+      href={routes.coffeeBeansItem(item.name)}
+      {item}
+      recipeCount={item.recipeCount}
+      sortOrder={sortOrderValue?.value}
+    />
   {/each}
 {/if}
 <AddRecipeFab href={routes.addRecipe()} />
