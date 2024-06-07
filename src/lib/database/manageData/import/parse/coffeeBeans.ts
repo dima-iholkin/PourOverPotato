@@ -3,10 +3,7 @@ import { CoffeeBeans, type ICoffeeBeans } from "$lib/domain/entities/CoffeeBeans
 import { isNullOrUndefined } from "$lib/helpers/undefinedHelpers";
 import { checkIsValidEntityId, parseTextField } from "./primitives";
 
-export function parseCoffeeBeans(
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  importedItem: unknown | ImportedJsonCoffeeBeans, importedDbVersion: number
-): CoffeeBeans | "ImportFailed" {
+export function parseCoffeeBeans(importedItem: unknown | ImportedJsonCoffeeBeans): CoffeeBeans | "ImportFailed" {
   if (isNullOrUndefined(importedItem)) {
     return "ImportFailed";
   }
@@ -43,7 +40,7 @@ export function parseCoffeeBeans(
 }
 
 export function parseCoffeeBeansArray(
-  importedCoffeeBeansArray: unknown | CoffeeBeans[], importedDbVersion: number
+  importedCoffeeBeansArray: unknown | CoffeeBeans[]
 ): CoffeeBeans[] | "ImportFailed" {
   // Guard clause:
   if (isNullOrUndefined(importedCoffeeBeansArray) || Array.isArray(importedCoffeeBeansArray) === false) {
@@ -55,7 +52,7 @@ export function parseCoffeeBeansArray(
   const parsedCoffeeBeansArray: CoffeeBeans[] = [];
   // Parse the CoffeeBeans items:
   for (const item of _importedCoffeeBeansArray) {
-    const _item = parseCoffeeBeans(item, importedDbVersion);
+    const _item = parseCoffeeBeans(item);
     // Guard clause:
     if (_item === "ImportFailed") {
       return "ImportFailed";

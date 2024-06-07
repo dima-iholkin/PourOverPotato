@@ -1,5 +1,6 @@
 import type { DBSchema } from "idb";
 import type { ICoffeeBeansDB } from "./CoffeeBeansDB";
+import type { IEnhancedCoffeeBeansDB } from "./EnhancedCoffeeBeansDB";
 import type { IRecipeDB } from "./RecipeDB";
 
 export interface EntitiesDB extends DBSchema {
@@ -10,6 +11,10 @@ export interface EntitiesDB extends DBSchema {
       nameLowerCase: string;
     };
   };
+  enhancedCoffeeBeans: {
+    key: number;
+    value: IEnhancedCoffeeBeansDB;
+  }
   recipes: {
     key: number;
     value: IRecipeDB;

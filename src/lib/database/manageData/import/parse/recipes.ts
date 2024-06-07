@@ -6,8 +6,7 @@ import {
 } from "./primitives";
 
 export function parseRecipe(
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  importedRecipe: unknown | ImportedJsonRecipe, matchCoffeeBeansIds: Map<number, number>, importedDbVersion: number
+  importedRecipe: unknown | ImportedJsonRecipe, matchCoffeeBeansIds: Map<number, number>
 ): Recipe | "ImportFailed" {
   // Parse an imported Recipe:
   if (isNullOrUndefined(importedRecipe)) {
@@ -55,14 +54,14 @@ export function parseRecipe(
   // Prepare the Recipe item:
   const _recipe: IRecipe = {
     id: _id,
+    coffeeBeansId: _coffeeBeansId,
     recipeTarget: _recipeTarget,
     recipeResult: _recipeResult,
     recipeThoughts: _recipeThoughts,
-    outWeight: _outWeight,
-    rating: _rating,
     favorite: _favorite,
-    timestamp: _timestamp,
-    coffeeBeansId: _coffeeBeansId
+    rating: _rating,
+    outWeight: _outWeight,
+    timestamp: _timestamp
   };
   const recipe = new Recipe(_recipe);
   // The happy path:
@@ -70,7 +69,7 @@ export function parseRecipe(
 }
 
 export function parseRecipesArray(
-  importedRecipes: unknown | ImportedJsonRecipe[], matchCoffeeBeansIds: Map<number, number>, importedDbVersion: number
+  importedRecipes: unknown | ImportedJsonRecipe[], matchCoffeeBeansIds: Map<number, number>
 ): Recipe[] | "ImportFailed" {
   if (isNullOrUndefined(importedRecipes) || Array.isArray(importedRecipes) === false) {
     alert("\"recipes\" array not found in the file.");
@@ -79,7 +78,7 @@ export function parseRecipesArray(
   // Parse the imported Recipes array:
   const parsedRecipes: Recipe[] = [];
   for (const importedItem of importedRecipes) {
-    const parsedItem: Recipe | "ImportFailed" = parseRecipe(importedItem, matchCoffeeBeansIds, importedDbVersion);
+    const parsedItem: Recipe | "ImportFailed" = parseRecipe(importedItem, matchCoffeeBeansIds);
     // Guard clause:
     if (parsedItem === "ImportFailed") {
       return "ImportFailed";

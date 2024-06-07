@@ -2,15 +2,15 @@ import { CoffeeBeans, type CoffeeBeansCreateSubmit, type ICoffeeBeans } from "$l
 
 export interface ICoffeeBeansDB extends ICoffeeBeans {
   nameLowerCase: string;
-  softDeleted: boolean | undefined;
+  softDeleted: boolean;
 }
 
 export class CoffeeBeansDB implements ICoffeeBeansDB {
   id: number;
   name: string;
-  description: string;
   nameLowerCase: string;
-  softDeleted: boolean | undefined;
+  description: string;
+  softDeleted: boolean;
 
   constructor(item: ICoffeeBeansDB) {
     this.id = item.id;
@@ -36,9 +36,9 @@ export class CoffeeBeansDB implements ICoffeeBeansDB {
 
 export class CoffeeBeansDBSubmit implements Omit<ICoffeeBeansDB, "id"> {
   name: string;
-  description: string;
   nameLowerCase: string;
-  softDeleted: boolean | undefined;
+  description: string;
+  softDeleted: boolean;
 
   constructor(item: CoffeeBeansCreateSubmit) {
     this.name = item.name;

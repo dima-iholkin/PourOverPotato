@@ -7,7 +7,7 @@ import type { IRecipeDB } from "$lib/database/types/RecipeDB";
 export async function vacuumSoftDeletedCoffeeBeans(): Promise<void> {
   // Open a transaction:
   const db = await openEntitiesDB();
-  const tx = await db.transaction([COFFEEBEANS_STORE_NAME, RECIPES_STORE_NAME], "readwrite");
+  const tx = db.transaction([COFFEEBEANS_STORE_NAME, RECIPES_STORE_NAME], "readwrite");
   // Load all CoffeeBeans items:
   const allCoffeeBeans: ICoffeeBeansDB[] = await tx.objectStore(COFFEEBEANS_STORE_NAME).getAll();
   // Filter only the soft deleted CoffeeBeans items:
@@ -30,7 +30,7 @@ export async function vacuumSoftDeletedCoffeeBeans(): Promise<void> {
 export async function vacuumSoftDeletedRecipes(): Promise<void> {
   // Open a transaction:
   const db = await openEntitiesDB();
-  const tx = await db.transaction(RECIPES_STORE_NAME, "readwrite").objectStore(RECIPES_STORE_NAME);
+  const tx = db.transaction(RECIPES_STORE_NAME, "readwrite").objectStore(RECIPES_STORE_NAME);
   // Load the entities logic:
   const allRecipes: IRecipeDB[] = await tx.getAll();
   // Filter only the soft deleted Recipes:
