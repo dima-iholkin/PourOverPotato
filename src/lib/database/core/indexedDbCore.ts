@@ -58,10 +58,10 @@ function createStoresV3(
     coffeeBeansStore.createIndex(COFFEEBEANS_INDEX_NAME, COFFEEBEANS_INDEX_NAME, { unique: true });
     coffeeBeansStore.createIndex("softDeletionTimestamp", "softDeletionTimestamp", { unique: false });
   }
-  // Create CoffeeBeans "softDeleted" index:
+  // Create CoffeeBeans "softDeletionTimestamp" index:
   if (transaction.objectStore(COFFEEBEANS_STORE_NAME).indexNames.contains("softDeletionTimestamp") === false) {
     transaction.objectStore(COFFEEBEANS_STORE_NAME)
-      .createIndex("softDeletionTimestamp", "softDeleted", { unique: false });
+      .createIndex("softDeletionTimestamp", "softDeletionTimestamp", { unique: false });
   }
   // Create Recipes store:
   if (_db.objectStoreNames.contains(RECIPES_STORE_NAME) === false) {
@@ -74,7 +74,8 @@ function createStoresV3(
   }
   // Create Recipes "softDeletionTimestamp" index:
   if (transaction.objectStore(RECIPES_STORE_NAME).indexNames.contains("softDeletionTimestamp") === false) {
-    transaction.objectStore(RECIPES_STORE_NAME).createIndex("softDeletionTimestamp", "softDeleted", { unique: false });
+    transaction.objectStore(RECIPES_STORE_NAME)
+      .createIndex("softDeletionTimestamp", "softDeletionTimestamp", { unique: false });
   }
   // Create EnhancedCoffeeBeans store:
   if (_db.objectStoreNames.contains(ENHANCEDCOFFEEBEANS_STORE_NAME) === false) {
@@ -125,6 +126,8 @@ async function migrateCoffeeBeansFromV2ToV3(
       ...itemV2,
       softDeletionTimestamp: itemV2.softDeleted ? Date.now() : undefined
     };
+    // @ts-ignore:
+    delete itemV3.softDeleted;
     // Save all modified CoffeeBeans:
     await transaction.objectStore(COFFEEBEANS_STORE_NAME).put(itemV3);
   }
@@ -175,6 +178,8 @@ async function migrateRecipesFromV2ToV3(
       favorite: itemV2.favorite ?? false,
       softDeletionTimestamp: itemV2.softDeleted ? Date.now() : undefined
     };
+    // @ts-ignore:
+    delete itemV3.softDeleted;
     // Save all modified Recipes:
     await transaction.objectStore(RECIPES_STORE_NAME).put(itemV3);
   }
