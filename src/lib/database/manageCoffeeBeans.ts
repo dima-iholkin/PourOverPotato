@@ -80,7 +80,7 @@ export async function editCoffeeBeans(submitItem: CoffeeBeansEditSubmit):
   const dbSubmitItem: ICoffeeBeansDB = new CoffeeBeansDB({
     ...submitItem,
     nameLowerCase: submitItem.name.toLowerCase(),
-    softDeleted: false
+    softDeleted: 0
   });
   // Save the edited entity:
   await tx.put(dbSubmitItem);
@@ -95,7 +95,7 @@ export async function getAllCoffeeBeans(): Promise<CoffeeBeans[]> {
   const itemsDB: ICoffeeBeansDB[] = await db.getAll(COFFEEBEANS_STORE_NAME);
   // Filter out the soft deleted CoffeeBeans, convert to the core CoffeeBeans entities:
   const items: CoffeeBeans[] = itemsDB
-    .filter(item => item.softDeleted === undefined || item.softDeleted === false)
+    .filter(item => item.softDeleted === 0)
     .map(item => new CoffeeBeansDB(item).toCoffeeBeans());
   // Return them:
   return items;
@@ -106,7 +106,7 @@ export async function getCoffeeBeansById(id: number): Promise<CoffeeBeans | unde
   const db = await openEntitiesDB();
   const item: ICoffeeBeansDB | undefined = await db.get(COFFEEBEANS_STORE_NAME, id);
   // Return undefined, if not found or soft deleted:
-  if (item === undefined || (item.softDeleted && item.softDeleted === true)) {
+  if (item === undefined || item.softDeleted === 1) {
     return undefined;
   }
   // The happy path, return the core CoffeeBeans entity:
@@ -120,7 +120,7 @@ export async function getCoffeeBeansByName(name: string): Promise<CoffeeBeans | 
     COFFEEBEANS_STORE_NAME, COFFEEBEANS_INDEX_NAME, name.toLowerCase()
   );
   // Return undefined, if not found or soft deleted:
-  if (item === undefined || (item.softDeleted && item.softDeleted === true)) {
+  if (item === undefined || item.softDeleted === 1) {
     return undefined;
   }
   // The happy path, return the core CoffeeBeans entity:
@@ -172,13 +172,13 @@ export async function softDeleteCoffeeBeansAndRecipesById(coffeeBeansId: number)
       continue;
     }
     // Prepare the Recipe item:
-    item.softDeleted = true;
+    item.softDeleted = 1;
     // Update the Recipe item in the DB:
     await tx.objectStore(RECIPES_STORE_NAME).put(item);
     recipesCount++;
   }
   // Prepare the CoffeeBeans item:
-  coffeeBeansItem.softDeleted = true;
+  coffeeBeansItem.softDeleted = 1;
   // Soft delete the CoffeeBeans item:
   tx.objectStore(COFFEEBEANS_STORE_NAME).put(coffeeBeansItem);
   await tx.done;
@@ -203,7 +203,7 @@ export async function undoSoftDeleteCoffeeBeansAndRecipesById(coffeeBeansId: num
     return "CoffeeBeansNotFound";
   }
   // Prepare the CoffeeBeans item:
-  coffeeBeansItem.softDeleted = false;
+  coffeeBeansItem.softDeleted = 0;
   // Undo soft delete for the CoffeeBeans item:
   tx.objectStore(COFFEEBEANS_STORE_NAME).put(coffeeBeansItem);
   // Get all Recipes by CoffeeBeansId:
@@ -212,11 +212,11 @@ export async function undoSoftDeleteCoffeeBeansAndRecipesById(coffeeBeansId: num
   // Undo soft delete for all Recipes with this CoffeeBeansId:
   for (const recipeItem of recipeItems) {
     // Ignore Recipe items that are not soft deleted:
-    if (recipeItem.softDeleted === false) {
+    if (recipeItem.softDeleted === 0) {
       continue;
     }
     // Prepare the Recipe item:
-    recipeItem.softDeleted = false;
+    recipeItem.softDeleted = 0;
     // Update the Recipe item in the DB:
     await tx.objectStore(RECIPES_STORE_NAME).put(recipeItem);
     recipesCount++;

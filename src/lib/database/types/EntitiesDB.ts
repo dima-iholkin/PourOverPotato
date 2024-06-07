@@ -9,6 +9,7 @@ export interface EntitiesDB extends DBSchema {
     value: ICoffeeBeansDB;
     indexes: {
       nameLowerCase: string;
+      softDeleted: 0 | 1;
     };
   };
   enhancedCoffeeBeans: {
@@ -23,6 +24,7 @@ export interface EntitiesDB extends DBSchema {
       outWeight: number;
       rating: number;
       timestamp: number;
+      softDeleted: 0 | 1;
     };
   };
 }

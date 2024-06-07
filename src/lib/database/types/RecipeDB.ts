@@ -2,7 +2,7 @@ import { Recipe, RecipeSubmit, type IRecipe } from "$lib/domain/entities/Recipe"
 
 export interface IRecipeDB extends Omit<IRecipe, "timestamp"> {
   timestamp: number;
-  softDeleted: boolean;
+  softDeleted: 0 | 1;
 }
 
 export class RecipeDB implements IRecipeDB {
@@ -15,7 +15,7 @@ export class RecipeDB implements IRecipeDB {
   rating: number;
   outWeight: number;
   timestamp: number;
-  softDeleted: boolean;
+  softDeleted: 0 | 1;
 
   constructor(item: IRecipeDB) {
     this.id = item.id;
@@ -34,7 +34,7 @@ export class RecipeDB implements IRecipeDB {
     const obj: IRecipeDB = {
       ...item,
       timestamp: item.timestamp.getTime(),
-      softDeleted: false // Because the Recipe entity doesn't even have the concept of "softDeleted".
+      softDeleted: 0 // Because the core Recipe entity doesn't even have the concept of "softDeleted".
     };
     return new RecipeDB(obj);
   }
@@ -58,7 +58,7 @@ export class RecipeDBSubmit implements Omit<IRecipeDB, "id"> {
   rating: number;
   outWeight: number;
   timestamp: number;
-  softDeleted: boolean;
+  softDeleted: 0 | 1;
 
   constructor(recipe: RecipeSubmit) {
     this.coffeeBeansId = recipe.coffeeBeansId;
@@ -69,7 +69,7 @@ export class RecipeDBSubmit implements Omit<IRecipeDB, "id"> {
     this.rating = recipe.rating;
     this.outWeight = recipe.outWeight;
     this.timestamp = recipe.timestamp.getTime();
-    this.softDeleted = false;
+    this.softDeleted = 0;
   }
 
   toRecipeDB(recipeDbSubmit: RecipeDBSubmit, id: number): RecipeDB {

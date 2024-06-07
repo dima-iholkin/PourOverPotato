@@ -2,7 +2,7 @@ import { CoffeeBeans, type CoffeeBeansCreateSubmit, type ICoffeeBeans } from "$l
 
 export interface ICoffeeBeansDB extends ICoffeeBeans {
   nameLowerCase: string;
-  softDeleted: boolean;
+  softDeleted: 0 | 1;
 }
 
 export class CoffeeBeansDB implements ICoffeeBeansDB {
@@ -10,7 +10,7 @@ export class CoffeeBeansDB implements ICoffeeBeansDB {
   name: string;
   nameLowerCase: string;
   description: string;
-  softDeleted: boolean;
+  softDeleted: 0 | 1;
 
   constructor(item: ICoffeeBeansDB) {
     this.id = item.id;
@@ -24,7 +24,7 @@ export class CoffeeBeansDB implements ICoffeeBeansDB {
     const obj: ICoffeeBeansDB = {
       ...item,
       nameLowerCase: item.name.toLowerCase(),
-      softDeleted: false
+      softDeleted: 0
     };
     return new CoffeeBeansDB(obj);
   }
@@ -38,12 +38,12 @@ export class CoffeeBeansDBSubmit implements Omit<ICoffeeBeansDB, "id"> {
   name: string;
   nameLowerCase: string;
   description: string;
-  softDeleted: boolean;
+  softDeleted: 0 | 1;
 
   constructor(item: CoffeeBeansCreateSubmit) {
     this.name = item.name;
     this.description = item.description;
     this.nameLowerCase = item.name.toLowerCase();
-    this.softDeleted = false;
+    this.softDeleted = 0;
   }
 }
