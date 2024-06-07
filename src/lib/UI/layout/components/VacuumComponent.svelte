@@ -8,7 +8,8 @@
 
   // Lifecycle:
   onMount(() => {
-    vacuum(); // Intentionally don't wait on Promise to speed up the page load.
+    // Intentionally don't wait on a Promise to speed up the page load:
+    vacuum();
   });
 
   // Helper:
@@ -30,6 +31,7 @@
       return;
     }
     // Happy path vacuum:
+    console.log("Vacuum started.");
     vacuumDeprecatedLocalStorageKeys();
     await vacuumSoftDeletedEntities();
     localStorage.setItem(VACUUM_KEY, new Date().toDateString());
