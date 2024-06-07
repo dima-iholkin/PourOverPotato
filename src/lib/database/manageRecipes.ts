@@ -1,18 +1,26 @@
 import type { Recipe, RecipeSubmit } from "$lib/domain/entities/Recipe";
-import { openEntitiesDB, RECIPES_INDEX_COFFEEBEANSID_NAME, RECIPES_STORE_NAME } from "./core/indexedDbCore";
+import {
+  ENHANCEDCOFFEEBEANS_STORE_NAME, openEntitiesDB, RECIPES_INDEX_COFFEEBEANSID_NAME, RECIPES_STORE_NAME
+} from "./core/indexedDbCore";
+import { regenerateEnhancedCoffeeBeansItemById } from "./manageEnhancedCoffeeBeans";
 import { RecipeDB, type IRecipeDB, RecipeDBSubmit } from "./types/RecipeDB";
 
 // Public functions:
 
-export async function addRecipe(recipeSubmit: RecipeSubmit): Promise<Recipe> {
-  // Prepare the entity for submit:
-  const recipeDbSubmit: RecipeDBSubmit = new RecipeDBSubmit(recipeSubmit);
-  // Save the new Recipe:
+export async function addRecipe(item: RecipeSubmit): Promise<Recipe> {
+  // Prepare the new Recipe:
+  const itemDbSubmit: RecipeDBSubmit = new RecipeDBSubmit(item);
+  // Open a transaction:
   const db = await openEntitiesDB();
-  const id: number = await db.add(RECIPES_STORE_NAME, recipeDbSubmit as unknown as IRecipeDB);
-  // Prepare to return the saved entity:
-  const recipeDbSaved: RecipeDB = new RecipeDB({ ...recipeDbSubmit, id });
-  return recipeDbSaved.toRecipe();
+  const tx = db.transaction([RECIPES_STORE_NAME, ENHANCEDCOFFEEBEANS_STORE_NAME], "readwrite");
+  // Save the new Recipe:
+  const id: number = await tx.objectStore(RECIPES_STORE_NAME).add(itemDbSubmit as unknown as IRecipeDB);
+  // Regenerate the EnhancedCoffeeBeans item:
+  await regenerateEnhancedCoffeeBeansItemById(item.coffeeBeansId, tx);
+  await tx.done;
+  // Prepare and return the saved Recipe:
+  const itemDbSaved: RecipeDB = new RecipeDB({ ...itemDbSubmit, id });
+  return itemDbSaved.toRecipe();
 }
 
 export async function anyRecipes(): Promise<boolean> {
@@ -21,100 +29,106 @@ export async function anyRecipes(): Promise<boolean> {
   return count > 0;
 }
 
-export async function countRecipesByCoffeeBeansId(coffeeBeansId: number): Promise<number> {
-  // Load the entities from the DB:
+export async function editRecipe(item: Recipe): Promise<Recipe> {
+  // Prepare the changed Recipe:
+  const itemDbSubmit: RecipeDB = RecipeDB.fromRecipe(item);
+  // Open a transaction:
   const db = await openEntitiesDB();
-  const itemsDB: IRecipeDB[] = await db.getAllFromIndex(
-    RECIPES_STORE_NAME, RECIPES_INDEX_COFFEEBEANSID_NAME, coffeeBeansId
-  );
-  // Filter out the soft deleted entities and count the valid Recipes:
-  const count: number = itemsDB.filter(item => item.softDeletionTimestamp === undefined).length;
-  return count;
-}
-
-export async function editRecipe(submitItem: Recipe): Promise<Recipe> {
-  // Prepare the entity for submit:
-  const dbSubmitItem: RecipeDB = RecipeDB.fromRecipe(submitItem);
-  // Save the edited entity:
-  const db = await openEntitiesDB();
-  await db.put(RECIPES_STORE_NAME, dbSubmitItem);
-  // Prepare and return the saved entity:
-  return dbSubmitItem.toRecipe();
+  const tx = db.transaction([RECIPES_STORE_NAME, ENHANCEDCOFFEEBEANS_STORE_NAME], "readwrite");
+  // Save the changed Recipe:
+  await tx.objectStore(RECIPES_STORE_NAME).put(itemDbSubmit);
+  // Regenerate the EnhancedCoffeeBeans item:
+  await regenerateEnhancedCoffeeBeansItemById(item.coffeeBeansId, tx);
+  await tx.done;
+  // Prepare and return the saved Recipe:
+  return itemDbSubmit.toRecipe();
 }
 
 export async function getAllRecipes(): Promise<Recipe[]> {
-  // Load the entities from the DB:
+  // Load the Recipes:
   const db = await openEntitiesDB();
   const itemsDB: IRecipeDB[] = await db.getAll(RECIPES_STORE_NAME);
-  // Filter out the soft deleted entities and convert to core Recipe entities:
-  const items: Recipe[] = itemsDB
-    .filter(item => item.softDeletionTimestamp === undefined)
+  // Prepare and return the Recipes:
+  const items: Recipe[] = itemsDB.filter(item => item.softDeletionTimestamp === undefined)
     .map(item => new RecipeDB(item).toRecipe());
   return items;
 }
 
 export async function getRecipeById(recipeId: number): Promise<Recipe | undefined> {
-  // Load the entity from the DB:
+  // Load the Recipe:
   const db = await openEntitiesDB();
   const item: IRecipeDB | undefined = await db.get(RECIPES_STORE_NAME, recipeId);
-  // Ignore the soft deleted Recipes:
+  // Guard clause, check if not found or soft-deleted Recipe:
   if (item === undefined || item.softDeletionTimestamp) {
     return undefined;
   }
-  // Prepare and return a core Recipe entity:
+  // Prepare and return the Recipe:
   return new RecipeDB(item).toRecipe();
 }
 
 export async function getRecipesByCoffeeBeansId(coffeeBeansId: number): Promise<Recipe[]> {
-  // Load the entities from the DB:
+  // Load the Recipes:
   const db = await openEntitiesDB();
   const itemsDB: IRecipeDB[] = await db.getAllFromIndex(
     RECIPES_STORE_NAME, RECIPES_INDEX_COFFEEBEANSID_NAME, coffeeBeansId
   );
-  // Filter out the soft deleted entities and convert to core Recipe entities:
-  const items: Recipe[] = itemsDB
-    .filter(item => item.softDeletionTimestamp === undefined)
+  // Prepare and return the Recipes:
+  const items: Recipe[] = itemsDB.filter(item => item.softDeletionTimestamp === undefined)
     .map(item => new RecipeDB(item).toRecipe());
   return items;
 }
 
 export async function hardDeleteRecipeById(recipeId: number): Promise<void> {
+  // Open a transaction:
   const db = await openEntitiesDB();
-  await db.delete(RECIPES_STORE_NAME, recipeId);
+  const tx = db.transaction([RECIPES_STORE_NAME, ENHANCEDCOFFEEBEANS_STORE_NAME], "readwrite");
+  // Load the Recipe:
+  const recipe: IRecipeDB | undefined = await tx.objectStore(RECIPES_STORE_NAME).get(recipeId);
+  // Guard clause:
+  if (recipe === undefined) {
+    return;
+  }
+  // Hard-delete the Recipe:
+  await tx.objectStore(RECIPES_STORE_NAME).delete(recipeId);
+  // Regenerate the EnhancedCoffeeBeans item:
+  await regenerateEnhancedCoffeeBeansItemById(recipe.coffeeBeansId, tx);
+  await tx.done;
 }
 
 export async function softDeleteRecipeById(recipeId: number): Promise<"Success" | "RecipeNotFound"> {
-  // Start a transaction:
+  // Open a transaction:
   const db = await openEntitiesDB();
-  const tx = db.transaction(RECIPES_STORE_NAME, "readwrite").objectStore(RECIPES_STORE_NAME);
-  // Load the entity from the DB:
-  const dbItem: IRecipeDB | undefined = await tx.get(recipeId);
+  const tx = db.transaction([RECIPES_STORE_NAME, ENHANCEDCOFFEEBEANS_STORE_NAME], "readwrite");
+  // Load the Recipe:
+  const item: IRecipeDB | undefined = await tx.objectStore(RECIPES_STORE_NAME).get(recipeId);
   // Guard clause:
-  if (dbItem === undefined) {
+  if (item === undefined) {
     return "RecipeNotFound";
   }
-  // Prepare the entity for submit:
-  dbItem.softDeletionTimestamp = Date.now();
-  // Save the soft deleted entity:
-  await tx.put(dbItem);
-  await tx.transaction.done;
+  // Prepare and save the soft-deleted Recipe:
+  item.softDeletionTimestamp = Date.now();
+  await tx.objectStore(RECIPES_STORE_NAME).put(item);
+  // Regenerate the EnhancedCoffeeBeans item:
+  await regenerateEnhancedCoffeeBeansItemById(item.coffeeBeansId, tx);
+  await tx.done;
   return "Success";
 }
 
 export async function undoSoftDeleteRecipeById(recipeId: number): Promise<"Success" | "RecipeNotFound"> {
-  // Start a transaction:
+  // Open a transaction:
   const db = await openEntitiesDB();
-  const tx = db.transaction(RECIPES_STORE_NAME, "readwrite").objectStore(RECIPES_STORE_NAME);
-  // Load the entity from the DB:
-  const dbItem: IRecipeDB | undefined = await tx.get(recipeId);
+  const tx = db.transaction([RECIPES_STORE_NAME, ENHANCEDCOFFEEBEANS_STORE_NAME], "readwrite");
+  // Load the Recipe:
+  const item: IRecipeDB | undefined = await tx.objectStore(RECIPES_STORE_NAME).get(recipeId);
   // Guard clause:
-  if (dbItem === undefined) {
+  if (item === undefined) {
     return "RecipeNotFound";
   }
-  // Prepare the entity for submit:
-  dbItem.softDeletionTimestamp = undefined;
-  // Save the restored entity:
-  await tx.put(dbItem);
-  await tx.transaction.done;
+  // Prepare and restore the soft-deleted Recipe:
+  item.softDeletionTimestamp = undefined;
+  await tx.objectStore(RECIPES_STORE_NAME).put(item);
+  // Regenerate the EnhancedCoffeeBeans item:
+  await regenerateEnhancedCoffeeBeansItemById(item.coffeeBeansId, tx);
+  await tx.done;
   return "Success";
 }

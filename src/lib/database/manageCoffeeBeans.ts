@@ -3,45 +3,40 @@ import {
 } from "$lib/domain/entities/CoffeeBeans";
 import type { Count } from "$lib/types/Count";
 import {
-  COFFEEBEANS_INDEX_NAME, COFFEEBEANS_STORE_NAME, RECIPES_INDEX_COFFEEBEANSID_NAME, RECIPES_STORE_NAME, openEntitiesDB
+  COFFEEBEANS_INDEX_NAME, COFFEEBEANS_STORE_NAME, ENHANCEDCOFFEEBEANS_STORE_NAME, RECIPES_INDEX_COFFEEBEANSID_NAME,
+  RECIPES_STORE_NAME, openEntitiesDB
 } from "./core/indexedDbCore";
 import { CoffeeBeansDB, CoffeeBeansDBSubmit, type ICoffeeBeansDB } from "./types/CoffeeBeansDB";
+import type { IEnhancedCoffeeBeansDB } from "./types/EnhancedCoffeeBeansDB";
 import type { IRecipeDB } from "./types/RecipeDB";
 
 // Public functions:
 
-export async function addCoffeeBeans(item: CoffeeBeansCreateSubmit):
-  Promise<CoffeeBeans | "Failure_NameAlreadyExist" | "DatabaseError"> {
-  // Open the DB transaction:
+export async function addCoffeeBeans(item: CoffeeBeansCreateSubmit): Promise<CoffeeBeans | "Failure_NameAlreadyExist"> {
+  // Open a transaction:
   const db = await openEntitiesDB();
-  const tx = db.transaction(COFFEEBEANS_STORE_NAME, "readwrite").objectStore(COFFEEBEANS_STORE_NAME);
-  // Check that a CoffeeBeans record with the same Name property doesn't exist:
-  const dbItem: ICoffeeBeansDB | undefined = await tx.index("nameLowerCase").get(item.name.toLowerCase());
-  if (dbItem) {
+  const tx = db.transaction([COFFEEBEANS_STORE_NAME, ENHANCEDCOFFEEBEANS_STORE_NAME], "readwrite");
+  // Guard clause, check that a CoffeeBeans item with the same Name doesn't exist:
+  const itemDb: ICoffeeBeansDB | undefined = await tx.objectStore(COFFEEBEANS_STORE_NAME).index("nameLowerCase")
+    .get(item.name.toLowerCase());
+  if (itemDb) {
     return "Failure_NameAlreadyExist";
   }
-  // The happy path:
+  // Prepare and save the new CoffeeBeans item:
   const itemDBSubmit: CoffeeBeansDBSubmit = new CoffeeBeansDBSubmit(item);
-  try {
-    // Save and get the Id inserted into the DB:
-    const id = await tx.add(itemDBSubmit as ICoffeeBeansDB);
-    await tx.transaction.done;
-    // Prepare and return the saved CoffeeBeans:
-    const itemDBsaved = new CoffeeBeansDB({ ...itemDBSubmit, id });
-    return itemDBsaved.toCoffeeBeans();
-  } catch (error) {
-    // Protect from errors during save:
-    if (error instanceof DOMException && error.name === "ConstraintError") {
-      const message =
-        `A ConstraintError occurred while saving CoffeeBeans "${item.name}" to the database.
-         It seems a CoffeeBeans with the same name already exist.`;
-      console.error(message, error);
-      return "Failure_NameAlreadyExist";
-    } else {
-      console.error(error);
-      return "DatabaseError";
-    }
-  }
+  const id = await tx.objectStore(COFFEEBEANS_STORE_NAME).add(itemDBSubmit as ICoffeeBeansDB);
+  // Prepare and save the new EnhancedCoffeeBeans item:
+  const enhancedCoffeeBeans: IEnhancedCoffeeBeansDB = {
+    id: id,
+    recipesCount: 0,
+    earliestRecipeTimestamp: undefined,
+    latestRecipeTimestamp: undefined
+  };
+  await tx.objectStore(ENHANCEDCOFFEEBEANS_STORE_NAME).add(enhancedCoffeeBeans);
+  await tx.done;
+  // Prepare and return the saved CoffeeBeans item:
+  const itemDBsaved = new CoffeeBeansDB({ ...itemDBSubmit, id });
+  return itemDBsaved.toCoffeeBeans();
 }
 
 export async function anyCoffeeBeans(): Promise<boolean> {
@@ -50,181 +45,188 @@ export async function anyCoffeeBeans(): Promise<boolean> {
   return count > 0;
 }
 
-export async function editCoffeeBeans(submitItem: CoffeeBeansEditSubmit):
+export async function editCoffeeBeans(item: CoffeeBeansEditSubmit):
   Promise<CoffeeBeans | "Failure_NameAlreadyExist" | "CoffeeBeansNotFound"> {
-  // Open the DB transaction:
+  // Open a transaction:
   const db = await openEntitiesDB();
-  const tx = db.transaction(COFFEEBEANS_STORE_NAME, "readwrite").objectStore(COFFEEBEANS_STORE_NAME);
-  // Load the present DB version of CoffeeBeans item:
-  const presentDbItem: ICoffeeBeansDB | undefined = await tx.get(submitItem.id);
-  // Guard clause, check if the edited CoffeeBeans entity exists in the DB:
-  if (presentDbItem === undefined) {
+  const tx = db.transaction(COFFEEBEANS_STORE_NAME, "readwrite");
+  // Load the present version of the CoffeeBeans item:
+  const presentItem: ICoffeeBeansDB | undefined = await tx.objectStore(COFFEEBEANS_STORE_NAME).get(item.id);
+  // Guard clause, check if the edited CoffeeBeans is actually present in the DB:
+  if (presentItem === undefined) {
     console.error(
-      `The edited CoffeeBeans item ${JSON.stringify(submitItem)} wasn't found in the database. Edit operation aborted.`
+      `The edited CoffeeBeans item ${JSON.stringify(item)} wasn't found in the database. Edit operation aborted.`
     );
     return "CoffeeBeansNotFound";
   }
-  // Check if the Name was edited:
-  if (submitItem.name.toLowerCase() !== presentDbItem.nameLowerCase) {
+  // Guard clause, check if the Name was changed:
+  if (item.name.toLowerCase() !== presentItem.nameLowerCase) {
     // Make sure it's not going to be a name collision:
-    const dbItemWithNameCollision: ICoffeeBeansDB | undefined = await tx.index(COFFEEBEANS_INDEX_NAME).get(
-      submitItem.name.toLowerCase()
-    );
-    if (dbItemWithNameCollision) {
-      await tx.transaction.done;
+    const anotherItemWithThisName: ICoffeeBeansDB | undefined = await tx.objectStore(COFFEEBEANS_STORE_NAME)
+      .index(COFFEEBEANS_INDEX_NAME).get(item.name.toLowerCase());
+    if (anotherItemWithThisName) {
+      await tx.done;
       return "Failure_NameAlreadyExist";
     }
   }
-  // The happy path:
-  // Prepare the entity:
-  const dbSubmitItem: ICoffeeBeansDB = new CoffeeBeansDB({
-    ...submitItem,
-    nameLowerCase: submitItem.name.toLowerCase(),
+  // Prepare and save the changed CoffeeBeans item:
+  const submitItem: ICoffeeBeansDB = new CoffeeBeansDB({
+    ...item,
+    nameLowerCase: item.name.toLowerCase(),
     softDeletionTimestamp: undefined
   });
-  // Save the edited entity:
-  await tx.put(dbSubmitItem);
-  await tx.transaction.done;
-  // Return the prepared entity:
-  return new CoffeeBeans(dbSubmitItem);
+  await tx.objectStore(COFFEEBEANS_STORE_NAME).put(submitItem);
+  await tx.done;
+  // Prepare and return the saved CoffeeBeans item:
+  return new CoffeeBeans(submitItem);
 }
 
 export async function getAllCoffeeBeans(): Promise<CoffeeBeans[]> {
-  // Load the CoffeeBeans from DB:
+  // Load the CoffeeBeans item:
   const db = await openEntitiesDB();
   const itemsDB: ICoffeeBeansDB[] = await db.getAll(COFFEEBEANS_STORE_NAME);
-  // Filter out the soft deleted CoffeeBeans, convert to the core CoffeeBeans entities:
-  const items: CoffeeBeans[] = itemsDB
-    .filter(item => item.softDeletionTimestamp === undefined)
+  // Prepare and return the CoffeeBeans items:
+  const items: CoffeeBeans[] = itemsDB.filter(item => item.softDeletionTimestamp === undefined)
     .map(item => new CoffeeBeansDB(item).toCoffeeBeans());
-  // Return them:
   return items;
 }
 
 export async function getCoffeeBeansById(id: number): Promise<CoffeeBeans | undefined> {
-  // Load the CoffeeBeans from DB:
+  // Load the CoffeeBeans items:
   const db = await openEntitiesDB();
   const item: ICoffeeBeansDB | undefined = await db.get(COFFEEBEANS_STORE_NAME, id);
-  // Return undefined, if not found or soft deleted:
+  // Guard clause, check if not found or soft-deleted:
   if (item === undefined || item.softDeletionTimestamp) {
     return undefined;
   }
-  // The happy path, return the core CoffeeBeans entity:
+  // Prepare and return the CoffeeBeans item:
   return new CoffeeBeansDB(item).toCoffeeBeans();
 }
 
 export async function getCoffeeBeansByName(name: string): Promise<CoffeeBeans | undefined> {
-  // Load the CoffeeBeans from DB:
+  // Load the CoffeeBeans item:
   const db = await openEntitiesDB();
   const item: ICoffeeBeansDB | undefined = await db.getFromIndex(
     COFFEEBEANS_STORE_NAME, COFFEEBEANS_INDEX_NAME, name.toLowerCase()
   );
-  // Return undefined, if not found or soft deleted:
+  // Guard clause, check if not found or soft-deleted:
   if (item === undefined || item.softDeletionTimestamp) {
     return undefined;
   }
-  // The happy path, return the core CoffeeBeans entity:
+  // Prepare and return the CoffeeBeans item:
   return new CoffeeBeansDB(item).toCoffeeBeans();
 }
 
 export async function hardDeleteCoffeeBeansAndRecipesById(coffeeBeansId: number): Promise<Count> {
   let recipesCount = 0;
-  // Open the transaction:
+  // Open a transaction:
   const db = await openEntitiesDB();
-  const tx = db.transaction([COFFEEBEANS_STORE_NAME, RECIPES_STORE_NAME], "readwrite");
-  // Get all Recipes by CoffeeBeansId:
-  const items: IRecipeDB[] = await tx.objectStore(RECIPES_STORE_NAME).index(RECIPES_INDEX_COFFEEBEANSID_NAME)
+  const tx = db.transaction([COFFEEBEANS_STORE_NAME, RECIPES_STORE_NAME, ENHANCEDCOFFEEBEANS_STORE_NAME], "readwrite");
+  // Load all Recipes by CoffeeBeansId:
+  const recipeItems: IRecipeDB[] = await tx.objectStore(RECIPES_STORE_NAME).index(RECIPES_INDEX_COFFEEBEANSID_NAME)
     .getAll(coffeeBeansId);
-  // Delete all Recipes with this CoffeeBeansId:
-  for (const item of items) {
+  // Hard-delete the Recipes:
+  for (const item of recipeItems) {
     await tx.objectStore(RECIPES_STORE_NAME).delete(item.id);
     recipesCount++;
   }
-  // Delete the CoffeeBeans item:
+  // Hard-delete the CoffeeBeans item:
   tx.objectStore(COFFEEBEANS_STORE_NAME).delete(coffeeBeansId);
+  // Hard-delete the EnhancedCoffeeBeans item:
+  tx.objectStore(ENHANCEDCOFFEEBEANS_STORE_NAME).delete(coffeeBeansId);
   await tx.done;
-  // Return the deletion count:
+  // Prepare and return the hard-deletion count:
   return {
     coffeeBeansCount: 1,
-    recipesCount: recipesCount
+    recipesCount
   };
 }
 
 export async function softDeleteCoffeeBeansAndRecipesById(coffeeBeansId: number):
   Promise<Count | "CoffeeBeansNotFound"> {
   let recipesCount = 0;
-  // Open the transaction:
+  // Open a transaction:
   const db = await openEntitiesDB();
   const tx = db.transaction([COFFEEBEANS_STORE_NAME, RECIPES_STORE_NAME], "readwrite");
-  // Get the CoffeeBeans item:
+  // Load the CoffeeBeans item:
   const coffeeBeansItem: ICoffeeBeansDB | undefined = await tx.objectStore(COFFEEBEANS_STORE_NAME).get(coffeeBeansId);
+  // Guard clause, check if the CoffeeBeans item not found:
   if (coffeeBeansItem === undefined) {
     await tx.done;
     return "CoffeeBeansNotFound";
   }
-  // Get all Recipes by CoffeeBeansId:
+  // Load all Recipes by CoffeeBeansId:
   const recipeItems: IRecipeDB[] = await tx.objectStore(RECIPES_STORE_NAME).index(RECIPES_INDEX_COFFEEBEANSID_NAME)
     .getAll(coffeeBeansId);
-  // Soft delete all Recipes with this CoffeeBeansId:
-  for (const item of recipeItems) {
-    // Ignore Recipe items that are already soft deleted:
-    if (item.softDeletionTimestamp) {
+  // Have a single softDeletionTimestamp:
+  const _softDeletionTimestamp: number = Date.now();
+  // Soft-delete the Recipes:
+  for (const recipe of recipeItems) {
+    // Ignore the already soft-deleted Recipes:
+    if (recipe.softDeletionTimestamp) {
       continue;
     }
-    // Prepare the Recipe item:
-    item.softDeletionTimestamp = Date.now();
-    // Update the Recipe item in the DB:
-    await tx.objectStore(RECIPES_STORE_NAME).put(item);
+    // Soft-delete the Recipes:
+    recipe.softDeletionTimestamp = _softDeletionTimestamp;
+    await tx.objectStore(RECIPES_STORE_NAME).put(recipe);
     recipesCount++;
   }
-  // Prepare the CoffeeBeans item:
-  coffeeBeansItem.softDeletionTimestamp = Date.now();
-  // Soft delete the CoffeeBeans item:
+  // Soft-delete the CoffeeBeans item:
+  coffeeBeansItem.softDeletionTimestamp = _softDeletionTimestamp;
   tx.objectStore(COFFEEBEANS_STORE_NAME).put(coffeeBeansItem);
   await tx.done;
-  // Return the soft deletion count:
+  // Prepare and return the soft-deletion count:
   return {
     coffeeBeansCount: 1,
-    recipesCount: recipesCount
+    recipesCount
   };
 }
 
 export async function undoSoftDeleteCoffeeBeansAndRecipesById(coffeeBeansId: number):
   Promise<Count | "CoffeeBeansNotFound"> {
   let recipesCount = 0;
-  // Open the transaction:
+  // Open a transaction:
   const db = await openEntitiesDB();
   const tx = db.transaction([COFFEEBEANS_STORE_NAME, RECIPES_STORE_NAME], "readwrite");
-  // Get the CoffeeBeans item:
+  // Load the CoffeeBeans item:
   const coffeeBeansItem: ICoffeeBeansDB | undefined = await tx.objectStore(COFFEEBEANS_STORE_NAME).get(coffeeBeansId);
-  // Guard clause:
+  // Guard clause, check if the CoffeeBeans item not found:
   if (coffeeBeansItem === undefined) {
     await tx.done;
     return "CoffeeBeansNotFound";
   }
-  // Prepare the CoffeeBeans item:
+  // Guard clause, check if the CoffeeBeans item wasn't soft-deleted:
+  if (coffeeBeansItem.softDeletionTimestamp === undefined) {
+    await tx.done;
+    return { coffeeBeansCount: 0, recipesCount: 0 };
+  }
+  // Get the CoffeeBeans item's softDeletionTimestamp:
+  const _softDeletionTimestamp: number = coffeeBeansItem.softDeletionTimestamp;
+  // Undo soft-delete the CoffeeBeans item:
   coffeeBeansItem.softDeletionTimestamp = undefined;
-  // Undo soft delete for the CoffeeBeans item:
   tx.objectStore(COFFEEBEANS_STORE_NAME).put(coffeeBeansItem);
-  // Get all Recipes by CoffeeBeansId:
+  // Load all Recipes by CoffeeBeansId:
   const recipeItems: IRecipeDB[] = await tx.objectStore(RECIPES_STORE_NAME).index(RECIPES_INDEX_COFFEEBEANSID_NAME)
     .getAll(coffeeBeansId);
-  // Undo soft delete for all Recipes with this CoffeeBeansId:
+  // Undo soft-delete the Recipes:
   for (const recipeItem of recipeItems) {
-    // Ignore Recipe items that are not soft deleted:
+    // Ignore the not soft-deleted Recipes:
     if (recipeItem.softDeletionTimestamp === undefined) {
       continue;
     }
-    // Prepare the Recipe item:
+    // Ignore the Recipes that were soft-deleted earlier:
+    if (recipeItem.softDeletionTimestamp < _softDeletionTimestamp) {
+      continue;
+    }
+    // Undo soft-delete the Recipes:
     recipeItem.softDeletionTimestamp = undefined;
-    // Update the Recipe item in the DB:
     await tx.objectStore(RECIPES_STORE_NAME).put(recipeItem);
     recipesCount++;
   }
   await tx.done;
-  // Return the undo soft deletion count:
+  // Prepare and return the undone soft-deletion count:
   return {
     coffeeBeansCount: 1,
-    recipesCount: recipesCount
+    recipesCount
   };
 }

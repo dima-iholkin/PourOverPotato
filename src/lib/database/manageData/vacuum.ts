@@ -12,18 +12,17 @@ export async function vacuumSoftDeletedCoffeeBeans(): Promise<void> {
   // Load the soft-deleted CoffeeBeans items:
   const softDeletedCoffeeBeans: ICoffeeBeansDB[] = await tx.objectStore(COFFEEBEANS_STORE_NAME)
     .index("softDeletionTimestamp").getAll();
-  // Iterate over the soft-deleted CoffeeBeans items:
+  // For each soft-deleted CoffeeBeans item:
   for (const item of softDeletedCoffeeBeans) {
-    // Load the Recipes for the CoffeeBeans item:
+    // Hard-delete it's Recipes:
     const recipes: IRecipeDB[] = await tx.objectStore(RECIPES_STORE_NAME).index(RECIPES_INDEX_COFFEEBEANSID_NAME)
       .getAll(item.id);
-    // Hard-delete the Recipes:
     for (const recipeItem of recipes) {
       await tx.objectStore(RECIPES_STORE_NAME).delete(recipeItem.id);
     }
     // Hard-delete the CoffeeBeans item:
     await tx.objectStore(COFFEEBEANS_STORE_NAME).delete(item.id);
-    // Hard-delete from the EnhancedCoffeeBeans table:
+    // Hard-delete the EnhancedCoffeeBeans item:
     await tx.objectStore(ENHANCEDCOFFEEBEANS_STORE_NAME).delete(item.id);
   }
   await tx.done;

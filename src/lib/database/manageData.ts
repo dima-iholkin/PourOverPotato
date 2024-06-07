@@ -42,9 +42,11 @@ export async function exportAllData(): Promise<Blob> {
   const _dbVersion: number = tx.db.version;
   await tx.done;
   // Filter out the soft-deleted CoffeeBeans and Recipes, and convert into core entities:
-  const coffeeBeansItems: CoffeeBeans[] = coffeeBeansDbItems.filter(itemDb => itemDb.softDeleted === 0)
+  const coffeeBeansItems: CoffeeBeans[] = coffeeBeansDbItems
+    .filter(itemDb => itemDb.softDeletionTimestamp === undefined)
     .map(itemDb => new CoffeeBeansDB(itemDb).toCoffeeBeans());
-  const recipes: Recipe[] = recipeDbItems.filter(itemDb => itemDb.softDeleted === 0)
+  const recipes: Recipe[] = recipeDbItems
+    .filter(itemDb => itemDb.softDeletionTimestamp === undefined)
     .map(itemDb => new RecipeDB(itemDb).toRecipe());
   // Prepare the export data object:
   const exported: ExportJSON = {
