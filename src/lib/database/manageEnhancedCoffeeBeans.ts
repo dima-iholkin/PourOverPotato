@@ -27,7 +27,7 @@ export async function regenerateEnhancedCoffeeBeansTable(
     const recipesDB: IRecipeDB[] = await transaction.objectStore(RECIPES_STORE_NAME)
       .index(RECIPES_INDEX_COFFEEBEANSID_NAME).getAll(item.id);
     // Filter, transform to Recipe and sort the recipes by latest timestamp:
-    const validRecipes: Recipe[] = recipesDB.filter(r => r.softDeleted !== true)
+    const validRecipes: Recipe[] = recipesDB.filter(r => r.softDeletionTimestamp === undefined)
       .map(r => new RecipeDB(r).toRecipe())
       .toSorted(sortRecipesByTimestampDesc);
     // Prepare the aggregated info from Recipes:

@@ -56,11 +56,12 @@ function createStoresV3(
   if (_db.objectStoreNames.contains(COFFEEBEANS_STORE_NAME) === false) {
     const coffeeBeansStore = _db.createObjectStore(COFFEEBEANS_STORE_NAME, { keyPath: "id", autoIncrement: true });
     coffeeBeansStore.createIndex(COFFEEBEANS_INDEX_NAME, COFFEEBEANS_INDEX_NAME, { unique: true });
-    coffeeBeansStore.createIndex("softDeleted", "softDeleted", { unique: false });
+    coffeeBeansStore.createIndex("softDeletionTimestamp", "softDeletionTimestamp", { unique: false });
   }
   // Create CoffeeBeans "softDeleted" index:
-  if (transaction.objectStore(COFFEEBEANS_STORE_NAME).indexNames.contains("softDeleted") === false) {
-    transaction.objectStore(COFFEEBEANS_STORE_NAME).createIndex("softDeleted", "softDeleted", { unique: false });
+  if (transaction.objectStore(COFFEEBEANS_STORE_NAME).indexNames.contains("softDeletionTimestamp") === false) {
+    transaction.objectStore(COFFEEBEANS_STORE_NAME)
+      .createIndex("softDeletionTimestamp", "softDeleted", { unique: false });
   }
   // Create Recipes store:
   if (_db.objectStoreNames.contains(RECIPES_STORE_NAME) === false) {
@@ -69,11 +70,11 @@ function createStoresV3(
     recipesStore.createIndex("outWeight", "outWeight", { unique: false });
     recipesStore.createIndex("rating", "rating", { unique: false });
     recipesStore.createIndex("timestamp", "timestamp", { unique: false });
-    recipesStore.createIndex("softDeleted", "softDeleted", { unique: false });
+    recipesStore.createIndex("softDeletionTimestamp", "softDeletionTimestamp", { unique: false });
   }
-  // Create Recipes "softDeleted" index:
-  if (transaction.objectStore(RECIPES_STORE_NAME).indexNames.contains("softDeleted") === false) {
-    transaction.objectStore(RECIPES_STORE_NAME).createIndex("softDeleted", "softDeleted", { unique: false });
+  // Create Recipes "softDeletionTimestamp" index:
+  if (transaction.objectStore(RECIPES_STORE_NAME).indexNames.contains("softDeletionTimestamp") === false) {
+    transaction.objectStore(RECIPES_STORE_NAME).createIndex("softDeletionTimestamp", "softDeleted", { unique: false });
   }
   // Create EnhancedCoffeeBeans store:
   if (_db.objectStoreNames.contains(ENHANCEDCOFFEEBEANS_STORE_NAME) === false) {
@@ -98,7 +99,7 @@ async function migrateCoffeeBeansFromV1ToV3(
   for (const itemV1 of coffeeBeansFromV1) {
     const itemV3: ICoffeeBeansDB = {
       ...itemV1,
-      softDeleted: 0
+      softDeletionTimestamp: undefined
     };
     // Save all modified CoffeeBeans:
     await transaction.objectStore(COFFEEBEANS_STORE_NAME).put(itemV3);
@@ -122,7 +123,7 @@ async function migrateCoffeeBeansFromV2ToV3(
   for (const itemV2 of coffeeBeansItemsV2) {
     const itemV3: ICoffeeBeansDB = {
       ...itemV2,
-      softDeleted: itemV2.softDeleted ? 1 : 0
+      softDeletionTimestamp: itemV2.softDeleted ? Date.now() : undefined
     };
     // Save all modified CoffeeBeans:
     await transaction.objectStore(COFFEEBEANS_STORE_NAME).put(itemV3);
@@ -148,7 +149,7 @@ async function migrateRecipesFromV1ToV3(
       ...itemV1,
       favorite: false,
       timestamp: itemV1.timestamp.getTime(),
-      softDeleted: 0
+      softDeletionTimestamp: undefined
     };
     // Save all modified Recipes:
     await transaction.objectStore(RECIPES_STORE_NAME).put(itemV3);
@@ -172,7 +173,7 @@ async function migrateRecipesFromV2ToV3(
     const itemV3: IRecipeDB = {
       ...itemV2,
       favorite: itemV2.favorite ?? false,
-      softDeleted: itemV2.softDeleted ? 1 : 0
+      softDeletionTimestamp: itemV2.softDeleted ? Date.now() : undefined
     };
     // Save all modified Recipes:
     await transaction.objectStore(RECIPES_STORE_NAME).put(itemV3);

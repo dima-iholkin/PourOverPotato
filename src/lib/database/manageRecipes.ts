@@ -28,7 +28,7 @@ export async function countRecipesByCoffeeBeansId(coffeeBeansId: number): Promis
     RECIPES_STORE_NAME, RECIPES_INDEX_COFFEEBEANSID_NAME, coffeeBeansId
   );
   // Filter out the soft deleted entities and count the valid Recipes:
-  const count: number = itemsDB.filter(item => item.softDeleted === 0).length;
+  const count: number = itemsDB.filter(item => item.softDeletionTimestamp === undefined).length;
   return count;
 }
 
@@ -48,7 +48,7 @@ export async function getAllRecipes(): Promise<Recipe[]> {
   const itemsDB: IRecipeDB[] = await db.getAll(RECIPES_STORE_NAME);
   // Filter out the soft deleted entities and convert to core Recipe entities:
   const items: Recipe[] = itemsDB
-    .filter(item => item.softDeleted === 0)
+    .filter(item => item.softDeletionTimestamp === undefined)
     .map(item => new RecipeDB(item).toRecipe());
   return items;
 }
@@ -58,7 +58,7 @@ export async function getRecipeById(recipeId: number): Promise<Recipe | undefine
   const db = await openEntitiesDB();
   const item: IRecipeDB | undefined = await db.get(RECIPES_STORE_NAME, recipeId);
   // Ignore the soft deleted Recipes:
-  if (item === undefined || item.softDeleted === 1) {
+  if (item === undefined || item.softDeletionTimestamp) {
     return undefined;
   }
   // Prepare and return a core Recipe entity:
@@ -73,7 +73,7 @@ export async function getRecipesByCoffeeBeansId(coffeeBeansId: number): Promise<
   );
   // Filter out the soft deleted entities and convert to core Recipe entities:
   const items: Recipe[] = itemsDB
-    .filter(item => item.softDeleted === 0)
+    .filter(item => item.softDeletionTimestamp === undefined)
     .map(item => new RecipeDB(item).toRecipe());
   return items;
 }
@@ -94,7 +94,7 @@ export async function softDeleteRecipeById(recipeId: number): Promise<"Success" 
     return "RecipeNotFound";
   }
   // Prepare the entity for submit:
-  dbItem.softDeleted = 1;
+  dbItem.softDeletionTimestamp = Date.now();
   // Save the soft deleted entity:
   await tx.put(dbItem);
   await tx.transaction.done;
@@ -112,7 +112,7 @@ export async function undoSoftDeleteRecipeById(recipeId: number): Promise<"Succe
     return "RecipeNotFound";
   }
   // Prepare the entity for submit:
-  dbItem.softDeleted = 0;
+  dbItem.softDeletionTimestamp = undefined;
   // Save the restored entity:
   await tx.put(dbItem);
   await tx.transaction.done;

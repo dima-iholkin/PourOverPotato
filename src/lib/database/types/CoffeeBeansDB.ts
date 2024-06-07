@@ -2,7 +2,7 @@ import { CoffeeBeans, type CoffeeBeansCreateSubmit, type ICoffeeBeans } from "$l
 
 export interface ICoffeeBeansDB extends ICoffeeBeans {
   nameLowerCase: string;
-  softDeleted: 0 | 1;
+  softDeletionTimestamp: number | undefined;
 }
 
 export class CoffeeBeansDB implements ICoffeeBeansDB {
@@ -10,21 +10,21 @@ export class CoffeeBeansDB implements ICoffeeBeansDB {
   name: string;
   nameLowerCase: string;
   description: string;
-  softDeleted: 0 | 1;
+  softDeletionTimestamp: number | undefined;
 
   constructor(item: ICoffeeBeansDB) {
     this.id = item.id;
     this.name = item.name;
-    this.description = item.description;
     this.nameLowerCase = item.nameLowerCase;
-    this.softDeleted = item.softDeleted;
+    this.description = item.description;
+    this.softDeletionTimestamp = item.softDeletionTimestamp;
   }
 
   static fromCoffeeBeans(item: ICoffeeBeans): CoffeeBeansDB {
     const obj: ICoffeeBeansDB = {
       ...item,
       nameLowerCase: item.name.toLowerCase(),
-      softDeleted: 0
+      softDeletionTimestamp: undefined
     };
     return new CoffeeBeansDB(obj);
   }
@@ -38,12 +38,12 @@ export class CoffeeBeansDBSubmit implements Omit<ICoffeeBeansDB, "id"> {
   name: string;
   nameLowerCase: string;
   description: string;
-  softDeleted: 0 | 1;
+  softDeletionTimestamp: number | undefined;
 
   constructor(item: CoffeeBeansCreateSubmit) {
     this.name = item.name;
-    this.description = item.description;
     this.nameLowerCase = item.name.toLowerCase();
-    this.softDeleted = 0;
+    this.description = item.description;
+    this.softDeletionTimestamp = undefined;
   }
 }
