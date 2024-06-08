@@ -86,11 +86,6 @@
       validationMessage = "Coffee beans with this name exist already.";
       return;
     }
-    if (coffeeBeans === "DatabaseError") {
-      nameValidationFailed = false;
-      addToast("CoffeeBeans not saved because of a database error.");
-      return;
-    }
     // Show a toast:
     addToast(`Coffee beans "${coffeeBeans.name}" created.`);
     // Return the new Coffee Beans entity to the "Add recipe" page:

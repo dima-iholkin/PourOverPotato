@@ -56,7 +56,7 @@
   let recipeThoughts: string;
   let outWeight: number;
   let rating: number;
-  let favorite: boolean | undefined;
+  let favorite: boolean = false;
   let timestampStr: string;
 
   // Unsaved changes state:
