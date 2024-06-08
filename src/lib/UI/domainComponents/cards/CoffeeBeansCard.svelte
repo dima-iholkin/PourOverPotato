@@ -1,12 +1,12 @@
 <script lang="ts">
   import { convertToTimeAgo } from "$lib/helpers/dateHelpers";
-  import type { _EnhancedCoffeeBeans } from "$lib/types/EnhancedCoffeeBeans";
+  import type { EnhancedCoffeeBeans } from "$lib/types/EnhancedCoffeeBeans";
   // eslint-disable-next-line max-len
   import { CoffeeBeansSortOrderEnum } from "$lib/UI/domainComponents/lists/SortCoffeeBeansSelect/CoffeeBeansSortOrderEnum";
   import Card from "$lib/UI/genericComponents/Card.svelte";
 
   // Entity props:
-  export let item: _EnhancedCoffeeBeans;
+  export let item: EnhancedCoffeeBeans;
 
   // UI props:
   export let href: string;

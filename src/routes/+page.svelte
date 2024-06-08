@@ -3,7 +3,7 @@
   import { getAllEnhancedCoffeeBeans } from "$lib/database/manageEnhancedCoffeeBeans";
   import { routes } from "$lib/domain/constants/routes";
   import { sortCoffeeBeansByName } from "$lib/domain/helpers/sortCoffeeBeans";
-  import type { _EnhancedCoffeeBeans } from "$lib/types/EnhancedCoffeeBeans";
+  import type { EnhancedCoffeeBeans } from "$lib/types/EnhancedCoffeeBeans";
   import CoffeeBeansCard from "$lib/UI/domainComponents/cards/CoffeeBeansCard.svelte";
   import AddRecipeFab from "$lib/UI/domainComponents/FABs/AddRecipeFab.svelte";
   import Loading from "$lib/UI/domainComponents/lists/Loading.svelte";
@@ -14,12 +14,12 @@
   import PageHeadline from "$lib/UI/layout/PageHeadline.svelte";
 
   // Entities state:
-  let coffeeBeans: _EnhancedCoffeeBeans[] | undefined;
+  let coffeeBeans: EnhancedCoffeeBeans[] | undefined;
 
   // Sorting state:
   let sortOrderValue: {
     value: CoffeeBeansSortOrderEnum;
-    sortOrderFunc: (itemA: _EnhancedCoffeeBeans, itemB: _EnhancedCoffeeBeans) => number;
+    sortOrderFunc: (itemA: EnhancedCoffeeBeans, itemB: EnhancedCoffeeBeans) => number;
   };
 
   // Lifecycle:
@@ -36,7 +36,7 @@
 
   // Helper:
   async function loadAllCoffeeBeans() {
-    const enhancedCoffeeBeansItems: _EnhancedCoffeeBeans[] = await getAllEnhancedCoffeeBeans();
+    const enhancedCoffeeBeansItems: EnhancedCoffeeBeans[] = await getAllEnhancedCoffeeBeans();
     coffeeBeans = enhancedCoffeeBeansItems.sort(sortCoffeeBeansByName);
   }
 </script>

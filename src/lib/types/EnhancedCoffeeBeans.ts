@@ -1,6 +1,6 @@
 import { CoffeeBeans, type ICoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
 
-export class _EnhancedCoffeeBeans extends CoffeeBeans {
+export class EnhancedCoffeeBeans extends CoffeeBeans {
   recipeCount: number;
   latestRecipeTimestamp: Date | undefined;
   earliestRecipeTimestamp: Date | undefined;

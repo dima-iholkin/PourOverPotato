@@ -1,5 +1,5 @@
 import type { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
-import { _EnhancedCoffeeBeans, type EnhancedCoffeeBeansInfo } from "$lib/types/EnhancedCoffeeBeans";
+import { EnhancedCoffeeBeans, type EnhancedCoffeeBeansInfo } from "$lib/types/EnhancedCoffeeBeans";
 
 export interface IEnhancedCoffeeBeansDB {
   id: number;
@@ -10,11 +10,11 @@ export interface IEnhancedCoffeeBeansDB {
 
 export function toEnhancedCoffeeBeans(
   coffeeBeansItem: CoffeeBeans, info: Omit<IEnhancedCoffeeBeansDB, "id">
-): _EnhancedCoffeeBeans {
+): EnhancedCoffeeBeans {
   const _enhancedInfo: EnhancedCoffeeBeansInfo = {
     recipeCount: info.recipesCount,
     latestRecipeTimestamp: info.latestRecipeTimestamp ? new Date(info.latestRecipeTimestamp) : undefined,
     earliestRecipeTimestamp: info.earliestRecipeTimestamp ? new Date(info.earliestRecipeTimestamp) : undefined
   };
-  return new _EnhancedCoffeeBeans(coffeeBeansItem, _enhancedInfo);
+  return new EnhancedCoffeeBeans(coffeeBeansItem, _enhancedInfo);
 }

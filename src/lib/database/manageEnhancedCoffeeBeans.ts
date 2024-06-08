@@ -2,7 +2,7 @@ import type { IDBPTransaction } from "idb";
 import type { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
 import type { Recipe } from "$lib/domain/entities/Recipe";
 import { sortRecipesByTimestampDesc } from "$lib/domain/helpers/sortRecipes";
-import type { _EnhancedCoffeeBeans } from "$lib/types/EnhancedCoffeeBeans";
+import type { EnhancedCoffeeBeans } from "$lib/types/EnhancedCoffeeBeans";
 import {
   COFFEEBEANS_STORE_NAME, ENHANCEDCOFFEEBEANS_STORE_NAME, RECIPES_INDEX_COFFEEBEANSID_NAME, RECIPES_STORE_NAME,
   openEntitiesDB
@@ -12,7 +12,7 @@ import { toEnhancedCoffeeBeans, type IEnhancedCoffeeBeansDB } from "./types/Enha
 import type { EntitiesDB } from "./types/EntitiesDB";
 import { RecipeDB, type IRecipeDB } from "./types/RecipeDB";
 
-export async function getAllEnhancedCoffeeBeans(): Promise<_EnhancedCoffeeBeans[]> {
+export async function getAllEnhancedCoffeeBeans(): Promise<EnhancedCoffeeBeans[]> {
   // Open a transaction:
   const db = await openEntitiesDB();
   const tx = db.transaction([COFFEEBEANS_STORE_NAME, ENHANCEDCOFFEEBEANS_STORE_NAME], "readonly");
@@ -22,7 +22,7 @@ export async function getAllEnhancedCoffeeBeans(): Promise<_EnhancedCoffeeBeans[
   const coffeeBeansItems: CoffeeBeans[] = coffeeBeansItemsDb.filter(item => item.softDeletionTimestamp === undefined)
     .map(item => new CoffeeBeansDB(item).toCoffeeBeans());
   // Match the CoffeeBeans items with EnhancedCoffeeBeans info:
-  const items: _EnhancedCoffeeBeans[] = [];
+  const items: EnhancedCoffeeBeans[] = [];
   for (const coffeeBeansItem of coffeeBeansItems) {
     const itemDb: IEnhancedCoffeeBeansDB | undefined = await tx.objectStore(ENHANCEDCOFFEEBEANS_STORE_NAME)
       .get(coffeeBeansItem.id);
@@ -31,7 +31,7 @@ export async function getAllEnhancedCoffeeBeans(): Promise<_EnhancedCoffeeBeans[
       latestRecipeTimestamp: itemDb?.latestRecipeTimestamp,
       earliestRecipeTimestamp: itemDb?.earliestRecipeTimestamp
     };
-    const item: _EnhancedCoffeeBeans = toEnhancedCoffeeBeans(coffeeBeansItem, info);
+    const item: EnhancedCoffeeBeans = toEnhancedCoffeeBeans(coffeeBeansItem, info);
     items.push(item);
   }
   await tx.done;
@@ -41,7 +41,7 @@ export async function getAllEnhancedCoffeeBeans(): Promise<_EnhancedCoffeeBeans[
 
 export async function getEnhancedCoffeeBeansById(
   coffeeBeansId: number
-): Promise<_EnhancedCoffeeBeans | "EntityNotFound"> {
+): Promise<EnhancedCoffeeBeans | "EntityNotFound"> {
   // Open a transaction:
   const db = await openEntitiesDB();
   const tx = db.transaction([COFFEEBEANS_STORE_NAME, ENHANCEDCOFFEEBEANS_STORE_NAME], "readonly");
@@ -63,7 +63,7 @@ export async function getEnhancedCoffeeBeansById(
     latestRecipeTimestamp: itemDb?.latestRecipeTimestamp,
     earliestRecipeTimestamp: itemDb?.earliestRecipeTimestamp
   };
-  const item: _EnhancedCoffeeBeans = toEnhancedCoffeeBeans(coffeeBeansItem, info);
+  const item: EnhancedCoffeeBeans = toEnhancedCoffeeBeans(coffeeBeansItem, info);
   return item;
 }
 

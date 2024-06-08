@@ -6,14 +6,14 @@
     sortCoffeeBeansByEarliestRecipe
   } from "$lib/domain/helpers/sortCoffeeBeans";
   import { loadSortOrder, saveSortOrder } from "$lib/localStorage/persistSortOrder";
-  import type { _EnhancedCoffeeBeans } from "$lib/types/EnhancedCoffeeBeans";
+  import type { EnhancedCoffeeBeans } from "$lib/types/EnhancedCoffeeBeans";
 
   const SELECT_ID = "coffeebeans-sort-order";
 
   const sortOrderEnumEntriesForUI: {
     key: string;
     value: CoffeeBeansSortOrderEnum;
-    sortOrderFunc: (itemA: _EnhancedCoffeeBeans, itemB: _EnhancedCoffeeBeans) => number;
+    sortOrderFunc: (itemA: EnhancedCoffeeBeans, itemB: EnhancedCoffeeBeans) => number;
   }[] = [
     { value: CoffeeBeansSortOrderEnum.Name, key: "name", sortOrderFunc: sortCoffeeBeansByName },
     { value: CoffeeBeansSortOrderEnum.NameReverse, key: "name reverse", sortOrderFunc: sortCoffeeBeansByNameReverse },
@@ -36,7 +36,7 @@
   // Props:
   export let sortOrderValue: {
     value: CoffeeBeansSortOrderEnum;
-    sortOrderFunc: (itemA: _EnhancedCoffeeBeans, itemB: _EnhancedCoffeeBeans) => number;
+    sortOrderFunc: (itemA: EnhancedCoffeeBeans, itemB: EnhancedCoffeeBeans) => number;
   };
 
   // UI state:
