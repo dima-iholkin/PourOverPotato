@@ -15,9 +15,11 @@
 
 <Card {href}>
   <div class="card-content">
+    <h5>{item.name}</h5>
+    <p class="coffee-beans-description">{item.description}</p>
     <div class="header">
       {#if sortOrder === CoffeeBeansSortOrderEnum.EarliestRecipe && item.earliestRecipeTimestamp}
-        <p class="time-ago-info">earliest: {convertToTimeAgo(item.earliestRecipeTimestamp)}</p>
+        <p class="time-ago-info">🕒 {convertToTimeAgo(item.earliestRecipeTimestamp)} (earliest)</p>
       {:else if item.latestRecipeTimestamp}
         <p class="time-ago-info">🕒 {convertToTimeAgo(item.latestRecipeTimestamp)}</p>
       {:else}
@@ -25,8 +27,6 @@
       {/if}
       <p class="recipes-count">{item.recipeCount} {item.recipeCount === 1 ? "recipe" : "recipes"}</p>
     </div>
-    <h5>{item.name}</h5>
-    <p class="coffee-beans-description">{item.description}</p>
   </div>
 </Card>
 
