@@ -1,7 +1,20 @@
-import type { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
+import { CoffeeBeans, type ICoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
 
-export type EnhancedCoffeeBeans = CoffeeBeans & {
-  recipeCount: number | undefined;
-  latestRecipeTimestamp?: Date | undefined;
-  earliestRecipeTimestamp?: Date | undefined;
+export class _EnhancedCoffeeBeans extends CoffeeBeans {
+  recipeCount: number;
+  latestRecipeTimestamp: Date | undefined;
+  earliestRecipeTimestamp: Date | undefined;
+
+  constructor(coffeeBeansItem: ICoffeeBeans, enhancedInfo: EnhancedCoffeeBeansInfo) {
+    super(coffeeBeansItem);
+    this.recipeCount = enhancedInfo.recipeCount;
+    this.latestRecipeTimestamp = enhancedInfo.latestRecipeTimestamp;
+    this.earliestRecipeTimestamp = enhancedInfo.earliestRecipeTimestamp;
+  }
+}
+
+export interface EnhancedCoffeeBeansInfo {
+  recipeCount: number;
+  latestRecipeTimestamp: Date | undefined;
+  earliestRecipeTimestamp: Date | undefined;
 }

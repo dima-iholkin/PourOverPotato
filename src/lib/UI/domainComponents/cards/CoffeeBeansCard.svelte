@@ -1,13 +1,12 @@
 <script lang="ts">
   import { convertToTimeAgo } from "$lib/helpers/dateHelpers";
-  import type { EnhancedCoffeeBeans } from "$lib/types/EnhancedCoffeeBeans";
+  import type { _EnhancedCoffeeBeans } from "$lib/types/EnhancedCoffeeBeans";
   // eslint-disable-next-line max-len
   import { CoffeeBeansSortOrderEnum } from "$lib/UI/domainComponents/lists/SortCoffeeBeansSelect/CoffeeBeansSortOrderEnum";
   import Card from "$lib/UI/genericComponents/Card.svelte";
 
   // Entity props:
-  export let item: EnhancedCoffeeBeans;
-  export let recipeCount: number = 0;
+  export let item: _EnhancedCoffeeBeans;
 
   // UI props:
   export let href: string;
@@ -24,7 +23,7 @@
       {:else}
         <div />
       {/if}
-      <p class="recipes-count">{recipeCount} {recipeCount === 1 ? "recipe" : "recipes"}</p>
+      <p class="recipes-count">{item.recipeCount} {item.recipeCount === 1 ? "recipe" : "recipes"}</p>
     </div>
     <h5>{item.name}</h5>
     <p class="coffee-beans-description">{item.description}</p>
