@@ -1,15 +1,11 @@
 import type { Recipe } from "$lib/domain/entities/Recipe";
 
 export function sortRecipesByFavorite(recipeA: Recipe, recipeB: Recipe): number {
-  if (recipeA.favorite === true && recipeB.favorite === true) {
+  // Secondary sort order:
+  if (recipeA.favorite === recipeB.favorite) {
     return sortRecipesByRatingDesc(recipeA, recipeB);
   }
-  if (
-    (recipeA.favorite === false || recipeA.favorite === undefined)
-    && (recipeB.favorite === false || recipeB.favorite === undefined)
-  ) {
-    return sortRecipesByRatingDesc(recipeA, recipeB);
-  }
+  // Primary sort order:
   if (recipeA.favorite === true) {
     return -1;
   }
@@ -20,21 +16,38 @@ export function sortRecipesByFavorite(recipeA: Recipe, recipeB: Recipe): number 
 }
 
 export function sortRecipesByOutWeightAsc(recipeA: Recipe, recipeB: Recipe): number {
+  // Secondary sort order:
+  if (recipeA.outWeight === recipeB.outWeight) {
+    return sortRecipesByTimestampDesc(recipeA, recipeB);
+  }
+  // Primary sort order:
   return recipeA.outWeight - recipeB.outWeight;
 }
 
 export function sortRecipesByOutWeightDesc(recipeA: Recipe, recipeB: Recipe): number {
+  // Secondary sort order:
+  if (recipeA.outWeight === recipeB.outWeight) {
+    return sortRecipesByTimestampDesc(recipeA, recipeB);
+  }
+  // Primary sort order:
   return recipeB.outWeight - recipeA.outWeight;
 }
 
 export function sortRecipesByRatingAsc(recipeA: Recipe, recipeB: Recipe): number {
-  return -sortRecipesByRatingDesc(recipeA, recipeB);
-}
-
-export function sortRecipesByRatingDesc(recipeA: Recipe, recipeB: Recipe): number {
+  // Secondary sort order:
   if (recipeA.rating === recipeB.rating) {
     return sortRecipesByTimestampDesc(recipeA, recipeB);
   }
+  // Primary sort order:
+  return recipeA.rating - recipeB.rating;
+}
+
+export function sortRecipesByRatingDesc(recipeA: Recipe, recipeB: Recipe): number {
+  // Secondary sort order:
+  if (recipeA.rating === recipeB.rating) {
+    return sortRecipesByTimestampDesc(recipeA, recipeB);
+  }
+  // Primary sort order:
   return recipeB.rating - recipeA.rating;
 }
 

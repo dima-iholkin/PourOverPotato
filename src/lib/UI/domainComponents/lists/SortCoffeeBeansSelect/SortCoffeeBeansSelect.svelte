@@ -3,7 +3,13 @@
     sortCoffeeBeansByName,
     sortCoffeeBeansByNameReverse,
     sortCoffeeBeansByLatestRecipe,
-    sortCoffeeBeansByEarliestRecipe
+    sortCoffeeBeansByEarliestRecipe,
+
+    sortCoffeeBeansByMoreRecipes,
+
+    sortCoffeeBeansByLessRecipes
+
+
   } from "$lib/domain/helpers/sortCoffeeBeans";
   import { loadSortOrder, saveSortOrder } from "$lib/localStorage/persistSortOrder";
   import type { EnhancedCoffeeBeans } from "$lib/types/EnhancedCoffeeBeans";
@@ -26,6 +32,16 @@
       value: CoffeeBeansSortOrderEnum.EarliestRecipe,
       key: "earliest recipe",
       sortOrderFunc: sortCoffeeBeansByEarliestRecipe
+    },
+    {
+      value: CoffeeBeansSortOrderEnum.MoreRecipes,
+      key: "more recipes",
+      sortOrderFunc: sortCoffeeBeansByMoreRecipes
+    },
+    {
+      value: CoffeeBeansSortOrderEnum.LessRecipes,
+      key: "less recipes",
+      sortOrderFunc: sortCoffeeBeansByLessRecipes
     }
   ];
 </script>
