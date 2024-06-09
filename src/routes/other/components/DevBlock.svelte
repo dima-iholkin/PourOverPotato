@@ -3,13 +3,13 @@
 </script>
 
 <div class="container">
-  <button type="button" on:click={() => addToast("Ethiopia Gesha")}> Add toast </button>
+  <button type="button" on:click={() => addToast("Ethiopia Gesha")}> Add a toast </button>
   <button
     type="button"
     on:click={() =>
       addToast("Ethiopia Yirgacheffe Rwanda Mabanza Kenya Kegwa Colombia El Refugio Guatemala Cafe De Mujeres")}
   >
-    Add long toast
+    Add a long toast
   </button>
 </div>
 

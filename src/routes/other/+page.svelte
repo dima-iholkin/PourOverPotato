@@ -60,7 +60,12 @@
 <DevBlock />
 
 <h5>About the app</h5>
-<p>Version: {version}</p>
+<div class="about-section">
+  <p>Version: {version}</p>
+  <p>
+    <a href="https://github.com/dima-iholkin/PourOverPotato/blob/main/CHANGELOG.md" target="_blank">CHANGELOG</a>
+  </p>
+</div>
 
 <style lang="postcss">
   .page-headline {
