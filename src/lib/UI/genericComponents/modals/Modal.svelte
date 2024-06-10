@@ -94,7 +94,6 @@
     flex-direction: row;
     justify-content: center;
     align-items: flex-start;
-
     z-index: 1050;
   }
 
@@ -118,7 +117,6 @@
     height: 100vh;
     flex-grow: 1;
     max-width: 60ch;
-
     display: flex;
     flex-direction: column;
   }
