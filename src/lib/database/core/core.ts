@@ -3,7 +3,7 @@ import { regenerateEnhancedCoffeeBeansTable } from "$lib/database/manageEnhanced
 import type { EntitiesDB } from "$lib/database/types/EntitiesDB";
 import {
   migrateCoffeeBeansFromV1ToV3, migrateCoffeeBeansFromV2ToV3, migrateRecipesFromV1ToV3, migrateRecipesFromV2ToV3
-} from "./core/migrations";
+} from "./migrations/migrations";
 
 // Internal constants:
 const DB_NAME = "entities";

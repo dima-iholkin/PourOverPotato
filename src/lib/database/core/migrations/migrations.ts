@@ -1,5 +1,5 @@
 import type { IDBPTransaction } from "idb";
-import { COFFEEBEANS_STORE_NAME, RECIPES_STORE_NAME } from "$lib/database/core";
+import { COFFEEBEANS_STORE_NAME, RECIPES_STORE_NAME } from "$lib/database/core/core";
 import type { ICoffeeBeansDB } from "$lib/database/types/CoffeeBeansDB";
 import type { EntitiesDB } from "$lib/database/types/EntitiesDB";
 import type { IRecipeDB } from "$lib/database/types/RecipeDB";

@@ -1,7 +1,7 @@
 import type { Recipe, RecipeSubmit } from "$lib/domain/entities/Recipe";
 import {
   ENHANCEDCOFFEEBEANS_STORE_NAME, openEntitiesDB, RECIPES_INDEX_COFFEEBEANSID_NAME, RECIPES_STORE_NAME
-} from "./core";
+} from "./core/core";
 import { regenerateEnhancedCoffeeBeansItemById } from "./manageEnhancedCoffeeBeans";
 import { RecipeDB, type IRecipeDB, RecipeDBSubmit } from "./types/RecipeDB";
 

@@ -1,20 +1,20 @@
 import type { IDBPDatabase } from "idb";
+import {
+  openEntitiesDB, COFFEEBEANS_STORE_NAME, RECIPES_STORE_NAME, ENHANCEDCOFFEEBEANS_STORE_NAME
+} from "$lib/database/core/core";
+import { regenerateEnhancedCoffeeBeansTable } from "$lib/database/manageEnhancedCoffeeBeans";
+import { type ICoffeeBeansDB, CoffeeBeansDB, CoffeeBeansDBSubmit } from "$lib/database/types/CoffeeBeansDB";
+import type { EntitiesDB } from "$lib/database/types/EntitiesDB";
+import { type IRecipeDB, RecipeDB, RecipeDBSubmit } from "$lib/database/types/RecipeDB";
 import type { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
 import type { Recipe } from "$lib/domain/entities/Recipe";
 import type { Count } from "$lib/types/Count";
-import {
-  openEntitiesDB, COFFEEBEANS_STORE_NAME, RECIPES_STORE_NAME, ENHANCEDCOFFEEBEANS_STORE_NAME
-} from "./core";
-import { regenerateEnhancedCoffeeBeansTable } from "./manageEnhancedCoffeeBeans";
-import { matchUniqueCoffeeBeansToAdd, matchUniqueRecipesToAdd } from "./manageImportExport/match/arrays";
-import { parseCoffeeBeansArray } from "./manageImportExport/parse/coffeeBeans";
-import { parseDbVersion } from "./manageImportExport/parse/primitives";
-import { parseRecipesArray } from "./manageImportExport/parse/recipes";
-import { type ICoffeeBeansDB, CoffeeBeansDB, CoffeeBeansDBSubmit } from "./types/CoffeeBeansDB";
-import type { EntitiesDB } from "./types/EntitiesDB";
+import { matchUniqueCoffeeBeansToAdd, matchUniqueRecipesToAdd } from "./match/arrays";
+import { parseCoffeeBeansArray } from "./parse/coffeeBeans";
+import { parseDbVersion } from "./parse/primitives";
+import { parseRecipesArray } from "./parse/recipes";
 import type { ExportJSON } from "./types/ExportJSON";
 import type { ImportJSON } from "./types/ImportJSON";
-import { type IRecipeDB, RecipeDB, RecipeDBSubmit } from "./types/RecipeDB";
 
 // Public functions:
 
@@ -43,10 +43,11 @@ export async function exportAllData(): Promise<Blob> {
   // Serialize all data:
   const json = JSON.stringify(exported);
   return new Blob([json], { type: "application/json" });
-}/**
+}
+
+/**
  * The import will be aborted, if anything is wrong in the JSON file.
  */
-
 export async function importDataFromJson(jsonFile: File): Promise<Count | "ImportFailed"> {
   // Deserialize all data:
   const imported: ImportJSON = JSON.parse(await jsonFile.text());

@@ -1,13 +1,13 @@
-import { RecipeSubmit } from "$lib/domain/entities/Recipe";
 import {
   COFFEEBEANS_STORE_NAME, ENHANCEDCOFFEEBEANS_STORE_NAME, RECIPES_STORE_NAME, openEntitiesDB
-} from "./core";
-import { DemoCoffeeBeans } from "./manageData/demo/demoCoffeeBeans";
-import { generateDemoRecipesForCoffeeBeansId } from "./manageData/demo/demoRecipes";
-import { vacuumSoftDeletedCoffeeBeans, vacuumSoftDeletedRecipes } from "./manageData/vacuum";
-import { regenerateEnhancedCoffeeBeansTable } from "./manageEnhancedCoffeeBeans";
-import { CoffeeBeansDBSubmit, type ICoffeeBeansDB } from "./types/CoffeeBeansDB";
-import { RecipeDBSubmit, type IRecipeDB } from "./types/RecipeDB";
+} from "$lib/database/core/core";
+import { regenerateEnhancedCoffeeBeansTable } from "$lib/database/manageEnhancedCoffeeBeans";
+import { CoffeeBeansDBSubmit, type ICoffeeBeansDB } from "$lib/database/types/CoffeeBeansDB";
+import { RecipeDBSubmit, type IRecipeDB } from "$lib/database/types/RecipeDB";
+import { RecipeSubmit } from "$lib/domain/entities/Recipe";
+import { DemoCoffeeBeans } from "./demo/demoCoffeeBeans";
+import { generateDemoRecipesForCoffeeBeansId } from "./demo/demoRecipes";
+import { vacuumSoftDeletedCoffeeBeans, vacuumSoftDeletedRecipes } from "./vacuum/vacuum";
 
 // Public functions:
 
