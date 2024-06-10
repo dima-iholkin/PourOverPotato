@@ -74,7 +74,6 @@
 
   h5 {
     @apply text-2xl font-bold tracking-tight text-gray-900 dark:text-white;
-
     margin-top: 2rem;
     margin-bottom: 0.5rem;
   }
@@ -90,6 +89,7 @@
   }
 
   a {
-    color: cornflowerblue;
+    text-decoration: revert;
+    color: revert;
   }
 </style>
