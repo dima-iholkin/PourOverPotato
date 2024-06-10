@@ -1,5 +1,5 @@
+import type { EnhancedCoffeeBeans } from "$lib/domain/enhancedEntities/EnhancedCoffeeBeans";
 import type { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
-import type { EnhancedCoffeeBeans } from "$lib/types/EnhancedCoffeeBeans";
 
 export function sortCoffeeBeansByName(itemA: CoffeeBeans, itemB: CoffeeBeans): number {
   if (itemA.name < itemB.name) {

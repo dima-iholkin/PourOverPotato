@@ -1,8 +1,6 @@
 import { browser } from "$app/environment";
-import type {
-  CoffeeBeansSortOrderEnum
-} from "$lib/UI/domainComponents/lists/SortCoffeeBeansSelect/CoffeeBeansSortOrderEnum";
-import { RecipesSortOrderEnum } from "$lib/UI/domainComponents/lists/SortRecipesSelect/RecipesSortOrderEnum";
+import type { CoffeeBeansSortOrderEnum } from "$lib/domain/sort/CoffeeBeansSortOrderEnum";
+import { RecipesSortOrderEnum } from "$lib/domain/sort/RecipesSortOrderEnum";
 
 // Public functions:
 

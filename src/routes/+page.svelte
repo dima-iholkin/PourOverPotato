@@ -2,13 +2,13 @@
   import { onMount } from "svelte";
   import { getAllEnhancedCoffeeBeans } from "$lib/database/manageEnhancedCoffeeBeans";
   import { routes } from "$lib/domain/constants/routes";
-  import { sortCoffeeBeansByName } from "$lib/domain/helpers/sortCoffeeBeans";
-  import type { EnhancedCoffeeBeans } from "$lib/types/EnhancedCoffeeBeans";
+  import type { EnhancedCoffeeBeans } from "$lib/domain/enhancedEntities/EnhancedCoffeeBeans";
+  import type { CoffeeBeansSortOrderEnum } from "$lib/domain/sort/CoffeeBeansSortOrderEnum";
+  import { sortCoffeeBeansByName } from "$lib/domain/sort/sortCoffeeBeans";
   import CoffeeBeansCard from "$lib/UI/domainComponents/cards/CoffeeBeansCard.svelte";
   import AddRecipeFab from "$lib/UI/domainComponents/FABs/AddRecipeFab.svelte";
   import Loading from "$lib/UI/domainComponents/lists/Loading.svelte";
   // eslint-disable-next-line max-len
-  import type { CoffeeBeansSortOrderEnum } from "$lib/UI/domainComponents/lists/SortCoffeeBeansSelect/CoffeeBeansSortOrderEnum";
   import SortCoffeeBeansSelect from "$lib/UI/domainComponents/lists/SortCoffeeBeansSelect/SortCoffeeBeansSelect.svelte";
   import AddDemoCoffeeBeans_PageBlock from "$lib/UI/domainComponents/pageBlocks/AddDemoCoffeeBeans_PageBlock.svelte";
   import PageHeadline from "$lib/UI/layout/PageHeadline.svelte";

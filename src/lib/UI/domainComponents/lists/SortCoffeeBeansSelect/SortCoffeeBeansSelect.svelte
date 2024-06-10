@@ -1,18 +1,15 @@
 <script context="module" lang="ts">
+  import type { EnhancedCoffeeBeans } from "$lib/domain/enhancedEntities/EnhancedCoffeeBeans";
+  import { CoffeeBeansSortOrderEnum } from "$lib/domain/sort/CoffeeBeansSortOrderEnum";
   import {
     sortCoffeeBeansByName,
     sortCoffeeBeansByNameReverse,
     sortCoffeeBeansByLatestRecipe,
     sortCoffeeBeansByEarliestRecipe,
-
     sortCoffeeBeansByMoreRecipes,
-
     sortCoffeeBeansByLessRecipes
-
-
-  } from "$lib/domain/helpers/sortCoffeeBeans";
+  } from "$lib/domain/sort/sortCoffeeBeans";
   import { loadSortOrder, saveSortOrder } from "$lib/localStorage/persistSortOrder";
-  import type { EnhancedCoffeeBeans } from "$lib/types/EnhancedCoffeeBeans";
 
   const SELECT_ID = "coffeebeans-sort-order";
 
@@ -47,8 +44,6 @@
 </script>
 
 <script lang="ts">
-  import { CoffeeBeansSortOrderEnum } from "./CoffeeBeansSortOrderEnum";
-
   // Props:
   export let sortOrderValue: {
     value: CoffeeBeansSortOrderEnum;
@@ -88,10 +83,8 @@
     justify-content: flex-start;
     align-items: center;
     column-gap: 0.5rem;
-
     /* Typography: */
     @apply text-base font-normal tracking-tight;
-
     /* Colors: */
     @apply text-gray-900 dark:text-white;
   }
@@ -101,7 +94,6 @@
     @apply focus:ring-blue-500 focus:border-blue-500;
     @apply dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white;
     @apply dark:focus:ring-blue-500 dark:focus:border-blue-500;
-
     padding: 0.625rem 1rem 0.625rem 0.5rem;
   }
 </style>

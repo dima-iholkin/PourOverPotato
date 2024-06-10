@@ -9,7 +9,7 @@ export function vacuumDeprecatedLocalStorageKeys() {
   for (let i = 0; i < localStorage.length; i++) {
     const keyName = localStorage.key(i);
     // Remove the keys starting with "sortOrder_":
-    if (keyName?.startsWith("sortOrder_") && keyName !== "sortOrder_recipes") {
+    if (keyName?.startsWith("sortOrder_") && keyName !== "sortOrder_recipes" && keyName !== "sortOrder_coffeeBeans") {
       localStorage.removeItem(keyName);
     }
   }

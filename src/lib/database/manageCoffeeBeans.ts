@@ -1,7 +1,7 @@
 import {
   CoffeeBeans, type CoffeeBeansCreateSubmit, type CoffeeBeansEditSubmit
 } from "$lib/domain/entities/CoffeeBeans";
-import type { Count } from "$lib/types/Count";
+import type { Count } from "$lib/helperTypes/Count";
 import {
   COFFEEBEANS_INDEX_NAME, COFFEEBEANS_STORE_NAME, ENHANCEDCOFFEEBEANS_STORE_NAME, RECIPES_INDEX_COFFEEBEANSID_NAME,
   RECIPES_STORE_NAME, openEntitiesDB

@@ -8,7 +8,7 @@ import type { EntitiesDB } from "$lib/database/types/EntitiesDB";
 import { type IRecipeDB, RecipeDB, RecipeDBSubmit } from "$lib/database/types/RecipeDB";
 import type { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
 import type { Recipe } from "$lib/domain/entities/Recipe";
-import type { Count } from "$lib/types/Count";
+import type { Count } from "$lib/helperTypes/Count";
 import { matchUniqueCoffeeBeansToAdd, matchUniqueRecipesToAdd } from "./match/arrays";
 import { parseCoffeeBeansArray } from "./parse/coffeeBeans";
 import { parseDbVersion } from "./parse/primitives";

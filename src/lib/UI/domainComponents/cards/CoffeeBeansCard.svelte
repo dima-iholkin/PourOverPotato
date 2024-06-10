@@ -1,8 +1,8 @@
 <script lang="ts">
+  import type { EnhancedCoffeeBeans } from "$lib/domain/enhancedEntities/EnhancedCoffeeBeans";
+  import { CoffeeBeansSortOrderEnum } from "$lib/domain/sort/CoffeeBeansSortOrderEnum";
   import { convertToTimeAgo } from "$lib/helpers/dateHelpers";
-  import type { EnhancedCoffeeBeans } from "$lib/types/EnhancedCoffeeBeans";
   // eslint-disable-next-line max-len
-  import { CoffeeBeansSortOrderEnum } from "$lib/UI/domainComponents/lists/SortCoffeeBeansSelect/CoffeeBeansSortOrderEnum";
   import Card from "$lib/UI/genericComponents/Card.svelte";
 
   // Entity props:

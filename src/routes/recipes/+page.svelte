@@ -3,17 +3,17 @@
   import { getAllCoffeeBeans } from "$lib/database/manageCoffeeBeans";
   import { getAllRecipes } from "$lib/database/manageRecipes";
   import { routes } from "$lib/domain/constants/routes";
+  import type { EnhancedRecipe } from "$lib/domain/enhancedEntities/EnhancedRecipe";
   import type { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
   import type { Recipe } from "$lib/domain/entities/Recipe";
+  import type { RecipesSortOrderEnum } from "$lib/domain/sort/RecipesSortOrderEnum";
   import {
     sortRecipesByTimestampDesc as byTimestampDesc,
     sortRecipesByTimestampDesc
-  } from "$lib/domain/helpers/sortRecipes";
-  import type { EnhancedRecipe } from "$lib/types/EnhancedRecipe";
+  } from "$lib/domain/sort/sortRecipes";
   import RecipeCard from "$lib/UI/domainComponents/cards/RecipeCard.svelte";
   import MyFab from "$lib/UI/domainComponents/FABs/AddRecipeFab.svelte";
   import Loading from "$lib/UI/domainComponents/lists/Loading.svelte";
-  import type { RecipesSortOrderEnum } from "$lib/UI/domainComponents/lists/SortRecipesSelect/RecipesSortOrderEnum";
   import SortRecipesSelect from "$lib/UI/domainComponents/lists/SortRecipesSelect/SortRecipesSelect.svelte";
   import AddDemoCoffeeBeans_PageBlock from "$lib/UI/domainComponents/pageBlocks/AddDemoCoffeeBeans_PageBlock.svelte";
   import PageHeadline from "$lib/UI/layout/PageHeadline.svelte";

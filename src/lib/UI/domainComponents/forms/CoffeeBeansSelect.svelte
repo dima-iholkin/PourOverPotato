@@ -4,7 +4,7 @@
 
 <script lang="ts">
   import type { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
-  import { sortCoffeeBeansByName } from "$lib/domain/helpers/sortCoffeeBeans";
+  import { sortCoffeeBeansByName } from "$lib/domain/sort/sortCoffeeBeans";
   import NewCoffeeBeansModal from "$lib/UI/domainComponents/modals/NewCoffeeBeansModal.svelte";
   import Label from "$lib/UI/genericComponents/forms/Label.svelte";
 
