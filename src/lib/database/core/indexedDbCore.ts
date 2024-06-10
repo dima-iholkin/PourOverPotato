@@ -1,12 +1,12 @@
 import { openDB, type IDBPDatabase, type IDBPTransaction } from "idb";
-import type { ICoffeeBeansDB_v1 } from "$lib/database/manageData/prevVersions/v1/database/CoffeeBeansDBv1";
-import { type IRecipeDB_v1 } from "$lib/database/manageData/prevVersions/v1/database/RecipeDBv1";
-import type { ICoffeeBeansDB_v2 } from "$lib/database/manageData/prevVersions/v2/database/CoffeeBeansDBv2";
-import { type IRecipeDB_v2 } from "$lib/database/manageData/prevVersions/v2/database/RecipeDBv2";
 import { regenerateEnhancedCoffeeBeansTable } from "$lib/database/manageEnhancedCoffeeBeans";
 import type { ICoffeeBeansDB } from "$lib/database/types/CoffeeBeansDB";
 import type { EntitiesDB } from "$lib/database/types/EntitiesDB";
 import { type IRecipeDB } from "$lib/database/types/RecipeDB";
+import type { ICoffeeBeansDB_v1 } from "$lib/prevVersions/v1/database/CoffeeBeansDBv1";
+import { type IRecipeDB_v1 } from "$lib/prevVersions/v1/database/RecipeDBv1";
+import type { ICoffeeBeansDB_v2 } from "$lib/prevVersions/v2/database/CoffeeBeansDBv2";
+import { type IRecipeDB_v2 } from "$lib/prevVersions/v2/database/RecipeDBv2";
 
 // Internal constants:
 const DB_NAME = "entities";
