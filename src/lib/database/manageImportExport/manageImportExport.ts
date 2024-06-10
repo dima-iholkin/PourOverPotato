@@ -1,7 +1,5 @@
 import type { IDBPDatabase } from "idb";
-import {
-  openEntitiesDB, COFFEEBEANS_STORE_NAME, RECIPES_STORE_NAME, ENHANCEDCOFFEEBEANS_STORE_NAME
-} from "$lib/database/core/core";
+import { openEntitiesDB, COFFEEBEANS_STORE, RECIPES_STORE, ENHANCEDCOFFEEBEANS_STORE } from "$lib/database/core/core";
 import { regenerateEnhancedCoffeeBeansTable } from "$lib/database/manageEnhancedCoffeeBeans";
 import { type ICoffeeBeansDB, CoffeeBeansDB, CoffeeBeansDBSubmit } from "$lib/database/types/CoffeeBeansDB";
 import type { EntitiesDB } from "$lib/database/types/EntitiesDB";
@@ -21,10 +19,10 @@ import type { ImportJSON } from "./types/ImportJSON";
 export async function exportAllData(): Promise<Blob> {
   // Open a transaction:
   const db: IDBPDatabase<EntitiesDB> = await openEntitiesDB();
-  const tx = db.transaction([COFFEEBEANS_STORE_NAME, RECIPES_STORE_NAME], "readonly");
+  const tx = db.transaction([COFFEEBEANS_STORE, RECIPES_STORE], "readonly");
   // Load the CoffeeBeans items and Recipes:
-  const coffeeBeansDbItems: ICoffeeBeansDB[] = await tx.objectStore(COFFEEBEANS_STORE_NAME).getAll();
-  const recipeDbItems: IRecipeDB[] = await tx.objectStore(RECIPES_STORE_NAME).getAll();
+  const coffeeBeansDbItems: ICoffeeBeansDB[] = await tx.objectStore(COFFEEBEANS_STORE).getAll();
+  const recipeDbItems: IRecipeDB[] = await tx.objectStore(RECIPES_STORE).getAll();
   const _dbVersion: number = tx.db.version;
   await tx.done;
   // Filter out the soft-deleted CoffeeBeans and Recipes, and convert into core entities:
@@ -53,7 +51,7 @@ export async function importDataFromJson(jsonFile: File): Promise<Count | "Impor
   const imported: ImportJSON = JSON.parse(await jsonFile.text());
   // Open a transaction:
   const db = await openEntitiesDB();
-  const tx = db.transaction([COFFEEBEANS_STORE_NAME, RECIPES_STORE_NAME, ENHANCEDCOFFEEBEANS_STORE_NAME], "readwrite");
+  const tx = db.transaction([COFFEEBEANS_STORE, RECIPES_STORE, ENHANCEDCOFFEEBEANS_STORE], "readwrite");
   // Parse the DbVersion field:
   const parsedDbVersion: number | "ImportFailed" = parseDbVersion(imported.dbVersion, tx.db.version);
   // Guard clause:
@@ -70,7 +68,7 @@ export async function importDataFromJson(jsonFile: File): Promise<Count | "Impor
     return "ImportFailed";
   }
   // Load the CoffeeBeans items from DB:
-  const dbCoffeeBeans: CoffeeBeans[] = await tx.objectStore(COFFEEBEANS_STORE_NAME).getAll();
+  const dbCoffeeBeans: CoffeeBeans[] = await tx.objectStore(COFFEEBEANS_STORE).getAll();
   // Find the unique CoffeeBeans items to add to the DB:
   const uniqueCoffeeBeans: CoffeeBeans[] = matchUniqueCoffeeBeansToAdd(
     parsedCoffeeBeansArray, dbCoffeeBeans, matchCoffeeBeansIds
@@ -81,7 +79,7 @@ export async function importDataFromJson(jsonFile: File): Promise<Count | "Impor
     // Prepare the new CoffeeBeans item:
     const itemSubmit: CoffeeBeansDBSubmit = new CoffeeBeansDBSubmit(parsedItem);
     // Save the new CoffeeBeans item:
-    const savedItemId: number = await tx.objectStore(COFFEEBEANS_STORE_NAME).add(itemSubmit as ICoffeeBeansDB);
+    const savedItemId: number = await tx.objectStore(COFFEEBEANS_STORE).add(itemSubmit as ICoffeeBeansDB);
     // Make sure to keep track of the created CoffeeBeans' Id to map the Recipe's CoffeeBeansId later.
     matchCoffeeBeansIds.set(parsedItem.id, savedItemId);
     // Count the added CoffeeBeans item:
@@ -89,7 +87,7 @@ export async function importDataFromJson(jsonFile: File): Promise<Count | "Impor
   }
   // Parse the Recipes array:
   // Load the DB's Recipes:
-  const dbRecipes: IRecipeDB[] = await tx.objectStore(RECIPES_STORE_NAME).getAll();
+  const dbRecipes: IRecipeDB[] = await tx.objectStore(RECIPES_STORE).getAll();
   // Parse the imported Recipes array:
   const parsedRecipesArray: Recipe[] | "ImportFailed" = parseRecipesArray(imported.recipes, matchCoffeeBeansIds);
   // Guard clause:
@@ -102,7 +100,7 @@ export async function importDataFromJson(jsonFile: File): Promise<Count | "Impor
   // Save the unique Recipes:
   let addedRecipesCount: number = 0;
   for (const item of uniqueRecipes) {
-    await tx.objectStore(RECIPES_STORE_NAME).add(new RecipeDBSubmit(item) as unknown as IRecipeDB);
+    await tx.objectStore(RECIPES_STORE).add(new RecipeDBSubmit(item) as unknown as IRecipeDB);
     addedRecipesCount++;
   }
   // Regenerate the EnhancedCoffeeBeans table:

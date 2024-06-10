@@ -1,6 +1,4 @@
-import {
-  COFFEEBEANS_STORE_NAME, ENHANCEDCOFFEEBEANS_STORE_NAME, RECIPES_STORE_NAME, openEntitiesDB
-} from "$lib/database/core/core";
+import { COFFEEBEANS_STORE, ENHANCEDCOFFEEBEANS_STORE, RECIPES_STORE, openEntitiesDB } from "$lib/database/core/core";
 import { regenerateEnhancedCoffeeBeansTable } from "$lib/database/manageEnhancedCoffeeBeans";
 import { CoffeeBeansDBSubmit, type ICoffeeBeansDB } from "$lib/database/types/CoffeeBeansDB";
 import { RecipeDBSubmit, type IRecipeDB } from "$lib/database/types/RecipeDB";
@@ -14,18 +12,18 @@ import { vacuumSoftDeletedCoffeeBeans, vacuumSoftDeletedRecipes } from "./vacuum
 export async function deleteAllData(): Promise<void> {
   // Open a transaction:
   const db = await openEntitiesDB();
-  const tx = db.transaction([COFFEEBEANS_STORE_NAME, RECIPES_STORE_NAME, ENHANCEDCOFFEEBEANS_STORE_NAME], "readwrite");
+  const tx = db.transaction([COFFEEBEANS_STORE, RECIPES_STORE, ENHANCEDCOFFEEBEANS_STORE], "readwrite");
   // Delete all entities:
-  await tx.objectStore(ENHANCEDCOFFEEBEANS_STORE_NAME).clear();
-  await tx.objectStore(RECIPES_STORE_NAME).clear();
-  await tx.objectStore(COFFEEBEANS_STORE_NAME).clear();
+  await tx.objectStore(ENHANCEDCOFFEEBEANS_STORE).clear();
+  await tx.objectStore(RECIPES_STORE).clear();
+  await tx.objectStore(COFFEEBEANS_STORE).clear();
   await tx.done;
 }
 
 export async function fillDbWithDemoData(): Promise<void | "TransactionAborted"> {
   // Open a transaction:
   const db = await openEntitiesDB();
-  const tx = db.transaction([COFFEEBEANS_STORE_NAME, RECIPES_STORE_NAME, ENHANCEDCOFFEEBEANS_STORE_NAME], "readwrite");
+  const tx = db.transaction([COFFEEBEANS_STORE, RECIPES_STORE, ENHANCEDCOFFEEBEANS_STORE], "readwrite");
   // Iterate over demo CoffeeBeans items:
   for (const item of DemoCoffeeBeans) {
     // Prepare the CoffeeBeans item entity:
@@ -33,7 +31,7 @@ export async function fillDbWithDemoData(): Promise<void | "TransactionAborted">
     // Save the CoffeeBeans entity:
     let coffeeBeansId: number;
     try {
-      coffeeBeansId = await tx.objectStore(COFFEEBEANS_STORE_NAME).add(coffeeBeansItemDb as ICoffeeBeansDB);
+      coffeeBeansId = await tx.objectStore(COFFEEBEANS_STORE).add(coffeeBeansItemDb as ICoffeeBeansDB);
     }
     catch (error) {
       // Protect against an unlikely CoffeeBeans name collision:
@@ -48,7 +46,7 @@ export async function fillDbWithDemoData(): Promise<void | "TransactionAborted">
       // Prepare the Recipe entity:
       const recipeItemDb = new RecipeDBSubmit(recipe);
       // Save the Recipe entity:
-      await tx.objectStore(RECIPES_STORE_NAME).add(recipeItemDb as unknown as IRecipeDB);
+      await tx.objectStore(RECIPES_STORE).add(recipeItemDb as unknown as IRecipeDB);
     }
   }
   await regenerateEnhancedCoffeeBeansTable(tx);

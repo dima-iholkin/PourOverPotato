@@ -4,7 +4,7 @@ import type { Recipe } from "$lib/domain/entities/Recipe";
 import { sortRecipesByTimestampDesc } from "$lib/domain/sort/sortRecipes";
 import type { EnhancedCoffeeBeans } from "$lib/domain/enhancedEntities/EnhancedCoffeeBeans";
 import {
-  COFFEEBEANS_STORE_NAME, ENHANCEDCOFFEEBEANS_STORE_NAME, RECIPES_INDEX_COFFEEBEANSID_NAME, RECIPES_STORE_NAME,
+  COFFEEBEANS_STORE, ENHANCEDCOFFEEBEANS_STORE, RECIPES_COFFEEBEANSID_INDEX, RECIPES_STORE,
   openEntitiesDB
 } from "./core/core";
 import { CoffeeBeansDB, type ICoffeeBeansDB } from "./types/CoffeeBeansDB";
@@ -15,16 +15,16 @@ import { RecipeDB, type IRecipeDB } from "./types/RecipeDB";
 export async function getAllEnhancedCoffeeBeans(): Promise<EnhancedCoffeeBeans[]> {
   // Open a transaction:
   const db = await openEntitiesDB();
-  const tx = db.transaction([COFFEEBEANS_STORE_NAME, ENHANCEDCOFFEEBEANS_STORE_NAME], "readonly");
+  const tx = db.transaction([COFFEEBEANS_STORE, ENHANCEDCOFFEEBEANS_STORE], "readonly");
   // Load the CoffeeBeans items:
-  const coffeeBeansItemsDb: ICoffeeBeansDB[] = await tx.objectStore(COFFEEBEANS_STORE_NAME).getAll();
+  const coffeeBeansItemsDb: ICoffeeBeansDB[] = await tx.objectStore(COFFEEBEANS_STORE).getAll();
   // Prepare the core CoffeeBeans items:
   const coffeeBeansItems: CoffeeBeans[] = coffeeBeansItemsDb.filter(item => item.softDeletionTimestamp === undefined)
     .map(item => new CoffeeBeansDB(item).toCoffeeBeans());
   // Match the CoffeeBeans items with EnhancedCoffeeBeans info:
   const items: EnhancedCoffeeBeans[] = [];
   for (const coffeeBeansItem of coffeeBeansItems) {
-    const itemDb: IEnhancedCoffeeBeansDB | undefined = await tx.objectStore(ENHANCEDCOFFEEBEANS_STORE_NAME)
+    const itemDb: IEnhancedCoffeeBeansDB | undefined = await tx.objectStore(ENHANCEDCOFFEEBEANS_STORE)
       .get(coffeeBeansItem.id);
     const info: Omit<IEnhancedCoffeeBeansDB, "id"> = {
       recipesCount: itemDb?.recipesCount ?? 0,
@@ -44,9 +44,9 @@ export async function getEnhancedCoffeeBeansById(
 ): Promise<EnhancedCoffeeBeans | "EntityNotFound"> {
   // Open a transaction:
   const db = await openEntitiesDB();
-  const tx = db.transaction([COFFEEBEANS_STORE_NAME, ENHANCEDCOFFEEBEANS_STORE_NAME], "readonly");
+  const tx = db.transaction([COFFEEBEANS_STORE, ENHANCEDCOFFEEBEANS_STORE], "readonly");
   // Load the CoffeeBeans item:
-  const coffeeBeansItemDb: ICoffeeBeansDB | undefined = await tx.objectStore(COFFEEBEANS_STORE_NAME).get(coffeeBeansId);
+  const coffeeBeansItemDb: ICoffeeBeansDB | undefined = await tx.objectStore(COFFEEBEANS_STORE).get(coffeeBeansId);
   // Guard clause:
   if (coffeeBeansItemDb === undefined || coffeeBeansItemDb.softDeletionTimestamp !== undefined) {
     return "EntityNotFound";
@@ -54,8 +54,8 @@ export async function getEnhancedCoffeeBeansById(
   // Prepare the core CoffeeBeans item:
   const coffeeBeansItem: CoffeeBeans = new CoffeeBeansDB(coffeeBeansItemDb).toCoffeeBeans();
   // Load the EnhancedCoffeeBeans item:
-  const itemDb: IEnhancedCoffeeBeansDB | undefined = await tx.objectStore(ENHANCEDCOFFEEBEANS_STORE_NAME)
-      .get(coffeeBeansId);
+  const itemDb: IEnhancedCoffeeBeansDB | undefined = await tx.objectStore(ENHANCEDCOFFEEBEANS_STORE)
+    .get(coffeeBeansId);
   await tx.done;
   // Prepare and return the EnhancedCoffeeBeans item:
   const info: Omit<IEnhancedCoffeeBeansDB, "id"> = {
@@ -72,11 +72,11 @@ export async function regenerateEnhancedCoffeeBeansItemById(
   tx: IDBPTransaction<EntitiesDB, ("coffeeBeans" | "enhancedCoffeeBeans" | "recipes")[], "readwrite" | "versionchange">
 ) {
   // Load the EnhancedCoffeeBeans item:
-  let item: IEnhancedCoffeeBeansDB | undefined = await tx.objectStore(ENHANCEDCOFFEEBEANS_STORE_NAME)
+  let item: IEnhancedCoffeeBeansDB | undefined = await tx.objectStore(ENHANCEDCOFFEEBEANS_STORE)
     .get(coffeeBeansId);
   // Load all Recipes by CoffeeBeansId:
-  const recipesDB: IRecipeDB[] = await tx.objectStore(RECIPES_STORE_NAME)
-    .index(RECIPES_INDEX_COFFEEBEANSID_NAME).getAll(coffeeBeansId);
+  const recipesDB: IRecipeDB[] = await tx.objectStore(RECIPES_STORE)
+    .index(RECIPES_COFFEEBEANSID_INDEX).getAll(coffeeBeansId);
   // Prepare and sort the Recipes by latest timestamp:
   const validRecipes: Recipe[] = recipesDB.filter(r => r.softDeletionTimestamp === undefined)
     .map(r => new RecipeDB(r).toRecipe())
@@ -88,20 +88,20 @@ export async function regenerateEnhancedCoffeeBeansItemById(
     latestRecipeTimestamp: validRecipes[0]?.timestamp.getTime(),
     earliestRecipeTimestamp: validRecipes.at(-1)?.timestamp.getTime()
   };
-  await tx.objectStore(ENHANCEDCOFFEEBEANS_STORE_NAME).put(item);
+  await tx.objectStore(ENHANCEDCOFFEEBEANS_STORE).put(item);
 }
 
 export async function regenerateEnhancedCoffeeBeansTable(
   tx: IDBPTransaction<EntitiesDB, ("coffeeBeans" | "enhancedCoffeeBeans" | "recipes")[], "readwrite" | "versionchange">
 ) {
   // Guard clause:
-  if (tx.db.objectStoreNames.contains(ENHANCEDCOFFEEBEANS_STORE_NAME) === false) {
-    throw new Error(`Object store ${ENHANCEDCOFFEEBEANS_STORE_NAME} wasn't found.`);
+  if (tx.db.objectStoreNames.contains(ENHANCEDCOFFEEBEANS_STORE) === false) {
+    throw new Error(`Object store ${ENHANCEDCOFFEEBEANS_STORE} wasn't found.`);
   }
   // Empty the existing EnhancedCoffeeBeans table:
-  await tx.objectStore(ENHANCEDCOFFEEBEANS_STORE_NAME).clear();
+  await tx.objectStore(ENHANCEDCOFFEEBEANS_STORE).clear();
   // Populate the EnhancedCoffeeBeans table by aggregating the Recipes data by CoffeeBeansId:
-  const coffeeBeansItems: ICoffeeBeansDB[] = await tx.objectStore(COFFEEBEANS_STORE_NAME).getAll();
+  const coffeeBeansItems: ICoffeeBeansDB[] = await tx.objectStore(COFFEEBEANS_STORE).getAll();
   for (const item of coffeeBeansItems) {
     await regenerateEnhancedCoffeeBeansItemById(item.id, tx);
   }
