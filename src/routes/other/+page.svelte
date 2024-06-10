@@ -51,10 +51,10 @@
 <DeleteAllDataBlock />
 
 <h5>Credits</h5>
-<p>The coffee beans icon</p>
-<a href="https://www.flaticon.com/free-icons/coffee-beans" title="coffee beans icons">
-  created by Freepik - Flaticon
-</a>
+<p>
+  The coffee beans icon created by
+  <a href="https://www.flaticon.com/free-icons/coffee-beans" title="coffee beans icons"> Freepik - Flaticon </a>
+</p>
 
 <h5>Developer tools</h5>
 <DevBlock />
