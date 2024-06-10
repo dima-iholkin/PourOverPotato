@@ -26,7 +26,6 @@ the FAB will not obscure the page content.
   button {
     @apply fixed bg-blue-600 rounded-full drop-shadow-lg flex justify-center items-center text-white;
     @apply hover:bg-blue-700 hover:drop-shadow-2xl;
-
     transform: translateX(-50%);
   }
 

@@ -98,7 +98,6 @@
 
   .select-container {
     flex-grow: 1;
-
     display: flex;
     flex-direction: row;
   }
@@ -118,7 +117,6 @@
   .invalid {
     @apply bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-base rounded-lg focus:ring-red-500;
     @apply focus:border-red-500 block w-full p-2.5 dark:bg-red-100 dark:border-red-400;
-
     background-color: #fef2f2;
   }
 
