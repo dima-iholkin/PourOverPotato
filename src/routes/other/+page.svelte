@@ -1,10 +1,10 @@
 <script lang="ts">
   import { version } from "$app/environment";
-  import DeleteAllDataBlock from "./components/DeleteAllDataBlock.svelte";
-  import DevBlock from "./components/DevBlock.svelte";
-  import ExportDataBlock from "./components/ExportDataBlock.svelte";
-  import ImportDataBlock from "./components/ImportDataBlock.svelte";
-  import PersistentStorageBlock from "./components/PersistentStorageBlock.svelte";
+  import DeleteAllDataBlock from "$lib/UI/pageComponents/other/DeleteAllDataBlock.svelte";
+  import DevBlock from "$lib/UI/pageComponents/other/DevBlock.svelte";
+  import ExportDataBlock from "$lib/UI/pageComponents/other/ExportDataBlock.svelte";
+  import ImportDataBlock from "$lib/UI/pageComponents/other/ImportDataBlock.svelte";
+  import PersistentStorageBlock from "$lib/UI/pageComponents/other/PersistentStorageBlock.svelte";
 </script>
 
 <svelte:head>

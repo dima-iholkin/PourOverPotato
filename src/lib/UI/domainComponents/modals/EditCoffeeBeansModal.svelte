@@ -200,7 +200,6 @@
   .input-name-validation-failed {
     @apply border border-red-500 text-red-900 placeholder-red-700 text-base rounded-lg focus:ring-red-500;
     @apply focus:border-red-500 block w-full p-2.5 dark:bg-red-100 dark:border-red-400;
-
     background-color: #fef2f2;
   }
 
@@ -213,7 +212,6 @@
     @apply text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium;
     @apply rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700;
     @apply dark:focus:ring-blue-800;
-
     width: 100%;
     margin-left: 0;
     margin-right: 0;

@@ -19,6 +19,7 @@
   import Loading from "$lib/UI/domainComponents/lists/Loading.svelte";
   import NoItemsYetP from "$lib/UI/domainComponents/lists/NoItemsYetP.svelte";
   import SortRecipesSelect from "$lib/UI/domainComponents/lists/SortRecipesSelect.svelte";
+  import EditCoffeeBeansModal from "$lib/UI/domainComponents/modals/EditCoffeeBeansModal.svelte";
   import DropdownMenu from "$lib/UI/genericComponents/dropdownMenu/DropdownMenu.svelte";
   import DropdownMenuItem from "$lib/UI/genericComponents/dropdownMenu/DropdownMenuItem.svelte";
   import FlexRow from "$lib/UI/genericComponents/FlexRow.svelte";
@@ -26,7 +27,6 @@
   import { addToast, addToastWithUndo } from "$lib/UI/genericComponents/toasts/toastProvider";
   import PageHeadline from "$lib/UI/layout/PageHeadline.svelte";
   import type { PageData } from "./$types";
-  import EditCoffeeBeansModal from "./EditCoffeeBeansModal.svelte";
 
   // Load function:
   export let data: PageData;
@@ -185,7 +185,6 @@
   .coffee-beans-description {
     margin-top: 0.25rem;
     margin-bottom: 1rem;
-
     white-space: pre-line;
   }
 

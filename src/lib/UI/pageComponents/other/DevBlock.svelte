@@ -19,7 +19,6 @@
     flex-direction: column;
     gap: 1rem;
     align-items: flex-start;
-
     margin-top: 1rem;
     margin-bottom: 2rem;
   }
