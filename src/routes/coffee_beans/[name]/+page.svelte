@@ -18,7 +18,7 @@
   import MyFab from "$lib/UI/domainComponents/FABs/AddRecipeFab.svelte";
   import Loading from "$lib/UI/domainComponents/lists/Loading.svelte";
   import NoItemsYetP from "$lib/UI/domainComponents/lists/NoItemsYetP.svelte";
-  import SortRecipesSelect from "$lib/UI/domainComponents/lists/SortRecipesSelect/SortRecipesSelect.svelte";
+  import SortRecipesSelect from "$lib/UI/domainComponents/lists/SortRecipesSelect.svelte";
   import DropdownMenu from "$lib/UI/genericComponents/dropdownMenu/DropdownMenu.svelte";
   import DropdownMenuItem from "$lib/UI/genericComponents/dropdownMenu/DropdownMenuItem.svelte";
   import FlexRow from "$lib/UI/genericComponents/FlexRow.svelte";

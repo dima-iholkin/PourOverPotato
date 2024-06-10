@@ -9,7 +9,7 @@
   import AddRecipeFab from "$lib/UI/domainComponents/FABs/AddRecipeFab.svelte";
   import Loading from "$lib/UI/domainComponents/lists/Loading.svelte";
   // eslint-disable-next-line max-len
-  import SortCoffeeBeansSelect from "$lib/UI/domainComponents/lists/SortCoffeeBeansSelect/SortCoffeeBeansSelect.svelte";
+  import SortCoffeeBeansSelect from "$lib/UI/domainComponents/lists/SortCoffeeBeansSelect.svelte";
   import AddDemoCoffeeBeans_PageBlock from "$lib/UI/domainComponents/pageBlocks/AddDemoCoffeeBeans_PageBlock.svelte";
   import PageHeadline from "$lib/UI/layout/PageHeadline.svelte";
 
