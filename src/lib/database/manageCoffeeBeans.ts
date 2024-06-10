@@ -5,7 +5,7 @@ import type { Count } from "$lib/types/Count";
 import {
   COFFEEBEANS_INDEX_NAME, COFFEEBEANS_STORE_NAME, ENHANCEDCOFFEEBEANS_STORE_NAME, RECIPES_INDEX_COFFEEBEANSID_NAME,
   RECIPES_STORE_NAME, openEntitiesDB
-} from "./core/indexedDbCore";
+} from "./core";
 import { CoffeeBeansDB, CoffeeBeansDBSubmit, type ICoffeeBeansDB } from "./types/CoffeeBeansDB";
 import type { IEnhancedCoffeeBeansDB } from "./types/EnhancedCoffeeBeansDB";
 import type { IRecipeDB } from "./types/RecipeDB";

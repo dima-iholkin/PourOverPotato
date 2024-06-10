@@ -6,7 +6,7 @@ import type { EnhancedCoffeeBeans } from "$lib/types/EnhancedCoffeeBeans";
 import {
   COFFEEBEANS_STORE_NAME, ENHANCEDCOFFEEBEANS_STORE_NAME, RECIPES_INDEX_COFFEEBEANSID_NAME, RECIPES_STORE_NAME,
   openEntitiesDB
-} from "./core/indexedDbCore";
+} from "./core";
 import { CoffeeBeansDB, type ICoffeeBeansDB } from "./types/CoffeeBeansDB";
 import { toEnhancedCoffeeBeans, type IEnhancedCoffeeBeansDB } from "./types/EnhancedCoffeeBeansDB";
 import type { EntitiesDB } from "./types/EntitiesDB";
