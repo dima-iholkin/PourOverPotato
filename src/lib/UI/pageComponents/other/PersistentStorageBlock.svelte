@@ -36,7 +36,7 @@
         {storageIsPersistent ? "enabled" : "not enabled"}
       </p>
       {#if storageIsPersistent === false}
-        <button type="button" on:click={handlePersistButtonClick}> Enable persistent storage </button>
+        <button type="button" on:click={handlePersistButtonClick}> Enable </button>
       {/if}
     {/if}
   </div>
