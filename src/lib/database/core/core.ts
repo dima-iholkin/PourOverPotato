@@ -7,11 +7,13 @@ import {
   migrateCoffeeBeansV1ToV3, migrateCoffeeBeansV2ToV3, migrateRecipesV1ToV3, migrateRecipesV2ToV3
 } from "./migrations/migrations";
 
-// Internal constants:
-const DB_NAME = "entities";
+// Internal constant:
 const DB_VERSION = 3;
 
 // Public constants:
+
+// DB name:
+export const DB_NAME = "entities";
 
 // Store names:
 export const COFFEEBEANS_STORE = "coffeeBeans";

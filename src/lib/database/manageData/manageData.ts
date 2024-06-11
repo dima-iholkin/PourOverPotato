@@ -1,4 +1,7 @@
-import { COFFEEBEANS_STORE, ENHANCEDCOFFEEBEANS_STORE, RECIPES_STORE, openEntitiesDB } from "$lib/database/core/core";
+import { deleteDB as idb_deleteDB } from "idb";
+import {
+  COFFEEBEANS_STORE, DB_NAME, ENHANCEDCOFFEEBEANS_STORE, RECIPES_STORE, openEntitiesDB
+} from "$lib/database/core/core";
 import { regenerateEnhancedCoffeeBeansTable } from "$lib/database/manageEnhancedCoffeeBeans";
 import { CoffeeBeansDBSubmit, type ICoffeeBeansDB } from "$lib/database/types/CoffeeBeansDB";
 import { RecipeDBSubmit, type IRecipeDB } from "$lib/database/types/RecipeDB";
@@ -9,15 +12,9 @@ import { vacuumSoftDeletedCoffeeBeans, vacuumSoftDeletedRecipes } from "./vacuum
 
 // Public functions:
 
-export async function deleteAllData(): Promise<void> {
-  // Open a transaction:
-  const db = await openEntitiesDB();
-  const tx = db.transaction([COFFEEBEANS_STORE, RECIPES_STORE, ENHANCEDCOFFEEBEANS_STORE], "readwrite");
-  // Delete all entities:
-  await tx.objectStore(ENHANCEDCOFFEEBEANS_STORE).clear();
-  await tx.objectStore(RECIPES_STORE).clear();
-  await tx.objectStore(COFFEEBEANS_STORE).clear();
-  await tx.done;
+export async function deleteDB(): Promise<void> {
+  // Delete the DB:
+  await idb_deleteDB(DB_NAME);
 }
 
 export async function fillDbWithDemoData(): Promise<void | "TransactionAborted"> {
