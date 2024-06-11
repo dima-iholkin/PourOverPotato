@@ -9,7 +9,7 @@ export function convertToTimeAgo(date: Date): string {
     if (yesterday.toDateString() === date.toDateString()) {
       return "yesterday";
     }
-    return date.toLocaleString(undefined, { dateStyle: "short" });
+    return date.toLocaleString(undefined, { dateStyle: "long" });
   }
   const hoursAgo = Math.floor(seconds / 3600);
   if (hoursAgo > 1) {

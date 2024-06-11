@@ -15,7 +15,7 @@
 <Card {href}>
   <div class="card-content">
     <div class="header">
-      <p>🕒 {convertToTimeAgo(recipe.timestamp)}</p>
+      <p class="time-ago-info">🕒 {convertToTimeAgo(recipe.timestamp)}</p>
       <div class="right-header-horizontal">
         {#if recipe.rating > 0}
           <p>{recipe.rating}⭐</p>
@@ -45,6 +45,12 @@
 </Card>
 
 <style lang="postcss">
+  .card-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
   .header {
     display: flex;
     flex-direction: row;
@@ -53,31 +59,30 @@
     gap: 1rem;
   }
 
-  h5 {
-    @apply text-2xl font-bold tracking-tight text-gray-900 dark:text-white;
+  .time-ago-info {
+    /* Truncate the time ago text, if it's too long and doesn't fit on the single row with other info: */
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
   }
 
   .right-header-horizontal {
     display: flex;
     flex-direction: row;
     gap: 1rem;
-
     white-space: nowrap;
   }
 
-  .card-content {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .content {
-    @apply inline font-normal dark:text-gray-400;
-
-    white-space: pre-line;
+  h5 {
+    @apply text-2xl font-bold tracking-tight text-gray-900 dark:text-white;
   }
 
   .label {
     @apply inline text-base font-normal text-gray-400;
+  }
+
+  .content {
+    @apply inline font-normal dark:text-gray-400;
+    white-space: pre-line;
   }
 </style>

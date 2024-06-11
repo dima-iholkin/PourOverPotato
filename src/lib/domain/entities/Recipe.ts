@@ -4,7 +4,7 @@ export interface IRecipe {
   recipeTarget: string;
   recipeResult: string;
   recipeThoughts: string;
-  favorite: boolean | undefined;
+  favorite: boolean;
   rating: number;
   outWeight: number;
   timestamp: Date;
@@ -16,7 +16,7 @@ export class Recipe implements IRecipe {
   recipeTarget: string;
   recipeResult: string;
   recipeThoughts: string;
-  favorite: boolean | undefined;
+  favorite: boolean;
   rating: number;
   outWeight: number;
   timestamp: Date;
@@ -39,7 +39,7 @@ export class RecipeSubmit implements Omit<IRecipe, "id"> {
   recipeTarget: string;
   recipeResult: string;
   recipeThoughts: string;
-  favorite: boolean | undefined;
+  favorite: boolean;
   rating: number;
   outWeight: number;
   timestamp: Date;

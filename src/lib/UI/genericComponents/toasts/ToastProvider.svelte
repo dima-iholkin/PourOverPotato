@@ -2,7 +2,7 @@
   import { onMount } from "svelte";
   import { flip } from "svelte/animate";
   import { fly } from "svelte/transition";
-  import Toast from "$lib/UI/genericComponents/toasts/Toast.svelte";
+  import Toast from "./Toast.svelte";
   import UndoToast from "./UndoToast.svelte";
 
   interface ToastData {
@@ -95,7 +95,6 @@
     right: 1rem;
     z-index: 1001;
     transform: translate(0, -50%);
-
     display: flex;
     flex-direction: column;
     gap: 1rem;

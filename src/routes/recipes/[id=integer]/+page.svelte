@@ -56,7 +56,7 @@
   let recipeThoughts: string;
   let outWeight: number;
   let rating: number;
-  let favorite: boolean | undefined;
+  let favorite: boolean = false;
   let timestampStr: string;
 
   // Unsaved changes state:
@@ -289,7 +289,6 @@
 
   .my-button {
     @apply bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded;
-
     width: 100%;
     margin-bottom: 16px;
   }

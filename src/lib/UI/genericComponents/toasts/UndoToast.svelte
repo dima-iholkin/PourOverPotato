@@ -19,7 +19,6 @@
     @apply focus:ring-2 focus:ring-gray-300;
     @apply dark:text-gray-500 dark:bg-gray-800;
     @apply dark:hover:text-white  dark:hover:bg-gray-700;
-
     padding: 0.5rem;
   }
 </style>

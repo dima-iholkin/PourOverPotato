@@ -57,10 +57,8 @@
 
   .dropdown-container {
     @apply bg-white rounded-lg shadow w-44 dark:bg-gray-700;
-
     display: none;
     position: absolute;
-
     margin-top: 0.5rem;
     right: 0;
   }

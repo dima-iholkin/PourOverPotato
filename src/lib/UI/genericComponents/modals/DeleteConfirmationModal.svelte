@@ -1,6 +1,6 @@
 <script lang="ts">
   import { tick } from "svelte";
-  import Modal from "$lib/UI/genericComponents/modals/Modal.svelte";
+  import Modal from "./Modal.svelte";
 
   // Events:
   export let onDeleteClick: () => void;
@@ -77,7 +77,6 @@
 
   .buttons-container {
     margin-top: 1rem;
-
     display: flex;
     flex-direction: row;
     justify-content: center;

@@ -1,5 +1,6 @@
 import type { DBSchema } from "idb";
 import type { ICoffeeBeansDB } from "./CoffeeBeansDB";
+import type { IEnhancedCoffeeBeansDB } from "./EnhancedCoffeeBeansDB";
 import type { IRecipeDB } from "./RecipeDB";
 
 export interface EntitiesDB extends DBSchema {
@@ -8,8 +9,13 @@ export interface EntitiesDB extends DBSchema {
     value: ICoffeeBeansDB;
     indexes: {
       nameLowerCase: string;
+      softDeletionTimestamp: number;
     };
   };
+  enhancedCoffeeBeans: {
+    key: number;
+    value: IEnhancedCoffeeBeansDB;
+  }
   recipes: {
     key: number;
     value: IRecipeDB;
@@ -18,6 +24,7 @@ export interface EntitiesDB extends DBSchema {
       outWeight: number;
       rating: number;
       timestamp: number;
+      softDeletionTimestamp: number;
     };
   };
 }

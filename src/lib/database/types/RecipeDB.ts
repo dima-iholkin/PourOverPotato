@@ -2,7 +2,7 @@ import { Recipe, RecipeSubmit, type IRecipe } from "$lib/domain/entities/Recipe"
 
 export interface IRecipeDB extends Omit<IRecipe, "timestamp"> {
   timestamp: number;
-  softDeleted: boolean | undefined;
+  softDeletionTimestamp: number | undefined;
 }
 
 export class RecipeDB implements IRecipeDB {
@@ -11,11 +11,11 @@ export class RecipeDB implements IRecipeDB {
   recipeTarget: string;
   recipeResult: string;
   recipeThoughts: string;
-  favorite: boolean | undefined;
+  favorite: boolean;
   rating: number;
   outWeight: number;
   timestamp: number;
-  softDeleted: boolean | undefined;
+  softDeletionTimestamp: number | undefined;
 
   constructor(item: IRecipeDB) {
     this.id = item.id;
@@ -27,14 +27,14 @@ export class RecipeDB implements IRecipeDB {
     this.rating = item.rating;
     this.outWeight = item.outWeight;
     this.timestamp = item.timestamp;
-    this.softDeleted = item.softDeleted ?? false;
+    this.softDeletionTimestamp = item.softDeletionTimestamp;
   }
 
   static fromRecipe(item: Recipe): RecipeDB {
     const obj: IRecipeDB = {
       ...item,
       timestamp: item.timestamp.getTime(),
-      softDeleted: false // Because the Recipe entity doesn't even have the concept of "softDeleted".
+      softDeletionTimestamp: undefined // Because the core Recipe entity doesn't even have the concept of "softDeleted".
     };
     return new RecipeDB(obj);
   }
@@ -54,11 +54,11 @@ export class RecipeDBSubmit implements Omit<IRecipeDB, "id"> {
   recipeTarget: string;
   recipeResult: string;
   recipeThoughts: string;
-  favorite: boolean | undefined;
+  favorite: boolean;
   rating: number;
   outWeight: number;
   timestamp: number;
-  softDeleted: boolean | undefined;
+  softDeletionTimestamp: number | undefined;
 
   constructor(recipe: RecipeSubmit) {
     this.coffeeBeansId = recipe.coffeeBeansId;
@@ -69,7 +69,7 @@ export class RecipeDBSubmit implements Omit<IRecipeDB, "id"> {
     this.rating = recipe.rating;
     this.outWeight = recipe.outWeight;
     this.timestamp = recipe.timestamp.getTime();
-    this.softDeleted = false;
+    this.softDeletionTimestamp = undefined;
   }
 
   toRecipeDB(recipeDbSubmit: RecipeDBSubmit, id: number): RecipeDB {

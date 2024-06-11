@@ -11,14 +11,15 @@
   import { routes } from "$lib/domain/constants/routes";
   import { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
   import type { Recipe } from "$lib/domain/entities/Recipe";
-  import { sortRecipesByTimestampDesc } from "$lib/domain/helpers/sortRecipes";
-  import type { Count } from "$lib/types/Count";
+  import { RecipesSortOrderEnum } from "$lib/domain/sort/RecipesSortOrderEnum";
+  import { sortRecipesByTimestampDesc } from "$lib/domain/sort/sortRecipes";
+  import type { Count } from "$lib/helperTypes/Count";
   import RecipeCard from "$lib/UI/domainComponents/cards/RecipeCard.svelte";
   import MyFab from "$lib/UI/domainComponents/FABs/AddRecipeFab.svelte";
   import Loading from "$lib/UI/domainComponents/lists/Loading.svelte";
   import NoItemsYetP from "$lib/UI/domainComponents/lists/NoItemsYetP.svelte";
-  import { RecipesSortOrderEnum } from "$lib/UI/domainComponents/lists/SortRecipesSelect/RecipesSortOrderEnum";
-  import SortRecipesSelect from "$lib/UI/domainComponents/lists/SortRecipesSelect/SortRecipesSelect.svelte";
+  import SortRecipesSelect from "$lib/UI/domainComponents/lists/SortRecipesSelect.svelte";
+  import EditCoffeeBeansModal from "$lib/UI/domainComponents/modals/EditCoffeeBeansModal.svelte";
   import DropdownMenu from "$lib/UI/genericComponents/dropdownMenu/DropdownMenu.svelte";
   import DropdownMenuItem from "$lib/UI/genericComponents/dropdownMenu/DropdownMenuItem.svelte";
   import FlexRow from "$lib/UI/genericComponents/FlexRow.svelte";
@@ -26,7 +27,6 @@
   import { addToast, addToastWithUndo } from "$lib/UI/genericComponents/toasts/toastProvider";
   import PageHeadline from "$lib/UI/layout/PageHeadline.svelte";
   import type { PageData } from "./$types";
-  import EditCoffeeBeansModal from "./EditCoffeeBeansModal.svelte";
 
   // Load function:
   export let data: PageData;
@@ -185,7 +185,6 @@
   .coffee-beans-description {
     margin-top: 0.25rem;
     margin-bottom: 1rem;
-
     white-space: pre-line;
   }
 

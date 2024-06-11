@@ -1,10 +1,10 @@
 <script lang="ts">
   import { version } from "$app/environment";
-  import DeleteAllDataBlock from "./components/DeleteAllDataBlock.svelte";
-  import DevBlock from "./components/DevBlock.svelte";
-  import ExportDataBlock from "./components/ExportDataBlock.svelte";
-  import ImportDataBlock from "./components/ImportDataBlock.svelte";
-  import PersistentStorageBlock from "./components/PersistentStorageBlock.svelte";
+  import DeleteAllDataBlock from "$lib/UI/pageComponents/other/DeleteAllDataBlock.svelte";
+  import DevBlock from "$lib/UI/pageComponents/other/DevBlock.svelte";
+  import ExportDataBlock from "$lib/UI/pageComponents/other/ExportDataBlock.svelte";
+  import ImportDataBlock from "$lib/UI/pageComponents/other/ImportDataBlock.svelte";
+  import PersistentStorageBlock from "$lib/UI/pageComponents/other/PersistentStorageBlock.svelte";
 </script>
 
 <svelte:head>
@@ -51,16 +51,21 @@
 <DeleteAllDataBlock />
 
 <h5>Credits</h5>
-<p>The coffee beans icon</p>
-<a href="https://www.flaticon.com/free-icons/coffee-beans" title="coffee beans icons">
-  created by Freepik - Flaticon
-</a>
+<p>
+  The coffee beans icon created by
+  <a href="https://www.flaticon.com/free-icons/coffee-beans" title="coffee beans icons"> Freepik - Flaticon </a>
+</p>
 
 <h5>Developer tools</h5>
 <DevBlock />
 
 <h5>About the app</h5>
-<p>Version: {version}</p>
+<div class="about-section">
+  <p>Version: {version}</p>
+  <p>
+    <a href="https://github.com/dima-iholkin/PourOverPotato/blob/main/CHANGELOG.md" target="_blank">CHANGELOG</a>
+  </p>
+</div>
 
 <style lang="postcss">
   .page-headline {
@@ -69,7 +74,6 @@
 
   h5 {
     @apply text-2xl font-bold tracking-tight text-gray-900 dark:text-white;
-
     margin-top: 2rem;
     margin-bottom: 0.5rem;
   }
@@ -85,6 +89,7 @@
   }
 
   a {
-    color: cornflowerblue;
+    text-decoration: revert;
+    color: revert;
   }
 </style>

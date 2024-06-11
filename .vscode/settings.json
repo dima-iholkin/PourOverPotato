@@ -3,5 +3,11 @@
     "javascript",
     "javascriptreact",
     "svelte"
-  ]
+  ],
+  "files.exclude": {
+    "node_modules": true,
+    "build": true,
+    "package-lock.json": true,
+    "vite.config.ts.timestamp*": true,
+  }
 }
