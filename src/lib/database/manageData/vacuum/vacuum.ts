@@ -1,5 +1,6 @@
 import {
-  COFFEEBEANS_STORE, ENHANCEDCOFFEEBEANS_STORE, RECIPES_COFFEEBEANSID_INDEX, RECIPES_STORE, openEntitiesDB
+  COFFEEBEANS_STORE, ENHANCEDCOFFEEBEANS_STORE, RECIPES_COFFEEBEANSID_INDEX, RECIPES_STORE, SOFTDELETIONTIMESTAMP_INDEX,
+  openEntitiesDB
 } from "$lib/database/core/core";
 import type { ICoffeeBeansDB } from "$lib/database/types/CoffeeBeansDB";
 import type { IRecipeDB } from "$lib/database/types/RecipeDB";
@@ -10,11 +11,11 @@ export async function vacuumSoftDeletedCoffeeBeans(): Promise<void> {
   const tx = db.transaction([COFFEEBEANS_STORE, RECIPES_STORE, ENHANCEDCOFFEEBEANS_STORE], "readwrite");
   // Load the soft-deleted CoffeeBeans items:
   const softDeletedCoffeeBeans: ICoffeeBeansDB[] = await tx.objectStore(COFFEEBEANS_STORE)
-    .index("softDeletionTimestamp").getAll();
-  // For each soft-deleted CoffeeBeans item:
+    .index(SOFTDELETIONTIMESTAMP_INDEX).getAll();
   for (const item of softDeletedCoffeeBeans) {
-    // Hard-delete it's Recipes:
+    // Load the Recipes:
     const recipes: IRecipeDB[] = await tx.objectStore(RECIPES_STORE).index(RECIPES_COFFEEBEANSID_INDEX).getAll(item.id);
+    // Hard-delete the Recipes:
     for (const recipeItem of recipes) {
       await tx.objectStore(RECIPES_STORE).delete(recipeItem.id);
     }
@@ -31,7 +32,8 @@ export async function vacuumSoftDeletedRecipes(): Promise<void> {
   const db = await openEntitiesDB();
   const tx = db.transaction(RECIPES_STORE, "readwrite");
   // Load the soft-deleted Recipes:
-  const softDeletedRecipes: IRecipeDB[] = await tx.objectStore(RECIPES_STORE).index("softDeletionTimestamp").getAll();
+  const softDeletedRecipes: IRecipeDB[] = await tx.objectStore(RECIPES_STORE).index(SOFTDELETIONTIMESTAMP_INDEX)
+    .getAll();
   // Hard-delete the Recipes:
   for (const item of softDeletedRecipes) {
     await tx.objectStore(RECIPES_STORE).delete(item.id);

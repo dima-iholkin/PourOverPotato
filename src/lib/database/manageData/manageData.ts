@@ -13,7 +13,6 @@ import { vacuumSoftDeletedCoffeeBeans, vacuumSoftDeletedRecipes } from "./vacuum
 // Public functions:
 
 export async function deleteDB(): Promise<void> {
-  // Delete the DB:
   await idb_deleteDB(DB_NAME);
 }
 
@@ -21,31 +20,28 @@ export async function fillDbWithDemoData(): Promise<void | "TransactionAborted">
   // Open a transaction:
   const db = await openEntitiesDB();
   const tx = db.transaction([COFFEEBEANS_STORE, RECIPES_STORE, ENHANCEDCOFFEEBEANS_STORE], "readwrite");
-  // Iterate over demo CoffeeBeans items:
+  // Prepare and save the new demo CoffeeBeans items:
   for (const item of DemoCoffeeBeans) {
-    // Prepare the CoffeeBeans item entity:
     const coffeeBeansItemDb = new CoffeeBeansDBSubmit(item);
-    // Save the CoffeeBeans entity:
     let coffeeBeansId: number;
     try {
       coffeeBeansId = await tx.objectStore(COFFEEBEANS_STORE).add(coffeeBeansItemDb as ICoffeeBeansDB);
     }
     catch (error) {
-      // Protect against an unlikely CoffeeBeans name collision:
+      // Defend against an unlikely CoffeeBeans name collision:
       tx.abort();
       console.error(error);
       return "TransactionAborted";
     }
-    // Generate the Recipes for this CoffeeBeansId:
+    // Generate the demo Recipes for this CoffeeBeansId:
     const recipes: RecipeSubmit[] = generateDemoRecipesForCoffeeBeansId(coffeeBeansId);
-    // Iterate over demo Recipe items:
+    // Prepare and save the new demo Recipes for this CoffeeBeansId:
     for (const recipe of recipes) {
-      // Prepare the Recipe entity:
       const recipeItemDb = new RecipeDBSubmit(recipe);
-      // Save the Recipe entity:
       await tx.objectStore(RECIPES_STORE).add(recipeItemDb as unknown as IRecipeDB);
     }
   }
+  // Generate the EnhancedCoffeeBeans table:
   await regenerateEnhancedCoffeeBeansTable(tx);
   await tx.done;
 }
