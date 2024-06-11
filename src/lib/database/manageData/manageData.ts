@@ -47,6 +47,12 @@ export async function fillDbWithDemoData(): Promise<void | "TransactionAborted">
 }
 
 export async function vacuumSoftDeletedEntities(): Promise<void> {
-  await vacuumSoftDeletedRecipes();
-  await vacuumSoftDeletedCoffeeBeans();
+  // Open a transaction:
+  const db = await openEntitiesDB();
+  const tx = db.transaction([COFFEEBEANS_STORE, RECIPES_STORE, ENHANCEDCOFFEEBEANS_STORE], "readwrite");
+  // Vacuum the soft-deleted Recipes and CoffeeBeans items:
+  await vacuumSoftDeletedRecipes(tx);
+  await vacuumSoftDeletedCoffeeBeans(tx);
+  // Close the transaction:
+  await tx.done;
 }

@@ -1,14 +1,14 @@
+import type { IDBPTransaction } from "idb";
 import {
-  COFFEEBEANS_STORE, ENHANCEDCOFFEEBEANS_STORE, RECIPES_COFFEEBEANSID_INDEX, RECIPES_STORE, SOFTDELETIONTIMESTAMP_INDEX,
-  openEntitiesDB
+  COFFEEBEANS_STORE, ENHANCEDCOFFEEBEANS_STORE, RECIPES_COFFEEBEANSID_INDEX, RECIPES_STORE, SOFTDELETIONTIMESTAMP_INDEX
 } from "$lib/database/core/core";
 import type { ICoffeeBeansDB } from "$lib/database/types/CoffeeBeansDB";
+import type { EntitiesDB } from "$lib/database/types/EntitiesDB";
 import type { IRecipeDB } from "$lib/database/types/RecipeDB";
 
-export async function vacuumSoftDeletedCoffeeBeans(): Promise<void> {
-  // Open a transaction:
-  const db = await openEntitiesDB();
-  const tx = db.transaction([COFFEEBEANS_STORE, RECIPES_STORE, ENHANCEDCOFFEEBEANS_STORE], "readwrite");
+export async function vacuumSoftDeletedCoffeeBeans(
+  tx: IDBPTransaction<EntitiesDB, ("coffeeBeans" | "enhancedCoffeeBeans" | "recipes")[], "readwrite">
+): Promise<void> {
   // Load the soft-deleted CoffeeBeans items:
   const softDeletedCoffeeBeans: ICoffeeBeansDB[] = await tx.objectStore(COFFEEBEANS_STORE)
     .index(SOFTDELETIONTIMESTAMP_INDEX).getAll();
@@ -24,13 +24,11 @@ export async function vacuumSoftDeletedCoffeeBeans(): Promise<void> {
     // Hard-delete the EnhancedCoffeeBeans item:
     await tx.objectStore(ENHANCEDCOFFEEBEANS_STORE).delete(item.id);
   }
-  await tx.done;
 }
 
-export async function vacuumSoftDeletedRecipes(): Promise<void> {
-  // Open a transaction:
-  const db = await openEntitiesDB();
-  const tx = db.transaction(RECIPES_STORE, "readwrite");
+export async function vacuumSoftDeletedRecipes(
+  tx: IDBPTransaction<EntitiesDB, ("coffeeBeans" | "enhancedCoffeeBeans" | "recipes")[], "readwrite">
+): Promise<void> {
   // Load the soft-deleted Recipes:
   const softDeletedRecipes: IRecipeDB[] = await tx.objectStore(RECIPES_STORE).index(SOFTDELETIONTIMESTAMP_INDEX)
     .getAll();
@@ -38,5 +36,4 @@ export async function vacuumSoftDeletedRecipes(): Promise<void> {
   for (const item of softDeletedRecipes) {
     await tx.objectStore(RECIPES_STORE).delete(item.id);
   }
-  await tx.done;
 }

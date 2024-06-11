@@ -25,13 +25,13 @@ export function parseDbVersion(importedDbVersion: unknown | number, txDbVersion:
     alert("\"dbVersion\" property must be an integer. Import aborted.");
     return "ImportFailed";
   }
-  // At this point we've proven the DbVersion is a number:
+  // At this point we've proven the DbVersion is a number.
   const parsedDbVersion = importedDbVersion as number;
+  // Guard clauses:
   if (parsedDbVersion <= 0) {
     alert("The file's \"dbVersion\" must be higher than 0. Import aborted.");
     return "ImportFailed";
   }
-  // Guard clause:
   if (parsedDbVersion > txDbVersion) {
     alert(
       `The file's "dbVersion" = ${importedDbVersion} is higher than the app's current "dbVersion" = ${txDbVersion}.
@@ -48,7 +48,7 @@ export function parseNumberField(num: unknown | number): number {
   if (isNullOrUndefined(num) || Number.isFinite(num) === false || num as number < 0) {
     return 0;
   }
-  // At this point we've proven it's a positive integer:
+  // At this point we've proven it's a positive number.
   return num as number;
 }
 
@@ -64,13 +64,13 @@ export function parseTimestampField(ts: unknown | string): Date | "ImportFailed"
   if (isNullOrUndefined(ts) || typeof ts !== "string") {
     return "ImportFailed";
   }
-  // At this point we've proven Timestamp is a string:
-  // Convert string to Date:
-  const _ts: Date = parseDateFromInputString(ts);
+  // At this point we've proven Timestamp is a string.
+  // Convert the string to Date:
+  const date: Date = parseDateFromInputString(ts);
   // Guard clause:
-  if (_ts.toString() === "Invalid Date") {
+  if (date.toString() === "Invalid Date") {
     return "ImportFailed";
   }
-  // The happy path:
-  return _ts;
+  // Return the parsed date:
+  return date;
 }

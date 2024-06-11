@@ -6,20 +6,20 @@ import {
 } from "./primitives";
 
 export function parseRecipe(
-  importedRecipe: unknown | ImportedJsonRecipe, matchCoffeeBeansIds: Map<number, number>
+  importedRecipe: unknown | ImportedJsonRecipe, coffeeBeansIdMapping: Map<number, number>
 ): Recipe | "ImportFailed" {
-  // Parse an imported Recipe:
+  // Guard clause:
   if (isNullOrUndefined(importedRecipe)) {
     return "ImportFailed";
   }
-  // At this point we've proven it has a value:
+  // At this point we've proven it has a value.
   const _importedRecipe = importedRecipe as ImportedJsonRecipe;
   // Parse the Id field:
   const isValidId: boolean = checkIsValidEntityId(_importedRecipe.id);
   if (isValidId === false) {
     return "ImportFailed";
   }
-  // At this point we've proven it's a valid Id:
+  // At this point we've proven it's a valid Id.
   const _id = _importedRecipe.id as number;
   // Parse the text fields:
   const _recipeTarget = parseTextField(_importedRecipe.recipeTarget);
@@ -36,22 +36,22 @@ export function parseRecipe(
   if (_timestamp === "ImportFailed") {
     return "ImportFailed";
   }
-  // Parse the CoffeeBeansId filed:
+  // Parse the CoffeeBeansId field:
   const isValidCoffeeBeansId: boolean = checkIsValidEntityId(_importedRecipe.coffeeBeansId);
   if (isValidCoffeeBeansId === false) {
     return "ImportFailed";
   }
-  // At this point we've proven CoffeeBeansId is a valid Id:
+  // At this point we've proven CoffeeBeansId is a valid Id.
   // Check that the imported CoffeeBeansId can be matched:
-  if (matchCoffeeBeansIds.has(_importedRecipe.coffeeBeansId as number) === false) {
+  if (coffeeBeansIdMapping.has(_importedRecipe.coffeeBeansId as number) === false) {
     const message = `Import aborted because of an internal error. Unable to match the "CoffeeBeansId" from Recipe
        ${JSON.stringify(_importedRecipe)}. Please inform the developer.`;
     console.error(message);
     return "ImportFailed";
   }
   // Set the correct CoffeeBeansId from the DB:
-  const _coffeeBeansId = matchCoffeeBeansIds.get(_importedRecipe.coffeeBeansId as number)!;
-  // Prepare the Recipe item:
+  const _coffeeBeansId = coffeeBeansIdMapping.get(_importedRecipe.coffeeBeansId as number)!;
+  // Prepare and return the parsed Recipe:
   const _recipe: IRecipe = {
     id: _id,
     coffeeBeansId: _coffeeBeansId,
@@ -64,21 +64,21 @@ export function parseRecipe(
     timestamp: _timestamp
   };
   const recipe = new Recipe(_recipe);
-  // The happy path:
   return recipe;
 }
 
 export function parseRecipesArray(
-  importedRecipes: unknown | ImportedJsonRecipe[], matchCoffeeBeansIds: Map<number, number>
+  importedRecipes: unknown | ImportedJsonRecipe[], coffeeBeansIdMapping: Map<number, number>
 ): Recipe[] | "ImportFailed" {
+  // Guard clause:
   if (isNullOrUndefined(importedRecipes) || Array.isArray(importedRecipes) === false) {
     alert("\"recipes\" array not found in the file.");
     return "ImportFailed";
   }
-  // Parse the imported Recipes array:
+  // Parse the imported Recipes:
   const parsedRecipes: Recipe[] = [];
   for (const importedItem of importedRecipes) {
-    const parsedItem: Recipe | "ImportFailed" = parseRecipe(importedItem, matchCoffeeBeansIds);
+    const parsedItem: Recipe | "ImportFailed" = parseRecipe(importedItem, coffeeBeansIdMapping);
     // Guard clause:
     if (parsedItem === "ImportFailed") {
       return "ImportFailed";

@@ -1,5 +1,5 @@
-import type { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
 import { EnhancedCoffeeBeans, type EnhancedCoffeeBeansInfo } from "$lib/domain/enhancedEntities/EnhancedCoffeeBeans";
+import type { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
 
 export interface IEnhancedCoffeeBeansDB {
   id: number;

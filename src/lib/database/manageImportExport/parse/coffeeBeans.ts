@@ -4,17 +4,18 @@ import { isNullOrUndefined } from "$lib/helpers/undefinedHelpers";
 import { checkIsValidEntityId, parseTextField } from "./primitives";
 
 export function parseCoffeeBeans(importedItem: unknown | ImportedJsonCoffeeBeans): CoffeeBeans | "ImportFailed" {
+  // Guard clause:
   if (isNullOrUndefined(importedItem)) {
     return "ImportFailed";
   }
-  // At this point we've proven it has a value:
+  // At this point we've proven it has a value.
   const _importedItem = importedItem as ImportedJsonCoffeeBeans;
   // Parse the Id field:
   const isValidId: boolean = checkIsValidEntityId(_importedItem.id);
   if (isValidId === false) {
     return "ImportFailed";
   }
-  // At this point we've proven it's a valid Id:
+  // At this point we've proven it's a valid Id.
   const _id = _importedItem.id as number;
   // Parse the Name field:
   const _name = parseTextField(_importedItem.name);
@@ -28,13 +29,12 @@ export function parseCoffeeBeans(importedItem: unknown | ImportedJsonCoffeeBeans
   }
   // Parse the Description field:
   const _description = parseTextField(_importedItem.description);
-  // Prepare an entity with parsed fields:
+  // Prepare and return the parsed CoffeeBeans item:
   const parsedItem: ICoffeeBeans = {
     id: _id,
     name: _name,
     description: _description
   };
-  // Prepare the CoffeeBeans item:
   const item = new CoffeeBeans(parsedItem);
   return item;
 }

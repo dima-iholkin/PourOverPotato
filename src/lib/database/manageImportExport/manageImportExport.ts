@@ -1,5 +1,6 @@
 import type { IDBPDatabase } from "idb";
 import { openEntitiesDB, COFFEEBEANS_STORE, RECIPES_STORE, ENHANCEDCOFFEEBEANS_STORE } from "$lib/database/core/core";
+import { vacuumSoftDeletedCoffeeBeans, vacuumSoftDeletedRecipes } from "$lib/database/manageData/vacuum/vacuum";
 import { regenerateEnhancedCoffeeBeansTable } from "$lib/database/manageEnhancedCoffeeBeans";
 import { type ICoffeeBeansDB, CoffeeBeansDB, CoffeeBeansDBSubmit } from "$lib/database/types/CoffeeBeansDB";
 import type { EntitiesDB } from "$lib/database/types/EntitiesDB";
@@ -7,7 +8,7 @@ import { type IRecipeDB, RecipeDB, RecipeDBSubmit } from "$lib/database/types/Re
 import type { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
 import type { Recipe } from "$lib/domain/entities/Recipe";
 import type { Count } from "$lib/helperTypes/Count";
-import { matchUniqueCoffeeBeansToAdd, matchUniqueRecipesToAdd } from "./match/arrays";
+import { findUniqueCoffeeBeans, findUniqueRecipes } from "./match/arrays";
 import { parseCoffeeBeansArray } from "./parse/coffeeBeans";
 import { parseDbVersion } from "./parse/primitives";
 import { parseRecipesArray } from "./parse/recipes";
@@ -20,12 +21,13 @@ export async function exportAllData(): Promise<Blob> {
   // Open a transaction:
   const db: IDBPDatabase<EntitiesDB> = await openEntitiesDB();
   const tx = db.transaction([COFFEEBEANS_STORE, RECIPES_STORE], "readonly");
-  // Load the CoffeeBeans items and Recipes:
+  // Load the CoffeeBeans items, the Recipes and the DbVersion:
   const coffeeBeansDbItems: ICoffeeBeansDB[] = await tx.objectStore(COFFEEBEANS_STORE).getAll();
   const recipeDbItems: IRecipeDB[] = await tx.objectStore(RECIPES_STORE).getAll();
   const _dbVersion: number = tx.db.version;
+  // Close the transaction:
   await tx.done;
-  // Filter out the soft-deleted CoffeeBeans and Recipes, and convert into core entities:
+  // Prepare the CoffeeBeans items and the Recipes:
   const coffeeBeansItems: CoffeeBeans[] = coffeeBeansDbItems
     .filter(itemDb => itemDb.softDeletionTimestamp === undefined)
     .map(itemDb => new CoffeeBeansDB(itemDb).toCoffeeBeans());
@@ -52,6 +54,9 @@ export async function importDataFromJson(jsonFile: File): Promise<Count | "Impor
   // Open a transaction:
   const db = await openEntitiesDB();
   const tx = db.transaction([COFFEEBEANS_STORE, RECIPES_STORE, ENHANCEDCOFFEEBEANS_STORE], "readwrite");
+  // Vacuum the soft-deleted Recipes and CoffeeBeans items:
+  await vacuumSoftDeletedRecipes(tx);
+  await vacuumSoftDeletedCoffeeBeans(tx);
   // Parse the DbVersion field:
   const parsedDbVersion: number | "ImportFailed" = parseDbVersion(imported.dbVersion, tx.db.version);
   // Guard clause:
@@ -59,53 +64,49 @@ export async function importDataFromJson(jsonFile: File): Promise<Count | "Impor
     tx.abort();
     return "ImportFailed";
   }
-  // Use a Map to keep track of the correct Id's for imported CoffeeBeans:
-  const matchCoffeeBeansIds = new Map<number, number>();
-  // Parse the imported CoffeeBeans array:
-  const parsedCoffeeBeansArray: CoffeeBeans[] | "ImportFailed" = parseCoffeeBeansArray(imported.coffeeBeans);
-  if (parsedCoffeeBeansArray === "ImportFailed") {
+  // Keep track of the mapping between the imported CoffeeBeans Ids and the DB CoffeeBeans Ids, using a Map:
+  const coffeeBeansIdMapping = new Map<number, number>();
+  // Parse the imported CoffeeBeans items:
+  const parsedCoffeeBeans: CoffeeBeans[] | "ImportFailed" = parseCoffeeBeansArray(imported.coffeeBeans);
+  if (parsedCoffeeBeans === "ImportFailed") {
     tx.abort();
     return "ImportFailed";
   }
-  // Load the CoffeeBeans items from DB:
-  const dbCoffeeBeans: CoffeeBeans[] = await tx.objectStore(COFFEEBEANS_STORE).getAll();
+  // Load the CoffeeBeans items from the DB:
+  const _dbCoffeeBeans: ICoffeeBeansDB[] = await tx.objectStore(COFFEEBEANS_STORE).getAll();
+  const dbCoffeeBeans: CoffeeBeans[] = _dbCoffeeBeans.map(item => new CoffeeBeansDB(item).toCoffeeBeans());
   // Find the unique CoffeeBeans items to add to the DB:
-  const uniqueCoffeeBeans: CoffeeBeans[] = matchUniqueCoffeeBeansToAdd(
-    parsedCoffeeBeansArray, dbCoffeeBeans, matchCoffeeBeansIds
+  const uniqueCoffeeBeans: CoffeeBeans[] = findUniqueCoffeeBeans(
+    parsedCoffeeBeans, dbCoffeeBeans, coffeeBeansIdMapping
   );
-  // Save the unique CoffeeBeans items:
-  let addedCoffeeBeansCount: number = 0;
+  // Prepare and save the unique parsed CoffeeBeans items:
   for (const parsedItem of uniqueCoffeeBeans) {
-    // Prepare the new CoffeeBeans item:
     const itemSubmit: CoffeeBeansDBSubmit = new CoffeeBeansDBSubmit(parsedItem);
-    // Save the new CoffeeBeans item:
     const savedItemId: number = await tx.objectStore(COFFEEBEANS_STORE).add(itemSubmit as ICoffeeBeansDB);
-    // Make sure to keep track of the created CoffeeBeans' Id to map the Recipe's CoffeeBeansId later.
-    matchCoffeeBeansIds.set(parsedItem.id, savedItemId);
-    // Count the added CoffeeBeans item:
-    addedCoffeeBeansCount++;
+    // Keep track of the CoffeeBeans' Id mapping to map the Recipe's CoffeeBeansId later:
+    coffeeBeansIdMapping.set(parsedItem.id, savedItemId);
   }
-  // Parse the Recipes array:
-  // Load the DB's Recipes:
-  const dbRecipes: IRecipeDB[] = await tx.objectStore(RECIPES_STORE).getAll();
-  // Parse the imported Recipes array:
-  const parsedRecipesArray: Recipe[] | "ImportFailed" = parseRecipesArray(imported.recipes, matchCoffeeBeansIds);
+  // Parse the imported Recipes:
+  const parsedRecipes: Recipe[] | "ImportFailed" = parseRecipesArray(imported.recipes, coffeeBeansIdMapping);
   // Guard clause:
-  if (parsedRecipesArray === "ImportFailed") {
+  if (parsedRecipes === "ImportFailed") {
     tx.abort();
     return "ImportFailed";
   }
+  // Load the Recipes from the DB:
+  const _dbRecipes: IRecipeDB[] = await tx.objectStore(RECIPES_STORE).getAll();
+  const dbRecipes: Recipe[] = _dbRecipes.map(item => new RecipeDB(item).toRecipe());
   // Find the unique Recipes to add:
-  const uniqueRecipes: Recipe[] = matchUniqueRecipesToAdd(parsedRecipesArray, dbRecipes);
+  const uniqueRecipes: Recipe[] = findUniqueRecipes(parsedRecipes, dbRecipes);
   // Save the unique Recipes:
-  let addedRecipesCount: number = 0;
   for (const item of uniqueRecipes) {
-    await tx.objectStore(RECIPES_STORE).add(new RecipeDBSubmit(item) as unknown as IRecipeDB);
-    addedRecipesCount++;
+    const recipeSubmit: RecipeDBSubmit = new RecipeDBSubmit(item); // Takes care of deleting the Recipe Id too.
+    await tx.objectStore(RECIPES_STORE).add(recipeSubmit as unknown as IRecipeDB);
   }
   // Regenerate the EnhancedCoffeeBeans table:
   await regenerateEnhancedCoffeeBeansTable(tx);
+  // Close the transaction:
   await tx.done;
   // Return the new CoffeeBeans and Recipes counts:
-  return { coffeeBeansCount: addedCoffeeBeansCount, recipesCount: addedRecipesCount };
+  return { coffeeBeansCount: uniqueCoffeeBeans.length, recipesCount: uniqueRecipes.length };
 }

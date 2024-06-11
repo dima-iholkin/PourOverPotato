@@ -1,47 +1,47 @@
-import type { IRecipeDB } from "$lib/database/types/RecipeDB";
 import type { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
 import type { Recipe } from "$lib/domain/entities/Recipe";
 
-export function matchUniqueCoffeeBeansToAdd(
-  parsedCoffeeBeans: CoffeeBeans[], dbCoffeeBeans: CoffeeBeans[], matchCoffeeBeansIds: Map<number, number>
+export function findUniqueCoffeeBeans(
+  parsedCoffeeBeans: CoffeeBeans[], dbCoffeeBeans: CoffeeBeans[], coffeeBeansIdMapping: Map<number, number>
 ): CoffeeBeans[] {
   const uniqueCoffeeBeans: CoffeeBeans[] = [];
-  for (const parsedCoffeeBeansItem of parsedCoffeeBeans) {
+  for (const parsedItem of parsedCoffeeBeans) {
     // Match the imported and the DB's CoffeeBeans:
-    const matchedDbItem: CoffeeBeans | undefined = dbCoffeeBeans.find(dbItem =>
-      dbItem.name.toLowerCase() === parsedCoffeeBeansItem.name.toLowerCase()
+    const dbItem: CoffeeBeans | undefined = dbCoffeeBeans.find(dbItem =>
+      dbItem.name.toLowerCase() === parsedItem.name.toLowerCase()
     );
-    // If there is a match, save the mapping between the imported and DB's CoffeeBeans Id:
-    if (matchedDbItem) {
-      matchCoffeeBeansIds.set(parsedCoffeeBeansItem.id, matchedDbItem.id);
-      continue;
-    }
-    // If there isn't a match, prepare to add the new CoffeeBeans item:
-    else {
-      uniqueCoffeeBeans.push(parsedCoffeeBeansItem);
+    if (dbItem) {
+      // If there is a match, we've found a duplicate.
+      // Save the mapping between the parsed CoffeeBeans Id and DB CoffeeBeans Id:
+      coffeeBeansIdMapping.set(parsedItem.id, dbItem.id);
+    } else {
+      // If there isn't a match, we've found a unique item:
+      uniqueCoffeeBeans.push(parsedItem);
     }
   }
   return uniqueCoffeeBeans;
 }
 
-export function matchUniqueRecipesToAdd(parsedRecipes: Recipe[], dbRecipes: IRecipeDB[]): Recipe[] {
-  const uniqueRecipesToAdd: Recipe[] = [];
-  for (const item of parsedRecipes) {
+export function findUniqueRecipes(parsedRecipes: Recipe[], dbRecipes: Recipe[]): Recipe[] {
+  const uniqueRecipes: Recipe[] = [];
+  for (const parsedItem of parsedRecipes) {
     // Find a match in the DB:
-    const dbMatch: IRecipeDB | undefined = dbRecipes.find(dbItem =>
-      dbItem.timestamp === item.timestamp.getTime() &&
-      dbItem.outWeight === item.outWeight &&
-      dbItem.rating === item.rating &&
-      dbItem.recipeTarget === item.recipeTarget &&
-      dbItem.recipeResult === item.recipeResult &&
-      dbItem.recipeThoughts === item.recipeThoughts &&
-      dbItem.coffeeBeansId === item.coffeeBeansId
+    const dbMatch: Recipe | undefined = dbRecipes.find(dbItem =>
+      dbItem.timestamp.getTime() === parsedItem.timestamp.getTime() &&
+      dbItem.outWeight === parsedItem.outWeight &&
+      dbItem.rating === parsedItem.rating &&
+      dbItem.recipeTarget === parsedItem.recipeTarget &&
+      dbItem.recipeResult === parsedItem.recipeResult &&
+      dbItem.recipeThoughts === parsedItem.recipeThoughts &&
+      dbItem.coffeeBeansId === parsedItem.coffeeBeansId &&
+      dbItem.favorite === parsedItem.favorite
     );
-    // If there is a match, don't add this Recipe to the uniques array:
     if (dbMatch) {
-      continue;
+      // If there is a match, we've found a duplicate. Don't add it to the uniques.
+    } else {
+      // If there isn't a match, we've found a unique item:
+      uniqueRecipes.push(parsedItem);
     }
-    uniqueRecipesToAdd.push(item);
   }
-  return uniqueRecipesToAdd;
+  return uniqueRecipes;
 }

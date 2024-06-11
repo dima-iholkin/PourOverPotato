@@ -1,11 +1,10 @@
 import type { IDBPTransaction } from "idb";
+import type { EnhancedCoffeeBeans } from "$lib/domain/enhancedEntities/EnhancedCoffeeBeans";
 import type { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
 import type { Recipe } from "$lib/domain/entities/Recipe";
 import { sortRecipesByTimestampDesc } from "$lib/domain/sort/sortRecipes";
-import type { EnhancedCoffeeBeans } from "$lib/domain/enhancedEntities/EnhancedCoffeeBeans";
 import {
-  COFFEEBEANS_STORE, ENHANCEDCOFFEEBEANS_STORE, RECIPES_COFFEEBEANSID_INDEX, RECIPES_STORE,
-  openEntitiesDB
+  COFFEEBEANS_STORE, ENHANCEDCOFFEEBEANS_STORE, RECIPES_COFFEEBEANSID_INDEX, RECIPES_STORE, openEntitiesDB
 } from "./core/core";
 import { CoffeeBeansDB, type ICoffeeBeansDB } from "./types/CoffeeBeansDB";
 import { toEnhancedCoffeeBeans, type IEnhancedCoffeeBeansDB } from "./types/EnhancedCoffeeBeansDB";
