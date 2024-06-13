@@ -8,7 +8,7 @@ import {
 } from "./migrations/migrations";
 
 // Internal constant:
-const DB_VERSION = 3;
+const DB_VERSION = 4;
 
 // Public constants:
 
@@ -71,8 +71,8 @@ function createStoresV3(
     _db.createObjectStore(COFFEEBEANS_STORE, { keyPath: "id", autoIncrement: true });
   }
   // Create the indexes on CoffeeBeans:
-  createIndexOnCoffeeBeans(transaction, COFFEEBEANS_NAMELOWERCASE_INDEX);
-  createIndexOnCoffeeBeans(transaction, SOFTDELETIONTIMESTAMP_INDEX);
+  createIndexOnCoffeeBeans(transaction, COFFEEBEANS_NAMELOWERCASE_INDEX, true);
+  createIndexOnCoffeeBeans(transaction, SOFTDELETIONTIMESTAMP_INDEX, false);
   // Create Recipes store:
   if (_db.objectStoreNames.contains(RECIPES_STORE) === false) {
     _db.createObjectStore(RECIPES_STORE, { keyPath: "id", autoIncrement: true });
@@ -93,14 +93,15 @@ function createStoresV3(
 
 function createIndexOnCoffeeBeans(
   transaction: IDBPTransaction<EntitiesDB, ("coffeeBeans" | "recipes" | "enhancedCoffeeBeans")[], "versionchange">,
-  nameAndKeyPath: "nameLowerCase" | "softDeletionTimestamp"
+  nameAndKeyPath: "nameLowerCase" | "softDeletionTimestamp",
+  uniqueIndex: boolean
 ) {
   // Guard clause, if the index exists already:
   if (transaction.objectStore(COFFEEBEANS_STORE).indexNames.contains(nameAndKeyPath)) {
     return;
   }
   // Create an index:
-  transaction.objectStore(COFFEEBEANS_STORE).createIndex(nameAndKeyPath, nameAndKeyPath, { unique: false });
+  transaction.objectStore(COFFEEBEANS_STORE).createIndex(nameAndKeyPath, nameAndKeyPath, { unique: uniqueIndex });
 }
 
 function createIndexOnRecipes(
