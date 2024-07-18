@@ -16,10 +16,6 @@ This app is used daily. I'm maintaining and improving it when I can.
   <kbd>
     <img width="250" src="/_assets/recipes.png" title="screenshot showing a list of recipes in PourOverPotato app">
   </kbd>
-  &nbsp;&nbsp;
-  <kbd>
-    <img width="250" src="/_assets/other.png" title="screenshot showing page Other in PourOverPotato app">
-  </kbd>
 </div>
 
 ## About your data
