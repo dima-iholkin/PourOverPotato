@@ -8,6 +8,7 @@ import { type IRecipeDB, RecipeDB, RecipeDBSubmit } from "$lib/database/types/Re
 import type { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
 import type { Recipe } from "$lib/domain/entities/Recipe";
 import type { Count } from "$lib/helperTypes/Count";
+import { deduplicateCoffeeBeans } from "./deduplicate/coffeeBeans";
 import { findUniqueCoffeeBeans, findUniqueRecipes } from "./match/arrays";
 import { parseCoffeeBeansArray } from "./parse/coffeeBeans";
 import { parseDbVersion } from "./parse/primitives";
@@ -67,7 +68,7 @@ export async function importDataFromJson(jsonFile: File): Promise<Count | "Impor
   // Keep track of the mapping between the imported CoffeeBeans Ids and the DB CoffeeBeans Ids, using a Map:
   const coffeeBeansIdMapping = new Map<number, number>();
   // Parse the imported CoffeeBeans items:
-  const parsedCoffeeBeans: CoffeeBeans[] | "ImportFailed" = parseCoffeeBeansArray(imported.coffeeBeans);
+  let parsedCoffeeBeans: CoffeeBeans[] | "ImportFailed" = parseCoffeeBeansArray(imported.coffeeBeans);
   if (parsedCoffeeBeans === "ImportFailed") {
     tx.abort();
     return "ImportFailed";
@@ -75,6 +76,8 @@ export async function importDataFromJson(jsonFile: File): Promise<Count | "Impor
   // Load the CoffeeBeans items from the DB:
   const _dbCoffeeBeans: ICoffeeBeansDB[] = await tx.objectStore(COFFEEBEANS_STORE).getAll();
   const dbCoffeeBeans: CoffeeBeans[] = _dbCoffeeBeans.map(item => new CoffeeBeansDB(item).toCoffeeBeans());
+  // Deduplicate the CoffeeBeans by name:
+  parsedCoffeeBeans = deduplicateCoffeeBeans(parsedCoffeeBeans, dbCoffeeBeans);
   // Find the unique CoffeeBeans items to add to the DB:
   const uniqueCoffeeBeans: CoffeeBeans[] = findUniqueCoffeeBeans(
     parsedCoffeeBeans, dbCoffeeBeans, coffeeBeansIdMapping
