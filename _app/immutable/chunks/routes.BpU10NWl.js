@@ -1,1 +1,0 @@
-import{b as e}from"./paths.DQ8thWxe.js";const o={home:e+"/",coffeeBeansItem:r=>e+`/coffee_beans/${r}`,recipes:e+"/recipes",recipeItem:r=>e+`/recipes/${r}`,addRecipe:(r=void 0)=>r?e+`/recipes/add?coffee_beans_name=${r}`:e+"/recipes/add",other:e+"/other"};export{o as r};
