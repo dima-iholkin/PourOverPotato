@@ -83,7 +83,7 @@
     // Guard clauses:
     if (coffeeBeans === "Failure_NameAlreadyExist") {
       nameValidationFailed = true;
-      validationMessage = "Coffee beans with this name exist already.";
+      validationMessage = "Coffee beans with this name already exist.";
       return;
     }
     // Show a toast:
