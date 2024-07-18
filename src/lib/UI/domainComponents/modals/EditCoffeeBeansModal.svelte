@@ -5,7 +5,7 @@
 <script lang="ts">
   import { tick } from "svelte";
   import { goto } from "$app/navigation";
-  import { editCoffeeBeans } from "$lib/database/manageCoffeeBeans";
+  import { checkCoffeeBeansDuplicate, editCoffeeBeans } from "$lib/database/manageCoffeeBeans";
   import { routes } from "$lib/domain/constants/routes";
   import { CoffeeBeans, CoffeeBeansEditSubmit } from "$lib/domain/entities/CoffeeBeans";
   import Label from "$lib/UI/genericComponents/forms/Label.svelte";
@@ -49,7 +49,7 @@
   let hasUnsavedChanges: boolean = false;
 
   // Unsaved changes reactivity:
-  $: if (item && name === item.name && description === item.description) {
+  $: if (item && name.trim() === item.name && description.trim() === item.description) {
     hasUnsavedChanges = false;
   } else {
     hasUnsavedChanges = true;
@@ -72,6 +72,9 @@
   }
 
   async function handleSubmit() {
+    // Trim the name and description in the form too:
+    name = name.trim();
+    description = description.trim();
     // Validate and save the edited coffee beans:
     const editedCoffeeBeans: CoffeeBeans = new CoffeeBeans({ id: item.id, name, description });
     const coffeeBeansSubmit: CoffeeBeansEditSubmit | "ValidationFailed_NameMustBeAtLeast3CharsLong" =
@@ -119,10 +122,30 @@
   }
 
   function handleInputChange() {
-    if (nameValidationFailed) {
-      nameValidationFailed = false;
-      validationMessage = "";
+    if (CoffeeBeans.hasValidName({ name }) === "ValidationFailed_NameMustBeAtLeast3CharsLong") {
+      nameValidationFailed = true;
+      validationMessage = "Name must be at least 3 characters long.";
+      return;
     }
+    if (name.trim().toLowerCase() === item.name.toLowerCase()) {
+      nameValidationFailed === false;
+      validationMessage = "";
+      return;
+    }
+    checkCoffeeBeansDuplicate(name).then((value) => {
+      switch (value) {
+        case "CoffeeBeansNotFound":
+          nameValidationFailed = false;
+          validationMessage = "";
+          break;
+        case "Failure_NameAlreadyExist":
+          nameValidationFailed = true;
+          validationMessage = `Coffee beans "${name.trim()}" already exist.`;
+          break;
+        default:
+          break;
+      }
+    });
   }
 
   function handleSaveButtonTabKeydown(event: KeyboardEvent) {
@@ -157,7 +180,7 @@
         type="text"
         bind:this={inputDom}
         bind:value={name}
-        class:unsaved-changes={item.name !== undefined && item.name !== name}
+        class:unsaved-changes={item.name !== undefined && name.trim() !== item.name}
         on:focusin={handleInputFocusIn}
         on:input={handleInputChange}
         on:keydown={handleEnterKey}
@@ -179,7 +202,7 @@
     </div>
     <button
       class="button-submit"
-      disabled={hasUnsavedChanges === false || CoffeeBeans.hasValidName({ name }) !== true}
+      disabled={nameValidationFailed || hasUnsavedChanges === false || CoffeeBeans.hasValidName({ name }) !== true}
       type="submit"
       bind:this={saveButtonDOM}
       on:keydown={handleSaveButtonTabKeydown}

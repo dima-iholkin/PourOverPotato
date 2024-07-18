@@ -45,6 +45,22 @@ export async function anyCoffeeBeans(): Promise<boolean> {
   return count > 0;
 }
 
+export async function checkCoffeeBeansDuplicate(coffeeBeansName: string):
+  Promise<"CoffeeBeansNotFound" | "Failure_NameAlreadyExist"> {
+  // Open a transaction:
+  const db = await openEntitiesDB();
+  const tx = db.transaction(COFFEEBEANS_STORE, "readwrite");
+  // Load the present version of the CoffeeBeans item:
+  const presentItem: ICoffeeBeansDB | undefined = await tx.objectStore(COFFEEBEANS_STORE)
+    .index(COFFEEBEANS_NAMELOWERCASE_INDEX)
+    .get(coffeeBeansName.trim().toLowerCase());
+  if (presentItem === undefined) {
+    return "CoffeeBeansNotFound";
+  } else {
+    return "Failure_NameAlreadyExist";
+  }
+}
+
 export async function editCoffeeBeans(item: CoffeeBeansEditSubmit):
   Promise<CoffeeBeans | "Failure_NameAlreadyExist" | "CoffeeBeansNotFound"> {
   // Open a transaction:

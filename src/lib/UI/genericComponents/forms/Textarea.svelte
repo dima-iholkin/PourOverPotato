@@ -52,7 +52,7 @@
     {placeholder}
     bind:this={this_}
     bind:value
-    class:unsaved-changes={initialValue !== undefined && initialValue !== value}
+    class:unsaved-changes={initialValue !== undefined && value.trim() !== initialValue}
     on:input={(event) => resizeOnInput(event.currentTarget)}
     on:keydown
   />

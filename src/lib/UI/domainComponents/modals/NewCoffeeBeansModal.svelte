@@ -4,7 +4,7 @@
 
 <script lang="ts">
   import { tick } from "svelte";
-  import { addCoffeeBeans } from "$lib/database/manageCoffeeBeans";
+  import { addCoffeeBeans, checkCoffeeBeansDuplicate } from "$lib/database/manageCoffeeBeans";
   import { CoffeeBeans, CoffeeBeansCreateSubmit } from "$lib/domain/entities/CoffeeBeans";
   import Label from "$lib/UI/genericComponents/forms/Label.svelte";
   import Textarea from "$lib/UI/genericComponents/forms/Textarea.svelte";
@@ -61,13 +61,31 @@
   }
 
   function handleInputChange() {
-    if (nameValidationFailed) {
-      nameValidationFailed = false;
-      validationMessage = "";
+    if (CoffeeBeans.hasValidName({ name }) === "ValidationFailed_NameMustBeAtLeast3CharsLong") {
+      nameValidationFailed = true;
+      validationMessage = "Name must be at least 3 characters long.";
+      return;
     }
+    checkCoffeeBeansDuplicate(name).then((value) => {
+      switch (value) {
+        case "CoffeeBeansNotFound":
+          nameValidationFailed = false;
+          validationMessage = "";
+          break;
+        case "Failure_NameAlreadyExist":
+          nameValidationFailed = true;
+          validationMessage = `Coffee beans "${name.trim()}" already exist.`;
+          break;
+        default:
+          break;
+      }
+    });
   }
 
   async function handleFormSubmit() {
+    // Trim the name and description in the form too:
+    name = name.trim();
+    description = description.trim();
     // Validate and save the new coffee beans:
     const coffeeBeansSubmit: CoffeeBeansCreateSubmit | "ValidationFailed_NameMustBeAtLeast3CharsLong" =
       CoffeeBeansCreateSubmit.create({ name, description });
@@ -165,7 +183,7 @@
     </div>
     <button
       class="button-submit"
-      disabled={CoffeeBeans.hasValidName({ name }) !== true}
+      disabled={nameValidationFailed || CoffeeBeans.hasValidName({ name }) !== true}
       type="submit"
       bind:this={saveButtonDOM}
       on:keydown={handleSaveButtonTabKeydown}
