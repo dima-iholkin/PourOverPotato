@@ -12,6 +12,6 @@
     @apply text-2xl font-bold tracking-tight;
 
     /* Colors: */
-    @apply text-gray-900 dark:text-white;
+    @apply text-gray-900;
   }
 </style>

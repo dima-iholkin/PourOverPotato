@@ -1,5 +1,28 @@
 # Changelog
 
+## [1.0.0] - 2024-07-19
+
+### Added
+
+- Make the forms do the `CoffeeBeans` name uniqueness checks on an `input change`, not just on a `submit`.
+- Add a toast explaining that the data deletion may take some time.
+- Add a link to my LinkedIn on the `/other` page.
+
+### Changed
+
+- Update the About section on the `/other` page.
+- Update the `README.md`.
+- Update the screenshots in `README.md`.
+
+### Fixed
+
+- Enforce the `nameLowerCase` index uniqueness again.
+  - With a new DB schema `v4`.
+  - Add the DB migration from `v3` to `v4`.
+  - Add the deduplication logic for `CoffeeBeans` during import.
+- Fix the dark mode UI catastrophy.
+  - By removing the present dark theme styles, until we have a real dark theme.
+
 ## [0.28.0] - 2024-06-11
 
 ### Added

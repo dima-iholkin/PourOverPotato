@@ -47,9 +47,7 @@
   }
 
   .bottom-nav {
-    @apply fixed bottom-0 left-0 w-full h-16 bg-white border-t border-gray-200 dark:bg-gray-700;
-    @apply dark:border-gray-600;
-
+    @apply fixed bottom-0 left-0 w-full h-16 bg-white border-t border-gray-200;
     z-index: 49;
   }
 
@@ -88,14 +86,12 @@
   }
 
   span {
-    @apply text-sm text-gray-500 dark:text-gray-400 dark:hover:text-blue-500;
-
+    @apply text-sm text-gray-500;
     color: inherit;
   }
 
   button {
-    @apply inline-flex flex-col items-center justify-center px-5 dark:hover:bg-gray-800;
-
+    @apply inline-flex flex-col items-center justify-center px-5;
     width: 100%;
   }
 
@@ -103,7 +99,6 @@
 
   button:active {
     @apply text-blue-600;
-
     --tw-bg-opacity: 1;
     background-color: rgb(249 250 251 / var(--tw-bg-opacity));
   }
@@ -116,7 +111,6 @@
     button:hover {
       --tw-bg-opacity: 1;
       background-color: rgb(249 250 251 / var(--tw-bg-opacity));
-
       @apply text-blue-600;
     }
 

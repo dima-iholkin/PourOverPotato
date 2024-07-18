@@ -4,7 +4,7 @@
 
 <script lang="ts">
   import { tick } from "svelte";
-  import { addCoffeeBeans } from "$lib/database/manageCoffeeBeans";
+  import { addCoffeeBeans, checkCoffeeBeansDuplicate } from "$lib/database/manageCoffeeBeans";
   import { CoffeeBeans, CoffeeBeansCreateSubmit } from "$lib/domain/entities/CoffeeBeans";
   import Label from "$lib/UI/genericComponents/forms/Label.svelte";
   import Textarea from "$lib/UI/genericComponents/forms/Textarea.svelte";
@@ -61,13 +61,31 @@
   }
 
   function handleInputChange() {
-    if (nameValidationFailed) {
-      nameValidationFailed = false;
-      validationMessage = "";
+    if (CoffeeBeans.hasValidName({ name }) === "ValidationFailed_NameMustBeAtLeast3CharsLong") {
+      nameValidationFailed = true;
+      validationMessage = "Name must be at least 3 characters long.";
+      return;
     }
+    checkCoffeeBeansDuplicate(name).then((value) => {
+      switch (value) {
+        case "CoffeeBeansNotFound":
+          nameValidationFailed = false;
+          validationMessage = "";
+          break;
+        case "Failure_NameAlreadyExist":
+          nameValidationFailed = true;
+          validationMessage = `Coffee beans "${name.trim()}" already exist.`;
+          break;
+        default:
+          break;
+      }
+    });
   }
 
   async function handleFormSubmit() {
+    // Trim the name and description in the form too:
+    name = name.trim();
+    description = description.trim();
     // Validate and save the new coffee beans:
     const coffeeBeansSubmit: CoffeeBeansCreateSubmit | "ValidationFailed_NameMustBeAtLeast3CharsLong" =
       CoffeeBeansCreateSubmit.create({ name, description });
@@ -83,7 +101,7 @@
     // Guard clauses:
     if (coffeeBeans === "Failure_NameAlreadyExist") {
       nameValidationFailed = true;
-      validationMessage = "Coffee beans with this name exist already.";
+      validationMessage = "Coffee beans with this name already exist.";
       return;
     }
     // Show a toast:
@@ -149,7 +167,7 @@
         on:input={handleInputChange}
         on:keydown={handleEnter}
       />
-      <p class="mt-2 text-sm text-red-600 dark:text-red-500">{validationMessage}</p>
+      <p class="mt-2 text-sm text-red-600">{validationMessage}</p>
     </div>
     <div class="my-div mb-5">
       <Textarea
@@ -165,7 +183,7 @@
     </div>
     <button
       class="button-submit"
-      disabled={CoffeeBeans.hasValidName({ name }) !== true}
+      disabled={nameValidationFailed || CoffeeBeans.hasValidName({ name }) !== true}
       type="submit"
       bind:this={saveButtonDOM}
       on:keydown={handleSaveButtonTabKeydown}
@@ -179,14 +197,11 @@
   .input-name {
     @apply bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg block w-full p-2.5;
     @apply focus:ring-blue-500 focus:border-blue-500;
-    @apply dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white;
-    @apply dark:focus:ring-blue-500 dark:focus:border-blue-500;
   }
 
   .input-name-validation-failed {
     @apply border border-red-500 text-red-900 placeholder-red-700 text-base rounded-lg block w-full p-2.5;
     @apply focus:ring-red-500 focus:border-red-500;
-    @apply dark:bg-red-100 dark:border-red-400;
     background-color: #fef2f2;
   }
 
@@ -197,8 +212,7 @@
 
   .button-submit {
     @apply text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium;
-    @apply rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700;
-    @apply dark:focus:ring-blue-800;
+    @apply rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center;
     width: 100%;
     margin-left: 0;
     margin-right: 0;

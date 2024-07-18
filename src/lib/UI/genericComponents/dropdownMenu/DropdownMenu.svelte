@@ -37,7 +37,7 @@
     <HamburgerMenuIcon />
   </button>
   <div class="dropdown-container" bind:this={bind_menuDom} class:shown={isOpen}>
-    <ul id="dropdown" class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownMenuIconButton">
+    <ul id="dropdown" class="py-2 text-sm text-gray-700" aria-labelledby="dropdownMenuIconButton">
       <slot name="button" />
     </ul>
   </div>
@@ -51,12 +51,11 @@
 
   .button {
     @apply inline-flex items-center p-2 text-sm font-medium text-center text-gray-900 bg-white rounded-lg;
-    @apply hover:bg-gray-100 focus:ring-4 focus:outline-none dark:text-white focus:ring-gray-50 dark:bg-gray-800;
-    @apply dark:hover:bg-gray-700 dark:focus:ring-gray-600;
+    @apply hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-50;
   }
 
   .dropdown-container {
-    @apply bg-white rounded-lg shadow w-44 dark:bg-gray-700;
+    @apply bg-white rounded-lg shadow w-44;
     display: none;
     position: absolute;
     margin-top: 0.5rem;

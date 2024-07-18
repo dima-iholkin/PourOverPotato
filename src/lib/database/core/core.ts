@@ -3,12 +3,14 @@ import { regenerateEnhancedCoffeeBeansTable } from "$lib/database/manageEnhanced
 import type { EntitiesDB } from "$lib/database/types/EntitiesDB";
 import type { EntitiesDB_v1 } from "$lib/prevVersions/v1/database/EntitiesDBv1";
 import type { EntitiesDB_v2 } from "$lib/prevVersions/v2/database/EntitiesDBv2";
+import type { EntitiesDB_v3 } from "$lib/prevVersions/v3/database/EntitiesDBv3";
 import {
-  migrateCoffeeBeansV1ToV3, migrateCoffeeBeansV2ToV3, migrateRecipesV1ToV3, migrateRecipesV2ToV3
+  migrateCoffeeBeansV1ToV3, migrateCoffeeBeansV2ToV3, migrateCoffeeBeansV3ToV4, migrateRecipesV1ToV3,
+  migrateRecipesV2ToV3
 } from "./migrations/migrations";
 
 // Internal constant:
-const DB_VERSION = 3;
+const DB_VERSION = 4;
 
 // Public constants:
 
@@ -50,11 +52,18 @@ export async function openEntitiesDB(): Promise<IDBPDatabase<EntitiesDB>> {
             await migrateRecipesV2ToV3(_transaction);
             break;
           }
+        case 3:
+          {
+            const _transaction =
+              transaction as unknown as IDBPTransaction<EntitiesDB_v3, ("coffeeBeans" | "recipes")[], "versionchange">;
+            await migrateCoffeeBeansV3ToV4(_transaction);
+            break;
+          }
         default:
           break;
       }
       // Create any missing object stores and indexes:
-      createStoresV3(transaction);
+      createStoresV4(transaction);
       // Regenerate the EnhancedCoffeeBeans table:
       await regenerateEnhancedCoffeeBeansTable(transaction);
     }
@@ -62,7 +71,7 @@ export async function openEntitiesDB(): Promise<IDBPDatabase<EntitiesDB>> {
 }
 
 // Internal function:
-function createStoresV3(
+function createStoresV4(
   transaction: IDBPTransaction<EntitiesDB, ("coffeeBeans" | "enhancedCoffeeBeans" | "recipes")[], "versionchange">
 ): void {
   const _db: IDBPDatabase<EntitiesDB> = transaction.db;
@@ -71,8 +80,8 @@ function createStoresV3(
     _db.createObjectStore(COFFEEBEANS_STORE, { keyPath: "id", autoIncrement: true });
   }
   // Create the indexes on CoffeeBeans:
-  createIndexOnCoffeeBeans(transaction, COFFEEBEANS_NAMELOWERCASE_INDEX);
-  createIndexOnCoffeeBeans(transaction, SOFTDELETIONTIMESTAMP_INDEX);
+  createIndexOnCoffeeBeans_nameLowerCase(transaction);
+  createIndexOnCoffeeBeans_softDeletionTimestamp(transaction);
   // Create Recipes store:
   if (_db.objectStoreNames.contains(RECIPES_STORE) === false) {
     _db.createObjectStore(RECIPES_STORE, { keyPath: "id", autoIncrement: true });
@@ -89,18 +98,32 @@ function createStoresV3(
   }
 }
 
-// Helper functions for "createStoresV3":
+// Helper functions for "createStoresV4":
 
-function createIndexOnCoffeeBeans(
-  transaction: IDBPTransaction<EntitiesDB, ("coffeeBeans" | "recipes" | "enhancedCoffeeBeans")[], "versionchange">,
-  nameAndKeyPath: "nameLowerCase" | "softDeletionTimestamp"
+function createIndexOnCoffeeBeans_nameLowerCase(
+  transaction: IDBPTransaction<EntitiesDB, ("coffeeBeans" | "recipes" | "enhancedCoffeeBeans")[], "versionchange">
 ) {
   // Guard clause, if the index exists already:
-  if (transaction.objectStore(COFFEEBEANS_STORE).indexNames.contains(nameAndKeyPath)) {
+  if (transaction.objectStore(COFFEEBEANS_STORE).indexNames.contains(COFFEEBEANS_NAMELOWERCASE_INDEX)) {
     return;
   }
   // Create an index:
-  transaction.objectStore(COFFEEBEANS_STORE).createIndex(nameAndKeyPath, nameAndKeyPath, { unique: false });
+  transaction.objectStore(COFFEEBEANS_STORE).createIndex(
+    COFFEEBEANS_NAMELOWERCASE_INDEX, COFFEEBEANS_NAMELOWERCASE_INDEX, { unique: true }
+  );
+}
+
+function createIndexOnCoffeeBeans_softDeletionTimestamp(
+  transaction: IDBPTransaction<EntitiesDB, ("coffeeBeans" | "recipes" | "enhancedCoffeeBeans")[], "versionchange">
+) {
+  // Guard clause, if the index exists already:
+  if (transaction.objectStore(COFFEEBEANS_STORE).indexNames.contains(SOFTDELETIONTIMESTAMP_INDEX)) {
+    return;
+  }
+  // Create an index:
+  transaction.objectStore(COFFEEBEANS_STORE).createIndex(
+    SOFTDELETIONTIMESTAMP_INDEX, SOFTDELETIONTIMESTAMP_INDEX, { unique: false }
+  );
 }
 
 function createIndexOnRecipes(

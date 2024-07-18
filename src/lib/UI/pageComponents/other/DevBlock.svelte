@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { dev } from "$app/environment";
+  import { fillDbV3WithDuplicateCoffeeBeans } from "$lib/database/core/migrations/testUtilities";
   import { addToast } from "$lib/UI/genericComponents/toasts/toastProvider";
 </script>
 
@@ -11,6 +13,11 @@
   >
     Add a long toast
   </button>
+  {#if dev}
+    <button type="button" on:click={() => fillDbV3WithDuplicateCoffeeBeans()}>
+      Fill the DB with duplicate CoffeeBeans
+    </button>
+  {/if}
 </div>
 
 <style lang="postcss">

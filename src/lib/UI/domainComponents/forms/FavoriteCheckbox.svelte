@@ -35,8 +35,6 @@
   input {
     @apply bg-gray-50 border-x-0 border-gray-300 h-11 text-center text-gray-900 text-base block w-full py-2.5;
     @apply focus:ring-blue-500 focus:border-blue-500;
-    @apply dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400;
-    @apply dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500;
     border-top-color: rgb(209, 213, 219);
     border-top-style: solid;
     border-top-width: 0.8px;

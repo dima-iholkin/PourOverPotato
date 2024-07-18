@@ -6,8 +6,8 @@
 
 <label
   class={valid
-    ? "block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-    : "block mb-2 text-sm font-medium text-red-700 dark:text-red-500"}
+    ? "block mb-2 text-sm font-medium text-gray-900"
+    : "block mb-2 text-sm font-medium text-red-700"}
   for={for_}
 >
   <slot />

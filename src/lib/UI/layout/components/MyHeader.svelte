@@ -44,7 +44,7 @@
       </div>
       <a href={routes.home}>
         <div class="logo-container">
-          <span class="text-2xl font-semibold whitespace-nowrap dark:text-white">PourOverPotato</span>
+          <span class="text-2xl font-semibold whitespace-nowrap">PourOverPotato</span>
           <p class="sublogo">Save your best recipes for later use</p>
         </div>
       </a>
@@ -57,7 +57,7 @@
   /* Outer layout: */
 
   nav {
-    @apply bg-white dark:bg-gray-900 fixed w-full z-20 top-0 start-0 border-b border-gray-200 dark:border-gray-600;
+    @apply bg-white fixed w-full z-20 top-0 start-0 border-b border-gray-200;
     z-index: 10;
   }
 
@@ -88,7 +88,6 @@
 
   .logo-container {
     @apply space-x-3 rtl:space-x-reverse;
-
     display: flex;
     flex-direction: column;
   }
