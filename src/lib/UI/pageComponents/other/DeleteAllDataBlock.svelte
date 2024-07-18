@@ -8,6 +8,7 @@
 
   // Handler:
   async function handleDeleteButtonClick() {
+    addToast("The data deletion has started, it may take some time...");
     await deleteDB();
     addToast("All data deleted.");
   }
