@@ -57,7 +57,7 @@
   }
 
   h5 {
-    @apply text-2xl font-bold tracking-tight text-gray-900 dark:text-white;
+    @apply text-2xl font-bold tracking-tight text-gray-900;
     overflow-wrap: anywhere;
   }
 
@@ -66,6 +66,6 @@
   }
 
   p {
-    @apply font-normal text-gray-700 dark:text-gray-400;
+    @apply font-normal text-gray-700;
   }
 </style>

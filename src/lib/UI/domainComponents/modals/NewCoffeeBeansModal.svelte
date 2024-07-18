@@ -167,7 +167,7 @@
         on:input={handleInputChange}
         on:keydown={handleEnter}
       />
-      <p class="mt-2 text-sm text-red-600 dark:text-red-500">{validationMessage}</p>
+      <p class="mt-2 text-sm text-red-600">{validationMessage}</p>
     </div>
     <div class="my-div mb-5">
       <Textarea
@@ -197,14 +197,11 @@
   .input-name {
     @apply bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg block w-full p-2.5;
     @apply focus:ring-blue-500 focus:border-blue-500;
-    @apply dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white;
-    @apply dark:focus:ring-blue-500 dark:focus:border-blue-500;
   }
 
   .input-name-validation-failed {
     @apply border border-red-500 text-red-900 placeholder-red-700 text-base rounded-lg block w-full p-2.5;
     @apply focus:ring-red-500 focus:border-red-500;
-    @apply dark:bg-red-100 dark:border-red-400;
     background-color: #fef2f2;
   }
 
@@ -215,8 +212,7 @@
 
   .button-submit {
     @apply text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium;
-    @apply rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700;
-    @apply dark:focus:ring-blue-800;
+    @apply rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center;
     width: 100%;
     margin-left: 0;
     margin-right: 0;

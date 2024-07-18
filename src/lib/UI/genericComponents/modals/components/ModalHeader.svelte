@@ -30,7 +30,7 @@
   }
 
   h1 {
-    @apply text-xl text-center font-bold dark:text-white;
+    @apply text-xl text-center font-bold;
   }
 
   .hidden {

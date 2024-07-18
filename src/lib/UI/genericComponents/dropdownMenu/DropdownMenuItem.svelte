@@ -14,6 +14,6 @@
     width: 100%;
     text-align: left;
     /* Colors: */
-    @apply text-red-600 hover:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white;
+    @apply text-red-600 hover:text-red-400 hover:bg-gray-100;
   }
 </style>
