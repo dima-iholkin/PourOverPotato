@@ -27,7 +27,7 @@ This app is used daily. I'm maintaining and improving it when I can.
 By design all your data is saved in your browser only and on your device only, it's not sent anywhere, there is no server. You can import and export your data to and from a file.  
 Much later I would like to add an ability to sync data with Google Drive.  
 
-The application is in active development. Things may change and data integrity is not guaranteed. However I'll try hard to not break your data.
+Unfortunately it's likely that I won't be able to develop the app much more. However it was and is in a very good and usable state since the very early versions long time ago and I will continue using it.
 
 ## Support me
 

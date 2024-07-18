@@ -14,31 +14,28 @@
 <h5 class="page-headline">About the project</h5>
 <div class="about-section">
   <p>
-    This is on an open-source application developed
-    <a href="https://github.com/dima-iholkin/PourOverPotato" target="_blank">on GitHub</a>.
+    This is on an open-source application developed on
+    <a href="https://github.com/dima-iholkin/PourOverPotato" target="_blank">GitHub</a>.
   </p>
   <p>
-    You can view the development workitems
-    <a href="https://github.com/users/dima-iholkin/projects/5/views/1" target="_blank">on the Projects page</a>.
-  </p>
-  <p>
-    You can influence the project using
-    <a href="https://github.com/dima-iholkin/PourOverPotato/discussions" target="_blank">the Discussions</a> and
-    <a href="https://github.com/dima-iholkin/PourOverPotato/issues" target="_blank">the Issues</a>
-    pages.
+    You can connect with me on
+    <a href="https://www.linkedin.com/in/dima-iholkin/" target="_blank">LinkedIn</a>
+    or influence the project using the
+    <a href="https://github.com/dima-iholkin/PourOverPotato/discussions" target="_blank">GitHub Discussions</a>
+    and the
+    <a href="https://github.com/dima-iholkin/PourOverPotato/issues" target="_blank">GitHub Issues</a>.
   </p>
 </div>
 
 <h5>About your data</h5>
 <div class="about-section">
-  <p>
+  <p style="padding-bottom: 1rem;">
     By design all your data is saved in your browser only and on your device only, it's not sent anywhere, there is no
     server. You can import and export your data to and from a file.
   </p>
-  <p style="padding-bottom: 1rem;">Much later I would like to add an ability to sync data with Google Drive.</p>
   <p>
-    The application is in active development. Things may change and data integrity is not guaranteed. However I'll try
-    hard to not break your data.
+    Unfortunately it's likely that I won't be able to develop the app much more. However it was and is in a very good
+    and usable state since the very early versions long time ago and I will continue using it.
   </p>
 </div>
 
