@@ -236,6 +236,10 @@
       placeholder={placeholders.recipeTarget}
       bind:value={recipeTarget}
     />
+    <!-- TODO: -->
+    <!-- Date picker for roast date goes here. -->
+    <!-- Bag number goes here too. -->
+    <!-- Attempt to put them on the same row. -->
     <Textarea
       id={RECIPE_RESULT}
       initialValue={recipe.recipeResult}
