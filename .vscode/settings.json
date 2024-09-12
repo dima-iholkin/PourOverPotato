@@ -9,5 +9,41 @@
     "build": true,
     "package-lock.json": true,
     "vite.config.ts.timestamp*": true,
+  },
+  // Custom tab labels from here, modified:
+  // https://www.reddit.com/r/sveltejs/comments/1e26pfc/vs_code_supports_custom_tab_labels/
+  "workbench.editor.customLabels.patterns": {
+    // Page
+    "**/routes/*/*/**/+page.svelte": "\\${dirname(1)}\\${dirname}\\+page.svelte",
+    "**/routes/*/+page.svelte": "\\${dirname}\\+page.svelte",
+    "**/routes/+page.svelte": "\\+page.svelte",
+    // Layout
+    "**/routes/*/*/**/+layout.svelte": "\\${dirname(1)}\\${dirname}\\+layout.svelte",
+    "**/routes/*/+layout.svelte": "\\${dirname}\\+layout.svelte",
+    "**/routes/+layout.svelte": "\\+layout.svelte",
+    // Error Page
+    "**/routes/*/*/**/+error.svelte": "\\${dirname(1)}\\${dirname}\\+error.svelte",
+    "**/routes/*/+error.svelte": "\\${dirname}\\+error.svelte",
+    "**/routes/+error.svelte": "\\+error.svelte",
+    // Page Data
+    "**/routes/*/*/**/+page.[tj]s": "\\${dirname(1)}\\${dirname}\\+page.${extname}",
+    "**/routes/*/+page.[tj]s": "\\${dirname}\\+page.${extname}",
+    "**/routes/+page.[tj]s": "\\+page.${extname}",
+    // Layout Data
+    "**/routes/*/*/**/+layout.[tj]s": "\\${dirname(1)}\\${dirname}\\+layout.${extname}",
+    "**/routes/*/+layout.[tj]s": "\\${dirname}\\+layout.${extname}",
+    "**/routes/+layout.[tj]s": "\\+layout.${extname}",
+    // Page Server Data
+    "**/routes/*/*/**/+page.server.[tj]s": "\\${dirname(1)}\\${dirname}\\+page.server.${extname}",
+    "**/routes/*/+page.server.[tj]s": "\\${dirname}\\+page.server.${extname}",
+    "**/routes/+page.server.[tj]s": "\\+page.server.${extname}",
+    // Page Layout Data
+    "**/routes/*/*/**/+layout.server.[tj]s": "\\${dirname(1)}\\${dirname}\\+layout.server.${extname}",
+    "**/routes/*/+layout.server.[tj]s": "\\${dirname}\\+layout.server.${extname}",
+    "**/routes/+layout.server.[tj]s": "\\+layout.server.${extname}",
+    // Server Endpoint
+    "**/routes/*/*/**/+server.[tj]s": "\\${dirname(1)}\\${dirname}\\+server.${extname}",
+    "**/routes/*/+server.[tj]s": "\\${dirname}\\+server.${extname}",
+    "**/routes/+server.[tj]s": "\\+server.${extname}"
   }
 }
