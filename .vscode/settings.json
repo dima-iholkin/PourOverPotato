@@ -45,5 +45,21 @@
     "**/routes/*/*/**/+server.[tj]s": "\\${dirname(1)}\\${dirname}\\+server.${extname}",
     "**/routes/*/+server.[tj]s": "\\${dirname}\\+server.${extname}",
     "**/routes/+server.[tj]s": "\\+server.${extname}"
+  },
+  // Temporary theme fix for "{ }" brackets:
+  "editor.tokenColorCustomizations": {
+    "textMateRules": [
+      {
+        "scope": [
+          // "source.svelte meta meta meta punctuation.section.embedded.begin.svelte",
+          // "source.svelte meta meta meta punctuation.section.embedded.end.svelte",
+          "source.svelte punctuation.section.embedded.begin.svelte",
+          "source.svelte punctuation.section.embedded.end.svelte"
+        ],
+        "settings": {
+          "foreground": "#A9A9A9"
+        }
+      }
+    ]
   }
 }
