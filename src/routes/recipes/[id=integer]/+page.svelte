@@ -24,14 +24,18 @@
   import { Recipe } from "$lib/domain/entities/Recipe";
   import { formatTimeForInput, parseDateFromInputString } from "$lib/helpers/dateHelpers";
   import CoffeeBeansSelect from "$lib/UI/domainComponents/forms/CoffeeBeansSelect.svelte";
+  import DaysSinceRoastP from "$lib/UI/domainComponents/forms/DaysSinceRoastP.svelte";
   import FavoriteCheckbox from "$lib/UI/domainComponents/forms/FavoriteCheckbox.svelte";
+  import RoastDatePicker from "$lib/UI/domainComponents/forms/RoastDatePicker.svelte";
   import TimestampPicker from "$lib/UI/domainComponents/forms/TimestampPicker.svelte";
   import Loading from "$lib/UI/domainComponents/lists/Loading.svelte";
   import DropdownMenu from "$lib/UI/genericComponents/dropdownMenu/DropdownMenu.svelte";
   import DropdownMenuItem from "$lib/UI/genericComponents/dropdownMenu/DropdownMenuItem.svelte";
   import FlexRow from "$lib/UI/genericComponents/FlexRow.svelte";
+  import FormRow from "$lib/UI/genericComponents/forms/FormRow.svelte";
   import NumberInput from "$lib/UI/genericComponents/forms/NumberInput.svelte";
   import Textarea from "$lib/UI/genericComponents/forms/Textarea.svelte";
+  import TextInput from "$lib/UI/genericComponents/forms/TextInput.svelte";
   import DeleteConfirmationModal from "$lib/UI/genericComponents/modals/DeleteConfirmationModal.svelte";
   import { addToast, addToastWithUndo } from "$lib/UI/genericComponents/toasts/toastProvider";
   import PageHeadline from "$lib/UI/layout/PageHeadline.svelte";
@@ -52,12 +56,27 @@
   // Form state:
   let selectedCoffeeBeansId: number | undefined = undefined;
   let recipeTarget: string;
+  let roastDate: Date = new Date(0);
+  let daysSinceRoast: number | undefined;
+  let bagNumber: string;
   let recipeResult: string;
   let recipeThoughts: string;
   let outWeight: number;
   let rating: number;
   let favorite: boolean = false;
   let timestampStr: string;
+
+  // Recalculate the days since roast:
+  $: {
+    roastDate, timestampStr;
+    if (roastDate.getTime() === 0) {
+      daysSinceRoast = undefined;
+    } else if (timestampStr !== "") {
+      const roastTimestamp: number = roastDate.getTime();
+      const recipeTimestamp: number = parseDateFromInputString(timestampStr).getTime();
+      daysSinceRoast = Math.ceil((recipeTimestamp - roastTimestamp) / (1000 * 60 * 60 * 24));
+    }
+  }
 
   // Unsaved changes state:
   let hasUnsavedChanges: boolean = false;
@@ -66,6 +85,8 @@
   $: if (
     recipe &&
     selectedCoffeeBeansId === recipe.coffeeBeansId &&
+    roastDate.getTime() === (recipe.roastDate ? recipe.roastDate.getTime() : 0) &&
+    bagNumber === recipe.bagNumber &&
     recipeTarget === recipe.recipeTarget &&
     recipeResult === recipe.recipeResult &&
     recipeThoughts === recipe.recipeThoughts &&
@@ -164,6 +185,8 @@
     const recipeEdited: Recipe = new Recipe({
       id: recipe.id,
       coffeeBeansId: selectedCoffeeBeansId,
+      roastDate: roastDate,
+      bagNumber: bagNumber,
       recipeTarget: recipeTarget,
       recipeResult: recipeResult,
       recipeThoughts: recipeThoughts,
@@ -228,6 +251,12 @@
       showAddButton={false}
       bind:selectedCoffeeBeansId
     />
+    <FormRow>
+      <RoastDatePicker initialValue={recipe.roastDate} bind:valueDate={roastDate} />
+      <DaysSinceRoastP onClear={() => (roastDate = new Date(0))} value={daysSinceRoast} />
+      <div style="flex-grow: 1;" />
+      <TextInput initialValue={recipe.bagNumber} labelText="Bag number:" nameAttr="bag-number" bind:value={bagNumber} />
+    </FormRow>
     <Textarea
       id={RECIPE_TARGET}
       initialValue={recipe.recipeTarget}

@@ -1,6 +1,8 @@
 export interface IRecipe {
   id: number;
   coffeeBeansId: number;
+  roastDate: Date;
+  bagNumber: string;
   recipeTarget: string;
   recipeResult: string;
   recipeThoughts: string;
@@ -13,6 +15,8 @@ export interface IRecipe {
 export class Recipe implements IRecipe {
   id: number;
   coffeeBeansId: number;
+  roastDate: Date;
+  bagNumber: string;
   recipeTarget: string;
   recipeResult: string;
   recipeThoughts: string;
@@ -24,6 +28,8 @@ export class Recipe implements IRecipe {
   constructor(item: IRecipe) {
     this.id = item.id;
     this.coffeeBeansId = item.coffeeBeansId;
+    this.roastDate = item.roastDate;
+    this.bagNumber = item.bagNumber;
     this.recipeTarget = item.recipeTarget;
     this.recipeResult = item.recipeResult;
     this.recipeThoughts = item.recipeThoughts;
@@ -36,6 +42,8 @@ export class Recipe implements IRecipe {
 
 export class RecipeSubmit implements Omit<IRecipe, "id"> {
   coffeeBeansId: number;
+  roastDate: Date;
+  bagNumber: string;
   recipeTarget: string;
   recipeResult: string;
   recipeThoughts: string;
@@ -46,6 +54,8 @@ export class RecipeSubmit implements Omit<IRecipe, "id"> {
 
   constructor(item: Omit<IRecipe, "id">) {
     this.coffeeBeansId = item.coffeeBeansId;
+    this.roastDate = item.roastDate;
+    this.bagNumber = item.bagNumber;
     this.recipeTarget = item.recipeTarget;
     this.recipeResult = item.recipeResult;
     this.recipeThoughts = item.recipeThoughts;
