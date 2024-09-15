@@ -6,20 +6,29 @@
   const NAME = "roast-date";
 
   // Props:
-  export let valueDate: Date;
+  export let dateValue: Date;
   export let initialValue: Date = new Date(0);
+
+  // Bind DOM elements:
+  let _input: HTMLInputElement;
+
+  $: {
+    if (_input) {
+      _input.value = dateValue.getTime() > 0 ? formatTimeForInput(dateValue) : "";
+    }
+  }
 
   // Handlers:
   function handleChange(event: Event & { currentTarget: EventTarget & HTMLInputElement }) {
     // Guard clause:
     if (event.currentTarget.value === "") {
-      valueDate = new Date(0);
+      dateValue = new Date(0);
       return;
     }
     // Normal flow, for a real date:
     const datePart = event.currentTarget.value.split("T")[0];
     const newDateTime = datePart + "T12:00";
-    valueDate = parseDateFromInputString(newDateTime);
+    dateValue = parseDateFromInputString(newDateTime);
   }
 </script>
 
@@ -29,9 +38,9 @@
     id={NAME}
     name={NAME}
     type="datetime-local"
-    value={valueDate.getTime() === 0 ? "" : formatTimeForInput(valueDate)}
-    class:empty={valueDate.getTime() === 0}
-    class:unsaved-changes={initialValue.getTime() !== valueDate.getTime()}
+    bind:this={_input}
+    class:empty={dateValue.getTime() > 0 === false}
+    class:unsaved-changes={initialValue.getTime() !== dateValue.getTime()}
     on:input={handleChange}
   />
 </div>

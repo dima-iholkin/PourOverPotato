@@ -1,6 +1,7 @@
 import { Recipe, RecipeSubmit, type IRecipe } from "$lib/domain/entities/Recipe";
 
-export interface IRecipeDB extends Omit<IRecipe, "timestamp"> {
+export interface IRecipeDB extends Omit<IRecipe, "timestamp" | "roastDate"> {
+  roastDate: number;
   timestamp: number;
   softDeletionTimestamp: number | undefined;
 }
@@ -8,6 +9,8 @@ export interface IRecipeDB extends Omit<IRecipe, "timestamp"> {
 export class RecipeDB implements IRecipeDB {
   id: number;
   coffeeBeansId: number;
+  roastDate: number;
+  bagNumber: string;
   recipeTarget: string;
   recipeResult: string;
   recipeThoughts: string;
@@ -20,6 +23,8 @@ export class RecipeDB implements IRecipeDB {
   constructor(item: IRecipeDB) {
     this.id = item.id;
     this.coffeeBeansId = item.coffeeBeansId;
+    this.roastDate = item.roastDate;
+    this.bagNumber = item.bagNumber;
     this.recipeTarget = item.recipeTarget;
     this.recipeResult = item.recipeResult;
     this.recipeThoughts = item.recipeThoughts;
@@ -33,6 +38,8 @@ export class RecipeDB implements IRecipeDB {
   static fromRecipe(item: Recipe): RecipeDB {
     const obj: IRecipeDB = {
       ...item,
+      // roastDate: item.roastDate.getTime(),
+      roastDate: item.roastDate ? item.roastDate.getTime() : 0,
       timestamp: item.timestamp.getTime(),
       softDeletionTimestamp: undefined // Because the core Recipe entity doesn't even have the concept of "softDeleted".
     };
@@ -43,6 +50,7 @@ export class RecipeDB implements IRecipeDB {
     const obj: IRecipe = {
       ...this,
       favorite: this.favorite ?? false,
+      roastDate: new Date(this.roastDate),
       timestamp: new Date(this.timestamp)
     };
     return new Recipe(obj);
@@ -51,6 +59,8 @@ export class RecipeDB implements IRecipeDB {
 
 export class RecipeDBSubmit implements Omit<IRecipeDB, "id"> {
   coffeeBeansId: number;
+  roastDate: number;
+  bagNumber: string;
   recipeTarget: string;
   recipeResult: string;
   recipeThoughts: string;
@@ -62,6 +72,8 @@ export class RecipeDBSubmit implements Omit<IRecipeDB, "id"> {
 
   constructor(recipe: RecipeSubmit) {
     this.coffeeBeansId = recipe.coffeeBeansId;
+    this.roastDate = recipe.roastDate ? recipe.roastDate.getTime() : 0;
+    this.bagNumber = recipe.bagNumber;
     this.recipeTarget = recipe.recipeTarget;
     this.recipeResult = recipe.recipeResult;
     this.recipeThoughts = recipe.recipeThoughts;
@@ -72,7 +84,7 @@ export class RecipeDBSubmit implements Omit<IRecipeDB, "id"> {
     this.softDeletionTimestamp = undefined;
   }
 
-  toRecipeDB(recipeDbSubmit: RecipeDBSubmit, id: number): RecipeDB {
-    return new RecipeDB({ ...recipeDbSubmit, id });
+  toRecipeDB(recipe: RecipeDBSubmit, id: number): RecipeDB {
+    return new RecipeDB({ ...recipe, id });
   }
 }
