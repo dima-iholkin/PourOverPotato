@@ -1,16 +1,19 @@
 <script lang="ts">
-  export let value: number | undefined;
+  export let daysSinceRoast: number | undefined;
   export let onClear: () => void;
 </script>
 
 <div class="text-gray-900">
-  {#if value === undefined}
-    <p style="color: transparent;">xx days since roast</p>
-  {:else if value === 1}
+  {#if daysSinceRoast === undefined || Number.isFinite(daysSinceRoast) === false}
+    <div style="visibility: hidden;">
+      <p>xx days since roast</p>
+      <button on:click|preventDefault={() => onClear()}>clear</button>
+    </div>
+  {:else if daysSinceRoast === 1}
     <p>1 day since roast</p>
     <button on:click|preventDefault={() => onClear()}>clear</button>
   {:else}
-    <p>{value} days since roast</p>
+    <p>{daysSinceRoast} days since roast</p>
     <button on:click|preventDefault={() => onClear()}>clear</button>
   {/if}
 </div>

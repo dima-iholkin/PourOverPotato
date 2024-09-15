@@ -35,7 +35,8 @@
 
   // Form state:
   let selectedCoffeeBeansId: number | undefined = recipe.coffeeBeansId;
-  let roastDate: Date = recipe.roastDate ?? new Date(0);
+  let roastDate: Date =
+    recipe.roastDate instanceof Date && isFinite(recipe.roastDate.valueOf()) ? recipe.roastDate : new Date(0);
   let bagNumber: string = recipe.bagNumber ?? "";
   let recipeTarget: string = recipe.recipeTarget;
   let recipeResult: string = recipe.recipeResult;
@@ -51,8 +52,8 @@
     daysSinceRoast = undefined;
   } else if (timestampStr !== "") {
     const roastTimestamp: number = roastDate.getTime();
-    const recipeTimestamp: number = parseDateFromInputString(timestampStr).getTime();
-    daysSinceRoast = Math.ceil((recipeTimestamp - roastTimestamp) / (1000 * 60 * 60 * 24));
+    const recipeTimestamp: number = parseDateFromInputString(timestampStr.split("T")[0] + "T12:00").getTime();
+    daysSinceRoast = Math.round((recipeTimestamp - roastTimestamp) / (1000 * 60 * 60 * 24));
   }
 
   // Calculated state, unsaved changes:
@@ -85,6 +86,7 @@
   // Handlers:
   async function handleSubmit() {
     // Validate and format the form values:
+    bagNumber = bagNumber.trim();
     recipeTarget = recipeTarget.trim();
     recipeResult = recipeResult.trim();
     recipeThoughts = recipeThoughts.trim();
@@ -133,8 +135,13 @@
     bind:selectedCoffeeBeansId
   />
   <FormRow>
-    <RoastDatePicker initialValue={recipe.roastDate} bind:valueDate={roastDate} />
-    <DaysSinceRoastP onClear={() => (roastDate = new Date(0))} value={daysSinceRoast} />
+    <RoastDatePicker
+      initialValue={recipe.roastDate instanceof Date && isFinite(recipe.roastDate.valueOf())
+        ? recipe.roastDate
+        : new Date(0)}
+      bind:dateValue={roastDate}
+    />
+    <DaysSinceRoastP {daysSinceRoast} onClear={() => (roastDate = new Date(0))} />
     <div style="flex-grow: 1;" />
     <TextInput initialValue={recipe.bagNumber} labelText="Bag number:" nameAttr="bag-number" bind:value={bagNumber} />
   </FormRow>
