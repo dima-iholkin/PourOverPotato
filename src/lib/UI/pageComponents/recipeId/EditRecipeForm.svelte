@@ -53,7 +53,7 @@
   } else if (timestampStr !== "") {
     const roastTimestamp: number = roastDate.getTime();
     const recipeTimestamp: number = parseDateFromInputString(timestampStr.split("T")[0] + "T12:00").getTime();
-    daysSinceRoast = Math.floor((recipeTimestamp - roastTimestamp) / (1000 * 60 * 60 * 24));
+    daysSinceRoast = Math.round((recipeTimestamp - roastTimestamp) / (1000 * 60 * 60 * 24));
   }
 
   // Calculated state, unsaved changes:
