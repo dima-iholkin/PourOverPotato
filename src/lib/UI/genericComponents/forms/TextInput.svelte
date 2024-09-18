@@ -3,7 +3,7 @@
 
   // Props:
   export let value: string = "";
-  export let initialValue: string = "";
+  export let initialValue: string | undefined = undefined;
   export let labelText: string = "";
   export let nameAttr: string = "";
 </script>
@@ -17,7 +17,7 @@
       name={nameAttr}
       type="text"
       bind:value
-      class:unsaved-changes={initialValue !== value}
+      class:unsaved-changes={initialValue !== undefined && initialValue !== value}
     />
   </div>
 </div>

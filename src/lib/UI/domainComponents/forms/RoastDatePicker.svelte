@@ -7,7 +7,7 @@
 
   // Props:
   export let dateValue: Date;
-  export let initialValue: Date = new Date(0);
+  export let initialValue: Date | undefined = undefined;
 
   // Bind DOM elements:
   let _input: HTMLInputElement;
@@ -40,7 +40,7 @@
     type="datetime-local"
     bind:this={_input}
     class:empty={dateValue.getTime() > 0 === false}
-    class:unsaved-changes={initialValue.getTime() !== dateValue.getTime()}
+    class:unsaved-changes={initialValue !== undefined && initialValue.getTime() !== dateValue.getTime()}
     on:input={handleChange}
   />
 </div>
