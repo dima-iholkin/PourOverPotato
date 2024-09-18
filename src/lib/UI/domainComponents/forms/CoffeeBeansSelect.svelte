@@ -23,7 +23,7 @@
 
   // Entity props:
   export let allCoffeeBeans: CoffeeBeans[] | undefined;
-  export let selectedCoffeeBeansId: number | undefined;
+  export let selectedCoffeeBeansId: number | "" | undefined;
 
   // UI props:
   export let showAddButton: boolean = true;
