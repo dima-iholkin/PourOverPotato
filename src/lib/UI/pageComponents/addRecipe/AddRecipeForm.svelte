@@ -22,6 +22,7 @@
   import { addToast } from "$lib/UI/genericComponents/toasts/toastProvider";
 
   // Constants:
+  const ROAST_DATE = "roast-date";
   const BAG_NUMBER = "bag-number";
   const RECIPE_TARGET = "recipe-target";
   const RECIPE_RESULT = "recipe-result";
@@ -82,7 +83,7 @@
   $: {
     roastDate;
     if (initFinished) {
-      persistFormField(FORM_NAME, "roast-date", roastDate.getTime());
+      persistFormField(FORM_NAME, ROAST_DATE, roastDate.getTime());
     }
   }
 
@@ -149,6 +150,8 @@
         selectedCoffeeBeansId = <number | undefined>loadFormField(FORM_NAME, COFFEEBEANS_ID, "number") ?? undefined;
       }
       // Load the persisted form values from LocalStorage:
+      roastDate = new Date(<number>loadFormField(FORM_NAME, ROAST_DATE, "number")) ?? new Date(0);
+      bagNumber = <string>loadFormField(FORM_NAME, BAG_NUMBER, "string") ?? "";
       recipeTarget = <string>loadFormField(FORM_NAME, RECIPE_TARGET, "string") ?? "";
       recipeResult = <string>loadFormField(FORM_NAME, RECIPE_RESULT, "string") ?? "";
       recipeThoughts = <string>loadFormField(FORM_NAME, RECIPE_THOUGHTS, "string") ?? "";
@@ -193,6 +196,8 @@
     // Save the new Recipe:
     await addRecipe(recipeSubmit);
     // Clear the persisted form values from LocalStorage:
+    clearFormField(FORM_NAME, ROAST_DATE);
+    clearFormField(FORM_NAME, BAG_NUMBER);
     clearFormField(FORM_NAME, COFFEEBEANS_ID);
     clearFormField(FORM_NAME, RECIPE_TARGET);
     clearFormField(FORM_NAME, RECIPE_RESULT);
@@ -227,10 +232,10 @@
     bind:setValidationFailed={bindSetValidationFailed}
   />
   <FormRow>
-    <RoastDatePicker initialValue={undefined} bind:dateValue={roastDate} />
+    <RoastDatePicker bind:dateValue={roastDate} />
     <DaysSinceRoastP {daysSinceRoast} onClear={() => (roastDate = new Date(0))} />
     <div style="flex-grow: 1;" />
-    <TextInput initialValue="" labelText="Bag number:" nameAttr={BAG_NUMBER} bind:value={bagNumber} />
+    <TextInput labelText="Bag number:" nameAttr={BAG_NUMBER} bind:value={bagNumber} />
   </FormRow>
   <Textarea
     id={RECIPE_TARGET}

@@ -7,7 +7,7 @@
 
   // Props:
   export let dateValue: Date;
-  export let initialValue: Date = new Date(0);
+  export let initialValue: Date | undefined = undefined;
 
   // Bind DOM elements:
   let _input: HTMLInputElement;

@@ -3,7 +3,7 @@
 
   // Props:
   export let value: string = "";
-  export let initialValue: string = "";
+  export let initialValue: string | undefined = undefined;
   export let labelText: string = "";
   export let nameAttr: string = "";
 </script>
