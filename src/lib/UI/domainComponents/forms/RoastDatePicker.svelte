@@ -40,7 +40,7 @@
     type="datetime-local"
     bind:this={_input}
     class:empty={dateValue.getTime() > 0 === false}
-    class:unsaved-changes={initialValue.getTime() !== dateValue.getTime()}
+    class:unsaved-changes={initialValue !== undefined && initialValue.getTime() !== dateValue.getTime()}
     on:input={handleChange}
   />
 </div>

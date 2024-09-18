@@ -17,7 +17,7 @@
       name={nameAttr}
       type="text"
       bind:value
-      class:unsaved-changes={initialValue !== value}
+      class:unsaved-changes={initialValue !== undefined && initialValue !== value}
     />
   </div>
 </div>
