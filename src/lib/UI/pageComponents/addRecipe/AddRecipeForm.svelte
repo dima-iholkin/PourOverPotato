@@ -1,15 +1,19 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { goto } from "$app/navigation";
+  import { beforeNavigate, goto } from "$app/navigation";
   import { getAllCoffeeBeans } from "$lib/database/manageCoffeeBeans";
   import { addRecipe } from "$lib/database/manageRecipes";
   import { naming } from "$lib/domain/constants/naming";
   import { routes } from "$lib/domain/constants/routes";
   import { placeholders } from "$lib/domain/constants/strings";
   import { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
-  import type { RecipeSubmit } from "$lib/domain/entities/Recipe";
+  import type { Recipe, RecipeSubmit } from "$lib/domain/entities/Recipe";
   import { formatTimeForInput, parseDateFromInputString } from "$lib/helpers/dateHelpers";
-  import { clearFormField, loadFormField, persistFormField } from "$lib/localStorage/persistForms";
+  import {
+    clearNewRecipeFormState,
+    loadNewRecipeFormState,
+    saveNewRecipeFormState
+  } from "$lib/localStorage/persistNewRecipeForm";
   import CoffeeBeansSelect from "$lib/UI/domainComponents/forms/CoffeeBeansSelect.svelte";
   import DaysSinceRoastP from "$lib/UI/domainComponents/forms/DaysSinceRoastP.svelte";
   import FavoriteCheckbox from "$lib/UI/domainComponents/forms/FavoriteCheckbox.svelte";
@@ -22,16 +26,12 @@
   import { addToast } from "$lib/UI/genericComponents/toasts/toastProvider";
 
   // Constants:
-  const ROAST_DATE = "roast-date";
   const BAG_NUMBER = "bag-number";
   const RECIPE_TARGET = "recipe-target";
   const RECIPE_RESULT = "recipe-result";
   const RECIPE_THOUGHTS = "recipe-thoughts";
   const OUT_WEIGHT = "out-weight";
   const RATING = "rating";
-  const FAVORITE = "favorite";
-  const FORM_NAME = "addRecipe";
-  const COFFEEBEANS_ID = "coffee-beans";
 
   // Props:
   export let coffeeBeansName: string | null;
@@ -44,12 +44,13 @@
 
   // UI state:
   let initFinished: boolean = false;
+  let afterSave: boolean = false;
 
   // Entities state:
   let coffeeBeansItems: CoffeeBeans[];
 
   // Form state:
-  let selectedCoffeeBeansId: number | undefined = undefined;
+  let selectedCoffeeBeansId: number | "" | undefined = undefined;
   let roastDate: Date = new Date(0);
   let bagNumber: string = "";
   let recipeTarget: string = "";
@@ -62,7 +63,7 @@
 
   // Calculated state, the days since roast:
   let daysSinceRoast: number | undefined;
-  $: if (roastDate.getTime() === 0) {
+  $: if (roastDate === undefined || roastDate.getTime() === 0) {
     daysSinceRoast = undefined;
   } else if (timestampStr !== "") {
     const roastTimestamp: number = roastDate.getTime();
@@ -70,98 +71,82 @@
     daysSinceRoast = Math.round((recipeTimestamp - roastTimestamp) / (1000 * 60 * 60 * 24));
   }
 
-  // Reactivity, to persist the form values:
-
-  $: if (selectedCoffeeBeansId !== undefined && initFinished) {
-    persistFormField(FORM_NAME, COFFEEBEANS_ID, selectedCoffeeBeansId);
+  // Change the URL query string reactivity:
+  $: if (selectedCoffeeBeansId && initFinished) {
     const _coffeeBeansName: string | undefined = coffeeBeansItems.find(
       (item) => item.id === selectedCoffeeBeansId
     )?.name;
     goto(routes.addRecipe(_coffeeBeansName));
   }
 
-  $: {
-    roastDate;
-    if (initFinished) {
-      persistFormField(FORM_NAME, ROAST_DATE, roastDate.getTime());
-    }
-  }
-
-  $: {
-    bagNumber;
-    if (initFinished) {
-      persistFormField(FORM_NAME, BAG_NUMBER, bagNumber);
-    }
-  }
-
-  $: {
-    recipeTarget;
-    if (initFinished) {
-      persistFormField(FORM_NAME, RECIPE_TARGET, recipeTarget);
-    }
-  }
-
-  $: {
-    recipeResult;
-    if (initFinished) {
-      persistFormField(FORM_NAME, RECIPE_RESULT, recipeResult);
-    }
-  }
-
-  $: {
-    recipeThoughts;
-    if (initFinished) {
-      persistFormField(FORM_NAME, RECIPE_THOUGHTS, recipeThoughts);
-    }
-  }
-
-  $: {
-    outWeight;
-    if (initFinished) {
-      persistFormField(FORM_NAME, OUT_WEIGHT, outWeight);
-    }
-  }
-
-  $: {
-    rating;
-    if (initFinished) {
-      persistFormField(FORM_NAME, RATING, rating);
-    }
-  }
-
-  $: {
-    favorite;
-    if (initFinished) {
-      persistFormField(FORM_NAME, FAVORITE, favorite ? 1 : 0);
-    }
-  }
-
   // Lifecycle:
   onMount(() => {
+    // Load all CoffeeBeans from IndexedDB:
     getAllCoffeeBeans().then((items: CoffeeBeans[]) => {
-      // Load all CoffeeBeans from IndexedDB:
       coffeeBeansItems = items;
+      // If the coffee beans name provided in URL, use it for "selectedCoffeeBeansId":
       if (coffeeBeansName) {
         selectedCoffeeBeansId = coffeeBeansItems.find(
           (item) => item.name.toLowerCase() === coffeeBeansName.toLowerCase()
         )?.id;
-      } else {
-        // Load the persisted form values from LocalStorage:
-        selectedCoffeeBeansId = <number | undefined>loadFormField(FORM_NAME, COFFEEBEANS_ID, "number") ?? undefined;
       }
-      // Load the persisted form values from LocalStorage:
-      roastDate = new Date(<number>loadFormField(FORM_NAME, ROAST_DATE, "number")) ?? new Date(0);
-      bagNumber = <string>loadFormField(FORM_NAME, BAG_NUMBER, "string") ?? "";
-      recipeTarget = <string>loadFormField(FORM_NAME, RECIPE_TARGET, "string") ?? "";
-      recipeResult = <string>loadFormField(FORM_NAME, RECIPE_RESULT, "string") ?? "";
-      recipeThoughts = <string>loadFormField(FORM_NAME, RECIPE_THOUGHTS, "string") ?? "";
-      outWeight = <number>(loadFormField(FORM_NAME, OUT_WEIGHT, "number") ?? 0);
-      rating = <number>(loadFormField(FORM_NAME, RATING, "number") ?? 0);
-      favorite = <boolean>(loadFormField(FORM_NAME, FAVORITE, "number") === 1 ? true : false);
+      // Load the persisted form state from Local Storage:
+      const obj: Partial<Omit<Recipe, "id" | "timestamp">> | undefined = loadNewRecipeFormState();
+      // Guard clause:
+      if (obj === undefined) {
+        return;
+      }
+      // Set the form field values from Local Storage:
+      if (selectedCoffeeBeansId === "" || selectedCoffeeBeansId === undefined) {
+        selectedCoffeeBeansId = obj.coffeeBeansId;
+      }
+      roastDate = obj.roastDate ?? new Date(0);
+      bagNumber = obj.bagNumber ?? "";
+      recipeTarget = obj.recipeTarget ?? "";
+      recipeResult = obj.recipeResult ?? "";
+      recipeThoughts = obj.recipeThoughts ?? "";
+      outWeight = obj.outWeight ?? 0;
+      rating = obj.rating ?? 0;
+      favorite = obj.favorite ?? false;
       // Finish init:
       initFinished = true;
     });
   });
+
+  // Persist unsaved changes:
+  // Lifecycle method:
+  beforeNavigate((navigation) => {
+    if (navigation.willUnload === false && navigation.to?.route.id !== "/recipes/add") {
+      handleBeforeUnload();
+    }
+  });
+  // Handler:
+  function handleBeforeUnload() {
+    // Guard clause, don't persist the form after save:
+    if (afterSave) {
+      return;
+    }
+    // Create a Recipe object and persist it:
+    const recipeObj: Partial<Omit<Recipe, "id" | "timestamp">> = {
+      coffeeBeansId: selectedCoffeeBeansId === "" ? undefined : selectedCoffeeBeansId,
+      roastDate: roastDate,
+      bagNumber: bagNumber,
+      recipeTarget: recipeTarget,
+      recipeResult: recipeResult,
+      recipeThoughts: recipeThoughts,
+      outWeight: outWeight,
+      rating: rating,
+      favorite: favorite
+    };
+    saveNewRecipeFormState(recipeObj);
+  }
+  function handleVisibilityChange() {
+    // Guard clause, persist the form values only if visibilityState === "hidden":
+    if (document.visibilityState === "visible") {
+      return;
+    }
+    handleBeforeUnload();
+  }
 
   // Handlers:
 
@@ -182,6 +167,7 @@
     const timestamp: Date = parseDateFromInputString(timestampStr);
     // Save the new recipe:
     const recipeSubmit: RecipeSubmit = {
+      // @ts-ignore
       coffeeBeansId: selectedCoffeeBeansId,
       roastDate: roastDate,
       bagNumber: bagNumber,
@@ -195,16 +181,10 @@
     };
     // Save the new Recipe:
     await addRecipe(recipeSubmit);
-    // Clear the persisted form values from LocalStorage:
-    clearFormField(FORM_NAME, ROAST_DATE);
-    clearFormField(FORM_NAME, BAG_NUMBER);
-    clearFormField(FORM_NAME, COFFEEBEANS_ID);
-    clearFormField(FORM_NAME, RECIPE_TARGET);
-    clearFormField(FORM_NAME, RECIPE_RESULT);
-    clearFormField(FORM_NAME, RECIPE_THOUGHTS);
-    clearFormField(FORM_NAME, OUT_WEIGHT);
-    clearFormField(FORM_NAME, RATING);
-    clearFormField(FORM_NAME, FAVORITE);
+    // Clear the persisted form state from LocalStorage:
+    clearNewRecipeFormState();
+    // Disable form persistance to Local Storage:
+    afterSave = true;
     // Show a toast:
     addToast("Recipe created.");
     // Redirect to another page:
@@ -222,6 +202,8 @@
     bindSetValidationFailed ? bindSetValidationFailed(false) : undefined;
   }
 </script>
+
+<svelte:window on:beforeunload={handleBeforeUnload} on:visibilitychange={handleVisibilityChange} />
 
 <form id="add-recipe" on:submit|preventDefault={handleFormSubmit}>
   <CoffeeBeansSelect

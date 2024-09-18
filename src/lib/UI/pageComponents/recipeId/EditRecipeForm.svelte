@@ -21,6 +21,7 @@
   import { addToast } from "$lib/UI/genericComponents/toasts/toastProvider";
 
   // Constants:
+  const BAG_NUMBER = "bag-number";
   const RECIPE_TARGET = "recipe-target";
   const RECIPE_RESULT = "recipe-result";
   const RECIPE_THOUGHTS = "recipe-thoughts";
@@ -62,7 +63,7 @@
     recipe &&
     selectedCoffeeBeansId === recipe.coffeeBeansId &&
     roastDate.getTime() === (recipe.roastDate ? recipe.roastDate.getTime() : 0) &&
-    bagNumber === recipe.bagNumber &&
+    bagNumber === (recipe.bagNumber ?? "") &&
     recipeTarget === recipe.recipeTarget &&
     recipeResult === recipe.recipeResult &&
     recipeThoughts === recipe.recipeThoughts &&
@@ -143,7 +144,12 @@
     />
     <DaysSinceRoastP {daysSinceRoast} onClear={() => (roastDate = new Date(0))} />
     <div style="flex-grow: 1;" />
-    <TextInput initialValue={recipe.bagNumber} labelText="Bag number:" nameAttr="bag-number" bind:value={bagNumber} />
+    <TextInput
+      initialValue={recipe.bagNumber ?? ""}
+      labelText="Bag number:"
+      nameAttr={BAG_NUMBER}
+      bind:value={bagNumber}
+    />
   </FormRow>
   <Textarea
     id={RECIPE_TARGET}
