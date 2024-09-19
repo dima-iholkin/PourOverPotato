@@ -1,7 +1,8 @@
 import { Recipe, RecipeSubmit, type IRecipe } from "$lib/domain/entities/Recipe";
 
-export interface IRecipeDB extends Omit<IRecipe, "timestamp" | "roastDate"> {
-  roastDate: number;
+export interface IRecipeDB extends Omit<IRecipe, "timestamp" | "roastDate" | "bagNumber"> {
+  roastDate: number | undefined;
+  bagNumber: string | undefined;
   timestamp: number;
   softDeletionTimestamp: number | undefined;
 }
@@ -9,8 +10,8 @@ export interface IRecipeDB extends Omit<IRecipe, "timestamp" | "roastDate"> {
 export class RecipeDB implements IRecipeDB {
   id: number;
   coffeeBeansId: number;
-  roastDate: number;
-  bagNumber: string;
+  roastDate: number | undefined;
+  bagNumber: string | undefined;
   recipeTarget: string;
   recipeResult: string;
   recipeThoughts: string;
@@ -49,8 +50,9 @@ export class RecipeDB implements IRecipeDB {
   toRecipe(): Recipe {
     const obj: IRecipe = {
       ...this,
+      roastDate: new Date(this.roastDate ?? 0),
+      bagNumber: this.bagNumber ?? "",
       favorite: this.favorite ?? false,
-      roastDate: new Date(this.roastDate),
       timestamp: new Date(this.timestamp)
     };
     return new Recipe(obj);
@@ -59,8 +61,8 @@ export class RecipeDB implements IRecipeDB {
 
 export class RecipeDBSubmit implements Omit<IRecipeDB, "id"> {
   coffeeBeansId: number;
-  roastDate: number;
-  bagNumber: string;
+  roastDate: number | undefined;
+  bagNumber: string | undefined;
   recipeTarget: string;
   recipeResult: string;
   recipeThoughts: string;

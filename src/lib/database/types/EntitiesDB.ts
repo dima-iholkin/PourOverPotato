@@ -21,6 +21,8 @@ export interface EntitiesDB extends DBSchema {
     value: IRecipeDB;
     indexes: {
       coffeeBeansId: number;
+      roastDate: number;
+      bagNumber: string;
       outWeight: number;
       rating: number;
       timestamp: number;

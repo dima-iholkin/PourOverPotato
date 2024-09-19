@@ -4,6 +4,8 @@ export function generateDemoRecipesForCoffeeBeansId(coffeeBeansId: number): Reci
   return [
     new RecipeSubmit({
       coffeeBeansId: coffeeBeansId,
+      roastDate: undefined,
+      bagNumber: "",
       recipeTarget: "17g + 270g. 5m boil.",
       recipeResult: "2m10s + 15s drip.",
       outWeight: 230,
@@ -14,6 +16,8 @@ export function generateDemoRecipesForCoffeeBeansId(coffeeBeansId: number): Reci
     }),
     new RecipeSubmit({
       coffeeBeansId: coffeeBeansId,
+      roastDate: undefined,
+      bagNumber: "",
       recipeTarget: "18g + 290g. 5m boil.",
       recipeResult: "2m10s + 15s drip.",
       outWeight: 235,
@@ -24,6 +28,8 @@ export function generateDemoRecipesForCoffeeBeansId(coffeeBeansId: number): Reci
     }),
     new RecipeSubmit({
       coffeeBeansId: coffeeBeansId,
+      roastDate: undefined,
+      bagNumber: "",
       recipeTarget: "20g + 300g. 5m boil.",
       recipeResult: "2m30s + 5s drip.",
       outWeight: 240,

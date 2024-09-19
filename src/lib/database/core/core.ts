@@ -5,12 +5,12 @@ import type { EntitiesDB_v1 } from "$lib/prevVersions/v1/database/EntitiesDBv1";
 import type { EntitiesDB_v2 } from "$lib/prevVersions/v2/database/EntitiesDBv2";
 import type { EntitiesDB_v3 } from "$lib/prevVersions/v3/database/EntitiesDBv3";
 import {
-  migrateCoffeeBeansV1ToV3, migrateCoffeeBeansV2ToV3, migrateCoffeeBeansV3ToV4, migrateRecipesV1ToV3,
-  migrateRecipesV2ToV3
+  migrateCoffeeBeansV1ToV5, migrateCoffeeBeansV2ToV5, migrateCoffeeBeansV3ToV5, migrateRecipesV1ToV5,
+  migrateRecipesV2ToV5
 } from "./migrations/migrations";
 
 // Internal constant:
-const DB_VERSION = 4;
+const DB_VERSION = 5;
 
 // Public constants:
 
@@ -40,30 +40,36 @@ export async function openEntitiesDB(): Promise<IDBPDatabase<EntitiesDB>> {
           {
             const _transaction =
               transaction as unknown as IDBPTransaction<EntitiesDB_v1, ("coffeeBeans" | "recipes")[], "versionchange">;
-            await migrateCoffeeBeansV1ToV3(_transaction);
-            await migrateRecipesV1ToV3(_transaction);
+            await migrateCoffeeBeansV1ToV5(_transaction);
+            await migrateRecipesV1ToV5(_transaction);
             break;
           }
         case 2:
           {
             const _transaction =
               transaction as unknown as IDBPTransaction<EntitiesDB_v2, ("coffeeBeans" | "recipes")[], "versionchange">;
-            await migrateCoffeeBeansV2ToV3(_transaction);
-            await migrateRecipesV2ToV3(_transaction);
+            await migrateCoffeeBeansV2ToV5(_transaction);
+            await migrateRecipesV2ToV5(_transaction);
             break;
           }
         case 3:
           {
             const _transaction =
               transaction as unknown as IDBPTransaction<EntitiesDB_v3, ("coffeeBeans" | "recipes")[], "versionchange">;
-            await migrateCoffeeBeansV3ToV4(_transaction);
+            await migrateCoffeeBeansV3ToV5(_transaction);
+            break;
+          }
+        case 4:
+          {
+            // v5 introduces 2 new fields for RecipeDB: "roastDate" and "bagNumber", however they are optional,
+            // so there is no need to modify the existing records.
             break;
           }
         default:
           break;
       }
       // Create any missing object stores and indexes:
-      createStoresV4(transaction);
+      createStoresV5(transaction);
       // Regenerate the EnhancedCoffeeBeans table:
       await regenerateEnhancedCoffeeBeansTable(transaction);
     }
@@ -71,7 +77,7 @@ export async function openEntitiesDB(): Promise<IDBPDatabase<EntitiesDB>> {
 }
 
 // Internal function:
-function createStoresV4(
+function createStoresV5(
   transaction: IDBPTransaction<EntitiesDB, ("coffeeBeans" | "enhancedCoffeeBeans" | "recipes")[], "versionchange">
 ): void {
   const _db: IDBPDatabase<EntitiesDB> = transaction.db;
@@ -88,6 +94,8 @@ function createStoresV4(
   }
   // Create the indexes on Recipes:
   createIndexOnRecipes(transaction, RECIPES_COFFEEBEANSID_INDEX);
+  createIndexOnRecipes(transaction, "roastDate");
+  createIndexOnRecipes(transaction, "bagNumber");
   createIndexOnRecipes(transaction, "outWeight");
   createIndexOnRecipes(transaction, "rating");
   createIndexOnRecipes(transaction, "timestamp");
@@ -98,7 +106,7 @@ function createStoresV4(
   }
 }
 
-// Helper functions for "createStoresV4":
+// Helper functions for "createStoresV5":
 
 function createIndexOnCoffeeBeans_nameLowerCase(
   transaction: IDBPTransaction<EntitiesDB, ("coffeeBeans" | "recipes" | "enhancedCoffeeBeans")[], "versionchange">
@@ -128,7 +136,8 @@ function createIndexOnCoffeeBeans_softDeletionTimestamp(
 
 function createIndexOnRecipes(
   transaction: IDBPTransaction<EntitiesDB, ("coffeeBeans" | "recipes" | "enhancedCoffeeBeans")[], "versionchange">,
-  nameAndKeyPath: "coffeeBeansId" | "outWeight" | "rating" | "timestamp" | "softDeletionTimestamp"
+  // eslint-disable-next-line max-len
+  nameAndKeyPath: "coffeeBeansId" | "roastDate" | "bagNumber" | "outWeight" | "rating" | "timestamp" | "softDeletionTimestamp"
 ) {
   // Guard clause, if the index exists already:
   if (transaction.objectStore(RECIPES_STORE).indexNames.contains(nameAndKeyPath)) {
