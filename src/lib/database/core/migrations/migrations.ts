@@ -14,9 +14,9 @@ import type { EntitiesDB_v3 } from "$lib/prevVersions/v3/database/EntitiesDBv3";
 import { addToast } from "$lib/UI/genericComponents/toasts/toastProvider";
 
 /**
- * Initializes the CoffeeBeans' `softDeleted` field to `false`.
+ * Initialize the CoffeeBeans' `softDeleted` field to `false`.
  */
-export async function migrateCoffeeBeansV1ToV3(
+export async function migrateCoffeeBeansV1ToV5(
   transaction: IDBPTransaction<EntitiesDB_v1, ("coffeeBeans" | "recipes")[], "versionchange">
 ) {
   // Guard clause:
@@ -41,9 +41,9 @@ export async function migrateCoffeeBeansV1ToV3(
 }
 
 /**
- * Makes the CoffeeBeans' `softDeleted` field mandatory.
+ * Make the CoffeeBeans' `softDeleted` field mandatory.
  */
-export async function migrateCoffeeBeansV2ToV3(
+export async function migrateCoffeeBeansV2ToV5(
   transaction: IDBPTransaction<EntitiesDB_v2, ("coffeeBeans" | "recipes")[], "versionchange">
 ) {
   // Guard clause:
@@ -68,9 +68,9 @@ export async function migrateCoffeeBeansV2ToV3(
 }
 
 /**
- * Makes the CoffeeBeans' index `nameLowerCase` unique again.
+ * Make the CoffeeBeans' index `nameLowerCase` unique again.
  */
-export async function migrateCoffeeBeansV3ToV4(
+export async function migrateCoffeeBeansV3ToV5(
   transaction: IDBPTransaction<EntitiesDB_v3, ("coffeeBeans" | "recipes")[], "versionchange">
 ) {
   // Guard clause:
@@ -137,10 +137,10 @@ export async function migrateCoffeeBeansV3ToV4(
 }
 
 /**
- * Converts each Recipe's "timestamp" field from `Date` to `number`.
- * Initializes "favorite" and "softDeleted" fields to `false`.
+ * Convert each Recipe's "timestamp" field from `Date` to `number`.
+ * Initialize "favorite" and "softDeleted" fields to `false`.
  */
-export async function migrateRecipesV1ToV3(
+export async function migrateRecipesV1ToV5(
   transaction: IDBPTransaction<EntitiesDB_v1, ("coffeeBeans" | "recipes")[], "versionchange">
 ): Promise<void> {
   // Guard clause:
@@ -157,6 +157,8 @@ export async function migrateRecipesV1ToV3(
   for (const itemV1 of recipesFromV1) {
     const objV3: IRecipeDB = {
       ...itemV1,
+      roastDate: undefined,
+      bagNumber: undefined,
       favorite: false,
       timestamp: itemV1.timestamp.getTime(),
       softDeletionTimestamp: undefined
@@ -167,9 +169,9 @@ export async function migrateRecipesV1ToV3(
 }
 
 /**
- * Makes the Recipe's `favorite` and `softDeleted` fields mandatory.
+ * Make the Recipe's `favorite` and `softDeleted` fields mandatory.
  */
-export async function migrateRecipesV2ToV3(
+export async function migrateRecipesV2ToV5(
   transaction: IDBPTransaction<EntitiesDB_v2, ("coffeeBeans" | "recipes")[], "versionchange">
 ): Promise<void> {
   // Guard clause:
@@ -186,6 +188,8 @@ export async function migrateRecipesV2ToV3(
   for (const itemV2 of recipesV2) {
     const objV3: IRecipeDB = {
       ...itemV2,
+      roastDate: undefined,
+      bagNumber: undefined,
       favorite: itemV2.favorite ?? false,
       softDeletionTimestamp: itemV2.softDeleted ? Date.now() : undefined
     };

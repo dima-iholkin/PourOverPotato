@@ -1,7 +1,8 @@
 import { Recipe, RecipeSubmit, type IRecipe } from "$lib/domain/entities/Recipe";
 
-export interface IRecipeDB extends Omit<IRecipe, "timestamp" | "roastDate"> {
-  roastDate: number;
+export interface IRecipeDB extends Omit<IRecipe, "timestamp" | "roastDate" | "bagNumber"> {
+  roastDate: number | undefined;
+  bagNumber: string | undefined;
   timestamp: number;
   softDeletionTimestamp: number | undefined;
 }
@@ -9,8 +10,8 @@ export interface IRecipeDB extends Omit<IRecipe, "timestamp" | "roastDate"> {
 export class RecipeDB implements IRecipeDB {
   id: number;
   coffeeBeansId: number;
-  roastDate: number;
-  bagNumber: string;
+  roastDate: number | undefined;
+  bagNumber: string | undefined;
   recipeTarget: string;
   recipeResult: string;
   recipeThoughts: string;
@@ -36,10 +37,25 @@ export class RecipeDB implements IRecipeDB {
   }
 
   static fromRecipe(item: Recipe): RecipeDB {
+    // Convert an effectively 0-value roast date to undefined, for better index and storage usage:
+    let _roastDate: number | undefined;
+    if (item.roastDate === undefined || item.roastDate.getTime() === 0) {
+      _roastDate = undefined;
+    } else {
+      _roastDate = item.roastDate.getTime();
+    }
+    // Convert and effectively empty bag number to undefined, for better index and storage usage:
+    let _bagNumber: string | undefined;
+    if (item.bagNumber === "") {
+      _bagNumber = undefined;
+    } else {
+      _bagNumber = item.bagNumber;
+    }
+    // Assemble and create the instance:
     const obj: IRecipeDB = {
       ...item,
-      // roastDate: item.roastDate.getTime(),
-      roastDate: item.roastDate ? item.roastDate.getTime() : 0,
+      roastDate: _roastDate,
+      bagNumber: _bagNumber,
       timestamp: item.timestamp.getTime(),
       softDeletionTimestamp: undefined // Because the core Recipe entity doesn't even have the concept of "softDeleted".
     };
@@ -49,8 +65,9 @@ export class RecipeDB implements IRecipeDB {
   toRecipe(): Recipe {
     const obj: IRecipe = {
       ...this,
+      roastDate: this.roastDate ? new Date(this.roastDate) : undefined,
+      bagNumber: this.bagNumber ?? "",
       favorite: this.favorite ?? false,
-      roastDate: new Date(this.roastDate),
       timestamp: new Date(this.timestamp)
     };
     return new Recipe(obj);
@@ -59,8 +76,8 @@ export class RecipeDB implements IRecipeDB {
 
 export class RecipeDBSubmit implements Omit<IRecipeDB, "id"> {
   coffeeBeansId: number;
-  roastDate: number;
-  bagNumber: string;
+  roastDate: number | undefined;
+  bagNumber: string | undefined;
   recipeTarget: string;
   recipeResult: string;
   recipeThoughts: string;
@@ -71,9 +88,23 @@ export class RecipeDBSubmit implements Omit<IRecipeDB, "id"> {
   softDeletionTimestamp: number | undefined;
 
   constructor(recipe: RecipeSubmit) {
+    // Convert an effectively 0-value roast date to undefined, for better index and storage usage:
+    let _roastDate: number | undefined;
+    if (recipe.roastDate === undefined || recipe.roastDate.getTime() === 0) {
+      _roastDate = undefined;
+    } else {
+      _roastDate = recipe.roastDate.getTime();
+    }
+    // Convert and effectively empty bag number to undefined, for better index and storage usage:
+    let _bagNumber: string | undefined;
+    if (recipe.bagNumber === "") {
+      _bagNumber = undefined;
+    } else {
+      _bagNumber = recipe.bagNumber;
+    }
     this.coffeeBeansId = recipe.coffeeBeansId;
-    this.roastDate = recipe.roastDate ? recipe.roastDate.getTime() : 0;
-    this.bagNumber = recipe.bagNumber;
+    this.roastDate = _roastDate;
+    this.bagNumber = _bagNumber;
     this.recipeTarget = recipe.recipeTarget;
     this.recipeResult = recipe.recipeResult;
     this.recipeThoughts = recipe.recipeThoughts;

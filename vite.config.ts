@@ -6,6 +6,7 @@ export default defineConfig({
   plugins: [sveltekit()],
   server: {
     port: 5174,
+    host: true,
     https: {
       key: fs.readFileSync(`${__dirname}/_cert/key.pem`),
       cert: fs.readFileSync(`${__dirname}/_cert/cert.pem`)

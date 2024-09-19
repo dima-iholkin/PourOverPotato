@@ -1,7 +1,7 @@
 export interface IRecipe {
   id: number;
   coffeeBeansId: number;
-  roastDate: Date;
+  roastDate: Date | undefined;
   bagNumber: string;
   recipeTarget: string;
   recipeResult: string;
@@ -15,7 +15,7 @@ export interface IRecipe {
 export class Recipe implements IRecipe {
   id: number;
   coffeeBeansId: number;
-  roastDate: Date;
+  roastDate: Date | undefined;
   bagNumber: string;
   recipeTarget: string;
   recipeResult: string;
@@ -78,7 +78,7 @@ export class Recipe implements IRecipe {
 
 export class RecipeSubmit implements Omit<IRecipe, "id"> {
   coffeeBeansId: number;
-  roastDate: Date;
+  roastDate: Date | undefined;
   bagNumber: string;
   recipeTarget: string;
   recipeResult: string;

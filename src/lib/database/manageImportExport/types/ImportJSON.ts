@@ -13,10 +13,12 @@ export interface ImportedJsonCoffeeBeans {
 export interface ImportedJsonRecipe {
   id: unknown | number;
   coffeeBeansId: unknown | number;
+  roastDate: unknown | Date;
+  bagNumber: unknown | string;
   recipeTarget: unknown | string;
   recipeResult: unknown | string;
   recipeThoughts: unknown | string;
-  favorite: unknown | boolean | undefined;
+  favorite: unknown | boolean;
   rating: unknown | number;
   outWeight: unknown | number;
   timestamp: unknown | Date;
