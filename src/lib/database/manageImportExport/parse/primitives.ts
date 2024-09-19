@@ -74,3 +74,19 @@ export function parseTimestampField(ts: unknown | string): Date | "ImportFailed"
   // Return the parsed date:
   return date;
 }
+
+export function parseDateField(dateStr: unknown | string | undefined): Date | undefined | "ImportFailed" {
+  // Guard clause:
+  if (isNullOrUndefined(dateStr) || typeof dateStr !== "string") {
+    return undefined;
+  }
+  // At this point we've proven this field is a string.
+  // Convert the string to Date:
+  const date: Date = parseDateFromInputString(dateStr);
+  // Guard clause:
+  if (date.toString() === "Invalid Date") {
+    return "ImportFailed";
+  }
+  // Return the parsed date:
+  return date;
+}

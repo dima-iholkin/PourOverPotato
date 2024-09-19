@@ -40,7 +40,7 @@ export class RecipeDB implements IRecipeDB {
     const obj: IRecipeDB = {
       ...item,
       // roastDate: item.roastDate.getTime(),
-      roastDate: item.roastDate ? item.roastDate.getTime() : 0,
+      roastDate: item.roastDate ? item.roastDate.getTime() : undefined,
       timestamp: item.timestamp.getTime(),
       softDeletionTimestamp: undefined // Because the core Recipe entity doesn't even have the concept of "softDeleted".
     };
@@ -50,7 +50,7 @@ export class RecipeDB implements IRecipeDB {
   toRecipe(): Recipe {
     const obj: IRecipe = {
       ...this,
-      roastDate: new Date(this.roastDate ?? 0),
+      roastDate: this.roastDate ? new Date(this.roastDate) : undefined,
       bagNumber: this.bagNumber ?? "",
       favorite: this.favorite ?? false,
       timestamp: new Date(this.timestamp)
