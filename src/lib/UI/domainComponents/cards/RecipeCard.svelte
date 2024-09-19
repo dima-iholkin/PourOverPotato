@@ -28,7 +28,14 @@
         {/if}
       </div>
     </div>
-    <h5>{coffeeBeansName}</h5>
+    <h5>
+      {coffeeBeansName}
+      {#if recipe.daysSinceRoast}
+        <span class="at-roast-days">
+          at {recipe.daysSinceRoast} day{#if recipe.daysSinceRoast !== 1}s{/if}
+        </span>
+      {/if}
+    </h5>
     <div>
       <p class="label">{naming.recipe.recipeTarget}:</p>
       <p class="content">{recipe.recipeTarget}</p>
@@ -75,6 +82,10 @@
 
   h5 {
     @apply text-2xl font-bold tracking-tight text-gray-900;
+  }
+
+  .at-roast-days {
+    @apply font-light;
   }
 
   .label {

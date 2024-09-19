@@ -31,6 +31,11 @@ export function formatTimeForInput(date: Date): string {
 }
 
 export function parseDateFromInputString(dateStr: string): Date {
-  const dateMs = Date.parse(dateStr); // date in milliseconds
+  let dateMs: number; // date in milliseconds
+  if (dateStr === "") {
+    dateMs = 0;
+  } else {
+    dateMs = Date.parse(dateStr);
+  }
   return new Date(dateMs);
 }

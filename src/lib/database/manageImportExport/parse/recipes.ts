@@ -2,7 +2,8 @@ import type { ImportedJsonRecipe } from "$lib/database/manageImportExport/types/
 import { Recipe, type IRecipe } from "$lib/domain/entities/Recipe";
 import { isNullOrUndefined } from "$lib/helpers/undefinedHelpers";
 import {
-  checkIsValidEntityId, parseTextField, parseNumberField, parseBooleanField, parseTimestampField
+  checkIsValidEntityId, parseTextField, parseNumberField, parseBooleanField, parseTimestampField,
+  parseDateField
 } from "./primitives";
 
 export function parseRecipe(
@@ -21,7 +22,14 @@ export function parseRecipe(
   }
   // At this point we've proven it's a valid Id.
   const _id = _importedRecipe.id as number;
+  // Parse the roast date:
+  const _roastDate = parseDateField(_importedRecipe.roastDate);
+  // Guard clause for roast date:
+  if (_roastDate === "ImportFailed") {
+    return "ImportFailed";
+  }
   // Parse the text fields:
+  const _bagNumber = parseTextField(_importedRecipe.bagNumber);
   const _recipeTarget = parseTextField(_importedRecipe.recipeTarget);
   const _recipeResult = parseTextField(_importedRecipe.recipeResult);
   const _recipeThoughts = parseTextField(_importedRecipe.recipeThoughts);
@@ -55,6 +63,8 @@ export function parseRecipe(
   const _recipe: IRecipe = {
     id: _id,
     coffeeBeansId: _coffeeBeansId,
+    roastDate: _roastDate,
+    bagNumber: _bagNumber,
     recipeTarget: _recipeTarget,
     recipeResult: _recipeResult,
     recipeThoughts: _recipeThoughts,

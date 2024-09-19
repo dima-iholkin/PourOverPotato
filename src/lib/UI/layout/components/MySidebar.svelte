@@ -7,7 +7,7 @@
   export let asGap: boolean = false;
 
   // Reactivity:
-  $: selected = base + $page.route.id ?? "";
+  $: selected = base + ($page.route.id ?? "");
 </script>
 
 <aside class="my-aside" aria-label="Sidebar" class:as-gap={asGap}>

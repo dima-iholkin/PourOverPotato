@@ -33,6 +33,8 @@ export function findUniqueRecipes(parsedRecipes: Recipe[], dbRecipes: Recipe[]):
       dbItem.recipeTarget === parsedItem.recipeTarget &&
       dbItem.recipeResult === parsedItem.recipeResult &&
       dbItem.recipeThoughts === parsedItem.recipeThoughts &&
+      dbItem.bagNumber === parsedItem.bagNumber &&
+      dbItem.roastDate?.getTime() === parsedItem.roastDate?.getTime() &&
       dbItem.coffeeBeansId === parsedItem.coffeeBeansId &&
       dbItem.favorite === parsedItem.favorite
     );
