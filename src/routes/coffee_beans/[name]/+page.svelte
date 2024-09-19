@@ -9,11 +9,11 @@
   } from "$lib/database/manageCoffeeBeans";
   import { getRecipesByCoffeeBeansId } from "$lib/database/manageRecipes";
   import { routes } from "$lib/domain/constants/routes";
+  import type { Count } from "$lib/domain/enhancedEntities/Count";
   import { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
   import type { Recipe } from "$lib/domain/entities/Recipe";
   import { RecipesSortOrderEnum } from "$lib/domain/sort/RecipesSortOrderEnum";
   import { sortRecipesByTimestampDesc } from "$lib/domain/sort/sortRecipes";
-  import type { Count } from "$lib/helperTypes/Count";
   import RecipeCard from "$lib/UI/domainComponents/cards/RecipeCard.svelte";
   import MyFab from "$lib/UI/domainComponents/FABs/AddRecipeFab.svelte";
   import Loading from "$lib/UI/domainComponents/lists/Loading.svelte";

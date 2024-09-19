@@ -5,9 +5,9 @@ import { regenerateEnhancedCoffeeBeansTable } from "$lib/database/manageEnhanced
 import { type ICoffeeBeansDB, CoffeeBeansDB, CoffeeBeansDBSubmit } from "$lib/database/types/CoffeeBeansDB";
 import type { EntitiesDB } from "$lib/database/types/EntitiesDB";
 import { type IRecipeDB, RecipeDB, RecipeDBSubmit } from "$lib/database/types/RecipeDB";
+import type { Count } from "$lib/domain/enhancedEntities/Count";
 import type { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
 import type { Recipe } from "$lib/domain/entities/Recipe";
-import type { Count } from "$lib/helperTypes/Count";
 import { deduplicateCoffeeBeans } from "./deduplicate/coffeeBeans";
 import { findUniqueCoffeeBeans, findUniqueRecipes } from "./match/arrays";
 import { parseCoffeeBeansArray } from "./parse/coffeeBeans";
