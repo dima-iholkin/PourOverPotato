@@ -37,10 +37,25 @@ export class RecipeDB implements IRecipeDB {
   }
 
   static fromRecipe(item: Recipe): RecipeDB {
+    // Convert an effectively 0-value roast date to undefined, for better index and storage usage:
+    let _roastDate: number | undefined;
+    if (item.roastDate === undefined || item.roastDate.getTime() === 0) {
+      _roastDate = undefined;
+    } else {
+      _roastDate = item.roastDate.getTime();
+    }
+    // Convert and effectively empty bag number to undefined, for better index and storage usage:
+    let _bagNumber: string | undefined;
+    if (item.bagNumber === "") {
+      _bagNumber = undefined;
+    } else {
+      _bagNumber = item.bagNumber;
+    }
+    // Assemble and create the instance:
     const obj: IRecipeDB = {
       ...item,
-      // roastDate: item.roastDate.getTime(),
-      roastDate: item.roastDate ? item.roastDate.getTime() : undefined,
+      roastDate: _roastDate,
+      bagNumber: _bagNumber,
       timestamp: item.timestamp.getTime(),
       softDeletionTimestamp: undefined // Because the core Recipe entity doesn't even have the concept of "softDeleted".
     };
@@ -73,9 +88,23 @@ export class RecipeDBSubmit implements Omit<IRecipeDB, "id"> {
   softDeletionTimestamp: number | undefined;
 
   constructor(recipe: RecipeSubmit) {
+    // Convert an effectively 0-value roast date to undefined, for better index and storage usage:
+    let _roastDate: number | undefined;
+    if (recipe.roastDate === undefined || recipe.roastDate.getTime() === 0) {
+      _roastDate = undefined;
+    } else {
+      _roastDate = recipe.roastDate.getTime();
+    }
+    // Convert and effectively empty bag number to undefined, for better index and storage usage:
+    let _bagNumber: string | undefined;
+    if (recipe.bagNumber === "") {
+      _bagNumber = undefined;
+    } else {
+      _bagNumber = recipe.bagNumber;
+    }
     this.coffeeBeansId = recipe.coffeeBeansId;
-    this.roastDate = recipe.roastDate ? recipe.roastDate.getTime() : 0;
-    this.bagNumber = recipe.bagNumber;
+    this.roastDate = _roastDate;
+    this.bagNumber = _bagNumber;
     this.recipeTarget = recipe.recipeTarget;
     this.recipeResult = recipe.recipeResult;
     this.recipeThoughts = recipe.recipeThoughts;
