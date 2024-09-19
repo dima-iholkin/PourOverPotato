@@ -4,13 +4,13 @@
   import { getAllRecipes } from "$lib/database/manageRecipes";
   import { routes } from "$lib/domain/constants/routes";
   import type { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
-  import type { Recipe } from "$lib/domain/entities/Recipe";
+  import { Recipe } from "$lib/domain/entities/Recipe";
   import type { RecipesSortOrderEnum } from "$lib/domain/sort/RecipesSortOrderEnum";
   import {
     sortRecipesByTimestampDesc as byTimestampDesc,
     sortRecipesByTimestampDesc
   } from "$lib/domain/sort/sortRecipes";
-  import type { EnhancedRecipe } from "$lib/helperTypes/EnhancedRecipe";
+  import { createEnhancedRecipe, type EnhancedRecipe } from "$lib/helperTypes/EnhancedRecipe";
   import RecipeCard from "$lib/UI/domainComponents/cards/RecipeCard.svelte";
   import MyFab from "$lib/UI/domainComponents/FABs/AddRecipeFab.svelte";
   import Loading from "$lib/UI/domainComponents/lists/Loading.svelte";
@@ -42,19 +42,17 @@
   // Helper:
   async function loadEntities() {
     const coffeeBeans: CoffeeBeans[] = await getAllCoffeeBeans();
-    const map = new Map<number, string>();
-    coffeeBeans.forEach((item) => map.set(item.id, item.name));
-    recipes = (await getAllRecipes()).sort(byTimestampDesc).map((item) => {
-      return {
-        ...item,
-        coffeeBeansName: map.get(item.coffeeBeansId) ?? ""
-      };
+    const _coffeeBeans_IdToName_Map = new Map<number, string>();
+    coffeeBeans.forEach((item) => _coffeeBeans_IdToName_Map.set(item.id, item.name));
+    recipes = (await getAllRecipes()).sort(byTimestampDesc).map((recipe: Recipe) => {
+      const coffeeBeansName: string = _coffeeBeans_IdToName_Map.get(recipe.coffeeBeansId) ?? "";
+      return createEnhancedRecipe(recipe, coffeeBeansName);
     });
   }
 </script>
 
 <svelte:head>
-  <title>Pour over recipes - PourOverPotato app</title>
+  <title>Recipes - PourOverPotato</title>
 </svelte:head>
 
 <PageHeadline>Recipes</PageHeadline>

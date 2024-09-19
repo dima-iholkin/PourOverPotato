@@ -7,7 +7,7 @@
   import { routes } from "$lib/domain/constants/routes";
   import { placeholders } from "$lib/domain/constants/strings";
   import { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
-  import type { Recipe, RecipeSubmit } from "$lib/domain/entities/Recipe";
+  import { Recipe, type RecipeSubmit } from "$lib/domain/entities/Recipe";
   import { formatTimeForInput, parseDateFromInputString } from "$lib/helpers/dateHelpers";
   import {
     clearNewRecipeFormState,
@@ -63,13 +63,7 @@
 
   // Calculated state, the days since roast:
   let daysSinceRoast: number | undefined;
-  $: if (roastDate === undefined || roastDate.getTime() === 0) {
-    daysSinceRoast = undefined;
-  } else if (timestampStr !== "") {
-    const roastTimestamp: number = roastDate.getTime();
-    const recipeTimestamp: number = parseDateFromInputString(timestampStr.split("T")[0] + "T12:00").getTime();
-    daysSinceRoast = Math.round((recipeTimestamp - roastTimestamp) / (1000 * 60 * 60 * 24));
-  }
+  $: daysSinceRoast = Recipe.calculateDaysSinceRoast(parseDateFromInputString(timestampStr), roastDate);
 
   // Change the URL query string reactivity:
   $: if (selectedCoffeeBeansId && initFinished) {

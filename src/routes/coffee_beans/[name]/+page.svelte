@@ -113,11 +113,11 @@
 
 <svelte:head>
   {#if coffeeBeans === undefined}
-    <title>loading... - PourOverPotato app</title>
+    <title>loading... - PourOverPotato</title>
   {:else if coffeeBeans === "CoffeeBeansNotFound"}
-    <title>404 Not Found - PourOverPotato app</title>
+    <title>404 Not Found - PourOverPotato</title>
   {:else}
-    <title>{coffeeBeans.name} - PourOverPotato app</title>
+    <title>{coffeeBeans.name} - PourOverPotato</title>
   {/if}
 </svelte:head>
 
