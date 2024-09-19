@@ -49,13 +49,7 @@
 
   // Calculated state, the days since roast:
   let daysSinceRoast: number | undefined;
-  $: if (roastDate.getTime() === 0) {
-    daysSinceRoast = undefined;
-  } else if (timestampStr !== "") {
-    const roastTimestamp: number = roastDate.getTime();
-    const recipeTimestamp: number = parseDateFromInputString(timestampStr.split("T")[0] + "T12:00").getTime();
-    daysSinceRoast = Math.round((recipeTimestamp - roastTimestamp) / (1000 * 60 * 60 * 24));
-  }
+  $: daysSinceRoast = Recipe.calculateDaysSinceRoast(parseDateFromInputString(timestampStr), roastDate);
 
   // Calculated state, unsaved changes:
   export let hasUnsavedChanges: boolean = false;
