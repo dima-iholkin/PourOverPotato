@@ -57,10 +57,10 @@
     recipe &&
     selectedCoffeeBeansId === recipe.coffeeBeansId &&
     roastDate.getTime() === (recipe.roastDate ? recipe.roastDate.getTime() : 0) &&
-    bagNumber === (recipe.bagNumber ?? "") &&
-    recipeTarget === recipe.recipeTarget &&
-    recipeResult === recipe.recipeResult &&
-    recipeThoughts === recipe.recipeThoughts &&
+    bagNumber.trim() === (recipe.bagNumber ?? "") &&
+    recipeTarget.trim() === recipe.recipeTarget &&
+    recipeResult.trim() === recipe.recipeResult &&
+    recipeThoughts.trim() === recipe.recipeThoughts &&
     outWeight === recipe.outWeight &&
     rating === recipe.rating &&
     favorite === recipe.favorite &&

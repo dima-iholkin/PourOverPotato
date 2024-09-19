@@ -155,6 +155,7 @@
       }
       return;
     }
+    bagNumber = bagNumber.trim();
     recipeTarget = recipeTarget.trim();
     recipeResult = recipeResult.trim();
     recipeThoughts = recipeThoughts.trim();
