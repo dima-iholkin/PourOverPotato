@@ -1,6 +1,6 @@
 import { openDB, type IDBPDatabase, type IDBPTransaction } from "idb";
+import type { EntitiesDbSchema } from "$lib/database/core/EntitiesDbSchema";
 import { regenerateEnhancedCoffeeBeansTable } from "$lib/database/manageEnhancedCoffeeBeans";
-import type { EntitiesDbSchema } from "$lib/database/models/EntitiesDbSchema";
 import type { EntitiesDB_v1 } from "$lib/prevVersions/v1/database/EntitiesDBv1";
 import type { EntitiesDB_v2 } from "$lib/prevVersions/v2/database/EntitiesDBv2";
 import type { EntitiesDB_v3 } from "$lib/prevVersions/v3/database/EntitiesDBv3";

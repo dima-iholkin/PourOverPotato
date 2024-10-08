@@ -6,9 +6,9 @@ import { sortRecipesByTimestampDesc } from "$lib/domain/sort/sortRecipes";
 import {
   COFFEEBEANS_STORE, ENHANCEDCOFFEEBEANS_STORE, RECIPES_COFFEEBEANSID_INDEX, RECIPES_STORE, openEntitiesDB
 } from "./core/core";
+import type { EntitiesDbSchema } from "./core/EntitiesDbSchema";
 import { CoffeeBeansDB, type ICoffeeBeansDB } from "./models/CoffeeBeansDB";
 import { toEnhancedCoffeeBeans, type IEnhancedCoffeeBeansDB } from "./models/EnhancedCoffeeBeansDB";
-import type { EntitiesDbSchema } from "./models/EntitiesDbSchema";
 import { RecipeDB, type IRecipeDB } from "./models/RecipeDB";
 
 export async function getAllEnhancedCoffeeBeans(): Promise<EnhancedCoffeeBeans[]> {

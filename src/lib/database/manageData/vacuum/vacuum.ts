@@ -2,8 +2,8 @@ import type { IDBPTransaction } from "idb";
 import {
   COFFEEBEANS_STORE, ENHANCEDCOFFEEBEANS_STORE, RECIPES_COFFEEBEANSID_INDEX, RECIPES_STORE, SOFTDELETIONTIMESTAMP_INDEX
 } from "$lib/database/core/core";
+import type { EntitiesDbSchema } from "$lib/database/core/EntitiesDbSchema";
 import type { ICoffeeBeansDB } from "$lib/database/models/CoffeeBeansDB";
-import type { EntitiesDbSchema } from "$lib/database/models/EntitiesDbSchema";
 import type { IRecipeDB } from "$lib/database/models/RecipeDB";
 
 export async function vacuumSoftDeletedCoffeeBeans(
