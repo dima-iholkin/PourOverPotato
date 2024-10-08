@@ -3,7 +3,7 @@ import { openEntitiesDB, COFFEEBEANS_STORE, RECIPES_STORE, ENHANCEDCOFFEEBEANS_S
 import { vacuumSoftDeletedCoffeeBeans, vacuumSoftDeletedRecipes } from "$lib/database/manageData/vacuum/vacuum";
 import { regenerateEnhancedCoffeeBeansTable } from "$lib/database/manageEnhancedCoffeeBeans";
 import { type ICoffeeBeansDB, CoffeeBeansDB, CoffeeBeansDBSubmit } from "$lib/database/models/CoffeeBeansDB";
-import type { EntitiesDB } from "$lib/database/models/EntitiesDB";
+import type { EntitiesDbSchema } from "$lib/database/models/EntitiesDbSchema";
 import { type IRecipeDB, RecipeDB, RecipeDBSubmit } from "$lib/database/models/RecipeDB";
 import type { Count } from "$lib/domain/enhancedEntities/Count";
 import type { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
@@ -20,7 +20,7 @@ import type { ImportJSON } from "./types/ImportJSON";
 
 export async function exportAllData(): Promise<Blob> {
   // Open a transaction:
-  const db: IDBPDatabase<EntitiesDB> = await openEntitiesDB();
+  const db: IDBPDatabase<EntitiesDbSchema> = await openEntitiesDB();
   const tx = db.transaction([COFFEEBEANS_STORE, RECIPES_STORE], "readonly");
   // Load the CoffeeBeans items, the Recipes and the DbVersion:
   const coffeeBeansDbItems: ICoffeeBeansDB[] = await tx.objectStore(COFFEEBEANS_STORE).getAll();

@@ -3,11 +3,11 @@ import {
   COFFEEBEANS_STORE, ENHANCEDCOFFEEBEANS_STORE, RECIPES_COFFEEBEANSID_INDEX, RECIPES_STORE, SOFTDELETIONTIMESTAMP_INDEX
 } from "$lib/database/core/core";
 import type { ICoffeeBeansDB } from "$lib/database/models/CoffeeBeansDB";
-import type { EntitiesDB } from "$lib/database/models/EntitiesDB";
+import type { EntitiesDbSchema } from "$lib/database/models/EntitiesDbSchema";
 import type { IRecipeDB } from "$lib/database/models/RecipeDB";
 
 export async function vacuumSoftDeletedCoffeeBeans(
-  tx: IDBPTransaction<EntitiesDB, ("coffeeBeans" | "enhancedCoffeeBeans" | "recipes")[], "readwrite">
+  tx: IDBPTransaction<EntitiesDbSchema, ("coffeeBeans" | "enhancedCoffeeBeans" | "recipes")[], "readwrite">
 ): Promise<void> {
   // Load the soft-deleted CoffeeBeans items:
   const softDeletedCoffeeBeans: ICoffeeBeansDB[] = await tx.objectStore(COFFEEBEANS_STORE)
@@ -27,7 +27,7 @@ export async function vacuumSoftDeletedCoffeeBeans(
 }
 
 export async function vacuumSoftDeletedRecipes(
-  tx: IDBPTransaction<EntitiesDB, ("coffeeBeans" | "enhancedCoffeeBeans" | "recipes")[], "readwrite">
+  tx: IDBPTransaction<EntitiesDbSchema, ("coffeeBeans" | "enhancedCoffeeBeans" | "recipes")[], "readwrite">
 ): Promise<void> {
   // Load the soft-deleted Recipes:
   const softDeletedRecipes: IRecipeDB[] = await tx.objectStore(RECIPES_STORE).index(SOFTDELETIONTIMESTAMP_INDEX)

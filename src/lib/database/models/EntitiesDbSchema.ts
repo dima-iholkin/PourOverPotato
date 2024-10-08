@@ -3,7 +3,7 @@ import type { ICoffeeBeansDB } from "./CoffeeBeansDB";
 import type { IEnhancedCoffeeBeansDB } from "./EnhancedCoffeeBeansDB";
 import type { IRecipeDB } from "./RecipeDB";
 
-export interface EntitiesDB extends DBSchema {
+export interface EntitiesDbSchema extends DBSchema {
   coffeeBeans: {
     key: number;
     value: ICoffeeBeansDB;

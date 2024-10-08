@@ -1,6 +1,6 @@
 import { openDB, type IDBPDatabase, type IDBPTransaction } from "idb";
 import { regenerateEnhancedCoffeeBeansTable } from "$lib/database/manageEnhancedCoffeeBeans";
-import type { EntitiesDB } from "$lib/database/models/EntitiesDB";
+import type { EntitiesDbSchema } from "$lib/database/models/EntitiesDbSchema";
 import type { EntitiesDB_v1 } from "$lib/prevVersions/v1/database/EntitiesDBv1";
 import type { EntitiesDB_v2 } from "$lib/prevVersions/v2/database/EntitiesDBv2";
 import type { EntitiesDB_v3 } from "$lib/prevVersions/v3/database/EntitiesDBv3";
@@ -28,8 +28,8 @@ export const RECIPES_COFFEEBEANSID_INDEX = "coffeeBeansId";
 export const SOFTDELETIONTIMESTAMP_INDEX = "softDeletionTimestamp";
 
 // Public function, the core:
-export async function openEntitiesDB(): Promise<IDBPDatabase<EntitiesDB>> {
-  return await openDB<EntitiesDB>(DB_NAME, DB_VERSION, {
+export async function openEntitiesDB(): Promise<IDBPDatabase<EntitiesDbSchema>> {
+  return await openDB<EntitiesDbSchema>(DB_NAME, DB_VERSION, {
     async upgrade(db, oldVersion, newVersion, transaction) {
       // Deal with older versions:
       switch (oldVersion) {
@@ -78,9 +78,9 @@ export async function openEntitiesDB(): Promise<IDBPDatabase<EntitiesDB>> {
 
 // Internal function:
 function createStoresV5(
-  transaction: IDBPTransaction<EntitiesDB, ("coffeeBeans" | "enhancedCoffeeBeans" | "recipes")[], "versionchange">
+  transaction: IDBPTransaction<EntitiesDbSchema, ("coffeeBeans" | "enhancedCoffeeBeans" | "recipes")[], "versionchange">
 ): void {
-  const _db: IDBPDatabase<EntitiesDB> = transaction.db;
+  const _db: IDBPDatabase<EntitiesDbSchema> = transaction.db;
   // Create CoffeeBeans store:
   if (_db.objectStoreNames.contains(COFFEEBEANS_STORE) === false) {
     _db.createObjectStore(COFFEEBEANS_STORE, { keyPath: "id", autoIncrement: true });
@@ -109,7 +109,7 @@ function createStoresV5(
 // Helper functions for "createStoresV5":
 
 function createIndexOnCoffeeBeans_nameLowerCase(
-  transaction: IDBPTransaction<EntitiesDB, ("coffeeBeans" | "recipes" | "enhancedCoffeeBeans")[], "versionchange">
+  transaction: IDBPTransaction<EntitiesDbSchema, ("coffeeBeans" | "recipes" | "enhancedCoffeeBeans")[], "versionchange">
 ) {
   // Guard clause, if the index exists already:
   if (transaction.objectStore(COFFEEBEANS_STORE).indexNames.contains(COFFEEBEANS_NAMELOWERCASE_INDEX)) {
@@ -122,7 +122,7 @@ function createIndexOnCoffeeBeans_nameLowerCase(
 }
 
 function createIndexOnCoffeeBeans_softDeletionTimestamp(
-  transaction: IDBPTransaction<EntitiesDB, ("coffeeBeans" | "recipes" | "enhancedCoffeeBeans")[], "versionchange">
+  transaction: IDBPTransaction<EntitiesDbSchema, ("coffeeBeans" | "recipes" | "enhancedCoffeeBeans")[], "versionchange">
 ) {
   // Guard clause, if the index exists already:
   if (transaction.objectStore(COFFEEBEANS_STORE).indexNames.contains(SOFTDELETIONTIMESTAMP_INDEX)) {
@@ -135,7 +135,8 @@ function createIndexOnCoffeeBeans_softDeletionTimestamp(
 }
 
 function createIndexOnRecipes(
-  transaction: IDBPTransaction<EntitiesDB, ("coffeeBeans" | "recipes" | "enhancedCoffeeBeans")[], "versionchange">,
+  // eslint-disable-next-line max-len
+  transaction: IDBPTransaction<EntitiesDbSchema, ("coffeeBeans" | "recipes" | "enhancedCoffeeBeans")[], "versionchange">,
   // eslint-disable-next-line max-len
   nameAndKeyPath: "coffeeBeansId" | "roastDate" | "bagNumber" | "outWeight" | "rating" | "timestamp" | "softDeletionTimestamp"
 ) {
