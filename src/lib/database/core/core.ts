@@ -7,7 +7,7 @@ import type { EntitiesDB_v3 } from "$lib/prevVersions/v3/database/EntitiesDBv3";
 import {
   migrateCoffeeBeansV1ToV5, migrateCoffeeBeansV2ToV5, migrateCoffeeBeansV3ToV5, migrateRecipesV1ToV5,
   migrateRecipesV2ToV5
-} from "./migrations/migrations";
+} from "./migrations";
 
 // Internal constant:
 const DB_VERSION = 5;
