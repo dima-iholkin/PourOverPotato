@@ -1,7 +1,5 @@
-import type { IDBPDatabase } from "idb";
 import { openEntitiesDB, COFFEEBEANS_STORE, RECIPES_STORE, ENHANCEDCOFFEEBEANS_STORE } from "$lib/database/core/core";
-import type { EntitiesDbSchema } from "$lib/database/core/EntitiesDbSchema";
-import { vacuumSoftDeletedCoffeeBeans, vacuumSoftDeletedRecipes } from "$lib/database/manageData/vacuum/vacuum";
+import { vacuumSoftDeletedCoffeeBeans, vacuumSoftDeletedRecipes } from "$lib/database/dataManagementAPI/vacuum/vacuum";
 import { regenerateEnhancedCoffeeBeansTable } from "$lib/database/enhancedCoffeeBeansAPI";
 import { type ICoffeeBeansDB, CoffeeBeansDB, CoffeeBeansDBSubmit } from "$lib/database/models/CoffeeBeansDB";
 import { type IRecipeDB, RecipeDB, RecipeDBSubmit } from "$lib/database/models/RecipeDB";
@@ -13,38 +11,7 @@ import { findUniqueCoffeeBeans, findUniqueRecipes } from "./match/arrays";
 import { parseCoffeeBeansArray } from "./parse/coffeeBeans";
 import { parseDbVersion } from "./parse/primitives";
 import { parseRecipesArray } from "./parse/recipes";
-import type { ExportJSON } from "./types/ExportJSON";
 import type { ImportJSON } from "./types/ImportJSON";
-
-// Public functions:
-
-export async function exportAllData(): Promise<Blob> {
-  // Open a transaction:
-  const db: IDBPDatabase<EntitiesDbSchema> = await openEntitiesDB();
-  const tx = db.transaction([COFFEEBEANS_STORE, RECIPES_STORE], "readonly");
-  // Load the CoffeeBeans items, the Recipes and the DbVersion:
-  const coffeeBeansDbItems: ICoffeeBeansDB[] = await tx.objectStore(COFFEEBEANS_STORE).getAll();
-  const recipeDbItems: IRecipeDB[] = await tx.objectStore(RECIPES_STORE).getAll();
-  const _dbVersion: number = tx.db.version;
-  // Close the transaction:
-  await tx.done;
-  // Prepare the CoffeeBeans items and the Recipes:
-  const coffeeBeansItems: CoffeeBeans[] = coffeeBeansDbItems
-    .filter(itemDb => itemDb.softDeletionTimestamp === undefined)
-    .map(itemDb => new CoffeeBeansDB(itemDb).toCoffeeBeans());
-  const recipes: Recipe[] = recipeDbItems
-    .filter(itemDb => itemDb.softDeletionTimestamp === undefined)
-    .map(itemDb => new RecipeDB(itemDb).toRecipe());
-  // Prepare the export data object:
-  const exported: ExportJSON = {
-    dbVersion: _dbVersion,
-    coffeeBeans: coffeeBeansItems,
-    recipes: recipes
-  };
-  // Serialize all data:
-  const json = JSON.stringify(exported);
-  return new Blob([json], { type: "application/json" });
-}
 
 /**
  * The import will be aborted, if anything is wrong in the JSON file.

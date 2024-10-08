@@ -1,4 +1,4 @@
-import type { ImportedJsonCoffeeBeans } from "$lib/database/manageImportExport/types/ImportJSON";
+import type { ImportedJsonCoffeeBeans } from "$lib/database/dataExportImportAPI/types/ImportJSON";
 import { CoffeeBeans, type ICoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
 import { isNullOrUndefined } from "$lib/helpers/undefinedHelpers";
 import { checkIsValidEntityId, parseTextField } from "./primitives";

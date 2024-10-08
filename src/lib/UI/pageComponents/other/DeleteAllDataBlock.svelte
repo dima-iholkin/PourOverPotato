@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { deleteDB } from "$lib/database/manageData/manageData";
+  import { deleteDB } from "$lib/database/dataManagementAPI/manageDataAPI";
   import DeleteConfirmationModal from "$lib/UI/genericComponents/modals/DeleteConfirmationModal.svelte";
   import { addToast } from "$lib/UI/genericComponents/toasts/toastProvider";
 
