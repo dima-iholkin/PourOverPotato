@@ -1,8 +1,8 @@
 import type { IDBPTransaction } from "idb";
 import { COFFEEBEANS_NAMELOWERCASE_INDEX, COFFEEBEANS_STORE, RECIPES_STORE } from "$lib/database/core/core";
-import { CoffeeBeansDB, type ICoffeeBeansDB } from "$lib/database/types/CoffeeBeansDB";
-import type { EntitiesDB } from "$lib/database/types/EntitiesDB";
-import { RecipeDB, type IRecipeDB } from "$lib/database/types/RecipeDB";
+import { CoffeeBeansDB, type ICoffeeBeansDB } from "$lib/database/models/CoffeeBeansDB";
+import type { EntitiesDB } from "$lib/database/models/EntitiesDB";
+import { RecipeDB, type IRecipeDB } from "$lib/database/models/RecipeDB";
 import type { ICoffeeBeansDB_v1 } from "$lib/prevVersions/v1/database/CoffeeBeansDBv1";
 import type { EntitiesDB_v1 } from "$lib/prevVersions/v1/database/EntitiesDBv1";
 import type { IRecipeDB_v1 } from "$lib/prevVersions/v1/database/RecipeDBv1";

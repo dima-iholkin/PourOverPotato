@@ -2,9 +2,9 @@ import type { IDBPTransaction } from "idb";
 import {
   COFFEEBEANS_STORE, ENHANCEDCOFFEEBEANS_STORE, RECIPES_COFFEEBEANSID_INDEX, RECIPES_STORE, SOFTDELETIONTIMESTAMP_INDEX
 } from "$lib/database/core/core";
-import type { ICoffeeBeansDB } from "$lib/database/types/CoffeeBeansDB";
-import type { EntitiesDB } from "$lib/database/types/EntitiesDB";
-import type { IRecipeDB } from "$lib/database/types/RecipeDB";
+import type { ICoffeeBeansDB } from "$lib/database/models/CoffeeBeansDB";
+import type { EntitiesDB } from "$lib/database/models/EntitiesDB";
+import type { IRecipeDB } from "$lib/database/models/RecipeDB";
 
 export async function vacuumSoftDeletedCoffeeBeans(
   tx: IDBPTransaction<EntitiesDB, ("coffeeBeans" | "enhancedCoffeeBeans" | "recipes")[], "readwrite">

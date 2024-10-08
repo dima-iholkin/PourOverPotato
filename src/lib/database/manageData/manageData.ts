@@ -3,8 +3,8 @@ import {
   COFFEEBEANS_STORE, DB_NAME, ENHANCEDCOFFEEBEANS_STORE, RECIPES_STORE, openEntitiesDB
 } from "$lib/database/core/core";
 import { regenerateEnhancedCoffeeBeansTable } from "$lib/database/manageEnhancedCoffeeBeans";
-import { CoffeeBeansDBSubmit, type ICoffeeBeansDB } from "$lib/database/types/CoffeeBeansDB";
-import { RecipeDBSubmit, type IRecipeDB } from "$lib/database/types/RecipeDB";
+import { CoffeeBeansDBSubmit, type ICoffeeBeansDB } from "$lib/database/models/CoffeeBeansDB";
+import { RecipeDBSubmit, type IRecipeDB } from "$lib/database/models/RecipeDB";
 import { RecipeSubmit } from "$lib/domain/entities/Recipe";
 import { DemoCoffeeBeans } from "./demo/demoCoffeeBeans";
 import { generateDemoRecipesForCoffeeBeansId } from "./demo/demoRecipes";

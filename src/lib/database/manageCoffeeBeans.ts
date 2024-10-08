@@ -6,9 +6,9 @@ import {
   COFFEEBEANS_NAMELOWERCASE_INDEX, COFFEEBEANS_STORE, ENHANCEDCOFFEEBEANS_STORE, RECIPES_COFFEEBEANSID_INDEX,
   RECIPES_STORE, openEntitiesDB
 } from "./core/core";
-import { CoffeeBeansDB, CoffeeBeansDBSubmit, type ICoffeeBeansDB } from "./types/CoffeeBeansDB";
-import type { IEnhancedCoffeeBeansDB } from "./types/EnhancedCoffeeBeansDB";
-import type { IRecipeDB } from "./types/RecipeDB";
+import { CoffeeBeansDB, CoffeeBeansDBSubmit, type ICoffeeBeansDB } from "./models/CoffeeBeansDB";
+import type { IEnhancedCoffeeBeansDB } from "./models/EnhancedCoffeeBeansDB";
+import type { IRecipeDB } from "./models/RecipeDB";
 
 // Public functions:
 
