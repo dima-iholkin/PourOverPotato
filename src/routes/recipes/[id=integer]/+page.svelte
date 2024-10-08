@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { beforeNavigate } from "$app/navigation";
-  import { getRecipeById } from "$lib/database/manageRecipes";
+  import { getRecipeById } from "$lib/database/recipesAPI";
   import { Recipe } from "$lib/domain/entities/Recipe";
   import Loading from "$lib/UI/domainComponents/lists/Loading.svelte";
   import FlexRow from "$lib/UI/genericComponents/FlexRow.svelte";

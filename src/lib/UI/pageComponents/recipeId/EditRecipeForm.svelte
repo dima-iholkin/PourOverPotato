@@ -1,8 +1,8 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { goto } from "$app/navigation";
-  import { getAllCoffeeBeans } from "$lib/database/manageCoffeeBeans";
-  import { editRecipe } from "$lib/database/manageRecipes";
+  import { getAllCoffeeBeans } from "$lib/database/coffeeBeansAPI";
+  import { editRecipe } from "$lib/database/recipesAPI";
   import { naming } from "$lib/domain/constants/naming";
   import { routes } from "$lib/domain/constants/routes";
   import { placeholders } from "$lib/domain/constants/strings";

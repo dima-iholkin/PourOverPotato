@@ -5,7 +5,7 @@
 <script lang="ts">
   import { tick } from "svelte";
   import { goto } from "$app/navigation";
-  import { checkCoffeeBeansDuplicate, editCoffeeBeans } from "$lib/database/manageCoffeeBeans";
+  import { checkCoffeeBeansDuplicate, editCoffeeBeans } from "$lib/database/coffeeBeansAPI";
   import { routes } from "$lib/domain/constants/routes";
   import { CoffeeBeans, CoffeeBeansEditSubmit } from "$lib/domain/entities/CoffeeBeans";
   import Label from "$lib/UI/genericComponents/forms/Label.svelte";

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { getAllEnhancedCoffeeBeans } from "$lib/database/manageEnhancedCoffeeBeans";
+  import { getAllEnhancedCoffeeBeans } from "$lib/database/enhancedCoffeeBeansAPI";
   import { routes } from "$lib/domain/constants/routes";
   import type { EnhancedCoffeeBeans } from "$lib/domain/enhancedEntities/EnhancedCoffeeBeans";
   import type { CoffeeBeansSortOrderEnum } from "$lib/domain/sort/CoffeeBeansSortOrderEnum";

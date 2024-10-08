@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { getAllCoffeeBeans } from "$lib/database/manageCoffeeBeans";
-  import { getAllRecipes } from "$lib/database/manageRecipes";
+  import { getAllCoffeeBeans } from "$lib/database/coffeeBeansAPI";
+  import { getAllRecipes } from "$lib/database/recipesAPI";
   import { routes } from "$lib/domain/constants/routes";
   import { createEnhancedRecipe, type EnhancedRecipe } from "$lib/domain/enhancedEntities/EnhancedRecipe";
   import type { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";

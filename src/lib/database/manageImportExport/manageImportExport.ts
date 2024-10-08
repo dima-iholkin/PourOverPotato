@@ -2,7 +2,7 @@ import type { IDBPDatabase } from "idb";
 import { openEntitiesDB, COFFEEBEANS_STORE, RECIPES_STORE, ENHANCEDCOFFEEBEANS_STORE } from "$lib/database/core/core";
 import type { EntitiesDbSchema } from "$lib/database/core/EntitiesDbSchema";
 import { vacuumSoftDeletedCoffeeBeans, vacuumSoftDeletedRecipes } from "$lib/database/manageData/vacuum/vacuum";
-import { regenerateEnhancedCoffeeBeansTable } from "$lib/database/manageEnhancedCoffeeBeans";
+import { regenerateEnhancedCoffeeBeansTable } from "$lib/database/enhancedCoffeeBeansAPI";
 import { type ICoffeeBeansDB, CoffeeBeansDB, CoffeeBeansDBSubmit } from "$lib/database/models/CoffeeBeansDB";
 import { type IRecipeDB, RecipeDB, RecipeDBSubmit } from "$lib/database/models/RecipeDB";
 import type { Count } from "$lib/domain/enhancedEntities/Count";

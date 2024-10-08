@@ -1,7 +1,7 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
-  import { getCoffeeBeansById } from "$lib/database/manageCoffeeBeans";
-  import { hardDeleteRecipeById, softDeleteRecipeById, undoSoftDeleteRecipeById } from "$lib/database/manageRecipes";
+  import { getCoffeeBeansById } from "$lib/database/coffeeBeansAPI";
+  import { hardDeleteRecipeById, softDeleteRecipeById, undoSoftDeleteRecipeById } from "$lib/database/recipesAPI";
   import { routes } from "$lib/domain/constants/routes";
   import { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
   import { Recipe } from "$lib/domain/entities/Recipe";

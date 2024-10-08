@@ -2,7 +2,7 @@ import { deleteDB as idb_deleteDB } from "idb";
 import {
   COFFEEBEANS_STORE, DB_NAME, ENHANCEDCOFFEEBEANS_STORE, RECIPES_STORE, openEntitiesDB
 } from "$lib/database/core/core";
-import { regenerateEnhancedCoffeeBeansTable } from "$lib/database/manageEnhancedCoffeeBeans";
+import { regenerateEnhancedCoffeeBeansTable } from "$lib/database/enhancedCoffeeBeansAPI";
 import { CoffeeBeansDBSubmit, type ICoffeeBeansDB } from "$lib/database/models/CoffeeBeansDB";
 import { RecipeDBSubmit, type IRecipeDB } from "$lib/database/models/RecipeDB";
 import { RecipeSubmit } from "$lib/domain/entities/Recipe";

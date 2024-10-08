@@ -1,8 +1,8 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { anyCoffeeBeans } from "$lib/database/manageCoffeeBeans";
+  import { anyCoffeeBeans } from "$lib/database/coffeeBeansAPI";
   import { fillDbWithDemoData } from "$lib/database/manageData/manageData";
-  import { anyRecipes } from "$lib/database/manageRecipes";
+  import { anyRecipes } from "$lib/database/recipesAPI";
   import NoItemsYetP from "$lib/UI/domainComponents/lists/NoItemsYetP.svelte";
   import { addToast } from "$lib/UI/genericComponents/toasts/toastProvider";
 
