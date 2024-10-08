@@ -1,9 +1,9 @@
 <script lang="ts">
   import { base } from "$app/paths";
   import { page } from "$app/stores";
-  import coffeeBeansIcon from "$lib/assets/coffee-beans-icon.png";
+  import coffeeBeansIcon from "$lib/_assets/coffee-beans-icon.png";
   import { routes } from "$lib/domain/constants/routes";
-  import OtherIcon from "$lib/UI/icons/OtherIcon.svelte";
+  import OtherIcon from "$lib/UI/_icons/OtherIcon.svelte";
 
   // Props:
   export let asGap: boolean = false;

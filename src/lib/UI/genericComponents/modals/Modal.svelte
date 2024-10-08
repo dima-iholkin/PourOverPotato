@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { clickOutsideTheBox } from "$lib/UI/helpers/clickOutsideTheBox";
+  import { clickOutsideTheBox } from "$lib/UI/_helpers/clickOutsideTheBox";
   import MySidebar from "$lib/UI/layout/components/MySidebar.svelte";
   import ModalHeader from "./components/ModalHeader.svelte";
 

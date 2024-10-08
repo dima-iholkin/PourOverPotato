@@ -1,6 +1,6 @@
 <script lang="ts">
   import { routes } from "$lib/domain/constants/routes";
-  import { clickOutsideTheBox } from "$lib/UI/helpers/clickOutsideTheBox";
+  import { clickOutsideTheBox } from "$lib/UI/_helpers/clickOutsideTheBox";
 
   // State:
   let menuOpen: boolean = false;

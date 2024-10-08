@@ -1,5 +1,5 @@
 <script lang="ts">
-  import PlusIcon from "$lib/UI/icons/PlusIcon.svelte";
+  import PlusIcon from "$lib/UI/_icons/PlusIcon.svelte";
 
   // Props:
   export let href: string | undefined;

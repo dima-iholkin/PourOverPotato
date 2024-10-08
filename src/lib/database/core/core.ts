@@ -1,9 +1,9 @@
 import { openDB, type IDBPDatabase, type IDBPTransaction } from "idb";
 import type { EntitiesDbSchema } from "$lib/database/core/EntitiesDbSchema";
 import { regenerateEnhancedCoffeeBeansTable } from "$lib/database/enhancedCoffeeBeansAPI";
-import type { EntitiesDB_v1 } from "$lib/prevVersions/v1/database/EntitiesDBv1";
-import type { EntitiesDB_v2 } from "$lib/prevVersions/v2/database/EntitiesDBv2";
-import type { EntitiesDB_v3 } from "$lib/prevVersions/v3/database/EntitiesDBv3";
+import type { EntitiesDB_v1 } from "$lib/_prevVersions/v1/database/EntitiesDBv1";
+import type { EntitiesDB_v2 } from "$lib/_prevVersions/v2/database/EntitiesDBv2";
+import type { EntitiesDB_v3 } from "$lib/_prevVersions/v3/database/EntitiesDBv3";
 import {
   migrateCoffeeBeansV1ToV5, migrateCoffeeBeansV2ToV5, migrateCoffeeBeansV3ToV5, migrateRecipesV1ToV5,
   migrateRecipesV2ToV5

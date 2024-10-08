@@ -3,14 +3,14 @@ import { COFFEEBEANS_NAMELOWERCASE_INDEX, COFFEEBEANS_STORE, RECIPES_STORE } fro
 import type { EntitiesDbSchema } from "$lib/database/core/EntitiesDbSchema";
 import { CoffeeBeansDB, type ICoffeeBeansDB } from "$lib/database/models/CoffeeBeansDB";
 import { RecipeDB, type IRecipeDB } from "$lib/database/models/RecipeDB";
-import type { ICoffeeBeansDB_v1 } from "$lib/prevVersions/v1/database/CoffeeBeansDBv1";
-import type { EntitiesDB_v1 } from "$lib/prevVersions/v1/database/EntitiesDBv1";
-import type { IRecipeDB_v1 } from "$lib/prevVersions/v1/database/RecipeDBv1";
-import type { ICoffeeBeansDB_v2 } from "$lib/prevVersions/v2/database/CoffeeBeansDBv2";
-import type { EntitiesDB_v2 } from "$lib/prevVersions/v2/database/EntitiesDBv2";
-import type { IRecipeDB_v2 } from "$lib/prevVersions/v2/database/RecipeDBv2";
-import type { ICoffeeBeansDB_v3 } from "$lib/prevVersions/v3/database/CoffeeBeansDBv3";
-import type { EntitiesDB_v3 } from "$lib/prevVersions/v3/database/EntitiesDBv3";
+import type { ICoffeeBeansDB_v1 } from "$lib/_prevVersions/v1/database/CoffeeBeansDBv1";
+import type { EntitiesDB_v1 } from "$lib/_prevVersions/v1/database/EntitiesDBv1";
+import type { IRecipeDB_v1 } from "$lib/_prevVersions/v1/database/RecipeDBv1";
+import type { ICoffeeBeansDB_v2 } from "$lib/_prevVersions/v2/database/CoffeeBeansDBv2";
+import type { EntitiesDB_v2 } from "$lib/_prevVersions/v2/database/EntitiesDBv2";
+import type { IRecipeDB_v2 } from "$lib/_prevVersions/v2/database/RecipeDBv2";
+import type { ICoffeeBeansDB_v3 } from "$lib/_prevVersions/v3/database/CoffeeBeansDBv3";
+import type { EntitiesDB_v3 } from "$lib/_prevVersions/v3/database/EntitiesDBv3";
 import { addToast } from "$lib/UI/genericComponents/toasts/toastProvider";
 
 /**
