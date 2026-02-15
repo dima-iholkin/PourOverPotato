@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { clickOutsideTheBox } from "$lib/UI/helpers/clickOutsideTheBox";
-  import HamburgerMenuIcon from "$lib/UI/icons/HamburgerMenuIcon.svelte";
+  import { clickOutsideTheBox } from "$lib/UI/_helpers/clickOutsideTheBox";
+  import HamburgerMenuIcon from "$lib/UI/_icons/HamburgerMenuIcon.svelte";
 
   // Triggers:
   // prettier-ignore

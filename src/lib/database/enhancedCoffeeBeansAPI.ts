@@ -6,10 +6,10 @@ import { sortRecipesByTimestampDesc } from "$lib/domain/sort/sortRecipes";
 import {
   COFFEEBEANS_STORE, ENHANCEDCOFFEEBEANS_STORE, RECIPES_COFFEEBEANSID_INDEX, RECIPES_STORE, openEntitiesDB
 } from "./core/core";
-import { CoffeeBeansDB, type ICoffeeBeansDB } from "./types/CoffeeBeansDB";
-import { toEnhancedCoffeeBeans, type IEnhancedCoffeeBeansDB } from "./types/EnhancedCoffeeBeansDB";
-import type { EntitiesDB } from "./types/EntitiesDB";
-import { RecipeDB, type IRecipeDB } from "./types/RecipeDB";
+import type { EntitiesDbSchema } from "./core/EntitiesDbSchema";
+import { CoffeeBeansDB, type ICoffeeBeansDB } from "./models/CoffeeBeansDB";
+import { toEnhancedCoffeeBeans, type IEnhancedCoffeeBeansDB } from "./models/EnhancedCoffeeBeansDB";
+import { RecipeDB, type IRecipeDB } from "./models/RecipeDB";
 
 export async function getAllEnhancedCoffeeBeans(): Promise<EnhancedCoffeeBeans[]> {
   // Open a transaction:
@@ -68,7 +68,8 @@ export async function getEnhancedCoffeeBeansById(
 
 export async function regenerateEnhancedCoffeeBeansItemById(
   coffeeBeansId: number,
-  tx: IDBPTransaction<EntitiesDB, ("coffeeBeans" | "enhancedCoffeeBeans" | "recipes")[], "readwrite" | "versionchange">
+  // eslint-disable-next-line max-len
+  tx: IDBPTransaction<EntitiesDbSchema, ("coffeeBeans" | "enhancedCoffeeBeans" | "recipes")[], "readwrite" | "versionchange">
 ) {
   // Load the EnhancedCoffeeBeans item:
   let item: IEnhancedCoffeeBeansDB | undefined = await tx.objectStore(ENHANCEDCOFFEEBEANS_STORE)
@@ -91,7 +92,8 @@ export async function regenerateEnhancedCoffeeBeansItemById(
 }
 
 export async function regenerateEnhancedCoffeeBeansTable(
-  tx: IDBPTransaction<EntitiesDB, ("coffeeBeans" | "enhancedCoffeeBeans" | "recipes")[], "readwrite" | "versionchange">
+  // eslint-disable-next-line max-len
+  tx: IDBPTransaction<EntitiesDbSchema, ("coffeeBeans" | "enhancedCoffeeBeans" | "recipes")[], "readwrite" | "versionchange">
 ) {
   // Guard clause:
   if (tx.db.objectStoreNames.contains(ENHANCEDCOFFEEBEANS_STORE) === false) {

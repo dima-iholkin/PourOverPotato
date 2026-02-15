@@ -1,16 +1,16 @@
 import type { IDBPTransaction } from "idb";
 import { COFFEEBEANS_NAMELOWERCASE_INDEX, COFFEEBEANS_STORE, RECIPES_STORE } from "$lib/database/core/core";
-import { CoffeeBeansDB, type ICoffeeBeansDB } from "$lib/database/types/CoffeeBeansDB";
-import type { EntitiesDB } from "$lib/database/types/EntitiesDB";
-import { RecipeDB, type IRecipeDB } from "$lib/database/types/RecipeDB";
-import type { ICoffeeBeansDB_v1 } from "$lib/prevVersions/v1/database/CoffeeBeansDBv1";
-import type { EntitiesDB_v1 } from "$lib/prevVersions/v1/database/EntitiesDBv1";
-import type { IRecipeDB_v1 } from "$lib/prevVersions/v1/database/RecipeDBv1";
-import type { ICoffeeBeansDB_v2 } from "$lib/prevVersions/v2/database/CoffeeBeansDBv2";
-import type { EntitiesDB_v2 } from "$lib/prevVersions/v2/database/EntitiesDBv2";
-import type { IRecipeDB_v2 } from "$lib/prevVersions/v2/database/RecipeDBv2";
-import type { ICoffeeBeansDB_v3 } from "$lib/prevVersions/v3/database/CoffeeBeansDBv3";
-import type { EntitiesDB_v3 } from "$lib/prevVersions/v3/database/EntitiesDBv3";
+import type { EntitiesDbSchema } from "$lib/database/core/EntitiesDbSchema";
+import { CoffeeBeansDB, type ICoffeeBeansDB } from "$lib/database/models/CoffeeBeansDB";
+import { RecipeDB, type IRecipeDB } from "$lib/database/models/RecipeDB";
+import type { ICoffeeBeansDB_v1 } from "$lib/_prevVersions/v1/database/CoffeeBeansDBv1";
+import type { EntitiesDB_v1 } from "$lib/_prevVersions/v1/database/EntitiesDBv1";
+import type { IRecipeDB_v1 } from "$lib/_prevVersions/v1/database/RecipeDBv1";
+import type { ICoffeeBeansDB_v2 } from "$lib/_prevVersions/v2/database/CoffeeBeansDBv2";
+import type { EntitiesDB_v2 } from "$lib/_prevVersions/v2/database/EntitiesDBv2";
+import type { IRecipeDB_v2 } from "$lib/_prevVersions/v2/database/RecipeDBv2";
+import type { ICoffeeBeansDB_v3 } from "$lib/_prevVersions/v3/database/CoffeeBeansDBv3";
+import type { EntitiesDB_v3 } from "$lib/_prevVersions/v3/database/EntitiesDBv3";
 import { addToast } from "$lib/UI/genericComponents/toasts/toastProvider";
 
 /**
@@ -28,7 +28,7 @@ export async function migrateCoffeeBeansV1ToV5(
   // Cast the CoffeeBeans store schema to v3:
   const _transaction =
     // eslint-disable-next-line max-len
-    transaction as unknown as IDBPTransaction<EntitiesDB, ("coffeeBeans" | "enhancedCoffeeBeans" | "recipes")[], "versionchange">;
+    transaction as unknown as IDBPTransaction<EntitiesDbSchema, ("coffeeBeans" | "enhancedCoffeeBeans" | "recipes")[], "versionchange">;
   // Prepare and save all modified CoffeeBeans:
   for (const itemV1 of coffeeBeansFromV1) {
     const objV3: ICoffeeBeansDB = {
@@ -55,7 +55,7 @@ export async function migrateCoffeeBeansV2ToV5(
   // Cast the CoffeeBeans store schema to v3:
   const _transaction =
     // eslint-disable-next-line max-len
-    transaction as unknown as IDBPTransaction<EntitiesDB, ("coffeeBeans" | "enhancedCoffeeBeans" | "recipes")[], "versionchange">;
+    transaction as unknown as IDBPTransaction<EntitiesDbSchema, ("coffeeBeans" | "enhancedCoffeeBeans" | "recipes")[], "versionchange">;
   // Prepare and save all modified CoffeeBeans items:
   for (const itemV2 of coffeeBeansItemsV2) {
     const objV3: ICoffeeBeansDB = {
@@ -152,7 +152,7 @@ export async function migrateRecipesV1ToV5(
   // Cast the Recipe store schema to v3:
   const _transaction =
     // eslint-disable-next-line max-len
-    transaction as unknown as IDBPTransaction<EntitiesDB, ("coffeeBeans" | "enhancedCoffeeBeans" | "recipes")[], "versionchange">;
+    transaction as unknown as IDBPTransaction<EntitiesDbSchema, ("coffeeBeans" | "enhancedCoffeeBeans" | "recipes")[], "versionchange">;
   // Prepare and save all modified Recipes:
   for (const itemV1 of recipesFromV1) {
     const objV3: IRecipeDB = {
@@ -183,7 +183,7 @@ export async function migrateRecipesV2ToV5(
   // Cast the Recipe store schema to v3:
   const _transaction =
     // eslint-disable-next-line max-len
-    transaction as unknown as IDBPTransaction<EntitiesDB, ("coffeeBeans" | "enhancedCoffeeBeans" | "recipes")[], "versionchange">;
+    transaction as unknown as IDBPTransaction<EntitiesDbSchema, ("coffeeBeans" | "enhancedCoffeeBeans" | "recipes")[], "versionchange">;
   // Prepare and save all modified Recipes:
   for (const itemV2 of recipesV2) {
     const objV3: IRecipeDB = {

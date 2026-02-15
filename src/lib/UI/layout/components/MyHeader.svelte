@@ -2,8 +2,8 @@
   import { goto } from "$app/navigation";
   import { page } from "$app/stores";
   import { routes } from "$lib/domain/constants/routes";
-  import LeftArrowIcon from "$lib/UI/icons/LeftArrowIcon.svelte";
-  import LoveIcon from "$lib/UI/icons/LoveIcon.svelte";
+  import LeftArrowIcon from "$lib/UI/_icons/LeftArrowIcon.svelte";
+  import LoveIcon from "$lib/UI/_icons/LoveIcon.svelte";
 
   // UI props:
   export let asGap: boolean = false;
@@ -45,7 +45,7 @@
       <a href={routes.home}>
         <div class="logo-container">
           <span class="text-2xl font-semibold whitespace-nowrap">PourOverPotato</span>
-          <p class="sublogo">Save your best recipes for later use</p>
+          <p class="sublogo">Save your best recipes</p>
         </div>
       </a>
     </div>

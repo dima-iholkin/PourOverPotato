@@ -1,9 +1,9 @@
 import type { DBSchema } from "idb";
-import type { ICoffeeBeansDB } from "./CoffeeBeansDB";
-import type { IEnhancedCoffeeBeansDB } from "./EnhancedCoffeeBeansDB";
-import type { IRecipeDB } from "./RecipeDB";
+import type { ICoffeeBeansDB } from "$lib/database/models/CoffeeBeansDB";
+import type { IEnhancedCoffeeBeansDB } from "$lib/database/models/EnhancedCoffeeBeansDB";
+import type { IRecipeDB } from "$lib/database/models/RecipeDB";
 
-export interface EntitiesDB extends DBSchema {
+export interface EntitiesDbSchema extends DBSchema {
   coffeeBeans: {
     key: number;
     value: ICoffeeBeansDB;

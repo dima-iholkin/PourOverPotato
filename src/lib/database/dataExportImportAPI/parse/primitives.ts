@@ -1,5 +1,5 @@
-import { parseDateFromInputString } from "$lib/helpers/dateHelpers";
-import { isNullOrUndefined } from "$lib/helpers/undefinedHelpers";
+import { parseDateFromInputString } from "$lib/_helpers/dateHelpers";
+import { isNullOrUndefined } from "$lib/_helpers/undefinedHelpers";
 
 export function checkIsValidEntityId(id: unknown | number): boolean {
   if (isNullOrUndefined(id) || Number.isInteger(id) === false || id as number < 0) {

@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { importDataFromJson } from "$lib/database/manageImportExport/manageImportExport";
-  import { isNullOrUndefined, isPresent } from "$lib/helpers/undefinedHelpers";
+  import { isNullOrUndefined, isPresent } from "$lib/_helpers/undefinedHelpers";
+  import { importDataFromJson } from "$lib/database/dataExportImportAPI/importDataAPI";
   import { addToast } from "$lib/UI/genericComponents/toasts/toastProvider";
 
   // Handler:

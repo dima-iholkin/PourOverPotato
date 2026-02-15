@@ -1,4 +1,4 @@
-import { CoffeeBeansDB } from "$lib/database/types/CoffeeBeansDB";
+import { CoffeeBeansDB } from "$lib/database/models/CoffeeBeansDB";
 import type { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
 import { addToast } from "$lib/UI/genericComponents/toasts/toastProvider";
 

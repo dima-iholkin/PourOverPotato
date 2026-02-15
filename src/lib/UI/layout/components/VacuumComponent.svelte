@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { vacuumSoftDeletedEntities } from "$lib/database/manageData/manageData";
+  import { vacuumSoftDeletedEntities } from "$lib/database/dataManagementAPI/manageDataAPI";
   import { vacuumDeprecatedLocalStorageKeys } from "$lib/localStorage/vacuum";
 
   // Constants:
