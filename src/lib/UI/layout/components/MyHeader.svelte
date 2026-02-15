@@ -45,7 +45,7 @@
       <a href={routes.home}>
         <div class="logo-container">
           <span class="text-2xl font-semibold whitespace-nowrap">PourOverPotato</span>
-          <p class="sublogo">Save your best coffee cups</p>
+          <p class="sublogo">Save your best recipes</p>
         </div>
       </a>
     </div>
