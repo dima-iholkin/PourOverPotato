@@ -2,17 +2,10 @@
   import { onMount, tick } from "svelte";
   import { goto } from "$app/navigation";
   import { page } from "$app/stores";
-  import { anyCoffeeBeans } from "$lib/database/coffeeBeansAPI";
+  import { exportAllData } from "$lib/database/dataExportImportAPI/exportDataAPI";
   import { routes } from "$lib/domain/constants/routes";
   import Modal from "$lib/UI/genericComponents/modals/Modal.svelte";
   import { addToast } from "$lib/UI/genericComponents/toasts/toastProvider";
-    import BackupYourDataModal from "./BackupYourDataModal.svelte";
-
-  // Constants:
-  const PERSISTENT_STORAGE_KEY = "persistentStorageCheckDate";
-
-  // Props:
-  let showBackupYourDataModal: boolean = false;
 
   // Bind triggers:
   let bindSetModalState: (state: "open" | "closed") => void;
@@ -23,39 +16,18 @@
   let enableButtonDOM: HTMLButtonElement;
 
   // Lifecycle:
-  onMount(async () => {
-    if (
-      (await navigator.storage.persisted()) === false &&
-      (localStorage.getItem(PERSISTENT_STORAGE_KEY) === null ||
-        localStorage.getItem(PERSISTENT_STORAGE_KEY) !== new Date().toDateString()) &&
-      (await anyCoffeeBeans())
-    ) {
-      localStorage.setItem(PERSISTENT_STORAGE_KEY, new Date().toDateString());
-      bindSetModalState("open");
-    }
-  });
+  onMount(() => bindSetModalState("open"));
 
   // Entity handler:
-  async function handlePersistButtonClick() {
-    const result: boolean = await navigator.storage.persist();
-    if (result == false) {
-      alert(
-        "Sorry, your browser refused to enable persistent storage. " +
-          "It means your data is still at risk of being evicted at any moment by the browser. " +
-          "Try using Firefox browser, it seems to be the only browser to allow enabling persistent storage always."
-      );
-      showBackupYourDataModal = true;
-      bindSetModalState("closed");
-    } else {
-      bindSetModalState("closed");
-      addToast("Persistent storage enabled.");
-      const route = $page.url.pathname;
-      goto(routes.home).then(() => goto(route));
-    }
+  async function handleExportMyDataClick() {
+    await handleExportButtonClick();
+    bindSetModalState("closed");
+    addToast("Backup saved.");
+    const route = $page.url.pathname;
+    goto(routes.home).then(() => goto(route));
   }
 
   // UI handlers:
-
   function handleVisibilityChange(state: "open" | "closed") {
     if (state === "open") {
       tick().then(() => {
@@ -70,24 +42,40 @@
       setFocusToModal();
     }
   }
+
+  // Helpers:
+  async function handleExportButtonClick() {
+    // Create the DOM element:
+    const a = document.createElement("a");
+    const data: Blob = await exportAllData();
+    a.href = URL.createObjectURL(data);
+    // Generate a file name:
+    const date = new Date();
+    const monthNumber = date.getMonth() + 1;
+    const monthString = monthNumber.toString().padStart(2, "0");
+    const dateNumber = date.getDate();
+    const dateString = dateNumber.toString().padStart(2, "0");
+    a.setAttribute("download", `PourOverPotato-${date.getFullYear()}_${monthString}_${dateString}.json`);
+    // Click the DOM element:
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  }
 </script>
 
 <Modal
   onFocusReverse={() => cancelButtonDOM.focus()}
   onStateChange={handleVisibilityChange}
-  title="Persistent storage not enabled"
+  title="Backup your data"
   bind:setFocus={setFocusToModal}
   bind:setState={bindSetModalState}
 >
   <div class="text-container">
-    <p>
-      Please try turning persistent storage ON in your browser, it will make your data relatively safe from a browser
-      eviction.
-    </p>
+    <p>Please backup your data in case web browser decides to free up space and wipe your data.</p>
   </div>
   <div class="buttons-container">
-    <button class="enable" type="button" bind:this={enableButtonDOM} on:click={handlePersistButtonClick}>
-      Enable persistent storage
+    <button class="enable" type="button" bind:this={enableButtonDOM} on:click={handleExportMyDataClick}>
+      Export my data
     </button>
     <button
       class="cancel"
@@ -100,10 +88,6 @@
     </button>
   </div>
 </Modal>
-
-{#if showBackupYourDataModal}
-  <BackupYourDataModal />
-{/if}
 
 <style lang="postcss">
   .text-container {
