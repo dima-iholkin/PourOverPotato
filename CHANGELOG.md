@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.2.0] - 2026-02-15
+
+### Added
+
+- Add a modal "Backup your data" in case persist storage can't be enabled.
+
+### Changed
+
+- Change the subheader to "Save your best recipes".
+- Rename some source files and folders.
+
 ## [1.0.0] - 2024-07-19
 
 ### Added
