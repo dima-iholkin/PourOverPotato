@@ -16,7 +16,7 @@
   <MySidebar asGap />
   <div class="page-container">
     <slot />
-    <div class="bottom-gap" />
+    <div class="bottom-gap"></div>
   </div>
 </div>
 

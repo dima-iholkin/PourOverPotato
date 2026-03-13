@@ -77,12 +77,12 @@
 >
   <MySidebar asGap />
   <div class="vertical-center mx-auto">
-    <div class="vertical-gap" />
+    <div class="vertical-gap"></div>
     <div class="inner-container relative shadow-xl rounded-md bg-white" bind:this={modalDom}>
       <ModalHeader onClose={handleClose} {onFocusReverse} {title} bind:setFocus={setFocusToModalHeader} />
       <slot />
     </div>
-    <div class="vertical-gap" />
+    <div class="vertical-gap"></div>
   </div>
 </div>
 

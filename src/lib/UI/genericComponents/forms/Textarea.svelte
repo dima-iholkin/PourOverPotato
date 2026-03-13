@@ -55,7 +55,7 @@
     class:unsaved-changes={initialValue !== undefined && value.trim() !== initialValue}
     on:input={(event) => resizeOnInput(event.currentTarget)}
     on:keydown
-  />
+ ></textarea>
 </div>
 
 <style lang="postcss">

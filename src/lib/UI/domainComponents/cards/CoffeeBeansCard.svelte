@@ -23,7 +23,7 @@
       {:else if item.latestRecipeTimestamp}
         <p class="time-ago-info">🕒 {convertToTimeAgo(item.latestRecipeTimestamp)}</p>
       {:else}
-        <div />
+        <div></div>
       {/if}
       <p class="recipes-count">{item.recipeCount} {item.recipeCount === 1 ? "recipe" : "recipes"}</p>
     </div>

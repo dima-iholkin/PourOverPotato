@@ -211,7 +211,7 @@
   <FormRow>
     <RoastDatePicker bind:dateValue={roastDate} />
     <DaysSinceRoastP {daysSinceRoast} onClear={() => (roastDate = new Date(0))} />
-    <div style="flex-grow: 1;" />
+    <div style="flex-grow: 1;"></div>
     <TextInput labelText="Bag number:" nameAttr={BAG_NUMBER} bind:value={bagNumber} />
   </FormRow>
   <Textarea
