@@ -64,6 +64,8 @@
 </div>
 
 <style lang="postcss">
+  @reference "tailwindcss";
+
   .menu-container {
     display: flex;
     flex-direction: row;

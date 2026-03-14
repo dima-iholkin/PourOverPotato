@@ -106,6 +106,8 @@
 {/if}
 
 <style lang="postcss">
+  @reference "tailwindcss";
+
   .text-container {
     margin-top: 1rem;
   }

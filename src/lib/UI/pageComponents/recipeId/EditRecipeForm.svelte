@@ -194,6 +194,8 @@
 </form>
 
 <style lang="postcss">
+  @reference "tailwindcss";
+
   form {
     display: flex;
     flex-direction: column;

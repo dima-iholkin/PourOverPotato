@@ -29,6 +29,8 @@
 <VacuumComponent />
 
 <style lang="postcss">
+  @reference "tailwindcss";
+
   .page-container {
     flex-grow: 1;
     max-width: 80ch;

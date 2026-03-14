@@ -45,6 +45,8 @@
 </div>
 
 <style lang="postcss">
+  @reference "tailwindcss";
+
   .container {
     position: relative;
   }

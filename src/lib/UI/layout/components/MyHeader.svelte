@@ -54,6 +54,8 @@
 </nav>
 
 <style lang="postcss">
+  @reference "tailwindcss";
+
   /* Outer layout: */
 
   nav {

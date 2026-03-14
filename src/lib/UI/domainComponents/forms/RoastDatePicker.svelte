@@ -46,6 +46,8 @@
 </div>
 
 <style lang="postcss">
+  @reference "tailwindcss";
+
   .my-container {
     display: flex;
     align-items: baseline;

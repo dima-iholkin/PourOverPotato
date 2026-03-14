@@ -45,6 +45,8 @@
 {/if}
 
 <style lang="postcss">
+  @reference "tailwindcss";
+
   .empty-db-message-container {
     text-align: center;
   }

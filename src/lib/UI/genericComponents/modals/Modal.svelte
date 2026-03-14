@@ -72,7 +72,7 @@
 <svelte:document on:keydown={handleEscKey} on:mousedown={handleDocumentClick} />
 
 <div
-  class="modal-container fixed inset-0 bg-gray-900 bg-opacity-60 overflow-y-auto h-full w-full px-4"
+  class="modal-container fixed inset-0 bg-gray-900/60 overflow-y-auto h-full w-full px-4"
   class:shown={isOpen}
 >
   <MySidebar asGap />

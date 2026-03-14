@@ -43,6 +43,8 @@
 </div>
 
 <style lang="postcss">
+  @reference "tailwindcss";
+
   .container {
     display: flex;
     flex-direction: row;

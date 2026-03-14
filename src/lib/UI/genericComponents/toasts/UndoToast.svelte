@@ -13,6 +13,8 @@
 </Toast>
 
 <style lang="postcss">
+  @reference "tailwindcss";
+
   button {
     @apply bg-gray-50 text-gray-900 rounded-lg inline-flex items-center justify-center;
     @apply hover:text-black hover:bg-white;

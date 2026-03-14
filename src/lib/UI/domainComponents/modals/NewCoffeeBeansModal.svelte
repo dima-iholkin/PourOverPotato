@@ -194,6 +194,8 @@
 </Modal>
 
 <style lang="postcss">
+  @reference "tailwindcss";
+
   .input-name {
     @apply bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg block w-full p-2.5;
     @apply focus:ring-blue-500 focus:border-blue-500;
