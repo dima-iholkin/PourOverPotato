@@ -2,7 +2,6 @@
   import { convertToTimeAgo } from "$lib/_helpers/dateHelpers";
   import type { EnhancedCoffeeBeans } from "$lib/domain/enhancedEntities/EnhancedCoffeeBeans";
   import { CoffeeBeansSortOrderEnum } from "$lib/domain/sort/CoffeeBeansSortOrderEnum";
-  // eslint-disable-next-line max-len
   import Card from "$lib/UI/genericComponents/Card.svelte";
 
   // Entity props:
