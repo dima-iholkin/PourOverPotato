@@ -1,11 +1,7 @@
 <script lang="ts">
   import Toast from "./Toast.svelte";
 
-  // Events:
-  export let onClickUndo: () => void;
-
-  // UI props:
-  export let message: string;
+  const { onClickUndo = $bindable(), message }: { onClickUndo: () => void; message: string } = $props();
 </script>
 
 <Toast {message} on:click>
