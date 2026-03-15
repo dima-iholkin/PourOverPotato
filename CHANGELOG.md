@@ -2,18 +2,23 @@
 
 ## [1.2.1] - 2026-03-15
 
-### Changed
-
-- Changed the subheader to "Keep your best recipes".
-- Migrated a few components to Svelte 5 runes mode.
-- Changed some linting errors into warnings.
-
 ### Updated
 
 - Updated all dependencies to their latest versions.
 - Updated to Svelte 5.
 - Migrated to TailwindCSS 4.
 - Migrated to ESLint 9.
+
+### Changed
+
+- Changed the subheader to "Keep your best recipes".
+- Migrated a few components to Svelte 5 runes mode.
+- Changed some linting errors into warnings.
+
+### Broke
+
+- Had to disable `eslint-plugin-perfectionist` to update ESLint and some other deps. It broke imports' sorting and Svelte tag attributes' sorting.
+- Added many new warnings everywhere due to updated dependencies.
 
 ## [1.2.0] - 2026-02-15
 
