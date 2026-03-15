@@ -19,7 +19,10 @@ const config = {
     version: {
       name: process.env.npm_package_version
     }
-  }
+  },
+  vitePlugin: {
+		dynamicCompileOptions: ({ filename }) => filename.includes("node_modules") ? undefined : { runes: false }
+	}
 };
 
 export default config;

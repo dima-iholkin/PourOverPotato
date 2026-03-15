@@ -8,6 +8,8 @@
 </a>
 
 <style lang="postcss">
+  @reference "tailwindcss";
+
   a {
     @apply block bg-white border border-gray-200 rounded-lg shadow;
     margin-top: 12px;

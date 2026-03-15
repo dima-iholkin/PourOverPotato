@@ -10,7 +10,7 @@
 Put this component as the last page-block on your page. This way it will create a nice gap at bottom of the page and
 the FAB will not obscure the page content.
 -->
-<div class="page-bottom-gap" />
+<div class="page-bottom-gap"></div>
 <div class="fab-container">
   <a {href} tabindex="-1">
     <button class="my-button">
@@ -23,6 +23,8 @@ the FAB will not obscure the page content.
 </div>
 
 <style lang="postcss">
+  @reference "tailwindcss";
+
   button {
     @apply fixed bg-blue-600 rounded-full drop-shadow-lg flex justify-center items-center text-white;
     @apply hover:bg-blue-700 hover:drop-shadow-2xl;

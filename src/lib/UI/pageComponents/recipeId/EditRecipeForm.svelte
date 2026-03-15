@@ -137,7 +137,7 @@
       bind:dateValue={roastDate}
     />
     <DaysSinceRoastP {daysSinceRoast} onClear={() => (roastDate = new Date(0))} />
-    <div style="flex-grow: 1;" />
+    <div style="flex-grow: 1;"></div>
     <TextInput
       initialValue={recipe.bagNumber ?? ""}
       labelText="Bag number:"
@@ -194,6 +194,8 @@
 </form>
 
 <style lang="postcss">
+  @reference "tailwindcss";
+
   form {
     display: flex;
     flex-direction: column;

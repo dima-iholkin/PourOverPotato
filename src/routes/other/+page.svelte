@@ -65,6 +65,8 @@
 </div>
 
 <style lang="postcss">
+  @reference "tailwindcss";
+
   .page-headline {
     margin-top: 0.5rem !important;
   }

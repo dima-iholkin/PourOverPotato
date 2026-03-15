@@ -76,6 +76,8 @@
 </div>
 
 <style lang="postcss">
+  @reference "tailwindcss";
+
   .select-container {
     /* Inner layout: */
     display: flex;

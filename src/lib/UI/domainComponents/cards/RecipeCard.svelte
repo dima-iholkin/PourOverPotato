@@ -52,6 +52,8 @@
 </Card>
 
 <style lang="postcss">
+  @reference "tailwindcss";
+
   .card-content {
     display: flex;
     flex-direction: column;

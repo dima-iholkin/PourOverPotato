@@ -29,6 +29,8 @@
 </aside>
 
 <style lang="postcss">
+  @reference "tailwindcss";
+
   @media only screen and (width < 800px) {
     .my-aside {
       display: none;

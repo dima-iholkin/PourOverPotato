@@ -24,6 +24,8 @@
 </div>
 
 <style lang="postcss">
+  @reference "tailwindcss";
+
   div {
     display: flex;
     justify-content: space-between;

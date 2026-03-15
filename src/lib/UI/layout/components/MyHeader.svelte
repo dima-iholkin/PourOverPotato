@@ -45,7 +45,7 @@
       <a href={routes.home}>
         <div class="logo-container">
           <span class="text-2xl font-semibold whitespace-nowrap">PourOverPotato</span>
-          <p class="sublogo">Save your best recipes</p>
+          <p class="sublogo">Keep your best recipes</p>
         </div>
       </a>
     </div>
@@ -54,10 +54,12 @@
 </nav>
 
 <style lang="postcss">
+  @reference "tailwindcss";
+
   /* Outer layout: */
 
   nav {
-    @apply bg-white fixed w-full z-20 top-0 start-0 border-b border-gray-200;
+    @apply bg-white fixed w-full z-20 top-0 inset-s-0 border-b border-gray-200;
     z-index: 10;
   }
 

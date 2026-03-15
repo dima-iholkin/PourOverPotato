@@ -41,6 +41,8 @@
 </div>
 
 <style lang="postcss">
+  @reference "tailwindcss";
+
   .as-gap {
     position: static !important;
     visibility: hidden;

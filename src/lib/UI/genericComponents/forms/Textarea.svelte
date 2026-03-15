@@ -55,10 +55,12 @@
     class:unsaved-changes={initialValue !== undefined && value.trim() !== initialValue}
     on:input={(event) => resizeOnInput(event.currentTarget)}
     on:keydown
-  />
+  ></textarea>
 </div>
 
 <style lang="postcss">
+  @reference "tailwindcss";
+
   textarea {
     @apply bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg block p-2.5;
     @apply focus:ring-blue-500 focus:border-blue-500;

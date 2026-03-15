@@ -2,7 +2,6 @@
   import { convertToTimeAgo } from "$lib/_helpers/dateHelpers";
   import type { EnhancedCoffeeBeans } from "$lib/domain/enhancedEntities/EnhancedCoffeeBeans";
   import { CoffeeBeansSortOrderEnum } from "$lib/domain/sort/CoffeeBeansSortOrderEnum";
-  // eslint-disable-next-line max-len
   import Card from "$lib/UI/genericComponents/Card.svelte";
 
   // Entity props:
@@ -23,7 +22,7 @@
       {:else if item.latestRecipeTimestamp}
         <p class="time-ago-info">🕒 {convertToTimeAgo(item.latestRecipeTimestamp)}</p>
       {:else}
-        <div />
+        <div></div>
       {/if}
       <p class="recipes-count">{item.recipeCount} {item.recipeCount === 1 ? "recipe" : "recipes"}</p>
     </div>
@@ -31,6 +30,8 @@
 </Card>
 
 <style lang="postcss">
+  @reference "tailwindcss";
+
   .card-content {
     display: flex;
     flex-direction: column;

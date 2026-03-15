@@ -171,6 +171,8 @@
 {/if}
 
 <style lang="postcss">
+  @reference "tailwindcss";
+
   .loading-position {
     margin-top: 1rem;
   }

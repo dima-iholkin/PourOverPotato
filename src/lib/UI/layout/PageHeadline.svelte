@@ -3,6 +3,8 @@
 </h1>
 
 <style lang="postcss">
+  @reference "tailwindcss";
+
   h1 {
     /* Layout: */
     margin-top: 0.5rem;

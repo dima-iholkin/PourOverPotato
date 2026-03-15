@@ -63,7 +63,7 @@
   <AddDemoCoffeeBeans_PageBlock onAddDemoEntities={() => loadEntities()} />
 {:else}
   <SortRecipesSelect bind:sortOrderValue />
-  {#each recipes as recipe}
+  {#each recipes as recipe (recipe.id)}
     <RecipeCard coffeeBeansName={recipe.coffeeBeansName} href={routes.recipeItem(recipe.id)} {recipe} />
   {/each}
 {/if}

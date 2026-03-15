@@ -64,6 +64,8 @@
 </div>
 
 <style lang="postcss">
+  @reference "tailwindcss";
+
   .hidden {
     display: none !important;
   }

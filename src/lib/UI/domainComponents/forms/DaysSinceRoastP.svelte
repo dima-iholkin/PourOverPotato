@@ -19,6 +19,8 @@
 </div>
 
 <style lang="postcss">
+  @reference "tailwindcss";
+
   div {
     display: flex;
     align-items: center;

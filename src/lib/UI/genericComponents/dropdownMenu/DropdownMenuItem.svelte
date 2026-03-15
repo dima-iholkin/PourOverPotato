@@ -8,6 +8,8 @@
 </li>
 
 <style lang="postcss">
+  @reference "tailwindcss";
+
   button {
     /* Layout: */
     @apply block px-4 py-2;
