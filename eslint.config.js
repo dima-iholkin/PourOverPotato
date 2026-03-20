@@ -28,7 +28,7 @@ export default defineConfig(
             "no-undef": "off",
             "@typescript-eslint/no-unused-vars": "warn",
             "@typescript-eslint/no-unused-expressions": "warn",
-            // "svelte/valid-compile": "warn",
+            "svelte/valid-compile": "warn",
             "svelte/prefer-svelte-reactivity": "warn",
             "svelte/no-navigation-without-resolve": "warn",
             "prefer-const": "warn",
