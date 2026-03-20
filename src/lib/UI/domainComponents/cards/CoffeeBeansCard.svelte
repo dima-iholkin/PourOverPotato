@@ -4,12 +4,15 @@
   import { CoffeeBeansSortOrderEnum } from "$lib/domain/sort/CoffeeBeansSortOrderEnum";
   import Card from "$lib/UI/genericComponents/Card.svelte";
 
-  // Entity props:
-  export let item: EnhancedCoffeeBeans;
+  interface Props {
+    // Entity props:
+    item: EnhancedCoffeeBeans;
+    // UI props:
+    href: string;
+    sortOrder: CoffeeBeansSortOrderEnum | undefined;
+  }
 
-  // UI props:
-  export let href: string;
-  export let sortOrder: CoffeeBeansSortOrderEnum | undefined = CoffeeBeansSortOrderEnum.LatestRecipe;
+  const { item, href, sortOrder }: Props = $props();
 </script>
 
 <Card {href}>
