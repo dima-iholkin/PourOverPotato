@@ -4,12 +4,15 @@
   import type { Recipe } from "$lib/domain/entities/Recipe";
   import Card from "$lib/UI/genericComponents/Card.svelte";
 
-  // Entities props:
-  export let recipe: Recipe;
+  interface Props {
+    // Entity props:
+    recipe: Recipe;
+    // UI props:
+    coffeeBeansName: string;
+    href: string | undefined;
+  }
 
-  // UI props:
-  export let coffeeBeansName: string;
-  export let href: string | undefined;
+  const { recipe, coffeeBeansName, href }: Props = $props();
 </script>
 
 <Card {href}>

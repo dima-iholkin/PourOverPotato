@@ -11,14 +11,14 @@
   import type { PageData } from "./$types";
 
   // Load function for recipeId:
-  export let data: PageData;
+  const { data }: { data: PageData } = $props();
 
   // Entities state:
-  let recipe: Recipe | undefined | null = null;
+  let recipe: Recipe | undefined | null = $state(null);
 
   // Unsaved changes state:
-  let bind_hasUnsavedChangesInForm: boolean;
-  let bind_ignoreUnsavedChangesForTopMenu: boolean;
+  let bind_hasUnsavedChangesInForm: boolean | undefined = $state();
+  let bind_ignoreUnsavedChangesForTopMenu: boolean | undefined = $state();
 
   // Lifecycle:
   onMount(() => {

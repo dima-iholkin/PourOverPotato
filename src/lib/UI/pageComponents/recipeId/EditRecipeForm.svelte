@@ -28,48 +28,59 @@
   const OUT_WEIGHT = "out-weight";
   const RATING = "rating";
 
-  // Entities props:
-  export let recipe: Recipe;
+  interface Props {
+    // Entity props:
+    recipe: Recipe;
+    // Unsaved changes:
+    hasUnsavedChanges: boolean | undefined;
+  }
+
+  // eslint-disable-next-line prefer-const
+  let { recipe, hasUnsavedChanges = $bindable(false) }: Props = $props();
 
   // Entities state:
-  let allCoffeeBeans: CoffeeBeans[] | undefined = undefined;
+  let allCoffeeBeans: CoffeeBeans[] | undefined = $state(undefined);
 
   // Form state:
-  let selectedCoffeeBeansId: number | undefined = recipe.coffeeBeansId;
-  let roastDate: Date =
-    recipe.roastDate instanceof Date && isFinite(recipe.roastDate.valueOf()) ? recipe.roastDate : new Date(0);
-  let bagNumber: string = recipe.bagNumber ?? "";
-  let recipeTarget: string = recipe.recipeTarget;
-  let recipeResult: string = recipe.recipeResult;
-  let recipeThoughts: string = recipe.recipeThoughts;
-  let outWeight: number = recipe.outWeight;
-  let rating: number = recipe.rating;
-  let favorite: boolean = recipe.favorite;
-  let timestampStr: string = formatTimeForInput(recipe.timestamp);
+  let selectedCoffeeBeansId: number | undefined = $derived(recipe.coffeeBeansId);
+  let roastDate: Date = $derived(
+    recipe.roastDate instanceof Date && isFinite(recipe.roastDate.valueOf()) ? recipe.roastDate : new Date(0)
+  );
+  let bagNumber: string = $derived(recipe.bagNumber ?? "");
+  let recipeTarget: string = $derived(recipe.recipeTarget);
+  let recipeResult: string = $derived(recipe.recipeResult);
+  let recipeThoughts: string = $derived(recipe.recipeThoughts);
+  let outWeight: number = $derived(recipe.outWeight);
+  let rating: number = $derived(recipe.rating);
+  let favorite: boolean = $derived(recipe.favorite);
+  let timestampStr: string = $derived(formatTimeForInput(recipe.timestamp));
 
   // Calculated state, the days since roast:
-  let daysSinceRoast: number | undefined;
-  $: daysSinceRoast = Recipe.calculateDaysSinceRoast(parseDateFromInputString(timestampStr), roastDate);
+  const daysSinceRoast: number | undefined = $derived(
+    Recipe.calculateDaysSinceRoast(parseDateFromInputString(timestampStr), roastDate)
+  );
 
   // Calculated state, unsaved changes:
-  export let hasUnsavedChanges: boolean = false;
-  $: if (
-    recipe &&
-    selectedCoffeeBeansId === recipe.coffeeBeansId &&
-    roastDate.getTime() === (recipe.roastDate ? recipe.roastDate.getTime() : 0) &&
-    bagNumber.trim() === (recipe.bagNumber ?? "") &&
-    recipeTarget.trim() === recipe.recipeTarget &&
-    recipeResult.trim() === recipe.recipeResult &&
-    recipeThoughts.trim() === recipe.recipeThoughts &&
-    outWeight === recipe.outWeight &&
-    rating === recipe.rating &&
-    favorite === recipe.favorite &&
-    timestampStr === formatTimeForInput(recipe.timestamp)
-  ) {
-    hasUnsavedChanges = false;
-  } else {
-    hasUnsavedChanges = true;
-  }
+  // export let hasUnsavedChanges: boolean = false;
+  $effect(() => {
+    if (
+      recipe &&
+      selectedCoffeeBeansId === recipe.coffeeBeansId &&
+      roastDate.getTime() === (recipe.roastDate ? recipe.roastDate.getTime() : 0) &&
+      bagNumber.trim() === (recipe.bagNumber ?? "") &&
+      recipeTarget.trim() === recipe.recipeTarget &&
+      recipeResult.trim() === recipe.recipeResult &&
+      recipeThoughts.trim() === recipe.recipeThoughts &&
+      outWeight === recipe.outWeight &&
+      rating === recipe.rating &&
+      favorite === recipe.favorite &&
+      timestampStr === formatTimeForInput(recipe.timestamp)
+    ) {
+      hasUnsavedChanges = false;
+    } else {
+      hasUnsavedChanges = true;
+    }
+  });
 
   // Lifecycle:
   onMount(() => {
@@ -79,7 +90,8 @@
   });
 
   // Handlers:
-  async function handleSubmit() {
+  async function handleSubmit(event: SubmitEvent & { currentTarget: EventTarget & HTMLFormElement }) {
+    event.preventDefault();
     // Validate and format the form values:
     bagNumber = bagNumber.trim();
     recipeTarget = recipeTarget.trim();
@@ -115,14 +127,17 @@
     hasUnsavedChanges = false;
     // Redirect user to another page:
     if (coffeeBeansItem === undefined) {
+      // eslint-disable-next-line svelte/no-navigation-without-resolve
       goto(routes.home);
       return;
     }
+    // eslint-disable-next-line svelte/no-navigation-without-resolve
     goto(routes.coffeeBeansItem(coffeeBeansItem.name));
+    // goto(resolve(`/coffee_beans/${coffeeBeansItem.name}`));
   }
 </script>
 
-<form id="edit-recipe" on:submit|preventDefault={handleSubmit}>
+<form id="edit-recipe" onsubmit={(event) => handleSubmit(event)}>
   <CoffeeBeansSelect
     {allCoffeeBeans}
     initialCoffeeBeansId={recipe.coffeeBeansId}

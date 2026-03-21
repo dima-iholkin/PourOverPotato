@@ -31,6 +31,7 @@ export default defineConfig(
             "svelte/valid-compile": "warn",
             "svelte/prefer-svelte-reactivity": "warn",
             "svelte/no-navigation-without-resolve": "warn",
+            "svelte/no-unused-props": "warn",
             "prefer-const": "warn",
             "no-debugger": "warn",
             "@typescript-eslint/ban-ts-comment": "off",
