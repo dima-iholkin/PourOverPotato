@@ -1,4 +1,4 @@
-<script context="module" lang="ts">
+<script module lang="ts">
   import type { Recipe } from "$lib/domain/entities/Recipe";
   import { RecipesSortOrderEnum } from "$lib/domain/sort/RecipesSortOrderEnum";
   import {
@@ -30,26 +30,30 @@
 </script>
 
 <script lang="ts">
+  interface Props {
+    sortOrderValue:
+      | {
+          value: RecipesSortOrderEnum;
+          sortOrderFunc: (recipeA: Recipe, recipeB: Recipe) => number;
+        }
+      | undefined;
+  }
+
   // Props:
-  export let sortOrderValue: {
-    value: RecipesSortOrderEnum;
-    sortOrderFunc: (recipeA: Recipe, recipeB: Recipe) => number;
-  };
+  let { sortOrderValue = $bindable() }: Props = $props();
 
   // UI state:
-  let value: RecipesSortOrderEnum = loadSortOrder("recipes");
+  let value: RecipesSortOrderEnum = $state(loadSortOrder("recipes"));
 
   // Reactivity:
-  $: {
-    value;
-    const sortOrderFunc =
-      sortOrderEnumEntriesForUI.find((item) => item.value === value)?.sortOrderFunc ?? sortRecipesByTimestampDesc;
+  $effect(() => {
     sortOrderValue = {
       value,
-      sortOrderFunc
+      sortOrderFunc:
+        sortOrderEnumEntriesForUI.find((item) => item.value === value)?.sortOrderFunc ?? sortRecipesByTimestampDesc
     };
     saveSortOrder("recipes", value);
-  }
+  });
 </script>
 
 <div class="select-container">

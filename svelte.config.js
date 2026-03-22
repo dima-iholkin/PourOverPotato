@@ -21,11 +21,11 @@ const config = {
     }
   },
   compilerOptions: {
-    runes: true
+    runes: undefined
+  },
+  vitePlugin: {
+  	dynamicCompileOptions: ({ filename }) => filename.includes("node_modules") ? undefined : { runes: undefined }
   }
-  // vitePlugin: {
-  // 	dynamicCompileOptions: ({ filename }) => filename.includes("node_modules") ? undefined : { runes: true }
-  // }
 };
 
 export default config;

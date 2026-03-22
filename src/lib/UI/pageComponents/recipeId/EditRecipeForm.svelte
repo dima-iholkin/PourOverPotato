@@ -36,7 +36,7 @@
   }
 
   // eslint-disable-next-line prefer-const
-  let { recipe, hasUnsavedChanges = $bindable(false) }: Props = $props();
+  let { recipe, hasUnsavedChanges = $bindable() }: Props = $props();
 
   // Entities state:
   let allCoffeeBeans: CoffeeBeans[] | undefined = $state(undefined);
@@ -127,11 +127,9 @@
     hasUnsavedChanges = false;
     // Redirect user to another page:
     if (coffeeBeansItem === undefined) {
-      // eslint-disable-next-line svelte/no-navigation-without-resolve
       goto(routes.home);
       return;
     }
-    // eslint-disable-next-line svelte/no-navigation-without-resolve
     goto(routes.coffeeBeansItem(coffeeBeansItem.name));
     // goto(resolve(`/coffee_beans/${coffeeBeansItem.name}`));
   }

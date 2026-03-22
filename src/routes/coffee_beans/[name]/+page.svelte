@@ -26,40 +26,38 @@
   import DeleteConfirmationModal from "$lib/UI/genericComponents/modals/DeleteConfirmationModal.svelte";
   import { addToast, addToastWithUndo } from "$lib/UI/genericComponents/toasts/toastProvider";
   import PageHeadline from "$lib/UI/layout/PageHeadline.svelte";
-  import type { PageData } from "./$types";
+  // import type { PageData } from "./$types";
+  import { page } from "$app/state";
 
   // Load function:
-  export let data: PageData;
+  // const data: PageData = $props();
 
   // Bind triggers:
-  let bind_setDeleteModalState: (state: "open" | "closed") => void;
-  let bind_setDropdownState: (state: "open" | "closed") => void;
-  let bind_setEditModalState: (state: "open" | "closed") => void;
+  let bind_setDeleteModalState: ((state: "open" | "closed") => void) | undefined = $state();
+  let bind_setDropdownState: ((state: "open" | "closed") => void) | undefined = $state();
+  let bind_setEditModalState: ((state: "open" | "closed") => void) | undefined = $state();
 
   // Entities state:
-  let coffeeBeans: CoffeeBeans | undefined | "CoffeeBeansNotFound";
-  let recipes: Recipe[] | undefined;
+  let coffeeBeans: CoffeeBeans | undefined | "CoffeeBeansNotFound" = $state();
+  let recipes: Recipe[] | undefined = $state();
 
   // Sorting state:
-  let sortOrderValue: {
-    value: RecipesSortOrderEnum;
-    sortOrderFunc: (recipeA: Recipe, recipeB: Recipe) => number;
-  };
+  let sortOrderValue:
+    | {
+        value: RecipesSortOrderEnum;
+        sortOrderFunc: (recipeA: Recipe, recipeB: Recipe) => number;
+      }
+    | undefined = $state();
 
-  // Sorting reactivity:
-  $: {
-    if (recipes) {
-      recipes = recipes.sort(sortOrderValue?.sortOrderFunc ?? sortRecipesByTimestampDesc);
-    }
-  }
+  // Derived state:
+  const sortedRecipes = $derived(recipes?.toSorted(sortOrderValue?.sortOrderFunc ?? sortRecipesByTimestampDesc));
 
   // Entities reactivity:
-  $: {
-    data;
-    if (browser && window.indexedDB) {
-      loadCoffeeBeansAndRecipes();
+  $effect(() => {
+    if (page.data.coffeeBeansName && browser && window.indexedDB) {
+      loadCoffeeBeansAndRecipes(page.data.coffeeBeansName);
     }
-  }
+  });
 
   // Handler:
   async function handleDeleteClick() {
@@ -94,9 +92,9 @@
   }
 
   // Helper:
-  async function loadCoffeeBeansAndRecipes() {
+  async function loadCoffeeBeansAndRecipes(coffeeBeansName: string) {
     // Load CoffeeBeans item from the DB:
-    const item: CoffeeBeans | undefined = await getCoffeeBeansByName(data.coffeeBeansName);
+    const item: CoffeeBeans | undefined = await getCoffeeBeansByName(coffeeBeansName);
     // Guard clause:
     if (item === undefined) {
       coffeeBeans = "CoffeeBeansNotFound";
@@ -134,15 +132,15 @@
   <FlexRow>
     <PageHeadline>{coffeeBeans.name}</PageHeadline>
     <div class="menu-container">
-      <button class="edit-button" type="button" on:click={() => bind_setEditModalState("open")}> Edit </button>
+      <button class="edit-button" type="button" onclick={() => bind_setEditModalState?.("open")}> Edit </button>
       <EditCoffeeBeansModal item={coffeeBeans} bind:setModalState={bind_setEditModalState} />
       <DropdownMenu bind:setDropdownState={bind_setDropdownState}>
         <DropdownMenuItem
           slot="button"
           buttonText="Delete"
           on:click={() => {
-            bind_setDeleteModalState("open");
-            bind_setDropdownState("closed");
+            bind_setDeleteModalState?.("open");
+            bind_setDropdownState?.("closed");
           }}
         />
         <DeleteConfirmationModal
@@ -163,7 +161,7 @@
     <NoItemsYetP />
   {:else}
     <SortRecipesSelect bind:sortOrderValue />
-    {#each recipes as recipe (recipe.id)}
+    {#each sortedRecipes as recipe (recipe.id)}
       <RecipeCard coffeeBeansName={coffeeBeans.name} href={routes.recipeItem(recipe.id)} {recipe} />
     {/each}
   {/if}

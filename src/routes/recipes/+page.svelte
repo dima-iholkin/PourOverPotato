@@ -18,26 +18,25 @@
   import AddDemoCoffeeBeans_PageBlock from "$lib/UI/domainComponents/pageBlocks/AddDemoCoffeeBeans_PageBlock.svelte";
   import PageHeadline from "$lib/UI/layout/PageHeadline.svelte";
 
-  // Entities state:
-  let recipes: EnhancedRecipe[] | undefined;
-
+  // Entity state:
+  let recipes: EnhancedRecipe[] | undefined = $state();
   // Sorting state:
-  let sortOrderValue: {
-    value: RecipesSortOrderEnum;
-    sortOrderFunc: (recipeA: Recipe, recipeB: Recipe) => number;
-  };
+  let sortOrderValue:
+    | {
+        value: RecipesSortOrderEnum;
+        sortOrderFunc: (recipeA: Recipe, recipeB: Recipe) => number;
+      }
+    | undefined = $state();
+
+  // Derived state:
+  const sortedRecipes: EnhancedRecipe[] | undefined = $derived(
+    recipes?.toSorted(sortOrderValue?.sortOrderFunc ?? sortRecipesByTimestampDesc)
+  );
 
   // Lifecycle:
   onMount(() => {
     loadEntities();
   });
-
-  // Sorting reactivity:
-  $: {
-    if (recipes) {
-      recipes = recipes.sort(sortOrderValue?.sortOrderFunc ?? sortRecipesByTimestampDesc);
-    }
-  }
 
   // Helper:
   async function loadEntities() {
@@ -63,7 +62,7 @@
   <AddDemoCoffeeBeans_PageBlock onAddDemoEntities={() => loadEntities()} />
 {:else}
   <SortRecipesSelect bind:sortOrderValue />
-  {#each recipes as recipe (recipe.id)}
+  {#each sortedRecipes as recipe (recipe.id)}
     <RecipeCard coffeeBeansName={recipe.coffeeBeansName} href={routes.recipeItem(recipe.id)} {recipe} />
   {/each}
 {/if}
