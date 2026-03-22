@@ -1,11 +1,17 @@
 <script lang="ts">
   import Toast from "./Toast.svelte";
 
-  const { onClickUndo = $bindable(), message }: { onClickUndo: () => void; message: string } = $props();
+  const {
+    onClickUndo = $bindable(),
+    message,
+    onclick
+  }: { onClickUndo: () => void; message: string; onclick: () => void } = $props();
 </script>
 
-<Toast {message} on:click>
-  <button slot="button" type="button" aria-label="Close" on:click={onClickUndo}>Undo</button>
+<Toast {message} onclick={() => onclick()}>
+  {#snippet button()}
+    <button  type="button" aria-label="Close" onclick={() => onClickUndo()}>Undo</button>
+  {/snippet}
 </Toast>
 
 <style lang="postcss">

@@ -1,6 +1,12 @@
 <script lang="ts">
+  interface Props {
+    button?: import("svelte").Snippet<[]>;
+    message: string;
+    onclick: () => void;
+  }
+
   // UI props:
-  const { message }: { message: string } = $props();
+  const { message, button, onclick }: Props = $props();
 </script>
 
 <!-- eslint-disable max-len -->
@@ -14,13 +20,13 @@
     <span class="sr-only">Check icon</span>
   </div>
   <div id="toast-content" class="text-base font-normal">{message}</div>
-  <slot name="button" />
+  {@render button?.()}
   <button
     class="my-close-button ms-auto -mx-1.5 -my-1.5 bg-gray-200 text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-300 inline-flex items-center justify-center h-8 w-8"
     data-dismiss-target="#toast-success"
     type="button"
     aria-label="Close"
-    on:click
+    onclick={() => onclick()}
   >
     <span class="sr-only">Close</span>
     <svg class="w-3 h-3" fill="none" viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">

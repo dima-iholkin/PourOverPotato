@@ -1,4 +1,4 @@
-<script context="module" lang="ts">
+<script module lang="ts">
   import type { EnhancedCoffeeBeans } from "$lib/domain/enhancedEntities/EnhancedCoffeeBeans";
   import { CoffeeBeansSortOrderEnum } from "$lib/domain/sort/CoffeeBeansSortOrderEnum";
   import {
@@ -44,18 +44,23 @@
 </script>
 
 <script lang="ts">
+  interface Props {
+    sortOrderValue:
+      | {
+          value: CoffeeBeansSortOrderEnum;
+          sortOrderFunc: (itemA: EnhancedCoffeeBeans, itemB: EnhancedCoffeeBeans) => number;
+        }
+      | undefined;
+  }
+
   // Props:
-  export let sortOrderValue: {
-    value: CoffeeBeansSortOrderEnum;
-    sortOrderFunc: (itemA: EnhancedCoffeeBeans, itemB: EnhancedCoffeeBeans) => number;
-  };
+  let { sortOrderValue = $bindable() }: Props = $props();
 
   // UI state:
-  let value: CoffeeBeansSortOrderEnum = loadSortOrder("coffeeBeans");
+  let value: CoffeeBeansSortOrderEnum = $state(loadSortOrder("coffeeBeans"));
 
   // Reactivity:
-  $: {
-    value;
+  $effect(() => {
     const sortOrderFunc =
       sortOrderEnumEntriesForUI.find((item) => item.value === value)?.sortOrderFunc ?? sortCoffeeBeansByName;
     sortOrderValue = {
@@ -63,7 +68,7 @@
       sortOrderFunc
     };
     saveSortOrder("coffeeBeans", value);
-  }
+  });
 </script>
 
 <div class="select-container">

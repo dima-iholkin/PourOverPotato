@@ -10,13 +10,17 @@
   import DeleteConfirmationModal from "$lib/UI/genericComponents/modals/DeleteConfirmationModal.svelte";
   import { addToastWithUndo } from "$lib/UI/genericComponents/toasts/toastProvider";
 
-  // Entities props:
-  export let recipe: Recipe;
-  export let ignoreUnsavedChanges: boolean = false;
+  interface Props {
+    recipe: Recipe;
+    ignoreUnsavedChanges: boolean | undefined;
+  }
+
+  // eslint-disable-next-line prefer-const
+  let { recipe, ignoreUnsavedChanges = $bindable(false) }: Props = $props();
 
   // Bind functions:
-  let bind_setDeleteModalState: (state: "open" | "closed") => void;
-  let bind_setDropdownState: (state: "open" | "closed") => void;
+  let bind_setDeleteModalState: ((state: "open" | "closed") => void) | undefined = $state();
+  let bind_setDropdownState: ((state: "open" | "closed") => void) | undefined = $state();
 
   // Handlers:
   async function handleDeleteClick() {
@@ -39,7 +43,11 @@
     // Disable unsaved changes alert for TopBar goto action:
     ignoreUnsavedChanges = true;
     // Navigation logic:
-    coffeeBeansItem ? goto(routes.coffeeBeansItem(coffeeBeansItem.name)) : goto(routes.home);
+    if (coffeeBeansItem == undefined) {
+      goto(routes.home);
+    } else {
+      goto(routes.coffeeBeansItem(coffeeBeansItem.name));
+    }
   }
 </script>
 
@@ -49,8 +57,8 @@
       slot="button"
       buttonText="Delete"
       on:click={() => {
-        bind_setDropdownState("closed");
-        bind_setDeleteModalState("open");
+        bind_setDropdownState?.("closed");
+        bind_setDeleteModalState?.("open");
       }}
     />
     <DeleteConfirmationModal

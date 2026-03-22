@@ -13,25 +13,25 @@
   import PageHeadline from "$lib/UI/layout/PageHeadline.svelte";
 
   // Entities state:
-  let coffeeBeans: EnhancedCoffeeBeans[] | undefined;
+  let coffeeBeans: EnhancedCoffeeBeans[] | undefined = $state();
 
   // Sorting state:
-  let sortOrderValue: {
-    value: CoffeeBeansSortOrderEnum;
-    sortOrderFunc: (itemA: EnhancedCoffeeBeans, itemB: EnhancedCoffeeBeans) => number;
-  };
+  let sortOrderValue:
+    | {
+        value: CoffeeBeansSortOrderEnum;
+        sortOrderFunc: (itemA: EnhancedCoffeeBeans, itemB: EnhancedCoffeeBeans) => number;
+      }
+    | undefined = $state();
+
+  // Reactivity:
+  const sortedCoffeeBeans: EnhancedCoffeeBeans[] | undefined = $derived(
+    coffeeBeans?.toSorted(sortOrderValue?.sortOrderFunc ?? sortCoffeeBeansByName)
+  );
 
   // Lifecycle:
   onMount(() => {
     loadAllCoffeeBeans();
   });
-
-  // Sorting reactivity:
-  $: {
-    if (coffeeBeans) {
-      coffeeBeans = coffeeBeans.sort(sortOrderValue?.sortOrderFunc ?? sortCoffeeBeansByName);
-    }
-  }
 
   // Helper:
   async function loadAllCoffeeBeans() {
@@ -51,7 +51,7 @@
   <AddDemoCoffeeBeans_PageBlock onAddDemoEntities={() => loadAllCoffeeBeans()} />
 {:else}
   <SortCoffeeBeansSelect bind:sortOrderValue />
-  {#each coffeeBeans as item (item.id)}
+  {#each sortedCoffeeBeans as item (item.id)}
     <CoffeeBeansCard href={routes.coffeeBeansItem(item.name)} {item} sortOrder={sortOrderValue?.value} />
   {/each}
 {/if}

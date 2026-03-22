@@ -21,7 +21,7 @@ const config = {
     }
   },
   compilerOptions: {
-    runes: undefined
+    runes: true
   },
   vitePlugin: {
   	dynamicCompileOptions: ({ filename }) => filename.includes("node_modules") ? undefined : { runes: undefined }

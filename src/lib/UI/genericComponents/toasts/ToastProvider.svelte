@@ -14,7 +14,7 @@
   }
 
   // UI state:
-  let toasts: ToastData[] = [];
+  let toasts: ToastData[] = $state([]);
 
   // Lifecycle:
   onMount(() => {
@@ -76,7 +76,7 @@
   {#each toasts as item (item.timestamp)}
     <div class="toast-wrapper" animate:flip in:fly={{ y: 100 }} out:fly={{ x: 100 }}>
       {#if item.onClickUndo === undefined}
-        <Toast message={item.message} on:click={() => handleClickClose(item)} />
+        <Toast message={item.message} onclick={() => handleClickClose(item)} />
       {:else}
         <UndoToast
           message={item.message}
