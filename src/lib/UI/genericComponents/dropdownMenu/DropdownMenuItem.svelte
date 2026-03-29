@@ -1,10 +1,15 @@
 <script lang="ts">
+  interface Props {
+    buttonText: string;
+    onclick: (event: MouseEvent) => void
+  }
+
   // Props:
-  export let buttonText: string;
+  const { buttonText, onclick }: Props = $props();
 </script>
 
 <li>
-  <button type="button" on:click>{buttonText}</button>
+  <button type="button" onclick={onclick}>{buttonText}</button>
 </li>
 
 <style lang="postcss">

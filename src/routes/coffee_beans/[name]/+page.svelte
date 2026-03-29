@@ -138,7 +138,7 @@
         <DropdownMenuItem
           slot="button"
           buttonText="Delete"
-          on:click={() => {
+          onclick={() => {
             bind_setDeleteModalState?.("open");
             bind_setDropdownState?.("closed");
           }}
