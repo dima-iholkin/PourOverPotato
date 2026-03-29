@@ -1,20 +1,31 @@
 <script lang="ts">
-  export let daysSinceRoast: number | undefined;
-  export let onClear: () => void;
+  interface Props {
+    daysSinceRoast?: number;
+    onClear: () => void;
+  }
+
+  // Props:
+  const { daysSinceRoast, onClear }: Props = $props();
+
+  // Event handlers:
+  function handleClick(event: MouseEvent) {
+    event.preventDefault();
+    onClear();
+  }
 </script>
 
 <div class="text-gray-900">
   {#if daysSinceRoast === undefined || Number.isFinite(daysSinceRoast) === false}
     <div style="visibility: hidden;">
       <p>xx days since roast</p>
-      <button on:click|preventDefault={() => onClear()}>clear</button>
+      <button onclick={handleClick}>clear</button>
     </div>
   {:else if daysSinceRoast === 1}
     <p>1 day since roast</p>
-    <button on:click|preventDefault={() => onClear()}>clear</button>
+    <button onclick={handleClick}>clear</button>
   {:else}
     <p>{daysSinceRoast} days since roast</p>
-    <button on:click|preventDefault={() => onClear()}>clear</button>
+    <button onclick={handleClick}>clear</button>
   {/if}
 </div>
 

@@ -1,9 +1,13 @@
 <script lang="ts">
   import Label from "$lib/UI/genericComponents/forms/Label.svelte";
 
-  // Props:
-  export let value: boolean = false;
-  export let initialValue: boolean | undefined = undefined;
+  interface Props {
+    value: boolean;
+    initialValue?: boolean;
+  }
+
+  // eslint-disable-next-line prefer-const
+  let { value = $bindable(), initialValue }: Props = $props();
 </script>
 
 <div class="container">
@@ -25,7 +29,7 @@
   }
 
   .input-container {
-    @apply relative flex items-center max-w-[8rem];
+    @apply relative flex items-center max-w-32;
     height: 2.75rem;
   }
 

@@ -5,18 +5,22 @@
   // Constants:
   const NAME = "roast-date";
 
-  // Props:
-  export let dateValue: Date;
-  export let initialValue: Date | undefined = undefined;
+  interface Props {
+    dateValue: Date;
+    initialValue?: Date;
+  }
+
+  // eslint-disable-next-line prefer-const
+  let { dateValue = $bindable(), initialValue }: Props = $props();
 
   // Bind DOM elements:
   let _input: HTMLInputElement;
 
-  $: {
+  $effect(() => {
     if (_input) {
       _input.value = dateValue.getTime() > 0 ? formatTimeForInput(dateValue) : "";
     }
-  }
+  });
 
   // Handlers:
   function handleChange(event: Event & { currentTarget: EventTarget & HTMLInputElement }) {
@@ -41,7 +45,7 @@
     bind:this={_input}
     class:empty={dateValue.getTime() > 0 === false}
     class:unsaved-changes={initialValue !== undefined && initialValue.getTime() !== dateValue.getTime()}
-    on:input={handleChange}
+    oninput={handleChange}
   />
 </div>
 

@@ -1,13 +1,17 @@
-<script context="module" lang="ts">
+<script module lang="ts">
   const TIMESTAMP = "timestamp";
 </script>
 
 <script lang="ts">
   import Label from "$lib/UI/genericComponents/forms/Label.svelte";
 
-  // Props:
-  export let value: string;
-  export let initialValue: string | undefined = undefined;
+  interface Props {
+    value: string;
+    initialValue?: string;
+  }
+
+  // eslint-disable-next-line prefer-const
+  let { value = $bindable(), initialValue }: Props = $props();
 </script>
 
 <!-- eslint-disable max-len -->

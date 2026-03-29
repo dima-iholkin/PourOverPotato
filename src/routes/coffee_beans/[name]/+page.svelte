@@ -135,22 +135,21 @@
       <button class="edit-button" type="button" onclick={() => bind_setEditModalState?.("open")}> Edit </button>
       <EditCoffeeBeansModal item={coffeeBeans} bind:setModalState={bind_setEditModalState} />
       <DropdownMenu bind:setDropdownState={bind_setDropdownState}>
-        <DropdownMenuItem
-          slot="button"
-          buttonText="Delete"
-          onclick={() => {
-            bind_setDeleteModalState?.("open");
-            bind_setDropdownState?.("closed");
-          }}
-        />
-        <DeleteConfirmationModal
-          slot="modal"
-          onDeleteClick={handleDeleteClick}
-          bind:setModalState={bind_setDeleteModalState}
-        >
-          <p>Please confirm you want to delete these coffee beans.</p>
-          <p>The dependent recipes will be deleted too.</p>
-        </DeleteConfirmationModal>
+        {#snippet button()}
+          <DropdownMenuItem
+            buttonText="Delete"
+            onclick={() => {
+              bind_setDeleteModalState?.("open");
+              bind_setDropdownState?.("closed");
+            }}
+          />
+        {/snippet}
+        {#snippet modal()}
+          <DeleteConfirmationModal onDeleteClick={handleDeleteClick} bind:setModalState={bind_setDeleteModalState}>
+            <p>Please confirm you want to delete these coffee beans.</p>
+            <p>The dependent recipes will be deleted too.</p>
+          </DeleteConfirmationModal>
+        {/snippet}
       </DropdownMenu>
     </div>
   </FlexRow>

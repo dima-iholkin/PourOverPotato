@@ -1,4 +1,4 @@
-<script context="module">
+<script module>
   const DESCRIPTION_PH = "Example: Washed process. Notes: plum, cherry.";
 </script>
 
@@ -13,47 +13,49 @@
   import Modal from "$lib/UI/genericComponents/modals/Modal.svelte";
   import { addToast } from "$lib/UI/genericComponents/toasts/toastProvider";
 
-  // Trigger:
-  export const setModalState = (state: "open" | "closed") => {
-    setModalState_(state);
-  };
+  interface Props {
+    item: CoffeeBeans;
+    setModalState: (state: "open" | "closed") => void;
+  }
 
-  // Entity props:
-  export let item: CoffeeBeans;
+  let { item, setModalState = $bindable((state) => setModalState_(state)) }: Props = $props();
 
   // Bind triggers:
-  let bindResizeTextarea: () => void;
-  let setFocusToModal: () => void;
-  let setModalState_: (state: "open" | "closed") => void;
+  let bindResizeTextarea: () => void = $state(() => {});
+  let setFocusToModal: () => void = $state(() => {});
+  let setModalState_: (state: "open" | "closed") => void = $state(() => {});
 
-  // Bind DOM elements:
+  // Pointers to DOM elements:
   let formDom: HTMLFormElement;
   let inputDom: HTMLInputElement;
   let saveButtonDOM: HTMLButtonElement;
+  // svelte-ignore non_reactive_update
   let textareaDom: HTMLTextAreaElement;
 
   // UI state:
-  let name: string = item.name ?? "";
-  let description: string = item.description ?? "";
-  let validationMessage: string = "";
+  let name: string = $derived(item.name ?? "");
+  let description: string = $derived(item.description ?? "");
+  let nameValidationFailed: boolean = $state(false);
+
+  // Custom pointers:
+  let validationMessage: string = $state("");
+  let hasUnsavedChanges: boolean = $state(false);
 
   // Reactivity:
-  let nameValidationFailed: boolean = false;
-  $: {
+  $effect(() => {
     if (nameValidationFailed === false) {
       validationMessage = "";
     }
-  }
-
-  // Unsaved changes state:
-  let hasUnsavedChanges: boolean = false;
+  });
 
   // Unsaved changes reactivity:
-  $: if (item && name.trim() === item.name && description.trim() === item.description) {
-    hasUnsavedChanges = false;
-  } else {
-    hasUnsavedChanges = true;
-  }
+  $effect(() => {
+    if (item && name.trim() === item.name && description.trim() === item.description) {
+      hasUnsavedChanges = false;
+    } else {
+      hasUnsavedChanges = true;
+    }
+  });
 
   // Handlers:
 
@@ -71,7 +73,8 @@
     }
   }
 
-  async function handleSubmit() {
+  async function handleSubmit(event: SubmitEvent) {
+    event.preventDefault();
     // Trim the name and description in the form too:
     name = name.trim();
     description = description.trim();
@@ -128,7 +131,7 @@
       return;
     }
     if (name.trim().toLowerCase() === item.name.toLowerCase()) {
-      nameValidationFailed === false;
+      nameValidationFailed = false;
       validationMessage = "";
       return;
     }
@@ -168,7 +171,7 @@
   bind:setFocus={setFocusToModal}
   bind:setState={setModalState_}
 >
-  <form class="mx-auto" bind:this={formDom} on:submit|preventDefault={handleSubmit}>
+  <form class="mx-auto" bind:this={formDom} onsubmit={handleSubmit}>
     <div class="mb-5">
       <Label for_="name" valid={!nameValidationFailed}>Coffee beans name:</Label>
       <input
@@ -181,9 +184,9 @@
         bind:this={inputDom}
         bind:value={name}
         class:unsaved-changes={item.name !== undefined && name.trim() !== item.name}
-        on:focusin={handleInputFocusIn}
-        on:input={handleInputChange}
-        on:keydown={handleEnterKey}
+        onfocusin={handleInputFocusIn}
+        oninput={handleInputChange}
+        onkeydown={handleEnterKey}
       />
       <p class="mt-2 text-sm text-red-600">{validationMessage}</p>
     </div>
@@ -205,7 +208,7 @@
       disabled={nameValidationFailed || hasUnsavedChanges === false || CoffeeBeans.hasValidName({ name }) !== true}
       type="submit"
       bind:this={saveButtonDOM}
-      on:keydown={handleSaveButtonTabKeydown}
+      onkeydown={handleSaveButtonTabKeydown}
     >
       Save changes
     </button>

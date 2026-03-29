@@ -6,12 +6,16 @@
   import NoItemsYetP from "$lib/UI/domainComponents/lists/NoItemsYetP.svelte";
   import { addToast } from "$lib/UI/genericComponents/toasts/toastProvider";
 
+  interface Props {
+    onAddDemoEntities: () => void;
+  }
+
   // Events:
-  export let onAddDemoEntities: () => void;
+  const { onAddDemoEntities }: Props = $props();
 
   // State:
-  let _anyCoffeeBeans: boolean = true;
-  let _anyRecipes: boolean = true;
+  let _anyCoffeeBeans: boolean = $state(true);
+  let _anyRecipes: boolean = $state(true);
 
   // Lifecycle:
   onMount(() => {
@@ -36,7 +40,7 @@
   <div class="empty-db-message-container">
     <p>You have no coffee beans or recipes added yet...</p>
     <p>Would you like to add 3 demo coffee beans and recipes?</p>
-    <button class="add-demo-coffee-beans" type="button" on:click={handleAddDemoEntities}>
+    <button class="add-demo-coffee-beans" type="button" onclick={handleAddDemoEntities}>
       Add demo coffee beans and recipes
     </button>
   </div>
