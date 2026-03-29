@@ -1,17 +1,24 @@
 <script lang="ts">
   import { clickOutsideTheBox } from "$lib/UI/_helpers/clickOutsideTheBox";
   import HamburgerMenuIcon from "$lib/UI/_icons/HamburgerMenuIcon.svelte";
+  import type { Snippet } from "svelte";
 
-  // Triggers:
-  // prettier-ignore
-  export const setDropdownState = (state: "open" | "closed") => {
-    isOpen = (state === "open") ? true : false;
-  };
+  interface Props {
+    button?: Snippet<[]>;
+    modal?: Snippet<[]>;
+    setDropdownState: (state: "open" | "closed") => void;
+  }
+
+  const {
+    button,
+    modal,
+    setDropdownState = $bindable((state) => (isOpen = state === "open" ? true : false))
+  }: Props = $props();
 
   // UI state:
-  let isOpen: boolean = false;
+  let isOpen: boolean = $state(false);
 
-  // Bind DOM elements:
+  // Pointers to DOM elements:
   let bind_buttonDom: Element;
   let bind_menuDom: Element;
 
@@ -30,18 +37,18 @@
   }
 </script>
 
-<svelte:document on:keydown={handleEscKey} on:mousedown={handleDocumentClick} />
+<svelte:document onkeydown={handleEscKey} onmousedown={handleDocumentClick} />
 
 <div class="container">
-  <button class="button" type="button" bind:this={bind_buttonDom} on:click={() => (isOpen = !isOpen)}>
+  <button class="button" type="button" bind:this={bind_buttonDom} onclick={() => (isOpen = !isOpen)}>
     <HamburgerMenuIcon />
   </button>
   <div class="dropdown-container" bind:this={bind_menuDom} class:shown={isOpen}>
     <ul id="dropdown" class="py-2 text-sm text-gray-700" aria-labelledby="dropdownMenuIconButton">
-      <slot name="button" />
+      {@render button?.()}
     </ul>
   </div>
-  <slot name="modal" />
+  {@render modal?.()}
 </div>
 
 <style lang="postcss">

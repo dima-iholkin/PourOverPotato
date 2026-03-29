@@ -53,21 +53,20 @@
 
 <div class="menu-container">
   <DropdownMenu bind:setDropdownState={bind_setDropdownState}>
-    <DropdownMenuItem
-      slot="button"
-      buttonText="Delete"
-      onclick={() => {
-        bind_setDropdownState?.("closed");
-        bind_setDeleteModalState?.("open");
-      }}
-    />
-    <DeleteConfirmationModal
-      slot="modal"
-      onDeleteClick={handleDeleteClick}
-      bind:setModalState={bind_setDeleteModalState}
-    >
-      Please confirm you want to delete this recipe
-    </DeleteConfirmationModal>
+    {#snippet button()}
+      <DropdownMenuItem
+        buttonText="Delete"
+        onclick={() => {
+          bind_setDropdownState?.("closed");
+          bind_setDeleteModalState?.("open");
+        }}
+      />
+    {/snippet}
+    {#snippet modal()}
+      <DeleteConfirmationModal onDeleteClick={handleDeleteClick} bind:setModalState={bind_setDeleteModalState}>
+        Please confirm you want to delete this recipe
+      </DeleteConfirmationModal>
+    {/snippet}
   </DropdownMenu>
 </div>
 
