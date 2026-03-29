@@ -23,7 +23,7 @@
 
 <div class="container">
   <p style="margin-right: 0.5rem;">Export all data:</p>
-  <button type="button" on:click={handleExportButtonClick}> Export to file </button>
+  <button type="button" onclick={() => handleExportButtonClick()}> Export to file </button>
 </div>
 
 <style lang="postcss">

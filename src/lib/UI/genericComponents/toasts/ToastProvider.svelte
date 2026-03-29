@@ -81,7 +81,7 @@
         <UndoToast
           message={item.message}
           onClickUndo={() => handleClickUndo(item)}
-          on:click={() => handleClickClose(item)}
+          onclick={() => handleClickClose(item)}
         />
       {/if}
     </div>

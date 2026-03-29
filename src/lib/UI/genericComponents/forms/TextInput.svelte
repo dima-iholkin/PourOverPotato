@@ -1,11 +1,21 @@
 <script lang="ts">
   import Label from "./Label.svelte";
 
+  interface Props {
+    value: string;
+    initialValue?: string;
+    labelText: string;
+    nameAttr: string;
+  }
+
+  // eslint-disable-next-line prefer-const
+  let { value = $bindable(""), initialValue, labelText = "", nameAttr = "" }: Props = $props();
+
   // Props:
-  export let value: string = "";
-  export let initialValue: string | undefined = undefined;
-  export let labelText: string = "";
-  export let nameAttr: string = "";
+  // export let value: string = "";
+  // export let initialValue: string | undefined = undefined;
+  // export let labelText: string = "";
+  // export let nameAttr: string = "";
 </script>
 
 <div class="my-container">

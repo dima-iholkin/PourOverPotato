@@ -33,45 +33,52 @@
   const OUT_WEIGHT = "out-weight";
   const RATING = "rating";
 
+  interface Props {
+    coffeeBeansName: string | null;
+  }
+
   // Props:
-  export let coffeeBeansName: string | null;
+  const { coffeeBeansName }: Props = $props();
 
   // Bind triggers:
-  let bindSetValidationFailed: ((state: boolean) => void) | undefined;
+  let bindSetValidationFailed: ((state: boolean) => void) | undefined = $state(undefined);
 
   // Bind DOM elements:
-  let bindSelectDOM: HTMLSelectElement | undefined;
+  let bindSelectDOM: HTMLSelectElement | undefined = $state(undefined);
 
   // UI state:
-  let initFinished: boolean = false;
-  let afterSave: boolean = false;
+  let initFinished: boolean = $state(false);
+  let afterSave: boolean = $state(false);
 
   // Entities state:
-  let coffeeBeansItems: CoffeeBeans[];
+  let coffeeBeansItems: CoffeeBeans[] = $state([]);
 
   // Form state:
-  let selectedCoffeeBeansId: number | "" | undefined = undefined;
-  let roastDate: Date = new Date(0);
-  let bagNumber: string = "";
-  let recipeTarget: string = "";
-  let recipeResult: string = "";
-  let recipeThoughts: string = "";
-  let outWeight: number = 0;
-  let rating: number = 0;
-  let favorite: boolean = false;
-  let timestampStr: string = formatTimeForInput(new Date());
+  let selectedCoffeeBeansId: number | "" | undefined = $state(undefined);
+  let roastDate: Date = $state(new Date(0));
+  let bagNumber: string = $state("");
+  let recipeTarget: string = $state("");
+  let recipeResult: string = $state("");
+  let recipeThoughts: string = $state("");
+  let outWeight: number = $state(0);
+  let rating: number = $state(0);
+  let favorite: boolean = $state(false);
+  let timestampStr: string = $state(formatTimeForInput(new Date()));
 
   // Calculated state, the days since roast:
-  let daysSinceRoast: number | undefined;
-  $: daysSinceRoast = Recipe.calculateDaysSinceRoast(parseDateFromInputString(timestampStr), roastDate);
+  const daysSinceRoast: number | undefined = $derived(
+    Recipe.calculateDaysSinceRoast(parseDateFromInputString(timestampStr), roastDate)
+  );
 
   // Change the URL query string reactivity:
-  $: if (selectedCoffeeBeansId && initFinished) {
-    const _coffeeBeansName: string | undefined = coffeeBeansItems.find(
-      (item) => item.id === selectedCoffeeBeansId
-    )?.name;
-    goto(routes.addRecipe(_coffeeBeansName));
-  }
+  $effect(() => {
+    if (selectedCoffeeBeansId && initFinished) {
+      const _coffeeBeansName: string | undefined = coffeeBeansItems.find(
+        (item) => item.id === selectedCoffeeBeansId
+      )?.name;
+      goto(routes.addRecipe(_coffeeBeansName));
+    }
+  });
 
   // Lifecycle:
   onMount(() => {
@@ -144,7 +151,12 @@
 
   // Handlers:
 
-  async function handleFormSubmit() {
+  async function handleFormSubmit(
+    event: SubmitEvent & {
+      currentTarget: EventTarget & HTMLFormElement;
+    }
+  ) {
+    event.preventDefault();
     // Validate and format the form values:
     if (selectedCoffeeBeansId === undefined) {
       if (bindSetValidationFailed) {
@@ -194,13 +206,17 @@
   function handleSavedCoffeeBeans(coffeeBeans: CoffeeBeans) {
     coffeeBeansItems.push(coffeeBeans);
     selectedCoffeeBeansId = coffeeBeans.id;
-    bindSetValidationFailed ? bindSetValidationFailed(false) : undefined;
+    if (bindSetValidationFailed) {
+      bindSetValidationFailed(false);
+    } else {
+      bindSetValidationFailed = undefined;
+    }
   }
 </script>
 
 <svelte:window on:beforeunload={handleBeforeUnload} on:visibilitychange={handleVisibilityChange} />
 
-<form id="add-recipe" on:submit|preventDefault={handleFormSubmit}>
+<form id="add-recipe" onsubmit={(event) => handleFormSubmit(event)}>
   <CoffeeBeansSelect
     allCoffeeBeans={coffeeBeansItems}
     onSavedCoffeeBeans={handleSavedCoffeeBeans}

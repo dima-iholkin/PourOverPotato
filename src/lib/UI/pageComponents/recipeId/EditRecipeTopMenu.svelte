@@ -19,8 +19,8 @@
   let { recipe, ignoreUnsavedChanges = $bindable(false) }: Props = $props();
 
   // Bind functions:
-  let bind_setDeleteModalState: ((state: "open" | "closed") => void) | undefined = $state();
-  let bind_setDropdownState: ((state: "open" | "closed") => void) | undefined = $state();
+  let bind_setDeleteModalState: (state: "open" | "closed") => void = $state(() => {});
+  let bind_setDropdownState: (state: "open" | "closed") => void = $state(() => {});
 
   // Handlers:
   async function handleDeleteClick() {

@@ -1,18 +1,40 @@
 <script lang="ts">
+  /* eslint-disable prefer-const */
+
   import Label from "./Label.svelte";
 
+  interface Props {
+    value: number;
+    labelText: string;
+    nameAttr: string;
+    initialValue?: number;
+    min?: number;
+    max?: number;
+    step?: number;
+  }
+
+  let {
+    value = $bindable(0),
+    labelText = "",
+    nameAttr = "",
+    initialValue,
+    min = 0,
+    max = Number.MAX_SAFE_INTEGER,
+    step = 1
+  }: Props = $props();
+
   // Props:
-  export let value: number = 0;
-  export let labelText: string = "";
-  export let nameAttr: string = "";
-  export let initialValue: number | undefined = undefined;
-  export let min: number = 0;
-  export let max: number = Number.MAX_SAFE_INTEGER;
+  // export let value: number = 0;
+  // export let labelText: string = "";
+  // export let nameAttr: string = "";
+  // export let initialValue: number | undefined = undefined;
+  // export let min: number = 0;
+  // export let max: number = Number.MAX_SAFE_INTEGER;
   /**
    * Step starting from the min value.
    * Therefore if min = 0 and step = 0.5, the possible values are integers and .5 values.
    */
-  export let step: number = 1;
+  // export let step: number = 1;
 
   // Handlers:
 
@@ -80,6 +102,7 @@
   }
 </script>
 
+/* eslint-disable prefer-const */
 <div class="container">
   <Label for_={nameAttr}>{labelText}</Label>
   <div class="input-container">
@@ -89,7 +112,7 @@
       tabindex="-1"
       type="button"
       class:unsaved-changes={initialValue !== undefined && initialValue !== value}
-      on:click={handleMinus}
+      onclick={handleMinus}
       aria-label="Decrease value"
     >
       <svg fill="none" viewBox="0 0 18 2" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -103,9 +126,9 @@
       type="text"
       bind:value
       class:unsaved-changes={initialValue !== undefined && initialValue !== value}
-      on:focusin={handleFocusIn}
-      on:focusout={handleFocusOut}
-      on:keydown={handleKeydown}
+      onfocusin={handleFocusIn}
+      onfocusout={handleFocusOut}
+      onkeydown={handleKeydown}
     />
     <button
       id="increment-button"
@@ -113,7 +136,7 @@
       tabindex="-1"
       type="button"
       class:unsaved-changes={initialValue !== undefined && initialValue !== value}
-      on:click={handlePlus}
+      onclick={handlePlus}
       aria-label="Increase value"
     >
       <svg fill="none" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">

@@ -4,7 +4,7 @@
   import { addToast } from "$lib/UI/genericComponents/toasts/toastProvider";
 
   // Bind triggers:
-  let bind_setDeleteModalState: (state: "open" | "closed") => void;
+  let bind_setDeleteModalState: (state: "open" | "closed") => void = $state(() => {});
 
   // Handler:
   async function handleDeleteButtonClick() {
@@ -16,7 +16,7 @@
 
 <div class="container">
   <p>Delete all data:</p>
-  <button class="button-delete" type="button" on:click={() => bind_setDeleteModalState("open")}>
+  <button class="button-delete" type="button" onclick={() => bind_setDeleteModalState("open")}>
     Delete all data
   </button>
 </div>

@@ -1,17 +1,17 @@
 <script lang="ts">
   import { onMount, tick } from "svelte";
   import { goto } from "$app/navigation";
-  import { page } from "$app/stores";
+  import { page } from "$app/state";
   import { exportAllData } from "$lib/database/dataExportImportAPI/exportDataAPI";
   import { routes } from "$lib/domain/constants/routes";
   import Modal from "$lib/UI/genericComponents/modals/Modal.svelte";
   import { addToast } from "$lib/UI/genericComponents/toasts/toastProvider";
 
   // Bind triggers:
-  let bindSetModalState: (state: "open" | "closed") => void;
-  let setFocusToModal: () => void;
+  let bindSetModalState: (state: "open" | "closed") => void = $state(() => {});
+  let setFocusToModal: () => void = $state(() => {});
 
-  // Bind DOM elements:
+  // Pointers to DOM elements:
   let cancelButtonDOM: HTMLButtonElement;
   let enableButtonDOM: HTMLButtonElement;
 
@@ -23,7 +23,7 @@
     await handleExportButtonClick();
     bindSetModalState("closed");
     addToast("Backup saved.");
-    const route = $page.url.pathname;
+    const route = page.url.pathname;
     goto(routes.home).then(() => goto(route));
   }
 
@@ -74,15 +74,15 @@
     <p>Please backup your data in case web browser decides to free up space and wipe your data.</p>
   </div>
   <div class="buttons-container">
-    <button class="enable" type="button" bind:this={enableButtonDOM} on:click={handleExportMyDataClick}>
+    <button class="enable" type="button" bind:this={enableButtonDOM} onclick={handleExportMyDataClick}>
       Export my data
     </button>
     <button
       class="cancel"
       type="button"
       bind:this={cancelButtonDOM}
-      on:click={() => bindSetModalState("closed")}
-      on:keydown={handleKeydown}
+      onclick={() => bindSetModalState("closed")}
+      onkeydown={handleKeydown}
     >
       Cancel
     </button>

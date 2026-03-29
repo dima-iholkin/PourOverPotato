@@ -1,18 +1,25 @@
 <script lang="ts">
-  import { tick } from "svelte";
+  import { tick, type Snippet } from "svelte";
   import Modal from "./Modal.svelte";
 
-  // Events:
-  export let onDeleteClick: () => void;
+  interface Props {
+    onDeleteClick: () => void;
+    children: Snippet<[]> | undefined;
+    setModalState: (state: "open" | "closed") => void;
+  }
 
-  // Triggers:
-  export const setModalState = (state: "open" | "closed") => {
-    bindSetModalState(state);
-  };
+  // Props:
+  const {
+    children,
+    onDeleteClick,
+    setModalState = $bindable((state: "open" | "closed") => {
+      bindSetModalState(state);
+    })
+  }: Props = $props();
 
   // Bind triggers:
-  let bindSetModalState: (state: "open" | "closed") => void;
-  let setFocusToModal: () => void;
+  let bindSetModalState: (state: "open" | "closed") => void = $state(() => {});
+  let setFocusToModal: () => void = $state(() => {});
 
   // Bind DOM elements:
   let cancelButtonDOM: HTMLButtonElement;
@@ -49,17 +56,17 @@
 >
   <div class="text-container">
     <p>
-      <slot />
+      {@render children?.()}
     </p>
   </div>
   <div class="buttons-container">
-    <button class="button-delete" type="button" on:click={handleDeleteClick}> Delete </button>
+    <button class="button-delete" type="button" onclick={handleDeleteClick}> Delete </button>
     <button
       class="button-cancel"
       type="button"
       bind:this={cancelButtonDOM}
-      on:click={() => bindSetModalState("closed")}
-      on:keydown={handleKeydown}
+      onclick={() => bindSetModalState("closed")}
+      onkeydown={handleKeydown}
     >
       Cancel
     </button>

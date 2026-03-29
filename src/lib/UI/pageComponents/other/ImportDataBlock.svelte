@@ -45,7 +45,7 @@
 
 <div class="container">
   <p style="margin-right: 0.5rem;">Import data:</p>
-  <button on:click={handleImportButtonClick}>Import from file</button>
+  <button onclick={() => handleImportButtonClick()}>Import from file</button>
 </div>
 
 <style lang="postcss">

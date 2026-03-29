@@ -1,10 +1,17 @@
 <script lang="ts">
   import ToastProvider from "$lib/UI/genericComponents/toasts/ToastProvider.svelte";
+  import type { Snippet } from "svelte";
   import MyBottomNav from "./components/MyBottomNav.svelte";
   import MyHeader from "./components/MyHeader.svelte";
   import MySidebar from "./components/MySidebar.svelte";
   import PersistentStorageCheckModal from "./components/PersistentStorageCheckModal.svelte";
   import VacuumComponent from "./components/VacuumComponent.svelte";
+
+  interface Props {
+    children?: Snippet<[]> | undefined;
+  }
+
+  const { children }: Props = $props();
 </script>
 
 <MyHeader />
@@ -15,7 +22,7 @@
 <div id="content" style="display: flex; flex-direction: row;">
   <MySidebar asGap />
   <div class="page-container">
-    <slot />
+    {@render children?.()}
     <div class="bottom-gap"></div>
   </div>
 </div>

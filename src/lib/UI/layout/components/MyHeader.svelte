@@ -1,20 +1,25 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
-  import { page } from "$app/stores";
+  import { page } from "$app/state";
   import { routes } from "$lib/domain/constants/routes";
   import LeftArrowIcon from "$lib/UI/_icons/LeftArrowIcon.svelte";
   import LoveIcon from "$lib/UI/_icons/LoveIcon.svelte";
 
+  interface Props {
+    asGap?: boolean;
+  }
+
   // UI props:
-  export let asGap: boolean = false;
+  const { asGap = false }: Props = $props();
 
   // URL state:
-  let pathname: string = routes.home;
+  // let pathname: string = $state(routes.home);
+  const pathname: string = $derived(page.url.pathname);
 
   // URL reactivity:
-  page.subscribe((pageInfo) => {
-    pathname = pageInfo.url.pathname;
-  });
+  // page.subscribe((pageInfo) => {
+  //   pathname = pageInfo.url.pathname;
+  // });
 
   // Handlers:
   function handleBackButtonClick() {
@@ -28,14 +33,14 @@
 
 <nav
   class:as-gap={asGap}
-  class:nav-static={$page.url.pathname === routes.addRecipe() ||
-    $page.url.pathname.substring(0, $page.url.pathname.lastIndexOf("/") + 1) + 1 === routes.recipeItem(1)}
+  class:nav-static={page.url.pathname === routes.addRecipe() ||
+    page.url.pathname.substring(0, page.url.pathname.lastIndexOf("/") + 1) + 1 === routes.recipeItem(1)}
 >
   <div class="flex flex-wrap items-center justify-between mx-auto p-4">
     <div class="left-nav-side vertical-center-children">
       <div class="icon-button vertical-center-children">
         {#if pathname !== routes.home}
-          <button class="vertical-center-children" on:click={handleBackButtonClick}>
+          <button class="vertical-center-children" onclick={handleBackButtonClick}>
             <LeftArrowIcon />
           </button>
         {:else}

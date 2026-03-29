@@ -33,9 +33,9 @@
   // const data: PageData = $props();
 
   // Bind triggers:
-  let bind_setDeleteModalState: ((state: "open" | "closed") => void) | undefined = $state();
-  let bind_setDropdownState: ((state: "open" | "closed") => void) | undefined = $state();
-  let bind_setEditModalState: ((state: "open" | "closed") => void) | undefined = $state();
+  let bind_setDeleteModalState: (state: "open" | "closed") => void = $state(() => {});
+  let bind_setDropdownState: (state: "open" | "closed") => void = $state(() => {});
+  let bind_setEditModalState: (state: "open" | "closed") => void = $state(() => {});
 
   // Entities state:
   let coffeeBeans: CoffeeBeans | undefined | "CoffeeBeansNotFound" = $state();

@@ -1,22 +1,29 @@
 <script lang="ts">
   import { base } from "$app/paths";
-  import { page } from "$app/stores";
+  import { page } from "$app/state";
   import coffeeBeansIcon from "$lib/_assets/coffee-beans-icon.png";
   import { routes } from "$lib/domain/constants/routes";
   import OtherIcon from "$lib/UI/_icons/OtherIcon.svelte";
 
+  interface Props {
+    asGap?: boolean;
+  }
+
+  // UI props:
+  const { asGap = false }: Props = $props();
+
   // Props:
-  export let asGap: boolean = false;
+  // export let asGap: boolean = false;
 
   // Reactivity:
-  $: route = base + $page.route.id;
+  const route: string = $derived(base + page.route.id);
 </script>
 
 <div
   class="bottom-nav"
   class:as-gap={asGap}
-  class:bottom-nav-static={$page.url.pathname === routes.addRecipe() ||
-    $page.url.pathname.substring(0, $page.url.pathname.lastIndexOf("/") + 1) + 1 === routes.recipeItem(1)}
+  class:bottom-nav-static={page.url.pathname === routes.addRecipe() ||
+    page.url.pathname.substring(0, page.url.pathname.lastIndexOf("/") + 1) + 1 === routes.recipeItem(1)}
 >
   <div class="grid h-full max-w-lg grid-cols-3 mx-auto font-medium">
     <a href={routes.recipes}>

@@ -3,7 +3,9 @@
   import { clickOutsideTheBox } from "$lib/UI/_helpers/clickOutsideTheBox";
 
   // State:
-  let menuOpen: boolean = false;
+  let menuOpen: boolean = $state(false);
+
+  // Pointers:
   let menuDom: Element;
   let menuButtonDom: Element;
 
@@ -33,10 +35,11 @@
   <button
     class="menu-button"
     type="button"
+    aria-label="Open or close menu"
     aria-controls="navbar-sticky"
     aria-expanded="false"
     bind:this={menuButtonDom}
-    on:click={toggleMenu}
+    onclick={() => toggleMenu()}
   >
     <svg class="w-5 h-5" fill="none" viewBox="0 0 17 14" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <path
@@ -52,13 +55,13 @@
 <div class="menu-div" bind:this={menuDom} class:hidden={!menuOpen}>
   <ul class="ul-menu">
     <li>
-      <a class="a-menu" href={routes.home} aria-current="page" on:click={handleMenuItemClick}> Coffee Beans </a>
+      <a class="a-menu" href={routes.home} aria-current="page" onclick={() => handleMenuItemClick()}> Coffee Beans </a>
     </li>
     <li>
-      <a class="a-menu" href={routes.recipes} aria-current="page" on:click={handleMenuItemClick}> Recipes </a>
+      <a class="a-menu" href={routes.recipes} aria-current="page" onclick={() => handleMenuItemClick()}> Recipes </a>
     </li>
     <li>
-      <a class="a-menu" href={routes.other} aria-current="page" on:click={handleMenuItemClick}> Other </a>
+      <a class="a-menu" href={routes.other} aria-current="page" onclick={() => handleMenuItemClick()}> Other </a>
     </li>
   </ul>
 </div>

@@ -3,7 +3,7 @@
   import { addToast } from "$lib/UI/genericComponents/toasts/toastProvider";
 
   // UI state:
-  let storageIsPersistent: boolean | undefined = undefined;
+  let storageIsPersistent: boolean | undefined = $state(undefined);
 
   // Lifecycle:
   onMount(async () => {
@@ -36,7 +36,7 @@
         {storageIsPersistent ? "enabled" : "not enabled"}
       </p>
       {#if storageIsPersistent === false}
-        <button type="button" on:click={handlePersistButtonClick}> Enable </button>
+        <button type="button" onclick={() => handlePersistButtonClick()}> Enable </button>
       {/if}
     {/if}
   </div>

@@ -1,24 +1,23 @@
 <script lang="ts">
   import { onMount, tick } from "svelte";
   import { goto } from "$app/navigation";
-  import { page } from "$app/stores";
+  import { page } from "$app/state";
   import { anyCoffeeBeans } from "$lib/database/coffeeBeansAPI";
   import { routes } from "$lib/domain/constants/routes";
   import Modal from "$lib/UI/genericComponents/modals/Modal.svelte";
   import { addToast } from "$lib/UI/genericComponents/toasts/toastProvider";
-    import BackupYourDataModal from "./BackupYourDataModal.svelte";
+  import BackupYourDataModal from "./BackupYourDataModal.svelte";
 
   // Constants:
   const PERSISTENT_STORAGE_KEY = "persistentStorageCheckDate";
 
-  // Props:
-  let showBackupYourDataModal: boolean = false;
+  let showBackupYourDataModal: boolean = $state(false);
 
   // Bind triggers:
-  let bindSetModalState: (state: "open" | "closed") => void;
-  let setFocusToModal: () => void;
+  let bindSetModalState: (state: "open" | "closed") => void = $state(() => {});
+  let setFocusToModal: () => void = $state(() => {});
 
-  // Bind DOM elements:
+  // Pointers to DOM elements:
   let cancelButtonDOM: HTMLButtonElement;
   let enableButtonDOM: HTMLButtonElement;
 
@@ -49,7 +48,7 @@
     } else {
       bindSetModalState("closed");
       addToast("Persistent storage enabled.");
-      const route = $page.url.pathname;
+      const route = page.url.pathname;
       goto(routes.home).then(() => goto(route));
     }
   }
@@ -86,15 +85,15 @@
     </p>
   </div>
   <div class="buttons-container">
-    <button class="enable" type="button" bind:this={enableButtonDOM} on:click={handlePersistButtonClick}>
+    <button class="enable" type="button" bind:this={enableButtonDOM} onclick={handlePersistButtonClick}>
       Enable persistent storage
     </button>
     <button
       class="cancel"
       type="button"
       bind:this={cancelButtonDOM}
-      on:click={() => bindSetModalState("closed")}
-      on:keydown={handleKeydown}
+      onclick={() => bindSetModalState("closed")}
+      onkeydown={handleKeydown}
     >
       Cancel
     </button>
