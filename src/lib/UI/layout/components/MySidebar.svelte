@@ -1,13 +1,16 @@
 <script lang="ts">
   import { base } from "$app/paths";
-  import { page } from "$app/stores";
+  import { page } from "$app/state";
   import { routes } from "$lib/domain/constants/routes";
 
-  // Props:
-  export let asGap: boolean = false;
+  interface Props {
+    asGap?: boolean;
+  }
+
+  const { asGap = false }: Props = $props();
 
   // Reactivity:
-  $: selected = base + ($page.route.id ?? "");
+  const selected = $derived(base + (page.route.id ?? ""));
 </script>
 
 <aside class="my-aside" aria-label="Sidebar" class:as-gap={asGap}>

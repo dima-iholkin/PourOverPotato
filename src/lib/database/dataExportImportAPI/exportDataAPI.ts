@@ -1,10 +1,10 @@
 import type { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
 import type { Recipe } from "$lib/domain/entities/Recipe";
 import type { IDBPDatabase } from "idb";
-import { openEntitiesDB, COFFEEBEANS_STORE, RECIPES_STORE } from "../core/core";
-import type { EntitiesDbSchema } from "../core/EntitiesDbSchema";
-import { type ICoffeeBeansDB, CoffeeBeansDB } from "../models/CoffeeBeansDB";
-import { type IRecipeDB, RecipeDB } from "../models/RecipeDB";
+import { openEntitiesDB, COFFEEBEANS_STORE, RECIPES_STORE } from "$lib/database/core/core";
+import type { EntitiesDbSchema } from "$lib/database/core/EntitiesDbSchema";
+import { type ICoffeeBeansDB, CoffeeBeansDB } from "$lib/database/models/CoffeeBeansDB";
+import { type IRecipeDB, RecipeDB } from "$lib/database/models/RecipeDB";
 import type { ExportJSON } from "./types/ExportJSON";
 
 // Public functions:

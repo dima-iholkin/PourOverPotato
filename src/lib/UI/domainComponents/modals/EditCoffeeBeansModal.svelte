@@ -200,7 +200,7 @@
         bind:resizeTextarea={bindResizeTextarea}
         bind:this_={textareaDom}
         bind:value={description}
-        on:keydown={handleCtrlEnterKey}
+        onkeydown={handleCtrlEnterKey}
       />
     </div>
     <button

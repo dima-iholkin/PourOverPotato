@@ -1,41 +1,48 @@
-<script context="module" lang="ts">
+<script module lang="ts">
   const COFFEEBEANS_ID = "coffee-beans";
 </script>
 
 <script lang="ts">
+  /* eslint-disable prefer-const */
   import type { CoffeeBeans } from "$lib/domain/entities/CoffeeBeans";
   import { sortCoffeeBeansByName } from "$lib/domain/sort/sortCoffeeBeans";
   import NewCoffeeBeansModal from "$lib/UI/domainComponents/modals/NewCoffeeBeansModal.svelte";
   import Label from "$lib/UI/genericComponents/forms/Label.svelte";
 
-  // Events:
-  export let onSavedCoffeeBeans: ((coffeeBeans: CoffeeBeans) => void) | undefined = undefined;
+  interface Props {
+    onSavedCoffeeBeans?: (coffeeBeans: CoffeeBeans) => void;
+    setValidationFailed?: ((state: boolean) => void) | undefined;
+    allCoffeeBeans?: CoffeeBeans[];
+    selectedCoffeeBeansId?: number | "";
+    showAddButton?: boolean;
+    selectDOM?: HTMLSelectElement;
+    initialCoffeeBeansId?: number;
+  }
 
-  // Triggers:
-  export const setValidationFailed = (state: boolean) => {
-    validationFailed = state;
-    if (validationFailed) {
-      validationMessage = "Please select coffee beans.";
-    } else {
-      validationMessage = "";
-    }
-  };
-
-  // Entity props:
-  export let allCoffeeBeans: CoffeeBeans[] | undefined;
-  export let selectedCoffeeBeansId: number | "" | undefined;
-
-  // UI props:
-  export let showAddButton: boolean = true;
-  export let selectDOM: HTMLSelectElement | undefined = undefined;
-  export let initialCoffeeBeansId: number | undefined = undefined;
+  let {
+    onSavedCoffeeBeans = $bindable(),
+    setValidationFailed = $bindable((state) => {
+      validationFailed = state;
+      if (validationFailed) {
+        validationMessage = "Please select coffee beans.";
+      } else {
+        validationMessage = "";
+      }
+    }),
+    allCoffeeBeans,
+    selectedCoffeeBeansId = $bindable(),
+    showAddButton = true,
+    selectDOM = $bindable(),
+    initialCoffeeBeansId
+  }: Props = $props();
 
   // Bind triggers:
-  let setModalState: ((state: "open" | "closed") => void) | undefined;
+  // svelte-ignore non_reactive_update
+  let setModalState: (state: "open" | "closed") => void;
 
   // UI state:
-  let validationFailed: boolean = false;
-  let validationMessage: string = "";
+  let validationFailed: boolean = $state(false);
+  let validationMessage: string = $state("");
 
   // Handlers:
   function handleSelectChange() {
@@ -58,7 +65,7 @@
         bind:this={selectDOM}
         bind:value={selectedCoffeeBeansId}
         class:unsaved-changes={initialCoffeeBeansId !== undefined && initialCoffeeBeansId !== selectedCoffeeBeansId}
-        on:change={handleSelectChange}
+        onchange={handleSelectChange}
       >
         {#if allCoffeeBeans !== undefined}
           {#if selectedCoffeeBeansId === undefined && showAddButton === true}
@@ -74,7 +81,8 @@
       {#if showAddButton}
         <button
           class="button-add bg-green-500 text-white rounded-md px-4 py-2 hover:bg-green-700 transition"
-          on:click|preventDefault={() => {
+          onclick={(event: MouseEvent) => {
+            event.preventDefault();
             if (setModalState !== undefined) {
               setModalState("open");
             }

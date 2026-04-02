@@ -1,4 +1,4 @@
-<script context="module">
+<script module>
   const DESCRIPTION_PH = "Example: Washed process. Notes: plum, cherry.";
 </script>
 
@@ -11,38 +11,42 @@
   import Modal from "$lib/UI/genericComponents/modals/Modal.svelte";
   import { addToast } from "$lib/UI/genericComponents/toasts/toastProvider";
 
-  // Events:
-  export let onModalStateChange: ((state: "open" | "closed") => void) | undefined = undefined;
-  export let onSavedCoffeeBeans: ((coffeeBeans: CoffeeBeans) => void) | undefined = undefined;
+  interface Props {
+    onModalStateChange?: (state: "open" | "closed") => void;
+    onSavedCoffeeBeans?: (coffeeBeans: CoffeeBeans) => void;
+    setModalState: (state: "open" | "closed") => void;
+  }
 
-  // Triggers:
-  export const setModalState = (state: "open" | "closed") => {
-    setModalState_(state);
-  };
+  let {
+    onModalStateChange = $bindable(),
+    onSavedCoffeeBeans = $bindable(),
+    setModalState = $bindable((state: "open" | "closed") => setModalState_?.(state))
+  }: Props = $props();
 
   // Bind triggers:
-  let bindResizeTextarea: () => void;
-  let setFocusToModal: () => void;
-  let setModalState_: (state: "open" | "closed") => void;
+  let bindResizeTextarea: (() => void) | undefined = $state();
+  let setFocusToModal: (() => void) | undefined = $state();
+  let setModalState_: ((state: "open" | "closed") => void) | undefined = $state();
 
   // Bind DOM elements:
   let formDom: HTMLFormElement;
   let inputDom: HTMLInputElement;
   let saveButtonDOM: HTMLButtonElement;
+  // svelte-ignore non_reactive_update
   let textareaDom: HTMLTextAreaElement;
 
   // Form state:
-  let name: string = "";
-  let description: string = "";
-  let nameValidationFailed: boolean = false;
-  let validationMessage: string = "";
+  let name: string = $state("");
+  let description: string = $state("");
+  let nameValidationFailed: boolean = $state(false);
+  let validationMessage: string = $state("");
 
   // Reactivity:
-  $: {
+  $effect(() => {
     if (nameValidationFailed === false) {
       validationMessage = "";
     }
-  }
+  });
 
   // Handlers:
 
@@ -82,7 +86,8 @@
     });
   }
 
-  async function handleFormSubmit() {
+  async function handleFormSubmit(event: SubmitEvent) {
+    event.preventDefault();
     // Trim the name and description in the form too:
     name = name.trim();
     description = description.trim();
@@ -111,7 +116,7 @@
       onSavedCoffeeBeans(coffeeBeans);
     }
     // Clear the modal state:
-    setModalState_("closed");
+    setModalState_?.("closed");
     name = "";
     description = "";
   }
@@ -122,7 +127,7 @@
       description = "";
       validationMessage = "";
       tick().then(() => {
-        bindResizeTextarea();
+        bindResizeTextarea?.();
         inputDom.focus();
       });
     }
@@ -134,7 +139,7 @@
   function handleSaveButtonTabKeydown(event: KeyboardEvent) {
     if (event.key === "Tab" && event.shiftKey === false) {
       event.preventDefault();
-      setFocusToModal();
+      setFocusToModal?.();
     }
   }
 
@@ -151,7 +156,7 @@
   bind:setFocus={setFocusToModal}
   bind:setState={setModalState_}
 >
-  <form class="mx-auto" bind:this={formDom} on:submit|preventDefault={handleFormSubmit}>
+  <form class="mx-auto" bind:this={formDom} onsubmit={handleFormSubmit}>
     <div class="mb-5">
       <Label for_="name" valid={!nameValidationFailed}>Coffee beans name:</Label>
       <input
@@ -163,9 +168,9 @@
         type="text"
         bind:this={inputDom}
         bind:value={name}
-        on:focusin={handleInputFocusIn}
-        on:input={handleInputChange}
-        on:keydown={handleEnter}
+        onfocusin={handleInputFocusIn}
+        oninput={handleInputChange}
+        onkeydown={handleEnter}
       />
       <p class="mt-2 text-sm text-red-600">{validationMessage}</p>
     </div>
@@ -178,7 +183,7 @@
         bind:resizeTextarea={bindResizeTextarea}
         bind:this_={textareaDom}
         bind:value={description}
-        on:keydown={handleCtrlEnter}
+        onkeydown={handleCtrlEnter}
       />
     </div>
     <button
@@ -186,7 +191,7 @@
       disabled={nameValidationFailed || CoffeeBeans.hasValidName({ name }) !== true}
       type="submit"
       bind:this={saveButtonDOM}
-      on:keydown={handleSaveButtonTabKeydown}
+      onkeydown={handleSaveButtonTabKeydown}
     >
       Save
     </button>

@@ -1,16 +1,20 @@
 <script lang="ts">
-  // Props:
-  export let for_: string | undefined;
-  export let valid: boolean | undefined = true;
+  import type { Snippet } from "svelte";
+
+  interface Props {
+    for_?: string;
+    valid?: boolean;
+    children: Snippet<[]>;
+  }
+
+  const { for_, valid = true, children }: Props = $props();
 </script>
 
 <label
-  class={valid
-    ? "block mb-2 text-sm font-medium text-gray-900"
-    : "block mb-2 text-sm font-medium text-red-700"}
+  class={valid ? "block mb-2 text-sm font-medium text-gray-900" : "block mb-2 text-sm font-medium text-red-700"}
   for={for_}
 >
-  <slot />
+  {@render children?.()}
 </label>
 
 <style>

@@ -1,37 +1,41 @@
 <script lang="ts">
+  /* eslint-disable prefer-const */
   import { clickOutsideTheBox } from "$lib/UI/_helpers/clickOutsideTheBox";
   import MySidebar from "$lib/UI/layout/components/MySidebar.svelte";
+  import type { Snippet } from "svelte";
   import ModalHeader from "./components/ModalHeader.svelte";
 
-  // Events:
-  export let onStateChange: ((state: "open" | "closed") => void) | undefined = undefined;
-  export let onFocusReverse: (() => void) | undefined = undefined;
+  interface Props {
+    onStateChange: ((state: "open" | "closed") => void) | undefined;
+    onFocusReverse: (() => void) | undefined;
+    setState: ((state: "open" | "closed") => void) | undefined;
+    setFocus: (() => void) | undefined;
+    title: string | undefined;
+    children: Snippet<[]>;
+  }
 
-  // Triggers:
-
-  // prettier-ignore
-  export const setState = (state: "open" | "closed") => {
-    isOpen = (state === "open") ? true : false;
-    if (onStateChange) {
-      onStateChange(state);
-    }
-  };
-
-  export const setFocus = () => {
-    setFocusToModalHeader();
-  };
-
-  // UI props:
-  export let title: string | undefined;
+  let {
+    onStateChange = $bindable(),
+    onFocusReverse = $bindable(),
+    setState = $bindable((state) => {
+      isOpen = state === "open" ? true : false;
+      if (onStateChange) {
+        onStateChange(state);
+      }
+    }),
+    setFocus = $bindable(() => setFocusToModalHeader?.()),
+    title,
+    children
+  }: Props = $props();
 
   // Bind triggers:
-  let setFocusToModalHeader: () => void;
+  let setFocusToModalHeader: (() => void) | undefined = $state();
 
   // Bind DOM elements:
   let modalDom: Element;
 
   // UI state:
-  let isOpen: boolean = false;
+  let isOpen: boolean = $state(false);
 
   // Handlers:
 
@@ -69,18 +73,15 @@
   {/if}
 </svelte:head>
 
-<svelte:document on:keydown={handleEscKey} on:mousedown={handleDocumentClick} />
+<svelte:document onkeydown={handleEscKey} onmousedown={handleDocumentClick} />
 
-<div
-  class="modal-container fixed inset-0 bg-gray-900/60 overflow-y-auto h-full w-full px-4"
-  class:shown={isOpen}
->
+<div class="modal-container fixed inset-0 bg-gray-900/60 overflow-y-auto h-full w-full px-4" class:shown={isOpen}>
   <MySidebar asGap />
   <div class="vertical-center mx-auto">
     <div class="vertical-gap"></div>
     <div class="inner-container relative shadow-xl rounded-md bg-white" bind:this={modalDom}>
       <ModalHeader onClose={handleClose} {onFocusReverse} {title} bind:setFocus={setFocusToModalHeader} />
-      <slot />
+      {@render children?.()}
     </div>
     <div class="vertical-gap"></div>
   </div>

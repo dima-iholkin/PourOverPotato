@@ -1,16 +1,15 @@
 <script lang="ts">
-  // Events:
-  export let onFocusReverse: (() => void) | undefined = undefined;
+  /* eslint-disable prefer-const */
+  interface Props {
+    onFocusReverse?: () => void;
+    setFocus?: () => void;
+    asGap?: boolean;
+    onclick?: (event: MouseEvent) => void;
+  }
 
-  // Triggers:
-  export const setFocus = () => {
-    buttonDOM?.focus();
-  };
+  let { onFocusReverse, setFocus = $bindable(() => buttonDOM?.focus()), asGap = false, onclick }: Props = $props();
 
-  // UI props:
-  export let asGap: boolean = false;
-
-  // Bind DOM elements:
+  // Pointer to a DOM element:
   let buttonDOM: HTMLButtonElement | undefined;
 
   // Handler:
@@ -28,8 +27,8 @@
   type="button"
   bind:this={buttonDOM}
   class:as-gap={asGap}
-  on:click
-  on:keydown={handleKeydown}
+  {onclick}
+  onkeydown={handleKeydown}
   aria-label="Close modal"
 >
   <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">

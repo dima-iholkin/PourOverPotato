@@ -1,5 +1,5 @@
 import { base } from "$app/paths";
-import type { RouteId } from "$app/types";
+// import type { RouteId } from "$app/types";
 
 export const routes = {
   home: base + "/",

@@ -1,33 +1,45 @@
 <script lang="ts">
+  /* eslint-disable prefer-const */
   import { onMount, tick } from "svelte";
   import Label from "./Label.svelte";
 
-  // Triggers:
-  export const resizeTextarea = () => {
-    if (this_) {
-      resizeOnInput(this_);
-    }
-  };
+  interface Props {
+    resizeTextarea?: () => void;
+    id?: string;
+    label?: string;
+    name?: string;
+    placeholder?: string;
+    this_?: HTMLTextAreaElement;
+    initialValue?: string;
+    value?: string;
+    onkeydown?: (event: KeyboardEvent & { currentTarget: EventTarget & HTMLTextAreaElement }) => void;
+  }
 
-  // Props:
-  export let id: string = "";
-  export let label: string = "";
-  export let name: string = "";
-  export let placeholder: string = "";
-  export let this_: HTMLTextAreaElement | undefined = undefined;
-  export let initialValue: string | undefined = undefined;
-  export let value: string = "";
+  let {
+    resizeTextarea = $bindable(() => {
+      if (this_) {
+        resizeOnInput(this_);
+      }
+    }),
+    id = "",
+    label = "",
+    name = "",
+    placeholder = "",
+    value = $bindable(""),
+    this_ = $bindable(undefined),
+    initialValue = undefined,
+    onkeydown
+  }: Props = $props();
 
   // Reactivity:
-  $: {
-    value;
+  $effect(() => {
     if (this_) {
       const elem = this_;
       tick().then(() => {
         resizeOnInput(elem);
       });
     }
-  }
+  });
 
   // Lifecycle:
   onMount(() => {
@@ -53,8 +65,8 @@
     bind:this={this_}
     bind:value
     class:unsaved-changes={initialValue !== undefined && value.trim() !== initialValue}
-    on:input={(event) => resizeOnInput(event.currentTarget)}
-    on:keydown
+    oninput={(event) => resizeOnInput(event.currentTarget)}
+    onkeydown={(event) => onkeydown?.(event)}
   ></textarea>
 </div>
 

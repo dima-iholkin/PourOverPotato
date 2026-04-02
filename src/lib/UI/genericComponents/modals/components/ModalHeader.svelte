@@ -1,26 +1,24 @@
 <script lang="ts">
+  /* eslint-disable prefer-const */
   import CloseModalButton from "./CloseButton.svelte";
 
-  // Events:
-  export let onClose: () => void;
-  export let onFocusReverse: (() => void) | undefined = undefined;
+  interface Props {
+    onClose?: () => void;
+    onFocusReverse?: () => void;
+    setFocus?: () => void;
+    title: string | undefined;
+  }
 
-  // Triggers:
-  export const setFocus = () => {
-    setFocusToCloseModalButton();
-  };
-
-  // UI props:
-  export let title: string | undefined;
+  let { onClose, onFocusReverse, setFocus = $bindable(() => setFocusToCloseModalButton?.()), title }: Props = $props();
 
   // Bind triggers:
-  let setFocusToCloseModalButton: () => void;
+  let setFocusToCloseModalButton: (() => void) | undefined = $state();
 </script>
 
 <div>
   <CloseModalButton asGap={true} />
   <h1 class:hidden={title === undefined || title.length === 0}>{title}</h1>
-  <CloseModalButton {onFocusReverse} bind:setFocus={setFocusToCloseModalButton} on:click={() => onClose()} />
+  <CloseModalButton {onFocusReverse} bind:setFocus={setFocusToCloseModalButton} onclick={() => onClose?.()} />
 </div>
 
 <style lang="postcss">

@@ -41,7 +41,8 @@
   const { coffeeBeansName }: Props = $props();
 
   // Bind triggers:
-  let bindSetValidationFailed: ((state: boolean) => void) | undefined = $state(undefined);
+  // svelte-ignore non_reactive_update
+  let bindSetValidationFailed: ((state: boolean) => void) | undefined;
 
   // Bind DOM elements:
   let bindSelectDOM: HTMLSelectElement | undefined = $state(undefined);
