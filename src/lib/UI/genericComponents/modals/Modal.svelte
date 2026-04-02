@@ -29,7 +29,7 @@
   }: Props = $props();
 
   // Bind triggers:
-  let setFocusToModalHeader: (() => void) | undefined = $state();
+  let setFocusToModalHeader: (() => void) | undefined = $state(() => {});
 
   // Bind DOM elements:
   let modalDom: Element;

@@ -12,7 +12,7 @@
   let { onClose, onFocusReverse, setFocus = $bindable(() => setFocusToCloseModalButton?.()), title }: Props = $props();
 
   // Bind triggers:
-  let setFocusToCloseModalButton: (() => void) | undefined = $state();
+  let setFocusToCloseModalButton: (() => void) | undefined = $state(() => {});
 </script>
 
 <div>
