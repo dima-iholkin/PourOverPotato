@@ -3,6 +3,7 @@
 </script>
 
 <script lang="ts">
+  /* eslint-disable prefer-const */
   import { tick } from "svelte";
   import { addCoffeeBeans, checkCoffeeBeansDuplicate } from "$lib/database/coffeeBeansAPI";
   import { CoffeeBeans, CoffeeBeansCreateSubmit } from "$lib/domain/entities/CoffeeBeans";
@@ -10,74 +11,42 @@
   import Textarea from "$lib/UI/genericComponents/forms/Textarea.svelte";
   import Modal from "$lib/UI/genericComponents/modals/Modal.svelte";
   import { addToast } from "$lib/UI/genericComponents/toasts/toastProvider";
+  import { getModalCloseButtonDOMContext } from "$lib/UI/genericComponents/modals/components/CloseButtonDOMContext";
 
   interface Props {
-    onModalStateChange?: (state: "open" | "closed") => void;
-    onSavedCoffeeBeans?: (coffeeBeans: CoffeeBeans) => void;
-    setModalState: (state: "open" | "closed") => void;
+    /**
+     * Subscribe to an event of `CoffeeBeans` creation. */
+    onCoffeeBeansAdded?: (coffeeBeans: CoffeeBeans) => void;
+    /**
+     * Set `true` to show the modal.
+     */
+    isShown: boolean;
   }
 
-  let {
-    onModalStateChange = $bindable(),
-    onSavedCoffeeBeans = $bindable(),
-    setModalState = $bindable((state: "open" | "closed") => setModalState_?.(state))
-  }: Props = $props();
+  // Props:
+  let { onCoffeeBeansAdded, isShown }: Props = $props();
 
-  // Bind triggers:
-  let bindResizeTextarea: (() => void) | undefined = $state();
-  let setFocusToModal: (() => void) | undefined = $state();
-  let setModalState_: ((state: "open" | "closed") => void) | undefined = $state();
-
-  // Bind DOM elements:
-  let formDom: HTMLFormElement;
-  let inputDom: HTMLInputElement;
-  let saveButtonDOM: HTMLButtonElement;
-  // svelte-ignore non_reactive_update
-  let textareaDom: HTMLTextAreaElement;
-
-  // Form state:
+  // Form fields state:
   let name: string = $state("");
   let description: string = $state("");
-  let nameValidationFailed: boolean = $state(false);
+
+  // Validation state:
   let validationMessage: string = $state("");
+  let nameValidationFailed: boolean = $derived(validationMessage === "" ? true : false);
 
-  // Reactivity:
-  $effect(() => {
-    if (nameValidationFailed === false) {
-      validationMessage = "";
-    }
-  });
-
-  // Handlers:
-
-  function handleCtrlEnter(event: KeyboardEvent) {
-    if (event.key === "Enter" && (event.metaKey || event.ctrlKey)) {
-      event.preventDefault();
-      formDom.requestSubmit();
-    }
-  }
-
-  function handleEnter(event: KeyboardEvent & { currentTarget: EventTarget & HTMLInputElement }) {
-    if (event.key === "Enter") {
-      event.preventDefault();
-      textareaDom.focus();
-    }
-  }
-
-  function handleInputChange() {
+  /**
+   * Validate `name` field on every input. */
+  function handleInput_ValidateNameField() {
     if (CoffeeBeans.hasValidName({ name }) === "ValidationFailed_NameMustBeAtLeast3CharsLong") {
-      nameValidationFailed = true;
       validationMessage = "Name must be at least 3 characters long.";
       return;
     }
     checkCoffeeBeansDuplicate(name).then((value) => {
       switch (value) {
         case "CoffeeBeansNotFound":
-          nameValidationFailed = false;
           validationMessage = "";
           break;
         case "Failure_NameAlreadyExist":
-          nameValidationFailed = true;
           validationMessage = `Coffee beans "${name.trim()}" already exist.`;
           break;
         default:
@@ -86,7 +55,8 @@
     });
   }
 
-  async function handleFormSubmit(event: SubmitEvent) {
+  // Form submit actions:
+  async function handleSubmit(event: SubmitEvent) {
     event.preventDefault();
     // Trim the name and description in the form too:
     name = name.trim();
@@ -96,7 +66,6 @@
       CoffeeBeansCreateSubmit.create({ name, description });
     // Guard clause:
     if (coffeeBeansSubmit === "ValidationFailed_NameMustBeAtLeast3CharsLong") {
-      nameValidationFailed = true;
       validationMessage = "Name must be at least 3 characters long.";
       return;
     }
@@ -105,58 +74,74 @@
       await addCoffeeBeans(coffeeBeansSubmit);
     // Guard clauses:
     if (coffeeBeans === "Failure_NameAlreadyExist") {
-      nameValidationFailed = true;
       validationMessage = "Coffee beans with this name already exist.";
       return;
     }
     // Show a toast:
     addToast(`Coffee beans "${coffeeBeans.name}" created.`);
     // Return the new Coffee Beans entity to the "Add recipe" page:
-    if (onSavedCoffeeBeans !== undefined) {
-      onSavedCoffeeBeans(coffeeBeans);
-    }
+    onCoffeeBeansAdded?.(coffeeBeans);
     // Clear the modal state:
-    setModalState_?.("closed");
+    isShown = false;
     name = "";
     description = "";
   }
 
-  function handleModalStateChange(state: "open" | "closed") {
-    if (state === "open") {
-      name = "";
-      description = "";
-      validationMessage = "";
+  // Refresh the modal UI, every time it's reopened:
+  $effect(() => {
+    if (isShown) {
+      // name = "";
+      // description = "";
+      // validationMessage = "";
       tick().then(() => {
         bindResizeTextarea?.();
         inputDom.focus();
       });
     }
-    if (onModalStateChange !== undefined) {
-      onModalStateChange(state);
-    }
-  }
+  });
 
-  function handleSaveButtonTabKeydown(event: KeyboardEvent) {
-    if (event.key === "Tab" && event.shiftKey === false) {
-      event.preventDefault();
-      setFocusToModal?.();
-    }
-  }
+  // ----- Inner logic: -----
 
-  function handleInputFocusIn(event: FocusEvent & { currentTarget: EventTarget & HTMLInputElement }) {
+  // Bind triggers:
+  let bindResizeTextarea: (() => void) | undefined = $state();
+
+  // DOM pointers:
+  let formDom: HTMLFormElement;
+  let inputDom: HTMLInputElement;
+  let saveButtonDOM: HTMLButtonElement;
+  // svelte-ignore non_reactive_update
+  let textareaDom: HTMLTextAreaElement;
+
+  /**
+   * Fix UI on `name` field `focusin`. */
+  function handleFocusIn_NameField(event: FocusEvent & { currentTarget: EventTarget & HTMLInputElement }) {
     const textLength = event.currentTarget.value.length;
     inputDom.setSelectionRange(textLength, textLength);
   }
+
+  // Keyboard command handlers:
+  function handleKeypress_CtrlEnter(event: KeyboardEvent) {
+    if (event.key === "Enter" && (event.metaKey || event.ctrlKey)) {
+      event.preventDefault();
+      formDom.requestSubmit();
+    }
+  }
+  function handleKeypress_Enter(event: KeyboardEvent & { currentTarget: EventTarget & HTMLInputElement }) {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      textareaDom.focus();
+    }
+  }
+  function handleKeydown_Tab_OnSaveButton(event: KeyboardEvent) {
+    if (event.key === "Tab" && event.shiftKey === false) {
+      event.preventDefault();
+      getModalCloseButtonDOMContext()?.focus();
+    }
+  }
 </script>
 
-<Modal
-  onFocusReverse={() => saveButtonDOM.focus()}
-  onStateChange={handleModalStateChange}
-  title="Add coffee beans"
-  bind:setFocus={setFocusToModal}
-  bind:setState={setModalState_}
->
-  <form class="mx-auto" bind:this={formDom} onsubmit={handleFormSubmit}>
+<Modal onFocusReverse={() => saveButtonDOM.focus()} title="Add coffee beans" showModal={isShown}>
+  <form class="mx-auto" bind:this={formDom} onsubmit={handleSubmit}>
     <div class="mb-5">
       <Label for_="name" valid={!nameValidationFailed}>Coffee beans name:</Label>
       <input
@@ -168,9 +153,9 @@
         type="text"
         bind:this={inputDom}
         bind:value={name}
-        onfocusin={handleInputFocusIn}
-        oninput={handleInputChange}
-        onkeydown={handleEnter}
+        onfocusin={handleFocusIn_NameField}
+        oninput={handleInput_ValidateNameField}
+        onkeydown={handleKeypress_Enter}
       />
       <p class="mt-2 text-sm text-red-600">{validationMessage}</p>
     </div>
@@ -183,7 +168,7 @@
         bind:resizeTextarea={bindResizeTextarea}
         bind:this_={textareaDom}
         bind:value={description}
-        onkeydown={handleCtrlEnter}
+        onkeydown={handleKeypress_CtrlEnter}
       />
     </div>
     <button
@@ -191,7 +176,7 @@
       disabled={nameValidationFailed || CoffeeBeans.hasValidName({ name }) !== true}
       type="submit"
       bind:this={saveButtonDOM}
-      onkeydown={handleSaveButtonTabKeydown}
+      onkeydown={handleKeydown_Tab_OnSaveButton}
     >
       Save
     </button>

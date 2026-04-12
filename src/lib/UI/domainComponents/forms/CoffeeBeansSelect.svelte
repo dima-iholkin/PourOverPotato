@@ -10,87 +10,104 @@
   import Label from "$lib/UI/genericComponents/forms/Label.svelte";
 
   interface Props {
-    onSavedCoffeeBeans?: (coffeeBeans: CoffeeBeans) => void;
-    setValidationFailed?: ((state: boolean) => void) | undefined;
-    allCoffeeBeans?: CoffeeBeans[];
-    selectedCoffeeBeansId?: number | "";
-    showAddButton?: boolean;
-    selectDOM?: HTMLSelectElement;
-    initialCoffeeBeansId?: number;
+    /**
+     * Bindable, an array of all `CoffeeBeans`.
+     * The array will be updated on new `CoffeeBeans` creation. */
+    allCoffeeBeans: CoffeeBeans[];
+    /**
+     * Bindable, selected `CoffeeBeansId` value.
+     * If nothing selected, will be `""` or `undefined`. */
+    value_CoffeeBeansId: number | "" | undefined;
+    /**
+     * Optional. Provide an initial `CoffeeBeansId` value for showing unsaved changes state. */
+    initialValue_CoffeeBeansId?: number;
+    /**
+     * Optional. Show a button for adding new `CoffeeBeans`. */
+    showButton_NewCoffeeBeans?: boolean;
   }
 
+  // Props:
   let {
-    onSavedCoffeeBeans = $bindable(),
-    setValidationFailed = $bindable((state) => {
-      validationFailed = state;
-      if (validationFailed) {
-        validationMessage = "Please select coffee beans.";
-      } else {
-        validationMessage = "";
-      }
-    }),
-    allCoffeeBeans,
-    selectedCoffeeBeansId = $bindable(),
-    showAddButton = true,
-    selectDOM = $bindable(),
-    initialCoffeeBeansId
+    allCoffeeBeans = $bindable(),
+    value_CoffeeBeansId = $bindable(),
+    initialValue_CoffeeBeansId,
+    showButton_NewCoffeeBeans = true
   }: Props = $props();
 
-  // Bind triggers:
-  // svelte-ignore non_reactive_update
-  let setModalState: (state: "open" | "closed") => void;
+  // React to clicking New CoffeeBeans button:
+  function handleClick_NewButton(event: MouseEvent) {
+    event.preventDefault();
+    showModal = true;
+  }
 
-  // UI state:
-  let validationFailed: boolean = $state(false);
-  let validationMessage: string = $state("");
+  // React to event of CoffeeBeans creation:
+  function handleEvent_CoffeeBeansCreated(cb: CoffeeBeans) {
+    allCoffeeBeans.push(cb);
+    value_CoffeeBeansId = cb.id;
+    refreshValidationState();
+  }
 
-  // Handlers:
-  function handleSelectChange() {
-    if (validationFailed) {
-      setValidationFailed(false);
+  // Enable refreshing the validation state from outside the component:
+  export function refreshValidationState() {
+    if (value_CoffeeBeansId === undefined || value_CoffeeBeansId === "") {
+      validationMessage = "Please select coffee beans";
+      selectDOM?.focus();
+    } else {
+      validationMessage = "";
     }
   }
+
+  // Show validation state:
+  let validationMessage: string = $state("");
+
+  // Show unsaved changes state:
+  let unsavedChanges: boolean = $derived(
+    initialValue_CoffeeBeansId !== undefined && initialValue_CoffeeBeansId !== value_CoffeeBeansId
+  );
+
+  // Show new CoffeeBeans modal:
+  let showModal: boolean = $state(false);
+
+  // ----- Inner logic: -----
+
+  // DOM pointers:
+  let selectDOM: HTMLSelectElement | undefined;
 </script>
 
 <div>
   <div class="container">
-    <Label for_={COFFEEBEANS_ID} valid={!validationFailed}>Coffee beans:</Label>
+    <Label for_={COFFEEBEANS_ID} valid={validationMessage === ""}>Coffee beans:</Label>
     <div class="select-container">
       <select
         id={COFFEEBEANS_ID}
-        class={validationFailed ? "invalid" : "valid"}
+        class={validationMessage === "" ? "valid" : "invalid"}
         disabled={allCoffeeBeans === undefined}
         name={COFFEEBEANS_ID}
         tabindex="0"
         bind:this={selectDOM}
-        bind:value={selectedCoffeeBeansId}
-        class:unsaved-changes={initialCoffeeBeansId !== undefined && initialCoffeeBeansId !== selectedCoffeeBeansId}
-        onchange={handleSelectChange}
+        bind:value={value_CoffeeBeansId}
+        class:unsaved-changes={unsavedChanges}
       >
-        {#if allCoffeeBeans !== undefined}
-          {#if selectedCoffeeBeansId === undefined && showAddButton === true}
+        {#if allCoffeeBeans === undefined}
+          <option disabled selected value>Loading coffee beans...</option>
+        {/if}
+        {#if allCoffeeBeans}
+          {#if value_CoffeeBeansId === undefined && showButton_NewCoffeeBeans === true}
             <option disabled selected value></option>
           {/if}
           {#each allCoffeeBeans.sort(sortCoffeeBeansByName) as item (item.id)}
-            <option selected={selectedCoffeeBeansId === item.id} value={item.id}>{item.name}</option>
+            <option selected={value_CoffeeBeansId === item.id} value={item.id}>{item.name}</option>
           {/each}
-        {:else}
-          <option disabled selected value>Loading coffee beans...</option>
         {/if}
       </select>
-      {#if showAddButton}
+      {#if showButton_NewCoffeeBeans}
         <button
           class="button-add bg-green-500 text-white rounded-md px-4 py-2 hover:bg-green-700 transition"
-          onclick={(event: MouseEvent) => {
-            event.preventDefault();
-            if (setModalState !== undefined) {
-              setModalState("open");
-            }
-          }}
+          onclick={handleClick_NewButton}
         >
           <span class="material-icons md-18"> add </span>
         </button>
-        <NewCoffeeBeansModal {onSavedCoffeeBeans} bind:setModalState />
+        <NewCoffeeBeansModal onCoffeeBeansAdded={handleEvent_CoffeeBeansCreated} isShown={showModal} />
       {/if}
     </div>
   </div>

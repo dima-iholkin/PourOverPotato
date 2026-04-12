@@ -39,7 +39,7 @@
   let { recipe, hasUnsavedChanges = $bindable() }: Props = $props();
 
   // Entities state:
-  let allCoffeeBeans: CoffeeBeans[] | undefined = $state(undefined);
+  let allCoffeeBeans: CoffeeBeans[] = $state([]);
 
   // Form state:
   let selectedCoffeeBeansId: number | undefined = $derived(recipe.coffeeBeansId);
@@ -138,9 +138,9 @@
 <form id="edit-recipe" onsubmit={(event) => handleSubmit(event)}>
   <CoffeeBeansSelect
     {allCoffeeBeans}
-    initialCoffeeBeansId={recipe.coffeeBeansId}
-    showAddButton={false}
-    bind:selectedCoffeeBeansId
+    initialValue_CoffeeBeansId={recipe.coffeeBeansId}
+    showButton_NewCoffeeBeans={false}
+    bind:value_CoffeeBeansId={selectedCoffeeBeansId}
   />
   <FormRow>
     <RoastDatePicker

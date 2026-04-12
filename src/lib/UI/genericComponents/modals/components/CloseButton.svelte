@@ -2,15 +2,18 @@
   /* eslint-disable prefer-const */
   interface Props {
     onFocusReverse?: () => void;
-    setFocus?: () => void;
     asGap?: boolean;
     onclick?: (event: MouseEvent) => void;
   }
 
-  let { onFocusReverse, setFocus = $bindable(() => buttonDOM?.focus()), asGap = false, onclick }: Props = $props();
+  let { onFocusReverse, asGap = false, onclick }: Props = $props();
 
-  // Pointer to a DOM element:
-  let buttonDOM: HTMLButtonElement | undefined;
+  // DOM pointer:
+  let buttonDOM: HTMLButtonElement | undefined = $state();
+
+  export function focus() {
+    buttonDOM?.focus();
+  }
 
   // Handler:
   function handleKeydown(event: KeyboardEvent) {

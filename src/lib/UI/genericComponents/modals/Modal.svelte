@@ -6,61 +6,47 @@
   import ModalHeader from "./components/ModalHeader.svelte";
 
   interface Props {
-    onStateChange: ((state: "open" | "closed") => void) | undefined;
+    /**
+     * Optional. Modal header text. */
+    title?: string;
+    /**
+     * Subscribe to focus leaving the modal. */
     onFocusReverse: (() => void) | undefined;
-    setState: ((state: "open" | "closed") => void) | undefined;
-    setFocus: (() => void) | undefined;
-    title: string | undefined;
+    /**
+     * Bindable, state of modal being shown or hidden. */
+    showModal: boolean;
     children: Snippet<[]>;
   }
 
-  let {
-    onStateChange = $bindable(),
-    onFocusReverse = $bindable(),
-    setState = $bindable((state) => {
-      isOpen = state === "open" ? true : false;
-      if (onStateChange) {
-        onStateChange(state);
-      }
-    }),
-    setFocus = $bindable(() => setFocusToModalHeader?.()),
-    title,
-    children
-  }: Props = $props();
+  let { title, onFocusReverse = $bindable(), showModal = $bindable(false), children }: Props = $props();
 
-  // Bind triggers:
-  let setFocusToModalHeader: (() => void) | undefined = $state(() => {});
+  // ----- Inner logic: -----
 
-  // Bind DOM elements:
-  let modalDom: Element;
-
-  // UI state:
-  let isOpen: boolean = $state(false);
-
-  // Handlers:
-
+  // Handle closing command:
   function handleClose() {
-    isOpen = false;
-    if (onStateChange !== undefined) {
-      onStateChange("closed");
-    }
+    showModal = false;
   }
 
-  function handleDocumentClick(event: MouseEvent & { currentTarget: EventTarget & Document }) {
-    if (isOpen && clickOutsideTheBox(modalDom, event)) {
+  // DOM pointers:
+  let modalDom: Element;
+
+  // Handle mouse commands:
+  function handleMousedown_OutsideModal(event: MouseEvent & { currentTarget: EventTarget & Document }) {
+    if (showModal && clickOutsideTheBox(modalDom, event)) {
       handleClose();
     }
   }
 
+  // Handle keyboard commands:
   function handleEscKey(event: KeyboardEvent) {
-    if (isOpen && event.key === "Escape") {
+    if (showModal && event.key === "Escape") {
       handleClose();
     }
   }
 </script>
 
 <svelte:head>
-  {#if isOpen}
+  {#if showModal}
     <style>
       body {
         overflow-y: hidden;
@@ -73,14 +59,14 @@
   {/if}
 </svelte:head>
 
-<svelte:document onkeydown={handleEscKey} onmousedown={handleDocumentClick} />
+<svelte:document onkeydown={handleEscKey} onmousedown={handleMousedown_OutsideModal} />
 
-<div class="modal-container fixed inset-0 bg-gray-900/60 overflow-y-auto h-full w-full px-4" class:shown={isOpen}>
+<div class="modal-container fixed inset-0 bg-gray-900/60 overflow-y-auto h-full w-full px-4" class:shown={showModal}>
   <MySidebar asGap />
   <div class="vertical-center mx-auto">
     <div class="vertical-gap"></div>
     <div class="inner-container relative shadow-xl rounded-md bg-white" bind:this={modalDom}>
-      <ModalHeader onClose={handleClose} {onFocusReverse} {title} bind:setFocus={setFocusToModalHeader} />
+      <ModalHeader onClose={handleClose} {onFocusReverse} {title} />
       {@render children?.()}
     </div>
     <div class="vertical-gap"></div>

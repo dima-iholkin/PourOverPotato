@@ -26,6 +26,7 @@
   import { addToast } from "$lib/UI/genericComponents/toasts/toastProvider";
 
   // Constants:
+
   const BAG_NUMBER = "bag-number";
   const RECIPE_TARGET = "recipe-target";
   const RECIPE_RESULT = "recipe-result";
@@ -33,21 +34,17 @@
   const OUT_WEIGHT = "out-weight";
   const RATING = "rating";
 
+  // Props:
+
   interface Props {
     coffeeBeansName: string | null;
   }
 
-  // Props:
   const { coffeeBeansName }: Props = $props();
 
-  // Bind triggers:
-  // svelte-ignore non_reactive_update
-  let bindSetValidationFailed: ((state: boolean) => void) | undefined;
+  // State:
 
-  // Bind DOM elements:
-  let bindSelectDOM: HTMLSelectElement | undefined = $state(undefined);
-
-  // UI state:
+  // Lifecycle state:
   let initFinished: boolean = $state(false);
   let afterSave: boolean = $state(false);
 
@@ -55,7 +52,7 @@
   let coffeeBeansItems: CoffeeBeans[] = $state([]);
 
   // Form state:
-  let selectedCoffeeBeansId: number | "" | undefined = $state(undefined);
+  let coffeeBeansId: number | "" | undefined = $state();
   let roastDate: Date = $state(new Date(0));
   let bagNumber: string = $state("");
   let recipeTarget: string = $state("");
@@ -65,32 +62,30 @@
   let rating: number = $state(0);
   let favorite: boolean = $state(false);
   let timestampStr: string = $state(formatTimeForInput(new Date()));
-
-  // Calculated state, the days since roast:
   const daysSinceRoast: number | undefined = $derived(
     Recipe.calculateDaysSinceRoast(parseDateFromInputString(timestampStr), roastDate)
   );
 
-  // Change the URL query string reactivity:
+  let coffeeBeansSelectInstance: ReturnType<typeof CoffeeBeansSelect> | undefined = $state();
+
+  // Reactivity:
+
+  // Once the selected CoffeeBeans change, change the URL query string:
   $effect(() => {
-    if (selectedCoffeeBeansId && initFinished) {
-      const _coffeeBeansName: string | undefined = coffeeBeansItems.find(
-        (item) => item.id === selectedCoffeeBeansId
-      )?.name;
+    if (coffeeBeansId && initFinished) {
+      const _coffeeBeansName: string | undefined = coffeeBeansItems.find((item) => item.id === coffeeBeansId)?.name;
       goto(routes.addRecipe(_coffeeBeansName));
     }
   });
 
-  // Lifecycle:
+  // Lifecycle methods:
+
   onMount(() => {
     // Load all CoffeeBeans from IndexedDB:
-    getAllCoffeeBeans().then((items: CoffeeBeans[]) => {
-      coffeeBeansItems = items;
+    getAllCoffeeBeans().then((cbItems: CoffeeBeans[]) => {
       // If the coffee beans name provided in URL, use it for "selectedCoffeeBeansId":
       if (coffeeBeansName) {
-        selectedCoffeeBeansId = coffeeBeansItems.find(
-          (item) => item.name.toLowerCase() === coffeeBeansName.toLowerCase()
-        )?.id;
+        coffeeBeansId = cbItems.find((cbItem) => cbItem.name.toLowerCase() === coffeeBeansName.toLowerCase())?.id;
       }
       // Load the persisted form state from Local Storage:
       const obj: Partial<Omit<Recipe, "id" | "timestamp">> | undefined = loadNewRecipeFormState();
@@ -99,8 +94,8 @@
         return;
       }
       // Set the form field values from Local Storage:
-      if (selectedCoffeeBeansId === "" || selectedCoffeeBeansId === undefined) {
-        selectedCoffeeBeansId = obj.coffeeBeansId;
+      if (coffeeBeansId === undefined) {
+        coffeeBeansId = obj.coffeeBeansId;
       }
       roastDate = obj.roastDate ?? new Date(0);
       bagNumber = obj.bagNumber ?? "";
@@ -116,13 +111,15 @@
   });
 
   // Persist unsaved changes:
-  // Lifecycle method:
   beforeNavigate((navigation) => {
     if (navigation.willUnload === false && navigation.to?.route.id !== "/recipes/add") {
       handleBeforeUnload();
     }
   });
-  // Handler:
+
+  // Event handlers:
+
+  // Persist unsaved changes:
   function handleBeforeUnload() {
     // Guard clause, don't persist the form after save:
     if (afterSave) {
@@ -130,7 +127,7 @@
     }
     // Create a Recipe object and persist it:
     const recipeObj: Partial<Omit<Recipe, "id" | "timestamp">> = {
-      coffeeBeansId: selectedCoffeeBeansId === "" ? undefined : selectedCoffeeBeansId,
+      coffeeBeansId: coffeeBeansId === "" ? undefined : coffeeBeansId,
       roastDate: roastDate,
       bagNumber: bagNumber,
       recipeTarget: recipeTarget,
@@ -142,30 +139,20 @@
     };
     saveNewRecipeFormState(recipeObj);
   }
+
+  // Persist unsaved changes:
   function handleVisibilityChange() {
     // Guard clause, persist the form values only if visibilityState === "hidden":
-    if (document.visibilityState === "visible") {
-      return;
+    if (document.visibilityState === "hidden") {
+      handleBeforeUnload();
     }
-    handleBeforeUnload();
   }
 
-  // Handlers:
-
-  async function handleFormSubmit(
-    event: SubmitEvent & {
-      currentTarget: EventTarget & HTMLFormElement;
-    }
-  ) {
+  async function handleFormSubmit(event: SubmitEvent) {
     event.preventDefault();
     // Validate and format the form values:
-    if (selectedCoffeeBeansId === undefined) {
-      if (bindSetValidationFailed) {
-        bindSetValidationFailed(true);
-      }
-      if (bindSelectDOM) {
-        bindSelectDOM.focus();
-      }
+    if (coffeeBeansId === undefined) {
+      coffeeBeansSelectInstance?.refreshValidationState();
       return;
     }
     bagNumber = bagNumber.trim();
@@ -176,7 +163,7 @@
     // Save the new recipe:
     const recipeSubmit: RecipeSubmit = {
       // @ts-ignore
-      coffeeBeansId: selectedCoffeeBeansId,
+      coffeeBeansId: coffeeBeansId,
       roastDate: roastDate,
       bagNumber: bagNumber,
       recipeTarget: recipeTarget,
@@ -196,34 +183,22 @@
     // Show a toast:
     addToast("Recipe created.");
     // Redirect to another page:
-    const item: CoffeeBeans | undefined = coffeeBeansItems.find((item) => item.id === selectedCoffeeBeansId);
+    const item: CoffeeBeans | undefined = coffeeBeansItems.find((item) => item.id === coffeeBeansId);
     if (item === undefined) {
       goto(routes.home);
       return;
     }
     goto(routes.coffeeBeansItem(item.name));
   }
-
-  function handleSavedCoffeeBeans(coffeeBeans: CoffeeBeans) {
-    coffeeBeansItems.push(coffeeBeans);
-    selectedCoffeeBeansId = coffeeBeans.id;
-    if (bindSetValidationFailed) {
-      bindSetValidationFailed(false);
-    } else {
-      bindSetValidationFailed = undefined;
-    }
-  }
 </script>
 
 <svelte:window on:beforeunload={handleBeforeUnload} on:visibilitychange={handleVisibilityChange} />
 
-<form id="add-recipe" onsubmit={(event) => handleFormSubmit(event)}>
+<form id="add-recipe" onsubmit={handleFormSubmit}>
   <CoffeeBeansSelect
-    allCoffeeBeans={coffeeBeansItems}
-    onSavedCoffeeBeans={handleSavedCoffeeBeans}
-    bind:selectDOM={bindSelectDOM}
-    bind:selectedCoffeeBeansId
-    bind:setValidationFailed={bindSetValidationFailed}
+    bind:this={coffeeBeansSelectInstance}
+    bind:allCoffeeBeans={coffeeBeansItems}
+    bind:value_CoffeeBeansId={coffeeBeansId}
   />
   <FormRow>
     <RoastDatePicker bind:dateValue={roastDate} />
